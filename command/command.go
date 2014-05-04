@@ -49,8 +49,20 @@ var installCmd = &cobra.Command{
 		    'gnvm install x.xx.xx --global`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("gnvm install args include " + strings.Join(args, " "))
-		//TO DO
 		fmt.Println("global flag is " + strconv.FormatBool(global))
+		//TO DO
+	},
+}
+
+// sub cmd
+var uninstallCmd = &cobra.Command{
+	Use:   "uninstall",
+	Short: "uninstall local node.js version",
+	Long: `uninstall local node.js version like
+		   'gnvm uninstall x.xx.xx`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("gnvm uninstall args include " + strings.Join(args, " "))
+		//TO DO
 	},
 }
 
@@ -59,8 +71,9 @@ func Exec() {
 	// add sub cmd to root
 	gnvmCmd.AddCommand(versionCmd)
 	gnvmCmd.AddCommand(installCmd)
+	gnvmCmd.AddCommand(uninstallCmd)
 
-	//flag
+	// flag
 	gnvmCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version")
 
 	// exec
