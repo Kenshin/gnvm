@@ -87,7 +87,21 @@ var updateCmd = &cobra.Command{
 	Long: `update global node.js like
 		   'gnvm update`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("gnvm use args include " + strings.Join(args, " "))
+		fmt.Println("gnvm update args include " + strings.Join(args, " "))
+		//TO DO
+	},
+}
+
+// sub cmd
+var lsCmd = &cobra.Command{
+	Use:   "ls",
+	Short: "list show all local | remote node.js version",
+	Long: `list show all local | remote node.js version like
+		   'gnvm ls
+		   'gnvm ls --remote`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("gnvm ls args include " + strings.Join(args, " "))
+		fmt.Println("remote flag is " + strconv.FormatBool(remote))
 		//TO DO
 	},
 }
@@ -100,9 +114,11 @@ func Exec() {
 	gnvmCmd.AddCommand(uninstallCmd)
 	gnvmCmd.AddCommand(useCmd)
 	gnvmCmd.AddCommand(updateCmd)
+	gnvmCmd.AddCommand(lsCmd)
 
 	// flag
-	gnvmCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version")
+	gnvmCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "get this version global version")
+	gnvmCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote all node.js version list")
 
 	// exec
 	gnvmCmd.Execute()
