@@ -66,12 +66,27 @@ var uninstallCmd = &cobra.Command{
 	},
 }
 
+// sub cmd
+var useCmd = &cobra.Command{
+	Use:   "use",
+	Short: "use the specific version by current cmd( temp )",
+	Long: `use the specific version by current cmd( temp ) like
+		   'gnvm use x.xx.xx
+		   'gnvm use x.xx.xx --global`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("gnvm use args include " + strings.Join(args, " "))
+		fmt.Println("global flag is " + strconv.FormatBool(global))
+		//TO DO
+	},
+}
+
 func Exec() {
 
 	// add sub cmd to root
 	gnvmCmd.AddCommand(versionCmd)
 	gnvmCmd.AddCommand(installCmd)
 	gnvmCmd.AddCommand(uninstallCmd)
+	gnvmCmd.AddCommand(useCmd)
 
 	// flag
 	gnvmCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version")
