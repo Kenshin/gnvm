@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func main() {
+func flagMode() {
 	// golang的flag包的一些基本使用方法
 
 	// 待使用的变量
@@ -68,4 +68,8 @@ func main() {
 	fmt.Printf("NArg = %d\n", flag.NArg())
 	// 已设置的flag参数个数
 	fmt.Printf("NFlag = %d\n", flag.NFlag())
+}
+
+func main() {
+	flagMode()
 }
