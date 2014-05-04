@@ -80,6 +80,18 @@ var useCmd = &cobra.Command{
 	},
 }
 
+// sub cmd
+var updateCmd = &cobra.Command{
+	Use:   "update",
+	Short: "update global node.js",
+	Long: `update global node.js like
+		   'gnvm update`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("gnvm use args include " + strings.Join(args, " "))
+		//TO DO
+	},
+}
+
 func Exec() {
 
 	// add sub cmd to root
@@ -87,6 +99,7 @@ func Exec() {
 	gnvmCmd.AddCommand(installCmd)
 	gnvmCmd.AddCommand(uninstallCmd)
 	gnvmCmd.AddCommand(useCmd)
+	gnvmCmd.AddCommand(updateCmd)
 
 	// flag
 	gnvmCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version")
