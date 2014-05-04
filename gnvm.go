@@ -2,11 +2,11 @@
 package main
 
 import (
-	"flag"
-	"fmt"
-	"github.com/spf13/cobra"
+	// local
+	"gnvm/command"
 )
 
+/*
 func cobraMode() {
 
 	var (
@@ -57,8 +57,8 @@ func cobraMode() {
 	// exec
 	GnvmCmd.Execute()
 }
+*/
 
 func main() {
-	//flagMode()
-	cobraMode()
+	command.Exec()
 }
