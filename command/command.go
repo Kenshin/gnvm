@@ -106,6 +106,21 @@ var lsCmd = &cobra.Command{
 	},
 }
 
+// sub cmd
+var nodeVersionCmd = &cobra.Command{
+	Use:   "node-version",
+	Short: "show global | current | latest node.js version",
+	Long: `show global | current | latest node.js version like
+		   'gnvm node-version
+		   'laest version is x.xx.xx
+		   'global version is x.xx.xx
+		   'current version is x.xx.xx`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("gnvm node-version args include " + strings.Join(args, " "))
+		//TO DO
+	},
+}
+
 func Exec() {
 
 	// add sub cmd to root
@@ -115,6 +130,7 @@ func Exec() {
 	gnvmCmd.AddCommand(useCmd)
 	gnvmCmd.AddCommand(updateCmd)
 	gnvmCmd.AddCommand(lsCmd)
+	gnvmCmd.AddCommand(nodeVersionCmd)
 
 	// flag
 	gnvmCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "get this version global version")
