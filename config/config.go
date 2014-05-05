@@ -9,6 +9,11 @@ import (
 	"os"
 )
 
+var (
+	config *toml.TomlTree
+	err    error
+)
+
 const (
 	NEWLINE = "\n"
 	VERSION = "0.1.0"
@@ -30,7 +35,9 @@ const (
 )
 
 func init() {
-	config, err := toml.LoadFile(CONFIG)
+
+	// create Config obj
+	config, err = toml.LoadFile(CONFIG)
 	if err != nil {
 
 		// print error
@@ -38,16 +45,21 @@ func init() {
 
 		// create .gnvmrc file and write
 		createConfigFile()
-	} else {
 
-		// get registry
-		registry := config.Get("registry").(string)
-		fmt.Println("registry is " + registry)
-
-		// get nodeversion
-		noderoot := config.Get("noderoot").(string)
-		fmt.Println("noderoot is " + noderoot)
 	}
+
+	/*
+		} else {
+
+			// get registry
+			registry := Config.Get("registry").(string)
+			fmt.Println("registry is " + registry)
+
+			// get nodeversion
+			noderoot := Config.Get("noderoot").(string)
+			fmt.Println("noderoot is " + noderoot)
+		}
+	*/
 }
 
 func createConfigFile() {
@@ -75,4 +87,17 @@ func createConfigFile() {
 	// success
 	fmt.Println(".gnvmrc file create success.")
 
+}
+
+func SetConfig(key string, value interface{}) {
+
+	fmt.Println(key)
+	fmt.Println(value)
+
+	config.Set(key, value)
+
+}
+
+func GetConfig(key string) string {
+	return config.Get(key).(string)
 }
