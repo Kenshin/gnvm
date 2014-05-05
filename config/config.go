@@ -17,7 +17,7 @@ const (
 	REGISTRY_KEY = "registry: "
 	REGISTRY_VAL = "http://nodejs.org/dist/"
 	NODEROOT_KEY = "noderoot: "
-	NODEROOT_VAL = ""
+	NODEROOT_VAL = "root"
 
 	GLOBAL_VERSION_KEY = "globalversion: "
 	GLOBAL_VERSION_VAL = "unknown"
@@ -34,7 +34,7 @@ func init() {
 	// create Config obj
 	if err := config.ReadConfigFile(CONFIG); err != nil {
 		// print error
-		fmt.Println("Read Config Error ", err.Error())
+		fmt.Println("Read Config file Error ", err.Error())
 
 		// create .gnvmrc file and write
 		createConfigFile()
@@ -57,9 +57,6 @@ func createConfigFile() {
 		fmt.Println("write .gnvmrc fail" + fileErr.Error())
 		return
 	}
-
-	// close file
-	file.Close()
 
 	// defear
 	defer file.Close()
@@ -92,7 +89,7 @@ func GetConfig(key string) string {
 	value, err := config.GetString(key)
 	if err != nil {
 		// print error
-		fmt.Println("Read Config Error ", err.Error())
+		fmt.Println(err.Error())
 	}
 	return value
 }
