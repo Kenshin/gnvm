@@ -134,9 +134,13 @@ var configCmd = &cobra.Command{
 			fmt.Println("gnvm config " + args[0] + " is " + config.GetConfig(args[0]))
 		} else if len(args) == 2 {
 			switch args[0] {
-			case "registry":
+			case "registry", "noderoot":
 				config.SetConfig(args[0], args[1])
+			default:
+				fmt.Println("config parameter include 'registry' | 'noderoot', you input undefined, please check your input. See 'gnvm help'.")
 			}
+		} else if len(args) > 2 {
+			fmt.Println("config parameter maximum is 2, please check your input. See 'gnvm help'.")
 		}
 	},
 }
