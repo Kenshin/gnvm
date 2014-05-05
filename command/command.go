@@ -121,6 +121,20 @@ var nodeVersionCmd = &cobra.Command{
 	},
 }
 
+// sub cmd
+var configCmd = &cobra.Command{
+	Use:   "config",
+	Short: "set | get registry and noderoot value",
+	Long: `set | get registry and noderoot value like
+		   'gnvm config registry
+		   'registry is http://nodejs.org/dist/
+		   'gnvm config registry http://dist.u.qiniudn.com/`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("gnvm config args include " + strings.Join(args, " "))
+		//TO DO
+	},
+}
+
 func Exec() {
 
 	// add sub cmd to root
@@ -131,6 +145,7 @@ func Exec() {
 	gnvmCmd.AddCommand(updateCmd)
 	gnvmCmd.AddCommand(lsCmd)
 	gnvmCmd.AddCommand(nodeVersionCmd)
+	gnvmCmd.AddCommand(configCmd)
 
 	// flag
 	gnvmCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "get this version global version")
