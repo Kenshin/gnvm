@@ -10,10 +10,23 @@ import (
 )
 
 const (
-	VERSION  = "0.1.0"
-	CONFIG   = ".gnvmrc"
-	REGISTRY = `"http://nodejs.org/dist/"`
-	NODEROOT = `""`
+	NEWLINE = "\n"
+	VERSION = "0.1.0"
+	CONFIG  = ".gnvmrc"
+
+	REGISTRY_KEY = "registry="
+	REGISTRY_VAL = `"http://nodejs.org/dist/"`
+	NODEROOT_KEY = `noderoot=`
+	NODEROOT_VAL = `""`
+
+	GLOBAL_VERSION_KEY = "globalversion="
+	GLOBAL_VERSION_VAL = `"unknown"`
+
+	LATEST_VERSION_KEY = "latestversion="
+	LATEST_VERSION_VAL = `"unknown"`
+
+	CURRENT_VERSION_KEY = "currentversion="
+	CURRENT_VERSION_VAL = `"unknown"`
 )
 
 func init() {
@@ -32,7 +45,7 @@ func init() {
 		fmt.Println("registry is " + registry)
 
 		// get nodeversion
-		registry := config.Get("noderoot").(string)
+		noderoot := config.Get("noderoot").(string)
 		fmt.Println("noderoot is " + noderoot)
 	}
 }
@@ -47,7 +60,7 @@ func createConfigFile() {
 	}
 
 	//write file
-	_, fileErr := file.WriteString("registry=" + REGISTRY + "\n" + "noderoot=" + NODEROOT)
+	_, fileErr := file.WriteString(REGISTRY_KEY + REGISTRY_VAL + NEWLINE + NODEROOT_KEY + NODEROOT_VAL + NEWLINE + GLOBAL_VERSION_KEY + GLOBAL_VERSION_VAL + NEWLINE + LATEST_VERSION_KEY + LATEST_VERSION_VAL + NEWLINE + CURRENT_VERSION_KEY + CURRENT_VERSION_VAL)
 	if fileErr != nil {
 		fmt.Println("write .gnvmrc fail" + fileErr.Error())
 		return
