@@ -31,30 +31,35 @@ const (
 
 func init() {
 
-	// create Config obj
-	if err := config.ReadConfigFile(CONFIG); err != nil {
+	// config file is exist
+	file, err := os.Open(CONFIG)
+	defer file.Close()
+	if err != nil && os.IsNotExist(err) {
 		// print error
-		fmt.Println("Read Config file Error ", err.Error())
+		fmt.Println("Read Config file Error: ", err.Error())
 
 		// create .gnvmrc file and write
-		createConfigFile()
+		createConfig()
 	}
+
+	// read config
+	readConfig()
 
 }
 
-func createConfigFile() {
+func createConfig() {
 
 	// create file
 	file, err := os.Create(CONFIG)
 	if err != nil {
-		fmt.Println(".gnvmrc create fail, error is" + err.Error())
+		fmt.Println("Config file create Error: " + err.Error())
 		return
 	}
 
-	//write file
+	//write init config
 	_, fileErr := file.WriteString(REGISTRY_KEY + REGISTRY_VAL + NEWLINE + NODEROOT_KEY + NODEROOT_VAL + NEWLINE + GLOBAL_VERSION_KEY + GLOBAL_VERSION_VAL + NEWLINE + LATEST_VERSION_KEY + LATEST_VERSION_VAL + NEWLINE + CURRENT_VERSION_KEY + CURRENT_VERSION_VAL)
 	if fileErr != nil {
-		fmt.Println("write .gnvmrc fail" + fileErr.Error())
+		fmt.Println("Write Config file Error: " + fileErr.Error())
 		return
 	}
 
@@ -62,11 +67,22 @@ func createConfigFile() {
 	defer file.Close()
 
 	// success
-	fmt.Println(".gnvmrc file create success.")
+	fmt.Println("Config file create success.")
 
 }
 
-func SetConfig(key string, value interface{}) {
+func readConfig() {
+	if err := config.ReadConfigFile(CONFIG); err != nil {
+		// print error
+		fmt.Println("Read Config file Error: ", err.Error())
+
+		return
+	}
+
+	fmt.Println("Read Config file success.")
+}
+
+func SetConfig(key string, value interface{}) string {
 
 	// set new value
 	config.Set(key, value)
@@ -74,14 +90,16 @@ func SetConfig(key string, value interface{}) {
 	// delete old config
 	if err := os.Remove(CONFIG); err != nil {
 		// print error
-		fmt.Println("Remove Error ", err.Error())
+		fmt.Println("Remove Config Error: ", err.Error())
 	}
 
 	// write new config
 	if err := config.WriteConfigFile(CONFIG, 0777); err != nil {
 		// print error
-		fmt.Println("Write Config Error ", err.Error())
+		fmt.Println("Write Config Error: ", err.Error())
 	}
+
+	return value.(string)
 
 }
 
@@ -89,7 +107,10 @@ func GetConfig(key string) string {
 	value, err := config.GetString(key)
 	if err != nil {
 		// print error
-		fmt.Println(err.Error())
+		fmt.Println("GetConfig Error: " + err.Error())
+
+		// value
+		value = "unknown"
 	}
 	return value
 }
