@@ -4,8 +4,11 @@ import (
 
 	// go
 	"fmt"
-	//"os"
-	//"os/exec"
+	//"log"
+	"bytes"
+	"io"
+	"os"
+	"os/exec"
 )
 
 const (
@@ -33,6 +36,43 @@ func Use(folderName string, global bool) {
 	// get node path
 	nodePath := path + DIVIDE
 	fmt.Println("Node.exe path is " + nodePath)
+
+	/*
+		app := "ls"
+		cmd, err := exec.Command(app, []string{app, "-l"}, nil, "", "", "", "")
+
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err.String())
+			return
+		}
+
+		var b bytes.Buffer
+		io.Copy(&b, cmd.Stdout)
+		fmt.Println(b.String())
+
+		cmd.Close()
+	*/
+
+	/*
+		out, err := exec.Command("node", "--version").Output()
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("The date is %s\n", out)
+	*/
+
+	/*
+		//os.Setenv("FOO", "1")
+		fmt.Println("FOO:", os.Getenv("FOO"))
+		fmt.Println("BAR:", os.Getenv("BAR"))
+	*/
+	/*
+		fmt.Println()
+		for _, e := range os.Environ() {
+			pair := strings.Split(e, "=")
+			fmt.Println(pair[0])
+		}
+	*/
 
 	// set env
 	/*
