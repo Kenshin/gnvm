@@ -131,17 +131,17 @@ var configCmd = &cobra.Command{
 'gnvm config registry http://dist.u.qiniudn.com/'`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
-			fmt.Println("gnvm config " + args[0] + " is " + config.GetConfig(args[0]))
+			fmt.Println("gnvm config [" + args[0] + "] is " + config.GetConfig(args[0]))
 		} else if len(args) == 2 {
 			switch args[0] {
 			case "registry", "noderoot":
 				newValue := config.SetConfig(args[0], args[1])
 				fmt.Println("Set success, [" + args[0] + "] new value is " + newValue)
 			default:
-				fmt.Println("config parameter include 'registry' | 'noderoot', you input undefined, please check your input. See 'gnvm help'.")
+				fmt.Println("Config parameter include 'registry' | 'noderoot', your input unknown, please check your input. See 'gnvm help'.")
 			}
 		} else if len(args) > 2 {
-			fmt.Println("config parameter maximum is 2, please check your input. See 'gnvm help'.")
+			fmt.Println("Config parameter maximum is 2, please check your input. See 'gnvm help'.")
 		}
 	},
 }

@@ -36,7 +36,7 @@ func init() {
 	defer file.Close()
 	if err != nil && os.IsNotExist(err) {
 		// print error
-		fmt.Println("Read Config file Error: ", err.Error())
+		fmt.Println("Config file is not exist.")
 
 		// create .gnvmrc file and write
 		createConfig()
@@ -51,6 +51,7 @@ func createConfig() {
 
 	// create file
 	file, err := os.Create(CONFIG)
+	defer file.Close()
 	if err != nil {
 		fmt.Println("Config file create Error: " + err.Error())
 		return
@@ -62,9 +63,6 @@ func createConfig() {
 		fmt.Println("Write Config file Error: " + fileErr.Error())
 		return
 	}
-
-	// defear
-	defer file.Close()
 
 	// success
 	fmt.Println("Config file create success.")
