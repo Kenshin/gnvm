@@ -11,6 +11,7 @@ import (
 
 	// local
 	"gnvm/config"
+	"gnvm/nodehandle"
 )
 
 var (
@@ -76,7 +77,12 @@ var useCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("gnvm use args include " + strings.Join(args, " "))
 		fmt.Println("global flag is " + strconv.FormatBool(global))
-		//TO DO
+
+		if len(args) == 1 {
+			nodehandle.Use(args[0], global)
+		} else {
+			fmt.Println("Use parameter maximum is 1, please check your input. See 'gnvm help use'.")
+		}
 	},
 }
 
@@ -138,10 +144,10 @@ var configCmd = &cobra.Command{
 				newValue := config.SetConfig(args[0], args[1])
 				fmt.Println("Set success, [" + args[0] + "] new value is " + newValue)
 			default:
-				fmt.Println("Config parameter include 'registry' | 'noderoot', your input unknown, please check your input. See 'gnvm help'.")
+				fmt.Println("Config parameter include 'registry' | 'noderoot', your input unknown, please check your input. See 'gnvm help config'.")
 			}
 		} else if len(args) > 2 {
-			fmt.Println("Config parameter maximum is 2, please check your input. See 'gnvm help'.")
+			fmt.Println("Config parameter maximum is 2, please check your input. See 'gnvm help config'.")
 		}
 	},
 }
