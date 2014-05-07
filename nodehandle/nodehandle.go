@@ -134,7 +134,7 @@ func Use(folder string, global bool) {
 	//fmt.Printf("root node.exe verison is: %v", rootVersion)
 
 	// check folder is rootVersion
-	if folder == rootVersion || folder == latestVersion {
+	if folder == rootVersion || folder == latestVersion || rootVersion == latestVersion {
 		fmt.Printf("Current node.exe version is [%v], not re-use. See 'gnvm node-version'.", folder)
 		return
 	}
