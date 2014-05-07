@@ -56,64 +56,73 @@ func copy(src, dest string) error {
 	return err
 }
 
-func Use(folderName string, global bool) {
+/**
+ * rootPath is gnvm.exe root path,     e.g <root>
+ * rootNode is rootPath + "/node.exe", e.g. <root>/node.exe
+ *
+ * usePath  is use node version path,  e.g. <root>/x.xx.xx
+ * useNode  is usePath + "/node.exe",  e.g. <root>/x.xx.xx/node.exe
+ */
+func Use(folder string, global bool) {
 
-	// get current path
+	// set rootPath and rootNode
 	rootPath := getCurrentPath() + DIVIDE
+	rootNode := rootPath + NODE
 	//fmt.Println("Current path is " + rootPath)
 
-	// get use node path
-	nodePath := rootPath + folderName + DIVIDE
-	//fmt.Println("Node.exe path is " + nodePath)
+	// set usePath and useNode
+	usePath := rootPath + folder + DIVIDE
+	useNode := usePath + NODE
+	//fmt.Println("Node.exe path is " + usePath)
 
-	// <root>/foldName/ is exist
-	if isDirExist(nodePath) != true {
-		fmt.Printf("%v version is not exist. Get local node.exe version see 'gnvm ls'.", folderName)
+	// <root>/folder is exist
+	if isDirExist(usePath) != true {
+		fmt.Printf("%v version is not exist. Get local node.exe version see 'gnvm ls'.", folder)
 		return
 	}
 
 	// <root>/node.exe is exist
-	if isDirExist(rootPath+NODE) != true {
+	if isDirExist(rootNode) != true {
 		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
 		return
 	}
 
-	// current node.exe
-	currentVersion, err := getNodeVersion(rootPath)
+	// get <root>/node.exe version
+	rootVersion, err := getNodeVersion(rootPath)
 	if err != nil {
 		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
 	}
-	//fmt.Printf("root node.exe verison is: %v", currentVersion)
+	//fmt.Printf("root node.exe verison is: %v", rootVersion)
 
-	// <root>/currentVersion is exist?
-	if isDirExist(rootPath+currentVersion+DIVIDE) != true {
+	// <root>/rootVersion is exist
+	if isDirExist(rootPath+rootVersion) != true {
 
-		// create currentversion folder
-		if err := cmd("md", currentVersion); err != nil {
-			fmt.Printf("Create %v folder Error: %v", currentVersion, err.Error())
+		// create rootVersion folder
+		if err := cmd("md", rootVersion); err != nil {
+			fmt.Printf("Create %v folder Error: %v", rootVersion, err.Error())
 			return
 		}
 
 	}
 
-	// copy currentVersion to <root>/currentVersion
-	if err := copy(rootPath+NODE, rootPath+currentVersion); err != nil {
-		fmt.Printf("copy %v to %v folder Error: ", rootPath+NODE, rootPath+currentVersion, err.Error())
+	// copy rootNode to <root>/rootVersion
+	if err := copy(rootNode, rootPath+rootVersion); err != nil {
+		fmt.Printf("copy %v to %v folder Error: ", rootNode, rootPath+rootVersion, err.Error())
 		return
 	}
 
 	// delete <root>/node.exe
-	if err := os.Remove(rootPath + NODE); err != nil {
-		fmt.Printf("remove %v to %v folder Error: ", rootPath+NODE, err.Error())
+	if err := os.Remove(rootNode); err != nil {
+		fmt.Printf("remove %v to %v folder Error: ", rootNode, err.Error())
 		return
 	}
 
-	// copy currentVersion to <root>/currentVersion
-	if err := copy(nodePath+NODE, rootPath); err != nil {
-		fmt.Printf("copy %v to %v folder Error: ", nodePath+NODE, rootPath, err.Error())
+	// copy useNode to rootPath
+	if err := copy(useNode, rootPath); err != nil {
+		fmt.Printf("copy %v to %v folder Error: ", useNode, rootPath, err.Error())
 		return
 	}
 
-	fmt.Printf("Set success, Current Node.exe version is [%v].", folderName)
+	fmt.Printf("Set success, Current Node.exe version is [%v].", folder)
 
 }
