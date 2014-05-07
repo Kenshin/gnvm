@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 const (
@@ -40,7 +41,9 @@ func isDirExist(path string) bool {
 func getNodeVersion(path string) (string, error) {
 	out, err := exec.Command(path+"node", "--version").Output()
 	//string(out[:]) bytes to string
-	return string(string(out[:])[1:]), err
+	// replace \r\n
+	newout := strings.Replace(string(string(out[:])[1:]), "\r\n", "", -1)
+	return newout, err
 }
 
 func cmd(name, arg string) error {
