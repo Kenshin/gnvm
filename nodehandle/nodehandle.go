@@ -28,7 +28,6 @@ func getCurrentPath() string {
 }
 
 func isDirExist(path string) bool {
-	fmt.Println(path)
 	_, err := os.Stat(path)
 	if err != nil {
 		return os.IsExist(err)
@@ -62,6 +61,9 @@ func copy(src, dest string) error {
  *
  * usePath  is use node version path,  e.g. <root>/x.xx.xx
  * useNode  is usePath + "/node.exe",  e.g. <root>/x.xx.xx/node.exe
+ *
+ * rootVersion is <root>/node.exe version
+ * rootFolder  is <root>/rootVersion
  */
 func Use(folder string, global bool) {
 
@@ -93,6 +95,7 @@ func Use(folder string, global bool) {
 		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
 	}
 	//fmt.Printf("root node.exe verison is: %v", rootVersion)
+	rootFolder := rootPath + rootVersion
 
 	// <root>/rootVersion is exist
 	if isDirExist(rootPath+rootVersion) != true {
