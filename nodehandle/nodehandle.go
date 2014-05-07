@@ -34,7 +34,7 @@ func GetGlobalNodePath() string {
 	if globalNodePath == "." {
 		globalNodePath = "root"
 	}
-	log.Println("Node.exe path: ", globalNodePath)
+	//log.Println("Node.exe path: ", globalNodePath)
 
 	return globalNodePath
 }
@@ -97,12 +97,12 @@ func Use(folder string, global bool) {
 		rootPath = globalNodePath + DIVIDE
 		rootNode = rootPath + NODE
 	}
-	log.Println("Current path is: " + rootPath)
+	//log.Println("Current path is: " + rootPath)
 
 	// set usePath and useNode
 	usePath := rootPath + folder + DIVIDE
 	useNode := usePath + NODE
-	log.Println("Node.exe path is: " + usePath)
+	//log.Println("Node.exe path is: " + usePath)
 
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
