@@ -88,7 +88,7 @@ func copy(src, dest string) error {
  * rootVersion is <root>/node.exe version
  * rootFolder  is <root>/rootVersion
  */
-func Use(folder string, global bool) {
+func Use(folder string, global bool) bool {
 
 	// set latestVersiion
 	latestVersion := config.GetConfig(config.LATEST_VERSION)
@@ -117,26 +117,27 @@ func Use(folder string, global bool) {
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
 		fmt.Printf("%v version is not exist. Get local node.exe version see 'gnvm ls'.", folder)
-		return
+		return false
 	}
 
 	// <root>/node.exe is exist
 	if isDirExist(rootNode) != true {
 		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
-		return
+		return false
 	}
 
 	// get <root>/node.exe version
 	rootVersion, err := getNodeVersion(rootPath)
 	if err != nil {
 		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
+		return false
 	}
 	//fmt.Printf("root node.exe verison is: %v", rootVersion)
 
 	// check folder is rootVersion
 	if folder == rootVersion || folder == latestVersion || rootVersion == latestVersion {
 		fmt.Printf("Current node.exe version is [%v], not re-use. See 'gnvm node-version'.", folder)
-		return
+		return false
 	}
 
 	// set rootFolder
@@ -151,7 +152,7 @@ func Use(folder string, global bool) {
 		// create rootVersion folder
 		if err := cmd("md", rootPath+rootVersion); err != nil {
 			fmt.Printf("Create %v folder Error: %v", rootVersion, err.Error())
-			return
+			return false
 		}
 
 	}
@@ -159,22 +160,24 @@ func Use(folder string, global bool) {
 	// copy rootNode to <root>/rootVersion
 	if err := copy(rootNode, rootFolder); err != nil {
 		fmt.Printf("copy %v to %v folder Error: ", rootNode, rootFolder, err.Error())
-		return
+		return false
 	}
 
 	// delete <root>/node.exe
 	if err := os.Remove(rootNode); err != nil {
 		fmt.Printf("remove %v to %v folder Error: ", rootNode, err.Error())
-		return
+		return false
 	}
 
 	// copy useNode to rootPath
 	if err := copy(useNode, rootPath); err != nil {
 		fmt.Printf("copy %v to %v folder Error: ", useNode, rootPath, err.Error())
-		return
+		return false
 	}
 
 	fmt.Printf("Set success, Current Node.exe version is [%v].", folder)
+
+	return true
 
 }
 
