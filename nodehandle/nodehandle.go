@@ -8,6 +8,9 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	// local
+	"gnvm/config"
 )
 
 const (
@@ -86,6 +89,14 @@ func copy(src, dest string) error {
  */
 func Use(folder string, global bool) {
 
+	// set latestVersiion
+	latestVersion := config.GetConfig(config.LATEST_VERSION)
+
+	// reset folder
+	if latestVersion != "unknown" && latestVersion == folder {
+		folder = "latest"
+	}
+
 	// set rootPath and rootNode
 	var rootPath, rootNode string
 	if globalNodePath == "root" {
@@ -122,12 +133,15 @@ func Use(folder string, global bool) {
 	//fmt.Printf("root node.exe verison is: %v", rootVersion)
 
 	// check folder is rootVersion
-	if rootVersion == folder {
+	if folder == rootVersion || folder == latestVersion {
 		fmt.Printf("Current node.exe version is [%v], not re-use. See 'gnvm node-version'.", folder)
 		return
 	}
 
 	// set rootFolder
+	if rootVersion == latestVersion {
+		rootVersion = "latest"
+	}
 	rootFolder := rootPath + rootVersion
 
 	// <root>/rootVersion is exist
