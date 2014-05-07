@@ -1,4 +1,6 @@
-.gnvmrc
+*.*
 
-0.11.2
-0.10.28
+!gnvm.go
+!command/*
+!config/*
+!nodehandle/*
