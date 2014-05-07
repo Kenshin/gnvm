@@ -12,9 +12,7 @@ import (
 
 const (
 	DIVIDE = "\\"
-	//NODEHOME = "NODE_HOME_2"
-	PATH = "path"
-	NODE = "node.exe"
+	NODE   = "node.exe"
 )
 
 var globalNodePath string
