@@ -157,6 +157,13 @@ var configCmd = &cobra.Command{
 	},
 }
 
+func init() {
+	// get node.exe root
+	noderoot := nodehandle.GetGlobalNodePath()
+	// set node.exe root to .gnvmrc
+	config.SetConfig(config.NODEROOT, noderoot)
+}
+
 func Exec() {
 
 	// add sub cmd to root

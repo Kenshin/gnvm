@@ -16,6 +16,7 @@ const (
 
 	REGISTRY_KEY = "registry: "
 	REGISTRY_VAL = "http://nodejs.org/dist/"
+	NODEROOT     = "noderoot"
 	NODEROOT_KEY = "noderoot: "
 	NODEROOT_VAL = "root"
 

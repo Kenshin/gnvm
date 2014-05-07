@@ -4,6 +4,7 @@ import (
 
 	// go
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -15,6 +16,23 @@ const (
 	PATH = "path"
 	NODE = "node.exe"
 )
+
+var globalNodePath string
+
+func GetGlobalNodePath() string {
+
+	// get node.exe path
+	file, err := exec.LookPath(NODE)
+	if err != nil {
+		globalNodePath = "root"
+	} else {
+		// relpace "\\node.exe"
+		globalNodePath = strings.Replace(file, DIVIDE+NODE, "", -1)
+	}
+	log.Println("Node.exe path: ", globalNodePath)
+
+	return globalNodePath
+}
 
 func getCurrentPath() string {
 	path, err := os.Getwd()
