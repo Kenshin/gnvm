@@ -4,7 +4,7 @@ import (
 
 	// go
 	"fmt"
-	"log"
+	//"log"
 	"os"
 	"os/exec"
 	"strings"
