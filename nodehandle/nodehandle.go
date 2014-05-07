@@ -181,6 +181,9 @@ func Use(folder string, global bool) {
 func VerifyNodeVersion(version string) bool {
 	result := true
 	arr := strings.Split(version, ".")
+	if len(arr) != 3 {
+		return false
+	}
 	for _, v := range arr {
 		_, err := strconv.ParseInt(v, 10, 0)
 		if err != nil {
