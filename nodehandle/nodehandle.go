@@ -7,6 +7,7 @@ import (
 	//"log"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 
 	// local
@@ -175,4 +176,17 @@ func Use(folder string, global bool) {
 
 	fmt.Printf("Set success, Current Node.exe version is [%v].", folder)
 
+}
+
+func VerifyNodeVersion(version string) bool {
+	result := true
+	arr := strings.Split(version, ".")
+	for _, v := range arr {
+		_, err := strconv.ParseInt(v, 10, 0)
+		if err != nil {
+			result = false
+			break
+		}
+	}
+	return result
 }
