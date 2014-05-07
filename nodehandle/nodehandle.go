@@ -84,14 +84,20 @@ func copy(src, dest string) error {
 func Use(folder string, global bool) {
 
 	// set rootPath and rootNode
-	rootPath := getCurrentPath() + DIVIDE
-	rootNode := rootPath + NODE
-	//fmt.Println("Current path is " + rootPath)
+	var rootPath, rootNode string
+	if globalNodePath == "root" {
+		rootPath = getCurrentPath() + DIVIDE
+		rootNode = rootPath + NODE
+	} else {
+		rootPath = globalNodePath + DIVIDE
+		rootNode = rootPath + NODE
+	}
+	log.Println("Current path is: " + rootPath)
 
 	// set usePath and useNode
 	usePath := rootPath + folder + DIVIDE
 	useNode := usePath + NODE
-	//fmt.Println("Node.exe path is " + usePath)
+	log.Println("Node.exe path is: " + usePath)
 
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
@@ -125,7 +131,7 @@ func Use(folder string, global bool) {
 	if isDirExist(rootFolder) != true {
 
 		// create rootVersion folder
-		if err := cmd("md", rootVersion); err != nil {
+		if err := cmd("md", rootPath+rootVersion); err != nil {
 			fmt.Printf("Create %v folder Error: %v", rootVersion, err.Error())
 			return
 		}
