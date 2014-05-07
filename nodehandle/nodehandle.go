@@ -95,10 +95,18 @@ func Use(folder string, global bool) {
 		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
 	}
 	//fmt.Printf("root node.exe verison is: %v", rootVersion)
+
+	// check folder is rootVersion
+	if rootVersion == folder {
+		fmt.Printf("Current node.exe version is [%v], not re-use. See 'gnvm node-version'.", folder)
+		return
+	}
+
+	// set rootFolder
 	rootFolder := rootPath + rootVersion
 
 	// <root>/rootVersion is exist
-	if isDirExist(rootPath+rootVersion) != true {
+	if isDirExist(rootFolder) != true {
 
 		// create rootVersion folder
 		if err := cmd("md", rootVersion); err != nil {
@@ -109,8 +117,8 @@ func Use(folder string, global bool) {
 	}
 
 	// copy rootNode to <root>/rootVersion
-	if err := copy(rootNode, rootPath+rootVersion); err != nil {
-		fmt.Printf("copy %v to %v folder Error: ", rootNode, rootPath+rootVersion, err.Error())
+	if err := copy(rootNode, rootFolder); err != nil {
+		fmt.Printf("copy %v to %v folder Error: ", rootNode, rootFolder, err.Error())
 		return
 	}
 
