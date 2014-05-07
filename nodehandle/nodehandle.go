@@ -29,6 +29,11 @@ func GetGlobalNodePath() string {
 		// relpace "\\node.exe"
 		globalNodePath = strings.Replace(file, DIVIDE+NODE, "", -1)
 	}
+
+	// gnvm.exe and node.exe the same path
+	if globalNodePath == "." {
+		globalNodePath = "root"
+	}
 	log.Println("Node.exe path: ", globalNodePath)
 
 	return globalNodePath
