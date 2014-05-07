@@ -75,11 +75,16 @@ var useCmd = &cobra.Command{
 'gnvm use x.xx.xx'
 'gnvm use x.xx.xx --global'`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("gnvm use args include " + strings.Join(args, " "))
-		fmt.Println("global flag is " + strconv.FormatBool(global))
+		//fmt.Println("gnvm use args include " + strings.Join(args, " "))
+		//fmt.Println("global flag is " + strconv.FormatBool(global))
 
 		if len(args) == 1 {
+
+			// set use
 			nodehandle.Use(args[0], global)
+
+			// set global version
+			config.SetConfig(config.GLOBAL_VERSION, args[0])
 		} else {
 			fmt.Println("Use parameter maximum is 1, please check your input. See 'gnvm help use'.")
 		}
