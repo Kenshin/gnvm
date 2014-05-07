@@ -16,8 +16,6 @@ const (
 	NODE = "node.exe"
 )
 
-var rootPath string
-
 func getCurrentPath() string {
 	path, err := os.Getwd()
 	if err != nil {
