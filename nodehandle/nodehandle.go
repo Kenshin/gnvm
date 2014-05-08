@@ -218,3 +218,14 @@ func NodeVersion() {
 Node.exe latest verson is [%v]
 when version is [%v], please See 'gnvm use help'.`, latest, global, config.UNKNOWN)
 }
+
+func Uninstall(version string) {
+	fmt.Println("version is " + version)
+	/*
+		if err := os.Remove(version); err != nil {
+			fmt.Printf("Uinstall [%v] fail, Error: %v", version, err.Error())
+			return
+		}
+		fmt.Printf("[%v] uninstall success.", version)
+	*/
+}
