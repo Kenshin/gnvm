@@ -19,7 +19,7 @@ const (
 	NODE   = "node.exe"
 )
 
-var globalNodePath string
+var globalNodePath, rootPath string
 
 func GetGlobalNodePath() string {
 
@@ -83,6 +83,19 @@ func copy(src, dest string) error {
 
 /**
  * rootPath is gnvm.exe root path,     e.g <root>
+ */
+func SetRootPath() {
+
+	// set rootPath and rootNode
+	if globalNodePath == "root" {
+		rootPath = getCurrentPath() + DIVIDE
+	} else {
+		rootPath = globalNodePath + DIVIDE
+	}
+	//log.Println("Current path is: " + rootPath)
+}
+
+/**
  * rootNode is rootPath + "/node.exe", e.g. <root>/node.exe
  *
  * usePath  is use node version path,  e.g. <root>/x.xx.xx
@@ -93,30 +106,17 @@ func copy(src, dest string) error {
  */
 func Use(folder string) bool {
 
-	// set latestVersiion
-	latestVersion := config.GetConfig(config.LATEST_VERSION)
+	// get true folder, e.g. folder is latest return x.xx.xx
+	folder = GetTrueVersion(folder)
 
-	if folder == config.LATEST && latestVersion == config.UNKNOWN {
-		fmt.Println("Unassigned latest version. See 'gnvm install latest'.")
+	if folder == config.UNKNOWN {
+		fmt.Println("Waring: Unassigned Node.js latest version. See 'gnvm install latest'.")
 		return false
 	}
 
-	// reset folder
-	if folder == config.LATEST {
-		folder = latestVersion
-		fmt.Printf("Current latest version is [%v] \n", latestVersion)
-	}
-
-	// set rootPath and rootNode
-	var rootPath, rootNode string
-	if globalNodePath == "root" {
-		rootPath = getCurrentPath() + DIVIDE
-		rootNode = rootPath + NODE
-	} else {
-		rootPath = globalNodePath + DIVIDE
-		rootNode = rootPath + NODE
-	}
-	//log.Println("Current path is: " + rootPath)
+	// set rootNode
+	rootNode := rootPath + NODE
+	//log.Println("Root node path is: " + rootNode)
 
 	// set usePath and useNode
 	usePath := rootPath + folder + DIVIDE
@@ -126,20 +126,20 @@ func Use(folder string) bool {
 	// get <root>/node.exe version
 	rootVersion, err := getNodeVersion(rootPath)
 	if err != nil {
-		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
+		fmt.Println("Not found global node version, please checkout. If not exist node.exe. See 'gnvm install latest'.")
 		return false
 	}
 	//log.Printf("Root node.exe verison is: %v \n", rootVersion)
 
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
-		fmt.Printf("[%v] folder is not exist. Get local node.exe version see 'gnvm ls'.", folder)
+		fmt.Printf("[%v] folder is not exist. Get local node.exe version. See 'gnvm ls'.", folder)
 		return false
 	}
 
 	// <root>/node.exe is exist
 	if isDirExist(rootNode) != true {
-		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
+		fmt.Println("Not found global node version, please checkout. If not exist node.exe. See 'gnvm install latest'.")
 		return false
 	}
 
@@ -189,6 +189,9 @@ func Use(folder string) bool {
 
 func VerifyNodeVersion(version string) bool {
 	result := true
+	if version == config.UNKNOWN {
+		return true
+	}
 	arr := strings.Split(version, ".")
 	if len(arr) != 3 {
 		return false
@@ -205,7 +208,8 @@ func VerifyNodeVersion(version string) bool {
 
 func GetTrueVersion(latest string) string {
 	if latest == config.LATEST {
-		return config.GetConfig(config.LATEST_VERSION)
+		latest = config.GetConfig(config.LATEST_VERSION)
+		fmt.Printf("Current latest version is [%v] \n", latest)
 	}
 	return latest
 }
@@ -216,5 +220,30 @@ func NodeVersion() {
 
 	fmt.Printf(`Node.exe global verson is [%v]
 Node.exe latest verson is [%v]
-when version is [%v], please See 'gnvm use help'.`, latest, global, config.UNKNOWN)
+Notice: When version is [%v], please See 'gnvm use help'.`, global, latest, config.UNKNOWN)
+}
+
+func Uninstall(folder string) {
+
+	// set removePath
+	removePath := rootPath + folder
+
+	if folder == config.UNKNOWN {
+		fmt.Println("Waring: Unassigned Node.js latest version. See 'gnvm install latest'.")
+		return
+	}
+
+	// rootPath/version is exist
+	if isDirExist(removePath) != true {
+		fmt.Printf("Waring: [%v] folder is not exist. Get local node.exe version. See 'gnvm ls'.\n", folder)
+		return
+	}
+
+	// remove rootPath/version folder
+	if err := os.RemoveAll(removePath); err != nil {
+		fmt.Printf("Uinstall [%v] fail, Error: %v", folder, err.Error())
+		return
+	}
+
+	fmt.Printf("Node.exe version [%v] uninstall success. \n", folder)
 }
