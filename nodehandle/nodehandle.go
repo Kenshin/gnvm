@@ -106,18 +106,12 @@ func SetRootPath() {
  */
 func Use(folder string) bool {
 
-	// set latestVersiion
-	latestVersion := config.GetConfig(config.LATEST_VERSION)
+	// get true folder, e.g. folder is latest return x.xx.xx
+	folder = GetTrueVersion(folder)
 
-	if folder == config.LATEST && latestVersion == config.UNKNOWN {
-		fmt.Println("Unassigned latest version. See 'gnvm install latest'.")
+	if folder == config.UNKNOWN {
+		fmt.Println("Waring: Unassigned Node.js latest version. See 'gnvm install latest'.")
 		return false
-	}
-
-	// reset folder
-	if folder == config.LATEST {
-		folder = latestVersion
-		fmt.Printf("Current latest version is [%v] \n", latestVersion)
 	}
 
 	// set rootNode
@@ -195,6 +189,9 @@ func Use(folder string) bool {
 
 func VerifyNodeVersion(version string) bool {
 	result := true
+	if version == config.UNKNOWN {
+		return true
+	}
 	arr := strings.Split(version, ".")
 	if len(arr) != 3 {
 		return false
@@ -211,7 +208,8 @@ func VerifyNodeVersion(version string) bool {
 
 func GetTrueVersion(latest string) string {
 	if latest == config.LATEST {
-		return config.GetConfig(config.LATEST_VERSION)
+		latest = config.GetConfig(config.LATEST_VERSION)
+		fmt.Printf("Current latest version is [%v] \n", latest)
 	}
 	return latest
 }
@@ -229,6 +227,11 @@ func Uninstall(folder string) {
 
 	// set removePath
 	removePath := rootPath + folder
+
+	if folder == config.UNKNOWN {
+		fmt.Println("Waring: Unassigned Node.js latest version. See 'gnvm install latest'.")
+		return
+	}
 
 	// rootPath/version is exist
 	if isDirExist(removePath) != true {

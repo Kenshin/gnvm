@@ -68,6 +68,11 @@ gnvm uninstall 0.10.26 0.11.2`,
 			fmt.Println("Error: 'gnvm uninstall' need parameter, please check your input. See 'gnvm help uninstall'.")
 		} else {
 			for _, v := range args {
+
+				// get true version
+				v = nodehandle.GetTrueVersion(v)
+
+				// check version format
 				if ok := nodehandle.VerifyNodeVersion(v); ok != true {
 					fmt.Printf("Error: [%v] format error, the correct format is x.xx.xx. \n", v)
 				} else {
