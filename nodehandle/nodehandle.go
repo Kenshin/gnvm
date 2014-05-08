@@ -220,7 +220,7 @@ func NodeVersion() {
 
 	fmt.Printf(`Node.exe global verson is [%v]
 Node.exe latest verson is [%v]
-when version is [%v], please See 'gnvm use help'.`, latest, global, config.UNKNOWN)
+Notice: When version is [%v], please See 'gnvm use help'.`, latest, global, config.UNKNOWN)
 }
 
 func Uninstall(folder string) {
