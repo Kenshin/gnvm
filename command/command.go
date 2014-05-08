@@ -125,15 +125,15 @@ var lsCmd = &cobra.Command{
 // sub cmd
 var nodeVersionCmd = &cobra.Command{
 	Use:   "node-version",
-	Short: "show global | current | latest node.js version",
-	Long: `show global | current | latest node.js version e.g.
-'gnvm node-version'
-'laest version is x.xx.xx'
-'global version is x.xx.xx'
-'current version is x.xx.xx'`,
+	Short: "show global | latest node.js version",
+	Long: `show global | latest node.js version e.g.
+gnvm node-version
+Node.exe global verson is [x.xx.xx]
+Node.exe latest verson is [x.xx.xx]`,
 	Run: func(cmd *cobra.Command, args []string) {
-		//fmt.Println("gnvm node-version args include " + strings.Join(args, " "))
-		//TO DO
+		if len(args) > 0 {
+			fmt.Println("Warning: gnvm node-version no parameter, please check your input. See 'gnvm help use'.")
+		}
 		nodehandle.NodeVersion()
 	},
 }

@@ -214,7 +214,7 @@ func NodeVersion() {
 	latest := config.GetConfig(config.LATEST_VERSION)
 	global := config.GetConfig(config.GLOBAL_VERSION)
 
-	fmt.Printf(`gnvm global verson is [%v]
-gnvm latest verson is [%v]
+	fmt.Printf(`Node.exe global verson is [%v]
+Node.exe latest verson is [%v]
 when version is [%v], please See 'gnvm use help'.`, latest, global, config.UNKNOWN)
 }
