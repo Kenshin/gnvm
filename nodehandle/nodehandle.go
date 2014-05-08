@@ -96,7 +96,7 @@ func Use(folder string) bool {
 	// set latestVersiion
 	latestVersion := config.GetConfig(config.LATEST_VERSION)
 
-	if folder == "latest" && latestVersion == "unknown" {
+	if folder == "latest" && latestVersion == config.UNKNOWN {
 		fmt.Println("Unassigned latest version. See 'gnvm install latest'.")
 		return false
 	}
