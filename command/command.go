@@ -72,8 +72,7 @@ var useCmd = &cobra.Command{
 	Use:   "use",
 	Short: "use the specific version by current cmd( temp )",
 	Long: `use the specific version by current cmd( temp ) like :
-'gnvm use x.xx.xx'
-'gnvm use x.xx.xx --global'`,
+'gnvm use x.xx.xx'`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//fmt.Println("gnvm use args include " + strings.Join(args, " "))
 		//fmt.Println("global flag is " + strconv.FormatBool(global))
@@ -86,7 +85,7 @@ var useCmd = &cobra.Command{
 			}
 
 			// set use
-			if ok := nodehandle.Use(args[0], global); ok == true {
+			if ok := nodehandle.Use(args[0]); ok == true {
 				// set global version
 				config.SetConfig(config.GLOBAL_VERSION, nodehandle.GetTrueVersion(args[0]))
 			}
@@ -183,7 +182,7 @@ func Exec() {
 
 	// flag
 	installCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "get this version global version")
-	useCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "get this version global version")
+	//useCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "get this version global version")
 	lsCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote all node.js version list")
 
 	// exec

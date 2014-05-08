@@ -88,7 +88,7 @@ func copy(src, dest string) error {
  * rootVersion is <root>/node.exe version
  * rootFolder  is <root>/rootVersion
  */
-func Use(folder string, global bool) bool {
+func Use(folder string) bool {
 
 	// set latestVersiion
 	latestVersion := config.GetConfig(config.LATEST_VERSION)
