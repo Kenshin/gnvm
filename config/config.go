@@ -14,6 +14,7 @@ const (
 	CONFIG  = ".gnvmrc"
 	NEWLINE = "\n"
 	UNKNOWN = "unknown"
+	LATEST  = "latest"
 
 	REGISTRY_KEY = "registry: "
 	REGISTRY_VAL = "http://nodejs.org/dist/"

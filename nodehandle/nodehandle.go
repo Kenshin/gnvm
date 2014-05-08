@@ -96,13 +96,13 @@ func Use(folder string) bool {
 	// set latestVersiion
 	latestVersion := config.GetConfig(config.LATEST_VERSION)
 
-	if folder == "latest" && latestVersion == config.UNKNOWN {
+	if folder == config.LATEST && latestVersion == config.UNKNOWN {
 		fmt.Println("Unassigned latest version. See 'gnvm install latest'.")
 		return false
 	}
 
 	// reset folder
-	if folder == "latest" {
+	if folder == config.LATEST {
 		folder = latestVersion
 		fmt.Printf("Current latest version is [%v] \n", latestVersion)
 	}
@@ -204,7 +204,7 @@ func VerifyNodeVersion(version string) bool {
 }
 
 func GetTrueVersion(latest string) string {
-	if latest == "latest" {
+	if latest == config.LATEST {
 		return config.GetConfig(config.LATEST_VERSION)
 	}
 	return latest
