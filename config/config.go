@@ -24,15 +24,15 @@ const (
 
 	GLOBAL_VERSION     = "globalversion"
 	GLOBAL_VERSION_KEY = "globalversion: "
-	GLOBAL_VERSION_VAL = "unknown"
+	GLOBAL_VERSION_VAL = UNKNOWN
 
 	LATEST_VERSION     = "latestversion"
 	LATEST_VERSION_KEY = "latestversion: "
-	LATEST_VERSION_VAL = "unknown"
+	LATEST_VERSION_VAL = UNKNOWN
 
 	CURRENT_VERSION     = "currentversion"
 	CURRENT_VERSION_KEY = "currentversion: "
-	CURRENT_VERSION_VAL = "unknown"
+	CURRENT_VERSION_VAL = UNKNOWN
 )
 
 func init() {
