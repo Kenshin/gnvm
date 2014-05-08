@@ -3,8 +3,8 @@ package nodehandle
 import (
 
 	// go
-	"fmt"
 	//"log"
+	"fmt"
 	"os"
 	"os/exec"
 	"strconv"
@@ -36,7 +36,7 @@ func GetGlobalNodePath() string {
 	if globalNodePath == "." {
 		globalNodePath = "root"
 	}
-	//log.Println("Node.exe path: ", globalNodePath)
+	//log.Println("Node.exe path is: ", globalNodePath)
 
 	return globalNodePath
 }
@@ -93,9 +93,15 @@ func Use(folder string, global bool) bool {
 	// set latestVersiion
 	latestVersion := config.GetConfig(config.LATEST_VERSION)
 
+	if folder == "latest" && latestVersion == "unknown" {
+		fmt.Println("Unassigned latest version. See 'gnvm install latest'.")
+		return false
+	}
+
 	// reset folder
-	if latestVersion != "unknown" && latestVersion == folder {
-		folder = "latest"
+	if folder == "latest" {
+		folder = latestVersion
+		fmt.Println("Current latest version is: " + latestVersion)
 	}
 
 	// set rootPath and rootNode
@@ -112,11 +118,11 @@ func Use(folder string, global bool) bool {
 	// set usePath and useNode
 	usePath := rootPath + folder + DIVIDE
 	useNode := usePath + NODE
-	//log.Println("Node.exe path is: " + usePath)
+	//log.Println("Use node.exe path is: " + usePath)
 
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
-		fmt.Printf("%v version is not exist. Get local node.exe version see 'gnvm ls'.", folder)
+		fmt.Printf("[%v] folder is not exist. Get local node.exe version see 'gnvm ls'.", folder)
 		return false
 	}
 
@@ -132,25 +138,22 @@ func Use(folder string, global bool) bool {
 		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
 		return false
 	}
-	//fmt.Printf("root node.exe verison is: %v", rootVersion)
+	//log.Printf("Root node.exe verison is: %v \n", rootVersion)
 
 	// check folder is rootVersion
-	if folder == rootVersion || folder == latestVersion || rootVersion == latestVersion {
+	if folder == rootVersion {
 		fmt.Printf("Current node.exe version is [%v], not re-use. See 'gnvm node-version'.", folder)
 		return false
 	}
 
 	// set rootFolder
-	if rootVersion == latestVersion {
-		rootVersion = "latest"
-	}
 	rootFolder := rootPath + rootVersion
 
 	// <root>/rootVersion is exist
 	if isDirExist(rootFolder) != true {
 
 		// create rootVersion folder
-		if err := cmd("md", rootPath+rootVersion); err != nil {
+		if err := cmd("md", rootFolder); err != nil {
 			fmt.Printf("Create %v folder Error: %v", rootVersion, err.Error())
 			return false
 		}
@@ -195,4 +198,11 @@ func VerifyNodeVersion(version string) bool {
 		}
 	}
 	return result
+}
+
+func GetTrueVersion(latest string) string {
+	if latest == "latest" {
+		return config.GetConfig(config.LATEST_VERSION)
+	}
+	return latest
 }

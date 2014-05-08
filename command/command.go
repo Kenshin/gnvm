@@ -88,7 +88,7 @@ var useCmd = &cobra.Command{
 			// set use
 			if ok := nodehandle.Use(args[0], global); ok == true {
 				// set global version
-				config.SetConfig(config.GLOBAL_VERSION, args[0])
+				config.SetConfig(config.GLOBAL_VERSION, nodehandle.GetTrueVersion(args[0]))
 			}
 		} else {
 			fmt.Println("Use parameter maximum is 1, please check your input. See 'gnvm help use'.")
