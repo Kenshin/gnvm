@@ -133,11 +133,17 @@ var lsCmd = &cobra.Command{
 gnvm ls
 gnvm ls --remote`,
 	Run: func(cmd *cobra.Command, args []string) {
-		//fmt.Println("gnvm ls args include " + strings.Join(args, " "))
-		//fmt.Println("remote flag is " + strconv.FormatBool(remote))
-		//TO DO
+
+		// check args
 		if len(args) > 0 {
 			fmt.Println("Warning: gnvm ls no parameter, please check your input. See 'gnvm help ls'.")
+		}
+
+		if remote == true {
+			fmt.Println("call remote ls")
+		} else {
+			// check local ls
+			nodehandle.LS()
 		}
 	},
 }

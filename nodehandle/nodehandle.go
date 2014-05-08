@@ -247,3 +247,7 @@ func Uninstall(folder string) {
 
 	fmt.Printf("Node.exe version [%v] uninstall success. \n", folder)
 }
+
+func LS() {
+	fmt.Println("LS")
+}
