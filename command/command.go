@@ -130,12 +130,15 @@ var lsCmd = &cobra.Command{
 	Use:   "ls",
 	Short: "list show all local | remote node.js version",
 	Long: `list show all local | remote node.js version e.g.
-'gnvm ls'
-'gnvm ls --remote'`,
+gnvm ls
+gnvm ls --remote`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("gnvm ls args include " + strings.Join(args, " "))
-		fmt.Println("remote flag is " + strconv.FormatBool(remote))
+		//fmt.Println("gnvm ls args include " + strings.Join(args, " "))
+		//fmt.Println("remote flag is " + strconv.FormatBool(remote))
 		//TO DO
+		if len(args) > 0 {
+			fmt.Println("Warning: gnvm ls no parameter, please check your input. See 'gnvm help ls'.")
+		}
 	},
 }
 
@@ -149,7 +152,7 @@ Node.exe global verson is [x.xx.xx]
 Node.exe latest verson is [x.xx.xx]`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 0 {
-			fmt.Println("Warning: gnvm node-version no parameter, please check your input. See 'gnvm help use'.")
+			fmt.Println("Warning: gnvm node-version no parameter, please check your input. See 'gnvm help node-version'.")
 		}
 		nodehandle.NodeVersion()
 	},
