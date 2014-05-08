@@ -108,14 +108,17 @@ func Use(folder string) bool {
 	}
 
 	// set rootPath and rootNode
-	var rootPath, rootNode string
+	var rootPath string
 	if globalNodePath == "root" {
 		rootPath = getCurrentPath() + DIVIDE
 	} else {
 		rootPath = globalNodePath + DIVIDE
 	}
-	rootNode = rootPath + NODE
 	//log.Println("Current path is: " + rootPath)
+
+	// set rootNode
+	rootNode := rootPath + NODE
+	//log.Println("Root node path is: " + rootNode)
 
 	// set usePath and useNode
 	usePath := rootPath + folder + DIVIDE
