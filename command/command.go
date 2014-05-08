@@ -70,9 +70,10 @@ var uninstallCmd = &cobra.Command{
 // sub cmd
 var useCmd = &cobra.Command{
 	Use:   "use",
-	Short: "use the specific version by current cmd( temp )",
-	Long: `use the specific version by current cmd( temp ) like :
-'gnvm use x.xx.xx'`,
+	Short: "use the specific version by global",
+	Long: `use the specific version by global like :
+'gnvm use x.xx.xx'
+'gnvm use latest'`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//fmt.Println("gnvm use args include " + strings.Join(args, " "))
 		//fmt.Println("global flag is " + strconv.FormatBool(global))
