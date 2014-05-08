@@ -19,7 +19,7 @@ const (
 	NODE   = "node.exe"
 )
 
-var globalNodePath string
+var globalNodePath, rootPath string
 
 func GetGlobalNodePath() string {
 
@@ -83,6 +83,19 @@ func copy(src, dest string) error {
 
 /**
  * rootPath is gnvm.exe root path,     e.g <root>
+ */
+func SetRootPath() {
+
+	// set rootPath and rootNode
+	if globalNodePath == "root" {
+		rootPath = getCurrentPath() + DIVIDE
+	} else {
+		rootPath = globalNodePath + DIVIDE
+	}
+	//log.Println("Current path is: " + rootPath)
+}
+
+/**
  * rootNode is rootPath + "/node.exe", e.g. <root>/node.exe
  *
  * usePath  is use node version path,  e.g. <root>/x.xx.xx
@@ -106,15 +119,6 @@ func Use(folder string) bool {
 		folder = latestVersion
 		fmt.Printf("Current latest version is [%v] \n", latestVersion)
 	}
-
-	// set rootPath and rootNode
-	var rootPath string
-	if globalNodePath == "root" {
-		rootPath = getCurrentPath() + DIVIDE
-	} else {
-		rootPath = globalNodePath + DIVIDE
-	}
-	//log.Println("Current path is: " + rootPath)
 
 	// set rootNode
 	rootNode := rootPath + NODE

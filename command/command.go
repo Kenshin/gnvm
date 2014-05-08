@@ -179,6 +179,8 @@ func init() {
 	noderoot := nodehandle.GetGlobalNodePath()
 	// set node.exe root to .gnvmrc
 	config.SetConfig(config.NODEROOT, noderoot)
+	// set root path
+	nodehandle.SetRootPath()
 }
 
 func Exec() {
