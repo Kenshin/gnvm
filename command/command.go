@@ -11,6 +11,7 @@ import (
 
 	// local
 	"gnvm/config"
+	"gnvm/nodehandle"
 )
 
 var (
@@ -71,12 +72,26 @@ var useCmd = &cobra.Command{
 	Use:   "use",
 	Short: "use the specific version by current cmd( temp )",
 	Long: `use the specific version by current cmd( temp ) like :
-'gnvm use x.xx.xx'
-'gnvm use x.xx.xx --global'`,
+'gnvm use x.xx.xx'`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("gnvm use args include " + strings.Join(args, " "))
-		fmt.Println("global flag is " + strconv.FormatBool(global))
-		//TO DO
+		//fmt.Println("gnvm use args include " + strings.Join(args, " "))
+		//fmt.Println("global flag is " + strconv.FormatBool(global))
+
+		if len(args) == 1 {
+
+			if args[0] != "latest" && nodehandle.VerifyNodeVersion(args[0]) != true {
+				fmt.Println("Use parameter support 'latest' or 'x.xx.xx', e.g. 0.10.28, please check your input. See 'gnvm help use'.")
+				return
+			}
+
+			// set use
+			if ok := nodehandle.Use(args[0]); ok == true {
+				// set global version
+				config.SetConfig(config.GLOBAL_VERSION, nodehandle.GetTrueVersion(args[0]))
+			}
+		} else {
+			fmt.Println("Use parameter maximum is 1, please check your input. See 'gnvm help use'.")
+		}
 	},
 }
 
@@ -138,12 +153,19 @@ var configCmd = &cobra.Command{
 				newValue := config.SetConfig(args[0], args[1])
 				fmt.Println("Set success, [" + args[0] + "] new value is " + newValue)
 			default:
-				fmt.Println("Config parameter include 'registry' | 'noderoot', your input unknown, please check your input. See 'gnvm help'.")
+				fmt.Println("Config parameter include 'registry' | 'noderoot', your input unknown, please check your input. See 'gnvm help config'.")
 			}
 		} else if len(args) > 2 {
-			fmt.Println("Config parameter maximum is 2, please check your input. See 'gnvm help'.")
+			fmt.Println("Config parameter maximum is 2, please check your input. See 'gnvm help config'.")
 		}
 	},
+}
+
+func init() {
+	// get node.exe root
+	noderoot := nodehandle.GetGlobalNodePath()
+	// set node.exe root to .gnvmrc
+	config.SetConfig(config.NODEROOT, noderoot)
 }
 
 func Exec() {
@@ -160,7 +182,7 @@ func Exec() {
 
 	// flag
 	installCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "get this version global version")
-	useCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "get this version global version")
+	//useCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "get this version global version")
 	lsCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote all node.js version list")
 
 	// exec
