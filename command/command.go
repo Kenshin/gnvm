@@ -61,6 +61,7 @@ var uninstallCmd = &cobra.Command{
 	Short: "uninstall local node.js version",
 	Long: `uninstall local node.js version e.g.
 gnvm uninstall x.xx.xx
+gnvm uninstall latest
 gnvm uninstall 0.10.26 0.11.2 latest`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//fmt.Println("gnvm uninstall args include " + strings.Join(args, " "))
