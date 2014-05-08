@@ -44,7 +44,7 @@ var versionCmd = &cobra.Command{
 var installCmd = &cobra.Command{
 	Use:   "install",
 	Short: "install any node.js version",
-	Long: `install any node.js version like :
+	Long: `install any node.js version e.g.
 'gnvm install latest'
 'gnvm install x.xx.xx'
 'gnvm install x.xx.xx --global'`,
@@ -59,7 +59,7 @@ var installCmd = &cobra.Command{
 var uninstallCmd = &cobra.Command{
 	Use:   "uninstall",
 	Short: "uninstall local node.js version",
-	Long: `uninstall local node.js version like :
+	Long: `uninstall local node.js version e.g.
 'gnvm uninstall x.xx.xx'`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("gnvm uninstall args include " + strings.Join(args, " "))
@@ -70,9 +70,10 @@ var uninstallCmd = &cobra.Command{
 // sub cmd
 var useCmd = &cobra.Command{
 	Use:   "use",
-	Short: "use the specific version by current cmd( temp )",
-	Long: `use the specific version by current cmd( temp ) like :
-'gnvm use x.xx.xx'`,
+	Short: "use the specific version by global",
+	Long: `use the specific version by global e.g.
+'gnvm use x.xx.xx'
+'gnvm use latest'`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//fmt.Println("gnvm use args include " + strings.Join(args, " "))
 		//fmt.Println("global flag is " + strconv.FormatBool(global))
@@ -99,7 +100,7 @@ var useCmd = &cobra.Command{
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "update global node.js",
-	Long: `update global node.js like :
+	Long: `update global node.js e.g.
 'gnvm update'`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("gnvm update args include " + strings.Join(args, " "))
@@ -111,7 +112,7 @@ var updateCmd = &cobra.Command{
 var lsCmd = &cobra.Command{
 	Use:   "ls",
 	Short: "list show all local | remote node.js version",
-	Long: `list show all local | remote node.js version like :
+	Long: `list show all local | remote node.js version e.g.
 'gnvm ls'
 'gnvm ls --remote'`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -124,15 +125,16 @@ var lsCmd = &cobra.Command{
 // sub cmd
 var nodeVersionCmd = &cobra.Command{
 	Use:   "node-version",
-	Short: "show global | current | latest node.js version",
-	Long: `show global | current | latest node.js version like :
-'gnvm node-version'
-'laest version is x.xx.xx'
-'global version is x.xx.xx'
-'current version is x.xx.xx'`,
+	Short: "show global | latest node.js version",
+	Long: `show global | latest node.js version e.g.
+gnvm node-version
+Node.exe global verson is [x.xx.xx]
+Node.exe latest verson is [x.xx.xx]`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("gnvm node-version args include " + strings.Join(args, " "))
-		//TO DO
+		if len(args) > 0 {
+			fmt.Println("Warning: gnvm node-version no parameter, please check your input. See 'gnvm help use'.")
+		}
+		nodehandle.NodeVersion()
 	},
 }
 
@@ -140,7 +142,7 @@ var nodeVersionCmd = &cobra.Command{
 var configCmd = &cobra.Command{
 	Use:   "config",
 	Short: "set | get registry and noderoot value",
-	Long: `set | get registry and noderoot value like :
+	Long: `set | get registry and noderoot value e.g.
 'gnvm config registry'
 'registry is http://nodejs.org/dist/'
 'gnvm config registry http://dist.u.qiniudn.com/'`,

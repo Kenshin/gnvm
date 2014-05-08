@@ -10,27 +10,30 @@ import (
 )
 
 const (
-	NEWLINE = "\n"
 	VERSION = "0.1.0"
 	CONFIG  = ".gnvmrc"
+	NEWLINE = "\n"
+	UNKNOWN = "unknown"
+	LATEST  = "latest"
 
 	REGISTRY_KEY = "registry: "
 	REGISTRY_VAL = "http://nodejs.org/dist/"
+
 	NODEROOT     = "noderoot"
 	NODEROOT_KEY = "noderoot: "
 	NODEROOT_VAL = "root"
 
 	GLOBAL_VERSION     = "globalversion"
 	GLOBAL_VERSION_KEY = "globalversion: "
-	GLOBAL_VERSION_VAL = "unknown"
+	GLOBAL_VERSION_VAL = UNKNOWN
 
 	LATEST_VERSION     = "latestversion"
 	LATEST_VERSION_KEY = "latestversion: "
-	LATEST_VERSION_VAL = "unknown"
+	LATEST_VERSION_VAL = UNKNOWN
 
 	CURRENT_VERSION     = "currentversion"
 	CURRENT_VERSION_KEY = "currentversion: "
-	CURRENT_VERSION_VAL = "unknown"
+	CURRENT_VERSION_VAL = UNKNOWN
 )
 
 func init() {
