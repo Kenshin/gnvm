@@ -61,10 +61,13 @@ func isDirExist(path string) bool {
 }
 
 func getNodeVersion(path string) (string, error) {
+	var newout string
 	out, err := exec.Command(path+"node", "--version").Output()
 	//string(out[:]) bytes to string
-	// replace \r\n
-	newout := strings.Replace(string(string(out[:])[1:]), "\r\n", "", -1)
+	if err == nil {
+		// replace \r\n
+		newout = strings.Replace(string(string(out[:])[1:]), "\r\n", "", -1)
+	}
 	return newout, err
 }
 
@@ -101,7 +104,7 @@ func Use(folder string) bool {
 	// reset folder
 	if folder == "latest" {
 		folder = latestVersion
-		fmt.Println("Current latest version is: " + latestVersion)
+		fmt.Printf("Current latest version is [%v] \n", latestVersion)
 	}
 
 	// set rootPath and rootNode
@@ -120,6 +123,14 @@ func Use(folder string) bool {
 	useNode := usePath + NODE
 	//log.Println("Use node.exe path is: " + usePath)
 
+	// get <root>/node.exe version
+	rootVersion, err := getNodeVersion(rootPath)
+	if err != nil {
+		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
+		return false
+	}
+	//log.Printf("Root node.exe verison is: %v \n", rootVersion)
+
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
 		fmt.Printf("[%v] folder is not exist. Get local node.exe version see 'gnvm ls'.", folder)
@@ -131,14 +142,6 @@ func Use(folder string) bool {
 		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
 		return false
 	}
-
-	// get <root>/node.exe version
-	rootVersion, err := getNodeVersion(rootPath)
-	if err != nil {
-		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
-		return false
-	}
-	//log.Printf("Root node.exe verison is: %v \n", rootVersion)
 
 	// check folder is rootVersion
 	if folder == rootVersion {

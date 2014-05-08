@@ -80,7 +80,7 @@ var useCmd = &cobra.Command{
 		if len(args) == 1 {
 
 			if args[0] != "latest" && nodehandle.VerifyNodeVersion(args[0]) != true {
-				fmt.Println("Use parameter support 'latest' or 'x.xx.xx', please check your input. See 'gnvm help use'.")
+				fmt.Println("Use parameter support 'latest' or 'x.xx.xx', e.g. 0.10.28, please check your input. See 'gnvm help use'.")
 				return
 			}
 
