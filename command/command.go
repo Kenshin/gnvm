@@ -65,7 +65,7 @@ gnvm uninstall 0.10.26 0.11.2`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//fmt.Println("gnvm uninstall args include " + strings.Join(args, " "))
 		if len(args) == 0 {
-			fmt.Println("Error: gnvm uninstall need parameter, please check your input. See 'gnvm help uninstall'.")
+			fmt.Println("Error: 'gnvm uninstall' need parameter, please check your input. See 'gnvm help uninstall'.")
 		} else {
 			for _, v := range args {
 				if ok := nodehandle.VerifyNodeVersion(v); ok != true {

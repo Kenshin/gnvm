@@ -132,20 +132,20 @@ func Use(folder string) bool {
 	// get <root>/node.exe version
 	rootVersion, err := getNodeVersion(rootPath)
 	if err != nil {
-		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
+		fmt.Println("Not found global node version, please checkout. If not exist node.exe. See 'gnvm install latest'.")
 		return false
 	}
 	//log.Printf("Root node.exe verison is: %v \n", rootVersion)
 
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
-		fmt.Printf("[%v] folder is not exist. Get local node.exe version see 'gnvm ls'.", folder)
+		fmt.Printf("[%v] folder is not exist. Get local node.exe version. See 'gnvm ls'.", folder)
 		return false
 	}
 
 	// <root>/node.exe is exist
 	if isDirExist(rootNode) != true {
-		fmt.Println("Not found global node version, please checkout. If not exist node.exe, See 'gnvm install latest'.")
+		fmt.Println("Not found global node version, please checkout. If not exist node.exe. See 'gnvm install latest'.")
 		return false
 	}
 
@@ -225,13 +225,22 @@ Node.exe latest verson is [%v]
 when version is [%v], please See 'gnvm use help'.`, latest, global, config.UNKNOWN)
 }
 
-func Uninstall(version string) {
-	fmt.Println("version is " + version)
-	/*
-		if err := os.Remove(version); err != nil {
-			fmt.Printf("Uinstall [%v] fail, Error: %v", version, err.Error())
-			return
-		}
-		fmt.Printf("[%v] uninstall success.", version)
-	*/
+func Uninstall(folder string) {
+
+	// set removePath
+	removePath := rootPath + folder
+
+	// rootPath/version is exist
+	if isDirExist(removePath) != true {
+		fmt.Printf("Waring: [%v] folder is not exist. Get local node.exe version. See 'gnvm ls'.\n", folder)
+		return
+	}
+
+	// remove rootPath/version folder
+	if err := os.RemoveAll(removePath); err != nil {
+		fmt.Printf("Uinstall [%v] fail, Error: %v", folder, err.Error())
+		return
+	}
+
+	fmt.Printf("Node.exe version [%v] uninstall success. \n", folder)
 }
