@@ -10,12 +10,14 @@ import (
 )
 
 const (
-	NEWLINE = "\n"
 	VERSION = "0.1.0"
 	CONFIG  = ".gnvmrc"
+	NEWLINE = "\n"
+	UNKNOWN = "unknown"
 
 	REGISTRY_KEY = "registry: "
 	REGISTRY_VAL = "http://nodejs.org/dist/"
+
 	NODEROOT     = "noderoot"
 	NODEROOT_KEY = "noderoot: "
 	NODEROOT_VAL = "root"

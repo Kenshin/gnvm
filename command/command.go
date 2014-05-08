@@ -132,8 +132,9 @@ var nodeVersionCmd = &cobra.Command{
 'global version is x.xx.xx'
 'current version is x.xx.xx'`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("gnvm node-version args include " + strings.Join(args, " "))
+		//fmt.Println("gnvm node-version args include " + strings.Join(args, " "))
 		//TO DO
+		nodehandle.NodeVersion()
 	},
 }
 
