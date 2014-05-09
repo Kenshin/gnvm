@@ -312,15 +312,6 @@ func LS() {
 
 func LsRemote() {
 
-	// try catch
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Printf("'gnvm ls --remote' an error has occurred. Error: ")
-			fmt.Println(err)
-			os.Exit(0)
-		}
-	}()
-
 	// set exist version
 	isExistVersion := false
 
@@ -336,6 +327,15 @@ func LsRemote() {
 
 	// print
 	fmt.Println("Read all Node.exe version list from " + url + ", please wait.")
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v], Error: ", url)
+			fmt.Println(err)
+			os.Exit(0)
+		}
+	}()
 
 	// get res
 	res, err := http.Get(url)
