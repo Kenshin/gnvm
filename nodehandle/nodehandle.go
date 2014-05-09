@@ -312,6 +312,15 @@ func LS() {
 
 func LsRemote() {
 
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Printf("'gnvm ls --remote' an error has occurred. Error: ")
+			fmt.Println(err)
+			os.Exit(0)
+		}
+	}()
+
 	// set exist version
 	isExistVersion := false
 
@@ -336,8 +345,7 @@ func LsRemote() {
 
 	// err
 	if err != nil {
-		fmt.Println("'gnvm ls --remote' an error has occurred. Error: " + err.Error())
-		os.Exit(0)
+		panic(err)
 	}
 
 	// check state code
