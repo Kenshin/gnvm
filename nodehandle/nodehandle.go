@@ -315,8 +315,15 @@ func LsRemote() {
 	// set exist version
 	isExistVersion := false
 
+	registry := config.GetConfig("registry")
+
+	// check config.GetConfig("registry") last byte include '/'
+	if registry[len(registry)-1:] != "/" {
+		registry = registry + "/"
+	}
+
 	// set url
-	url := config.GetConfig("registry") + config.NODELIST
+	url := registry + config.NODELIST
 
 	// print
 	fmt.Println("Read all Node.exe version list from " + url + ", please wait.")
