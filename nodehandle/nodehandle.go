@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	//"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -250,17 +251,56 @@ func Uninstall(folder string) {
 }
 
 func LS() {
-	err := filepath.Walk(rootPath, func(path string, f os.FileInfo, err error) error {
+	existVersion := false
+	err := filepath.Walk(rootPath, func(dir string, f os.FileInfo, err error) error {
+
+		// check nil
 		if f == nil {
 			return err
 		}
-		if f.IsDir() {
+
+		// check dir
+		if f.IsDir() == false {
 			return nil
 		}
-		println(path)
+
+		// set version
+		version := f.Name()
+
+		// check node version
+		if ok := VerifyNodeVersion(version); ok {
+
+			// <root>/x.xx.xx/node.exe is exist
+			if isDirExist(rootPath + version + DIVIDE + NODE) {
+				desc := ""
+				switch {
+				case version == config.GetConfig(config.GLOBAL_VERSION) && version == config.GetConfig(config.LATEST_VERSION):
+					desc = " -- global, latest"
+				case version == config.GetConfig(config.LATEST_VERSION):
+					desc = " -- latest"
+				case version == config.GetConfig(config.GLOBAL_VERSION):
+					desc = " -- global"
+				}
+
+				// set true
+				existVersion = true
+
+				fmt.Println("v" + version + desc)
+			}
+		}
+
+		// return
 		return nil
 	})
+
+	// show error
 	if err != nil {
-		fmt.Printf("filepath.Walk() returned %v\n", err)
+		fmt.Printf("'gnvm ls' Error: ", err.Error())
+		return
+	}
+
+	// version is exist
+	if !existVersion {
+		fmt.Println("Waring: Don't have any available version, please check. See 'gnvm help install'.")
 	}
 }
