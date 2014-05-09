@@ -324,14 +324,6 @@ func LsRemote() {
 	// get res
 	res, err := http.Get(url)
 
-	// defer
-	/*
-		defer func() {
-			fmt.Println("'gnvm ls --remote' an error has occurred. Error: " + err.Error())
-			os.Exit(0)
-		}()
-	*/
-
 	// err
 	if err != nil {
 		fmt.Println("'gnvm ls --remote' an error has occurred. Error: " + err.Error())
