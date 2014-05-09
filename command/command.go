@@ -6,7 +6,7 @@ import (
 
 	// go
 	"fmt"
-	"strconv"
+	//"strconv"
 	"strings"
 
 	// local
@@ -46,12 +46,13 @@ var installCmd = &cobra.Command{
 	Short: "install any node.js version",
 	Long: `install any node.js version e.g.
 'gnvm install latest'
-'gnvm install x.xx.xx'
+'gnvm install x.xx.xx y.yy.yy'
 'gnvm install x.xx.xx --global'`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("gnvm install args include " + strings.Join(args, " "))
-		fmt.Println("global flag is " + strconv.FormatBool(global))
+		//fmt.Println("gnvm install args include " + strings.Join(args, " "))
+		//fmt.Println("global flag is " + strconv.FormatBool(global))
 		//TO DO
+		nodehandle.Install(args, global)
 	},
 }
 

@@ -7,6 +7,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"os/exec"
@@ -381,6 +382,54 @@ func LsRemote() {
 
 	if !isExistVersion {
 		fmt.Printf("Not found any Node.exe version list from %v, please check it.\n", url)
+	}
+
+}
+
+func Install(args []string, global bool) {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			//fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v], Error: ", url)
+			fmt.Println(err)
+			os.Exit(0)
+		}
+	}()
+
+	// get res
+	res, err := http.Get("http://nodejs.org/dist/v0.11.9/node.exe")
+
+	// close
+	defer res.Body.Close()
+
+	// err
+	if err != nil {
+		panic(err)
+	}
+
+	// check state code
+	if res.StatusCode != 200 {
+		fmt.Printf("registry [%v] an [%v] error occurred, please check. See 'gnvm config help'.", "url", res.StatusCode)
+		return
+	}
+
+	exebyte, readErr := ioutil.ReadAll(res.Body)
+	if readErr != nil {
+		fmt.Println("Read file error, Error: " + readErr.Error())
+		return
+	}
+
+	file, createErr := os.Create("node-new.exe")
+	if createErr != nil {
+		fmt.Println("Create file error, Error: " + createErr.Error())
+		return
+	}
+
+	_, writeErr := file.Write(exebyte)
+	if writeErr != nil {
+		fmt.Println("Write file error, Error: " + writeErr.Error())
+		return
 	}
 
 }
