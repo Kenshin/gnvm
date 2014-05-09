@@ -109,7 +109,7 @@ func SetRootPath() {
 func Use(folder string) bool {
 
 	// get true folder, e.g. folder is latest return x.xx.xx
-	folder = GetTrueVersion(folder)
+	folder = GetTrueVersion(folder, true)
 
 	if folder == config.UNKNOWN {
 		fmt.Println("Waring: Unassigned Node.js latest version. See 'gnvm install latest'.")
@@ -208,10 +208,13 @@ func VerifyNodeVersion(version string) bool {
 	return result
 }
 
-func GetTrueVersion(latest string) string {
+func GetTrueVersion(latest string, isPrint bool) string {
 	if latest == config.LATEST {
 		latest = config.GetConfig(config.LATEST_VERSION)
-		fmt.Printf("Current latest version is [%v] \n", latest)
+		if isPrint {
+			fmt.Printf("Current latest version is [%v] \n", latest)
+
+		}
 	}
 	return latest
 }

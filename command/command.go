@@ -71,7 +71,7 @@ gnvm uninstall 0.10.26 0.11.2 latest`,
 			for _, v := range args {
 
 				// get true version
-				v = nodehandle.GetTrueVersion(v)
+				v = nodehandle.GetTrueVersion(v, true)
 
 				// check version format
 				if ok := nodehandle.VerifyNodeVersion(v); ok != true {
@@ -105,7 +105,7 @@ var useCmd = &cobra.Command{
 			// set use
 			if ok := nodehandle.Use(args[0]); ok == true {
 				// set global version
-				config.SetConfig(config.GLOBAL_VERSION, nodehandle.GetTrueVersion(args[0]))
+				config.SetConfig(config.GLOBAL_VERSION, nodehandle.GetTrueVersion(args[0], false))
 			}
 		} else {
 			fmt.Println("Use parameter maximum is 1, please check your input. See 'gnvm help use'.")
