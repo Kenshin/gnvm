@@ -337,6 +337,12 @@ func LsRemote() {
 		os.Exit(0)
 	}
 
+	// check state code
+	if res.StatusCode != 200 {
+		fmt.Printf("registry [%v] an [%v] error occurred, please check. See 'gnvm config help'.", url, res.StatusCode)
+		return
+	}
+
 	// set buff
 	buff := bufio.NewReader(res.Body)
 
