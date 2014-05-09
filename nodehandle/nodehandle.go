@@ -348,11 +348,6 @@ func LsRemote() {
 		// replace '\n'
 		line = strings.Replace(line, "\n", "", -1)
 
-		// when #node npm not print
-		if line == "#node npm" {
-			continue
-		}
-
 		// splite 'vx.xx.xx  1.1.0-alpha-2'
 		args := strings.Split(line, " ")
 
