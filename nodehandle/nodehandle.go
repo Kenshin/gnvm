@@ -4,9 +4,13 @@ import (
 
 	// go
 	//"log"
+	"bufio"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -107,7 +111,7 @@ func SetRootPath() {
 func Use(folder string) bool {
 
 	// get true folder, e.g. folder is latest return x.xx.xx
-	folder = GetTrueVersion(folder)
+	folder = GetTrueVersion(folder, true)
 
 	if folder == config.UNKNOWN {
 		fmt.Println("Waring: Unassigned Node.js latest version. See 'gnvm install latest'.")
@@ -181,7 +185,7 @@ func Use(folder string) bool {
 		return false
 	}
 
-	fmt.Printf("Set success, Current Node.exe version is [%v].", folder)
+	fmt.Printf("Set success, Current Node.exe version is [%v]. \n", folder)
 
 	return true
 
@@ -206,10 +210,13 @@ func VerifyNodeVersion(version string) bool {
 	return result
 }
 
-func GetTrueVersion(latest string) string {
+func GetTrueVersion(latest string, isPrint bool) string {
 	if latest == config.LATEST {
 		latest = config.GetConfig(config.LATEST_VERSION)
-		fmt.Printf("Current latest version is [%v] \n", latest)
+		if isPrint {
+			fmt.Printf("Current latest version is [%v] \n", latest)
+
+		}
 	}
 	return latest
 }
@@ -246,4 +253,134 @@ func Uninstall(folder string) {
 	}
 
 	fmt.Printf("Node.exe version [%v] uninstall success. \n", folder)
+}
+
+func LS() {
+	existVersion := false
+	err := filepath.Walk(rootPath, func(dir string, f os.FileInfo, err error) error {
+
+		// check nil
+		if f == nil {
+			return err
+		}
+
+		// check dir
+		if f.IsDir() == false {
+			return nil
+		}
+
+		// set version
+		version := f.Name()
+
+		// check node version
+		if ok := VerifyNodeVersion(version); ok {
+
+			// <root>/x.xx.xx/node.exe is exist
+			if isDirExist(rootPath + version + DIVIDE + NODE) {
+				desc := ""
+				switch {
+				case version == config.GetConfig(config.GLOBAL_VERSION) && version == config.GetConfig(config.LATEST_VERSION):
+					desc = " -- global, latest"
+				case version == config.GetConfig(config.LATEST_VERSION):
+					desc = " -- latest"
+				case version == config.GetConfig(config.GLOBAL_VERSION):
+					desc = " -- global"
+				}
+
+				// set true
+				existVersion = true
+
+				fmt.Println("v" + version + desc)
+			}
+		}
+
+		// return
+		return nil
+	})
+
+	// show error
+	if err != nil {
+		fmt.Printf("'gnvm ls' Error: ", err.Error())
+		return
+	}
+
+	// version is exist
+	if !existVersion {
+		fmt.Println("Waring: Don't have any available version, please check. See 'gnvm help install'.")
+	}
+}
+
+func LsRemote() {
+
+	// set exist version
+	isExistVersion := false
+
+	registry := config.GetConfig("registry")
+
+	// check config.GetConfig("registry") last byte include '/'
+	if registry[len(registry)-1:] != "/" {
+		registry = registry + "/"
+	}
+
+	// set url
+	url := registry + config.NODELIST
+
+	// print
+	fmt.Println("Read all Node.exe version list from " + url + ", please wait.")
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v], Error: ", url)
+			fmt.Println(err)
+			os.Exit(0)
+		}
+	}()
+
+	// get res
+	res, err := http.Get(url)
+
+	// close
+	defer res.Body.Close()
+
+	// err
+	if err != nil {
+		panic(err)
+	}
+
+	// check state code
+	if res.StatusCode != 200 {
+		fmt.Printf("registry [%v] an [%v] error occurred, please check. See 'gnvm config help'.", url, res.StatusCode)
+		return
+	}
+
+	// set buff
+	buff := bufio.NewReader(res.Body)
+
+	for {
+		// set line
+		line, err := buff.ReadString('\n')
+
+		// when EOF or err break
+		if err != nil || err == io.EOF {
+			break
+		}
+
+		// replace '\n'
+		line = strings.Replace(line, "\n", "", -1)
+
+		// splite 'vx.xx.xx  1.1.0-alpha-2'
+		args := strings.Split(line, " ")
+
+		if ok := VerifyNodeVersion(args[0][1:]); ok {
+			isExistVersion = true
+			// print all node.exe version
+			fmt.Println(args[0])
+		}
+	}
+
+	if !isExistVersion {
+		fmt.Printf("Not found any Node.exe version list from %v, please check it.\n", url)
+	}
+
 }
