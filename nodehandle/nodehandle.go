@@ -183,7 +183,7 @@ func Use(folder string) bool {
 		return false
 	}
 
-	fmt.Printf("Set success, Current Node.exe version is [%v].", folder)
+	fmt.Printf("Set success, Current Node.exe version is [%v]. \n", folder)
 
 	return true
 
