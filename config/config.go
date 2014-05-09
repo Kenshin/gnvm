@@ -10,11 +10,12 @@ import (
 )
 
 const (
-	VERSION = "0.1.0"
-	CONFIG  = ".gnvmrc"
-	NEWLINE = "\n"
-	UNKNOWN = "unknown"
-	LATEST  = "latest"
+	VERSION  = "0.1.0"
+	CONFIG   = ".gnvmrc"
+	NEWLINE  = "\n"
+	UNKNOWN  = "unknown"
+	LATEST   = "latest"
+	NODELIST = "npm-versions.txt"
 
 	REGISTRY_KEY = "registry: "
 	REGISTRY_VAL = "http://nodejs.org/dist/"

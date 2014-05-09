@@ -140,7 +140,7 @@ gnvm ls --remote`,
 		}
 
 		if remote == true {
-			fmt.Println("call remote ls")
+			nodehandle.LsRemote()
 		} else {
 			// check local ls
 			nodehandle.LS()

@@ -307,3 +307,7 @@ func LS() {
 		fmt.Println("Waring: Don't have any available version, please check. See 'gnvm help install'.")
 	}
 }
+
+func LsRemote() {
+	fmt.Println("LS Remote")
+}
