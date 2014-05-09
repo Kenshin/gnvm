@@ -4,10 +4,12 @@ import (
 
 	// go
 	//"log"
+	"bufio"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"os/exec"
-	//"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -309,5 +311,60 @@ func LS() {
 }
 
 func LsRemote() {
-	fmt.Println("LS Remote")
+
+	// set exist version
+	isExistVersion := false
+
+	// set url
+	url := config.GetConfig("registry") + config.NODELIST
+
+	// print
+	fmt.Println("Read all Node.exe version list from " + url + ", please wait.")
+
+	// get res
+	res, err := http.Get(url)
+
+	// defer
+	defer res.Body.Close()
+
+	// err
+	if err != nil {
+		fmt.Println("'gnvm ls --remote' an error has occurred. Error: " + err.Error())
+		return
+	}
+
+	// set buff
+	buff := bufio.NewReader(res.Body)
+
+	for {
+		// set line
+		line, err := buff.ReadString('\n')
+
+		// when EOF or err break
+		if err != nil || err == io.EOF {
+			break
+		}
+
+		// replace '\n'
+		line = strings.Replace(line, "\n", "", -1)
+
+		// when #node npm not print
+		if line == "#node npm" {
+			continue
+		}
+
+		// splite 'vx.xx.xx  1.1.0-alpha-2'
+		args := strings.Split(line, " ")
+
+		if ok := VerifyNodeVersion(args[0][1:]); ok {
+			isExistVersion = true
+			// print all node.exe version
+			fmt.Println(args[0])
+		}
+	}
+
+	if !isExistVersion {
+		fmt.Printf("Not found any Node.exe version list from %v, please check it.\n", url)
+	}
+
 }
