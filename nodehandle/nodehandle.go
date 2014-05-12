@@ -407,17 +407,6 @@ func Install(args []string, global bool) {
 
 func download(version string) {
 
-	// rootPath/version is exist
-	if isDirExist(rootPath+version) != true {
-		if err := os.Mkdir(rootPath+version, 0777); err != nil {
-			panic(err)
-		}
-		fmt.Printf("Create [%v] folder success.\n", version)
-	} else {
-		fmt.Printf("Waring: [%v] folder exist, please check. See 'gnvm uninstall help'.\n", version)
-		return
-	}
-
 	// get current os arch
 	amd64 := "/"
 	if runtime.GOARCH == "amd64" {
@@ -447,7 +436,18 @@ func download(version string) {
 
 	// check state code
 	if res.StatusCode != 200 {
-		fmt.Printf("registry [%v] an [%v] error occurred, please check. See 'gnvm config help'.", "url", res.StatusCode)
+		fmt.Printf("registry [%v] an [%v] error occurred, please check. See 'gnvm config help'.", url, res.StatusCode)
+		return
+	}
+
+	// rootPath/version is exist
+	if isDirExist(rootPath+version) != true {
+		if err := os.Mkdir(rootPath+version, 0777); err != nil {
+			panic(err)
+		}
+		fmt.Printf("Create [%v] folder success.\n", version)
+	} else {
+		fmt.Printf("Waring: [%v] folder exist, please check. See 'gnvm uninstall help'.\n", version)
 		return
 	}
 
