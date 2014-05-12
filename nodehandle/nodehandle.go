@@ -413,7 +413,6 @@ func download(version string) {
 	}
 
 	url := config.GetConfig("registry") + "v" + version + amd64 + NODE
-	fmt.Println("url is: " + url)
 
 	// get res
 	res, err := http.Get(url)
@@ -435,6 +434,14 @@ func download(version string) {
 	// create buffer
 	buf := make([]byte, res.ContentLength)
 
+	// rootPath/version is exist
+	if isDirExist(rootPath+version) != true {
+		if err := os.Mkdir(rootPath+version, 0777); err != nil {
+			panic(err)
+		}
+		fmt.Printf("Create [%v] folder success.\n", version)
+	}
+
 	// create file
 	file, createErr := os.Create(rootPath + version + DIVIDE + NODE)
 	if createErr != nil {
@@ -443,7 +450,7 @@ func download(version string) {
 	}
 	defer file.Close()
 
-	fmt.Printf("Start download node.exe version [%v] from %v.\n", version, config.GetConfig("registry"))
+	fmt.Printf("Start download node.exe version [%v] from %v.\n", version, url)
 
 	// loop buff to file
 	var m float32
