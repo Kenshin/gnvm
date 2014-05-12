@@ -7,7 +7,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"io/ioutil"
+	//"io/ioutil"
 	"net/http"
 	"os"
 	"os/exec"
@@ -398,7 +398,7 @@ func Install(args []string, global bool) {
 	}()
 
 	// get res
-	res, err := http.Get("http://nodejs.org/dist/v0.11.9/node.exe")
+	res, err := http.Get("http://dist.u.qiniudn.com/latest/node.exe")
 
 	// close
 	defer res.Body.Close()
@@ -414,22 +414,33 @@ func Install(args []string, global bool) {
 		return
 	}
 
-	exebyte, readErr := ioutil.ReadAll(res.Body)
-	if readErr != nil {
-		fmt.Println("Read file error, Error: " + readErr.Error())
-		return
-	}
+	// total
+	fmt.Println(res.ContentLength)
 
-	file, createErr := os.Create("node-new.exe")
+	// create buffer
+	buf := make([]byte, res.ContentLength)
+
+	// create file
+	file, createErr := os.Create(rootPath + "node-new.exe")
 	if createErr != nil {
 		fmt.Println("Create file error, Error: " + createErr.Error())
 		return
 	}
+	defer file.Close()
 
-	_, writeErr := file.Write(exebyte)
-	if writeErr != nil {
-		fmt.Println("Write file error, Error: " + writeErr.Error())
-		return
+	// loop buff to file
+	var m int
+	for {
+		n, err := res.Body.Read(buf)
+		if n == 0 {
+			break
+		}
+		if err != nil {
+			break
+		}
+		m = m + n
+		fmt.Println(m)
+		file.WriteString(string(buf[:n]))
 	}
 
 }
