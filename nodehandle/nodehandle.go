@@ -472,8 +472,7 @@ func download(version string) {
 
 		// write complete
 		if n == 0 {
-			fmt.Print("100% \n")
-			fmt.Print("End download.")
+			fmt.Println("100% \nEnd download.")
 			break
 		}
 
