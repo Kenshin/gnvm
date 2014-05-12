@@ -319,7 +319,8 @@ func LsRemote() {
 	registry := config.GetConfig("registry")
 
 	// check config.GetConfig("registry") last byte include '/'
-	if registry[len(registry)-1:] != "/" {
+	// registry[len(registry)-1:] != "/"
+	if !strings.HasPrefix(registry, "/") {
 		registry = registry + "/"
 	}
 
@@ -412,7 +413,14 @@ func download(version string) {
 		amd64 = "/x64/"
 	}
 
-	url := config.GetConfig("registry") + "v" + version + amd64 + NODE
+	registry := config.GetConfig("registry")
+	// check config.GetConfig("registry") last byte include '/'
+	// registry[len(registry)-1:] != "/"
+	if !strings.HasPrefix(registry, "/") {
+		registry = registry + "/"
+	}
+
+	url := registry + "v" + version + amd64 + NODE
 
 	// get res
 	res, err := http.Get(url)
