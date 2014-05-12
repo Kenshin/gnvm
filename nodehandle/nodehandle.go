@@ -397,8 +397,26 @@ func Install(args []string, global bool) {
 		}
 	}()
 
+	for _, v := range args {
+		// downlaod
+		download(v)
+	}
+
+}
+
+func download(version string) {
+
+	amd64 := "/"
+	// get current os arch
+	if runtime.GOARCH == "amd64" {
+		amd64 = "/x64/"
+	}
+
+	url := config.GetConfig("registry") + "v" + version + amd64 + NODE
+	fmt.Println("url is: " + url)
+
 	// get res
-	res, err := http.Get("http://dist.u.qiniudn.com/latest/node.exe")
+	res, err := http.Get(url)
 
 	// close
 	defer res.Body.Close()
@@ -414,25 +432,18 @@ func Install(args []string, global bool) {
 		return
 	}
 
-	amd64 := ""
-	// get current os arch
-	if runtime.GOARCH == "amd64" {
-		amd64 = "/x64/"
-	}
-	fmt.Println("Current system is: " + amd64)
-
 	// create buffer
 	buf := make([]byte, res.ContentLength)
 
 	// create file
-	file, createErr := os.Create(rootPath + "node-new.exe")
+	file, createErr := os.Create(rootPath + version + DIVIDE + NODE)
 	if createErr != nil {
 		fmt.Println("Create file error, Error: " + createErr.Error())
 		return
 	}
 	defer file.Close()
 
-	fmt.Printf("Start download node.exe version [%v] from %v.\n", "x.xx.xx", config.GetConfig("registry"))
+	fmt.Printf("Start download node.exe version [%v] from %v.\n", version, config.GetConfig("registry"))
 
 	// loop buff to file
 	var m float32
@@ -477,5 +488,4 @@ func Install(args []string, global bool) {
 
 		file.WriteString(string(buf[:n]))
 	}
-
 }
