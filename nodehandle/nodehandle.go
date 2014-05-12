@@ -7,11 +7,11 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	//"io/ioutil"
 	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 
@@ -414,8 +414,12 @@ func Install(args []string, global bool) {
 		return
 	}
 
-	// total
-	fmt.Println(res.ContentLength)
+	amd64 := ""
+	// get current os arch
+	if runtime.GOARCH == "amd64" {
+		amd64 = "/x64/"
+	}
+	fmt.Println("Current system is: " + amd64)
 
 	// create buffer
 	buf := make([]byte, res.ContentLength)
@@ -428,18 +432,49 @@ func Install(args []string, global bool) {
 	}
 	defer file.Close()
 
+	fmt.Printf("Start download node.exe version [%v] from %v.\n", "x.xx.xx", config.GetConfig("registry"))
+
 	// loop buff to file
-	var m int
+	var m float32
+	isShow, oldCurrent := false, 0
 	for {
 		n, err := res.Body.Read(buf)
+
+		// write complete
 		if n == 0 {
+			fmt.Print("100% \n")
+			fmt.Print("End download.")
 			break
 		}
+
+		//error
 		if err != nil {
-			break
+			panic(err)
 		}
-		m = m + n
-		fmt.Println(m)
+
+		/* show console e.g.
+		 * Start download node.exe version [x.xx.xx] from http://nodejs.org/dist/.
+		 * 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+		 * End download.
+		 */
+		m = m + float32(n)
+		current := int(m / float32(res.ContentLength) * 100)
+
+		if current > oldCurrent {
+			switch current {
+			case 10, 20, 30, 40, 50, 60, 70, 80, 90:
+				isShow = true
+			}
+
+			if isShow {
+				fmt.Printf("%d%v", current, "% ")
+			}
+
+			isShow = false
+		}
+
+		oldCurrent = current
+
 		file.WriteString(string(buf[:n]))
 	}
 
