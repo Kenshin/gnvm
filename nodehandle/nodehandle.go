@@ -320,7 +320,7 @@ func LsRemote() {
 
 	// check config.GetConfig("registry") last byte include '/'
 	// registry[len(registry)-1:] != "/"
-	if !strings.HasPrefix(registry, "/") {
+	if !strings.HasSuffix(registry, "/") {
 		registry = registry + "/"
 	}
 
@@ -417,7 +417,7 @@ func download(version string) {
 	registry := config.GetConfig("registry")
 	// check config.GetConfig("registry") last byte include '/'
 	// registry[len(registry)-1:] != "/"
-	if !strings.HasPrefix(registry, "/") {
+	if !strings.HasSuffix(registry, "/") {
 		registry = registry + "/"
 	}
 
