@@ -407,12 +407,24 @@ func Install(args []string, global bool) {
 
 func download(version string) {
 
-	amd64 := "/"
+	// rootPath/version is exist
+	if isDirExist(rootPath+version) != true {
+		if err := os.Mkdir(rootPath+version, 0777); err != nil {
+			panic(err)
+		}
+		fmt.Printf("Create [%v] folder success.\n", version)
+	} else {
+		fmt.Printf("Waring: [%v] folder exist, please check. See 'gnvm uninstall help'.\n", version)
+		return
+	}
+
 	// get current os arch
+	amd64 := "/"
 	if runtime.GOARCH == "amd64" {
 		amd64 = "/x64/"
 	}
 
+	// set url
 	registry := config.GetConfig("registry")
 	// check config.GetConfig("registry") last byte include '/'
 	// registry[len(registry)-1:] != "/"
@@ -441,14 +453,6 @@ func download(version string) {
 
 	// create buffer
 	buf := make([]byte, res.ContentLength)
-
-	// rootPath/version is exist
-	if isDirExist(rootPath+version) != true {
-		if err := os.Mkdir(rootPath+version, 0777); err != nil {
-			panic(err)
-		}
-		fmt.Printf("Create [%v] folder success.\n", version)
-	}
 
 	// create file
 	file, createErr := os.Create(rootPath + version + DIVIDE + NODE)
