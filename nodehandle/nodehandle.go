@@ -390,6 +390,8 @@ func LsRemote() {
 
 func Install(args []string, global bool) {
 
+	var currentLatest string
+
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
@@ -411,10 +413,12 @@ func Install(args []string, global bool) {
 
 			// set v
 			v = version
+			currentLatest = version
+			fmt.Printf("Current latest version is [%v]\n", version)
 		}
 
 		// downlaod
-		if ok := download(v); ok {
+		if ok := download(v); ok && v == currentLatest {
 			config.SetConfig(config.LATEST_VERSION, v)
 		}
 	}
