@@ -423,10 +423,12 @@ func Install(args []string, global bool) {
 			case v == currentLatest:
 				config.SetConfig(config.LATEST_VERSION, v)
 				fallthrough
-			case global:
+			case global && len(args) == 1:
 				if ok := Use(v); ok {
 					config.SetConfig(config.GLOBAL_VERSION, v)
 				}
+			case global && len(args) > 1:
+				fmt.Println("Waring: when use --global must be only one parameter, e.g. 'gnvm install x.xx.xx --global'. See 'gnvm install help'.")
 			}
 
 		}
