@@ -20,8 +20,9 @@ import (
 )
 
 const (
-	DIVIDE = "\\"
-	NODE   = "node.exe"
+	DIVIDE  = "\\"
+	NODE    = "node.exe"
+	SHASUMS = "SHASUMS.txt"
 )
 
 var globalNodePath, rootPath string
@@ -399,13 +400,28 @@ func Install(args []string, global bool) {
 	}()
 
 	for _, v := range args {
+
+		if v == config.LATEST {
+
+			version := getLatestVersionByRemote()
+			if version == "" {
+				fmt.Println("Get latest version error, please check. See 'gnvm config help'.")
+				break
+			}
+
+			// set v
+			v = version
+		}
+
 		// downlaod
-		download(v)
+		if ok := download(v); ok {
+			config.SetConfig(config.LATEST_VERSION, v)
+		}
 	}
 
 }
 
-func download(version string) {
+func download(version string) bool {
 
 	// get current os arch
 	amd64 := "/"
@@ -437,7 +453,7 @@ func download(version string) {
 	// check state code
 	if res.StatusCode != 200 {
 		fmt.Printf("Downlaod url [%v] an [%v] error occurred, please check. See 'gnvm config help'.", url, res.StatusCode)
-		return
+		return false
 	}
 
 	// rootPath/version is exist
@@ -448,7 +464,7 @@ func download(version string) {
 		fmt.Printf("Create [%v] folder success.\n", version)
 	} else {
 		fmt.Printf("Waring: [%v] folder exist, please check. See 'gnvm uninstall help'.\n", version)
-		return
+		return false
 	}
 
 	// create buffer
@@ -458,7 +474,7 @@ func download(version string) {
 	file, createErr := os.Create(rootPath + version + DIVIDE + NODE)
 	if createErr != nil {
 		fmt.Println("Create file error, Error: " + createErr.Error())
-		return
+		return false
 	}
 	defer file.Close()
 
@@ -506,4 +522,62 @@ func download(version string) {
 
 		file.WriteString(string(buf[:n]))
 	}
+
+	return true
+}
+
+func getLatestVersionByRemote() string {
+
+	var version string
+
+	// set url
+	registry := config.GetConfig("registry")
+
+	if !strings.HasSuffix(registry, "/") {
+		registry = registry + "/"
+	}
+
+	// set url
+	url := registry + "latest/" + SHASUMS
+
+	// get res
+	res, err := http.Get(url)
+
+	// close
+	defer res.Body.Close()
+
+	// err
+	if err != nil {
+		panic(err)
+	}
+
+	// check state code
+	if res.StatusCode != 200 {
+		fmt.Printf("Url [%v] an [%v] error occurred, please check. See 'gnvm config help'.", url, res.StatusCode)
+		return "err"
+	}
+
+	// set buff
+	buff := bufio.NewReader(res.Body)
+
+	for {
+		// set line
+		line, err := buff.ReadString('\n')
+
+		// when EOF or err break
+		if err != nil || err == io.EOF {
+			break
+		}
+
+		if line != "" {
+			args1 := strings.Split(line, "  ")
+			args2 := strings.Split(args1[1], "-")
+			version = args2[1][1:]
+			break
+		}
+
+	}
+
+	return version
+
 }
