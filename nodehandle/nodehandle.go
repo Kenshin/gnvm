@@ -467,9 +467,6 @@ func download(version string) bool {
 		return false
 	}
 
-	// create buffer
-	buf := make([]byte, res.ContentLength)
-
 	// create file
 	file, createErr := os.Create(rootPath + version + DIVIDE + NODE)
 	if createErr != nil {
@@ -481,6 +478,7 @@ func download(version string) bool {
 	fmt.Printf("Start download node.exe version [%v] from %v.\n", version, url)
 
 	// loop buff to file
+	buf := make([]byte, res.ContentLength)
 	var m float32
 	isShow, oldCurrent := false, 0
 	for {
