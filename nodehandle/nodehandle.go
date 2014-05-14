@@ -586,15 +586,15 @@ func getLatestVersionByRemote() string {
 		// set line
 		line, err := buff.ReadString('\n')
 
-		// when EOF or err break
-		if err != nil || err == io.EOF {
-			break
-		}
-
 		if line != "" {
 			args1 := strings.Split(line, "  ")
 			args2 := strings.Split(args1[1], "-")
 			version = args2[1][1:]
+			break
+		}
+
+		// when EOF or err break
+		if err != nil || err == io.EOF {
 			break
 		}
 
