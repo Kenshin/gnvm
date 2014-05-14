@@ -7,6 +7,7 @@ import (
 	// go
 	"fmt"
 	"os"
+	"strings"
 )
 
 const (
@@ -85,6 +86,14 @@ func readConfig() {
 }
 
 func SetConfig(key string, value interface{}) string {
+
+	if key == "registry" {
+		switch {
+		case !strings.HasSuffix(key, "/"):
+			value = value.(string) + "/"
+			//fallthrough
+		}
+	}
 
 	// set new value
 	config.Set(key, value)

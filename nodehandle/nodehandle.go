@@ -317,15 +317,8 @@ func LsRemote() {
 	// set exist version
 	isExistVersion := false
 
-	registry := config.GetConfig("registry")
-
-	// check config.GetConfig("registry") last byte include '/'
-	// registry[len(registry)-1:] != "/"
-	if !strings.HasSuffix(registry, "/") {
-		registry = registry + "/"
-	}
-
 	// set url
+	registry := config.GetConfig("registry")
 	url := registry + config.NODELIST
 
 	// print
@@ -446,12 +439,6 @@ func download(version string) bool {
 
 	// set url
 	registry := config.GetConfig("registry")
-	// check config.GetConfig("registry") last byte include '/'
-	// registry[len(registry)-1:] != "/"
-	if !strings.HasSuffix(registry, "/") {
-		registry = registry + "/"
-	}
-
 	url := registry + "v" + version + amd64 + NODE
 
 	// get res
@@ -554,10 +541,6 @@ func getLatestVersionByRemote() string {
 
 	// set url
 	registry := config.GetConfig("registry")
-
-	if !strings.HasSuffix(registry, "/") {
-		registry = registry + "/"
-	}
 
 	// set url
 	url := registry + "latest/" + SHASUMS
