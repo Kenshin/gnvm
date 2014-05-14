@@ -32,9 +32,9 @@ const (
 	LATEST_VERSION_KEY = "latestversion: "
 	LATEST_VERSION_VAL = UNKNOWN
 
-	CURRENT_VERSION     = "currentversion"
-	CURRENT_VERSION_KEY = "currentversion: "
-	CURRENT_VERSION_VAL = UNKNOWN
+	//CURRENT_VERSION     = "currentversion"
+	//CURRENT_VERSION_KEY = "currentversion: "
+	//CURRENT_VERSION_VAL = UNKNOWN
 )
 
 func init() {
@@ -66,7 +66,7 @@ func createConfig() {
 	}
 
 	//write init config
-	_, fileErr := file.WriteString(REGISTRY_KEY + REGISTRY_VAL + NEWLINE + NODEROOT_KEY + NODEROOT_VAL + NEWLINE + GLOBAL_VERSION_KEY + GLOBAL_VERSION_VAL + NEWLINE + LATEST_VERSION_KEY + LATEST_VERSION_VAL + NEWLINE + CURRENT_VERSION_KEY + CURRENT_VERSION_VAL)
+	_, fileErr := file.WriteString(REGISTRY_KEY + REGISTRY_VAL + NEWLINE + NODEROOT_KEY + NODEROOT_VAL + NEWLINE + GLOBAL_VERSION_KEY + GLOBAL_VERSION_VAL + NEWLINE + LATEST_VERSION_KEY + LATEST_VERSION_VAL)
 	if fileErr != nil {
 		fmt.Println("Write Config file Error: " + fileErr.Error())
 		return
