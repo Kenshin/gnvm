@@ -44,7 +44,7 @@ func init() {
 	defer file.Close()
 	if err != nil && os.IsNotExist(err) {
 		// print error
-		fmt.Println("Config file is not exist.")
+		fmt.Println("Waring:Config file is not exist.")
 
 		// create .gnvmrc file and write
 		createConfig()
@@ -79,13 +79,9 @@ func createConfig() {
 
 func readConfig() {
 	if err := config.ReadConfigFile(CONFIG); err != nil {
-		// print error
 		fmt.Println("Read Config file Error: ", err.Error())
-
 		return
 	}
-
-	fmt.Println("Read Config file success.")
 }
 
 func SetConfig(key string, value interface{}) string {
