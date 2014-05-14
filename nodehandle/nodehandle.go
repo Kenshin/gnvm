@@ -536,6 +536,15 @@ func download(version string) bool {
 		file.WriteString(string(buf[:n]))
 	}
 
+	// valid download exe
+	fi, err := file.Stat()
+	if err == nil {
+		if fi.Size() != res.ContentLength {
+			fmt.Printf("Error: Downlaod node.exe version [%v] size error, please check your network and run 'gnvm uninstall %v'. ", version, version)
+			return false
+		}
+	}
+
 	return true
 }
 
