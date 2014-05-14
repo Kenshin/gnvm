@@ -467,7 +467,7 @@ func download(version string) bool {
 
 	// check state code
 	if res.StatusCode != 200 {
-		fmt.Printf("Downlaod url [%v] an [%v] error occurred, please check. See 'gnvm config help'.", url, res.StatusCode)
+		fmt.Printf("Downlaod url [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
 		return false
 	}
 
@@ -575,8 +575,8 @@ func getLatestVersionByRemote() string {
 
 	// check state code
 	if res.StatusCode != 200 {
-		fmt.Printf("Url [%v] an [%v] error occurred, please check. See 'gnvm config help'.", url, res.StatusCode)
-		return "err"
+		fmt.Printf("Url [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
+		return ""
 	}
 
 	// set buff
