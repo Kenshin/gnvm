@@ -197,8 +197,9 @@ var configCmd = &cobra.Command{
 		} else if len(args) == 2 {
 			switch args[0] {
 			case "registry", "noderoot":
-				newValue := config.SetConfig(args[0], args[1])
-				fmt.Println("Set success, [" + args[0] + "] new value is " + newValue)
+				if newValue := config.SetConfig(args[0], args[1]); newValue != "" {
+					fmt.Println("Set success, [" + args[0] + "] new value is " + newValue)
+				}
 			default:
 				fmt.Println("Config parameter include 'registry' | 'noderoot', your input unknown, please check your input. See 'gnvm help config'.")
 			}

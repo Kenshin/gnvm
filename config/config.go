@@ -7,6 +7,7 @@ import (
 	// go
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -88,10 +89,15 @@ func readConfig() {
 func SetConfig(key string, value interface{}) string {
 
 	if key == "registry" {
+
+		reg := regexp.MustCompile(`(http|https)://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?`)
+
 		switch {
-		case !strings.HasSuffix(key, "/"):
+		case !reg.MatchString(value.(string)):
+			fmt.Printf("Error: registry must url valid, current registry is [%v].\n", value.(string))
+			return ""
+		case !strings.HasSuffix(value.(string), "/"):
 			value = value.(string) + "/"
-			//fallthrough
 		}
 	}
 
