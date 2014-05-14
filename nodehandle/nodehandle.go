@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 
@@ -19,8 +20,9 @@ import (
 )
 
 const (
-	DIVIDE = "\\"
-	NODE   = "node.exe"
+	DIVIDE  = "\\"
+	NODE    = "node.exe"
+	SHASUMS = "SHASUMS.txt"
 )
 
 var globalNodePath, rootPath string
@@ -318,7 +320,8 @@ func LsRemote() {
 	registry := config.GetConfig("registry")
 
 	// check config.GetConfig("registry") last byte include '/'
-	if registry[len(registry)-1:] != "/" {
+	// registry[len(registry)-1:] != "/"
+	if !strings.HasSuffix(registry, "/") {
 		registry = registry + "/"
 	}
 
@@ -382,5 +385,238 @@ func LsRemote() {
 	if !isExistVersion {
 		fmt.Printf("Not found any Node.exe version list from %v, please check it.\n", url)
 	}
+
+}
+
+func Install(args []string, global bool) {
+
+	var currentLatest string
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			//fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v], Error: ", url)
+			fmt.Println(err)
+			os.Exit(0)
+		}
+	}()
+
+	for _, v := range args {
+
+		if v == config.LATEST {
+
+			version := getLatestVersionByRemote()
+			if version == "" {
+				fmt.Println("Get latest version error, please check. See 'gnvm config help'.")
+				break
+			}
+
+			// set v
+			v = version
+			currentLatest = version
+			fmt.Printf("Current latest version is [%v]\n", version)
+		}
+
+		// downlaod
+		if ok := download(v); ok {
+			switch {
+			case v == currentLatest:
+				config.SetConfig(config.LATEST_VERSION, v)
+				fallthrough
+			case global && len(args) == 1:
+				if ok := Use(v); ok {
+					config.SetConfig(config.GLOBAL_VERSION, v)
+				}
+			case global && len(args) > 1:
+				fmt.Println("Waring: when use --global must be only one parameter, e.g. 'gnvm install x.xx.xx --global'. See 'gnvm install help'.")
+			}
+
+		}
+	}
+
+}
+
+func download(version string) bool {
+
+	// get current os arch
+	amd64 := "/"
+	if runtime.GOARCH == "amd64" {
+		amd64 = "/x64/"
+	}
+
+	// set url
+	registry := config.GetConfig("registry")
+	// check config.GetConfig("registry") last byte include '/'
+	// registry[len(registry)-1:] != "/"
+	if !strings.HasSuffix(registry, "/") {
+		registry = registry + "/"
+	}
+
+	url := registry + "v" + version + amd64 + NODE
+
+	// get res
+	res, err := http.Get(url)
+
+	// close
+	defer res.Body.Close()
+
+	// err
+	if err != nil {
+		panic(err)
+	}
+
+	// check state code
+	if res.StatusCode != 200 {
+		fmt.Printf("Downlaod url [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
+		return false
+	}
+
+	// rootPath/version is exist
+	if isDirExist(rootPath+version) != true {
+		if err := os.Mkdir(rootPath+version, 0777); err != nil {
+			panic(err)
+		}
+		fmt.Printf("Create [%v] folder success.\n", version)
+	} else {
+		fmt.Printf("Waring: [%v] folder exist, please check. See 'gnvm uninstall help'.\n", version)
+		return false
+	}
+
+	// create file
+	file, createErr := os.Create(rootPath + version + DIVIDE + NODE)
+	if createErr != nil {
+		fmt.Println("Create file error, Error: " + createErr.Error())
+		return false
+	}
+	defer file.Close()
+
+	fmt.Printf("Start download node.exe version [%v] from %v.\n", version, url)
+
+	// loop buff to file
+	buf := make([]byte, res.ContentLength)
+	var m float32
+	isShow, oldCurrent := false, 0
+	for {
+		n, err := res.Body.Read(buf)
+
+		// write complete
+		if n == 0 {
+			fmt.Println("100% \nEnd download.")
+			break
+		}
+
+		//error
+		if err != nil {
+			panic(err)
+		}
+
+		/* show console e.g.
+		 * Start download node.exe version [x.xx.xx] from http://nodejs.org/dist/.
+		 * 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+		 * End download.
+		 */
+		m = m + float32(n)
+		current := int(m / float32(res.ContentLength) * 100)
+
+		if current > oldCurrent {
+			switch current {
+			case 10, 20, 30, 40, 50, 60, 70, 80, 90:
+				isShow = true
+			}
+
+			if isShow {
+				fmt.Printf("%d%v", current, "% ")
+			}
+
+			isShow = false
+		}
+
+		oldCurrent = current
+
+		file.WriteString(string(buf[:n]))
+	}
+
+	// valid download exe
+	fi, err := file.Stat()
+	if err == nil {
+		if fi.Size() != res.ContentLength {
+			fmt.Printf("Error: Downlaod node.exe version [%v] size error, please check your network and run 'gnvm uninstall %v'. ", version, version)
+			return false
+		}
+	}
+
+	return true
+}
+
+func getLatestVersionByRemote() string {
+
+	var version string
+
+	// set url
+	registry := config.GetConfig("registry")
+
+	if !strings.HasSuffix(registry, "/") {
+		registry = registry + "/"
+	}
+
+	// set url
+	url := registry + "latest/" + SHASUMS
+
+	// get res
+	res, err := http.Get(url)
+
+	// close
+	defer res.Body.Close()
+
+	// err
+	if err != nil {
+		panic(err)
+	}
+
+	// check state code
+	if res.StatusCode != 200 {
+		fmt.Printf("Url [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
+		return ""
+	}
+
+	// set buff
+	buff := bufio.NewReader(res.Body)
+
+	for {
+		// set line
+		line, err := buff.ReadString('\n')
+
+		if line != "" {
+
+			args1 := strings.Split(line, "  ")
+			if len(args1) < 2 {
+				fmt.Printf("Error: Url [%v] format error, please change registry. See 'gnvm config help'.\n", url)
+				break
+			}
+
+			args2 := strings.Split(args1[1], "-")
+			if len(args2) < 2 {
+				fmt.Printf("Error: Url [%v] format error, please change registry. See 'gnvm config help'.\n", url)
+				break
+			}
+
+			if len(args2[1]) < 2 {
+				fmt.Printf("Error: Url [%v] format error, please change registry. See 'gnvm config help'.\n", url)
+				break
+			}
+
+			// set version
+			version = args2[1][1:]
+			break
+		}
+
+		// when EOF or err break
+		if err != nil || err == io.EOF {
+			break
+		}
+
+	}
+
+	return version
 
 }
