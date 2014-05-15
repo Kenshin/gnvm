@@ -373,7 +373,7 @@ func Install(args []string, global bool) {
 		}
 
 		// downlaod
-		if ok := download(v); ok {
+		if ok := download(v); ok == true {
 			switch {
 			case v == currentLatest:
 				config.SetConfig(config.LATEST_VERSION, v)
@@ -411,7 +411,7 @@ func Update(global bool) {
 		fmt.Println("Waring: local latest version undefined.")
 		var args []string
 		args = append(args, remoteVersion)
-		Install(args, false)
+		Install(args, global)
 		config.SetConfig(config.LATEST_VERSION, remoteVersion)
 	case local == remote:
 		fmt.Printf("Remote latest version [%v] same as local latest version [%v].\n", remoteVersion, localVersion)
@@ -421,7 +421,7 @@ func Update(global bool) {
 		fmt.Printf("Remote latest version [%v] greater than local latest version [%v].\n", remoteVersion, localVersion)
 		var args []string
 		args = append(args, remoteVersion)
-		Install(args, false)
+		Install(args, global)
 		config.SetConfig(config.LATEST_VERSION, remoteVersion)
 	}
 }
