@@ -17,6 +17,7 @@ import (
 
 	// local
 	"gnvm/config"
+	"gnvm/util"
 )
 
 const (
@@ -25,35 +26,10 @@ const (
 	SHASUMS = "SHASUMS.txt"
 )
 
-var globalNodePath, rootPath string
+var rootPath string
 
-func GetGlobalNodePath() string {
-
-	// get node.exe path
-	file, err := exec.LookPath(NODE)
-	if err != nil {
-		globalNodePath = "root"
-	} else {
-		// relpace "\\node.exe"
-		globalNodePath = strings.Replace(file, DIVIDE+NODE, "", -1)
-	}
-
-	// gnvm.exe and node.exe the same path
-	if globalNodePath == "." {
-		globalNodePath = "root"
-	}
-	//log.Println("Node.exe path is: ", globalNodePath)
-
-	return globalNodePath
-}
-
-func getCurrentPath() string {
-	path, err := os.Getwd()
-	if err != nil {
-		fmt.Println("Get current path Error: " + err.Error())
-		return ""
-	}
-	return path
+func init() {
+	rootPath = util.GlobalNodePath + DIVIDE
 }
 
 func isDirExist(path string) bool {
@@ -85,20 +61,6 @@ func cmd(name, arg string) error {
 func copy(src, dest string) error {
 	_, err := exec.Command("cmd", "/C", "copy", "/y", src, dest).Output()
 	return err
-}
-
-/**
- * rootPath is gnvm.exe root path,     e.g <root>
- */
-func SetRootPath() {
-
-	// set rootPath and rootNode
-	if globalNodePath == "root" {
-		rootPath = getCurrentPath() + DIVIDE
-	} else {
-		rootPath = globalNodePath + DIVIDE
-	}
-	//log.Println("Current path is: " + rootPath)
 }
 
 /**
@@ -151,7 +113,7 @@ func Use(folder string) bool {
 
 	// check folder is rootVersion
 	if folder == rootVersion {
-		fmt.Printf("Current node.exe version is [%v], not re-use. See 'gnvm node-version'.", folder)
+		fmt.Printf("Current node.exe version is [%v], not re-use. See 'gnvm node-version'.\n", folder)
 		return false
 	}
 
@@ -317,15 +279,8 @@ func LsRemote() {
 	// set exist version
 	isExistVersion := false
 
-	registry := config.GetConfig("registry")
-
-	// check config.GetConfig("registry") last byte include '/'
-	// registry[len(registry)-1:] != "/"
-	if !strings.HasSuffix(registry, "/") {
-		registry = registry + "/"
-	}
-
 	// set url
+	registry := config.GetConfig("registry")
 	url := registry + config.NODELIST
 
 	// print
@@ -446,12 +401,6 @@ func download(version string) bool {
 
 	// set url
 	registry := config.GetConfig("registry")
-	// check config.GetConfig("registry") last byte include '/'
-	// registry[len(registry)-1:] != "/"
-	if !strings.HasSuffix(registry, "/") {
-		registry = registry + "/"
-	}
-
 	url := registry + "v" + version + amd64 + NODE
 
 	// get res
@@ -554,10 +503,6 @@ func getLatestVersionByRemote() string {
 
 	// set url
 	registry := config.GetConfig("registry")
-
-	if !strings.HasSuffix(registry, "/") {
-		registry = registry + "/"
-	}
 
 	// set url
 	url := registry + "latest/" + SHASUMS
