@@ -391,6 +391,43 @@ func Install(args []string, global bool) {
 
 }
 
+func Update(global bool) {
+
+	localVersion := config.GetConfig(config.LATEST_VERSION)
+	fmt.Printf("local latest version is [%v].\n", localVersion)
+
+	remoteVersion := getLatestVersionByRemote()
+	if remoteVersion == "" {
+		fmt.Println("Get latest version error, please check. See 'gnvm config help'.")
+		return
+	}
+	fmt.Printf("remote latest version is [%v].\n", remoteVersion)
+
+	local, _ := strconv.ParseInt(strings.Replace(localVersion, ".", "", -1), 10, 0)
+	remote, _ := strconv.ParseInt(strings.Replace(remoteVersion, ".", "", -1), 10, 0)
+
+	switch {
+	case localVersion == config.UNKNOWN:
+		fmt.Println("Waring: local latest version undefined.")
+		if value := config.SetConfig(config.LATEST_VERSION, remoteVersion); value != "" {
+			var args []string
+			args = append(args, remoteVersion)
+			Install(args, false)
+		}
+	case local == remote:
+		fmt.Printf("Remote latest version [%v] same as local latest version [%v].\n", remoteVersion, localVersion)
+	case local > remote:
+		fmt.Println("Error: local latest version [%v] greater than remote latest version [%v], please check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
+	case local < remote:
+		fmt.Printf("Remote latest version [%v] greater than local latest version [%v].\n", remoteVersion, localVersion)
+		if value := config.SetConfig(config.LATEST_VERSION, remoteVersion); value != "" {
+			var args []string
+			args = append(args, remoteVersion)
+			Install(args, false)
+		}
+	}
+}
+
 func download(version string) bool {
 
 	// get current os arch
@@ -495,10 +532,6 @@ func download(version string) bool {
 	}
 
 	return true
-}
-
-func Update(global bool) {
-
 }
 
 func getLatestVersionByRemote() string {
