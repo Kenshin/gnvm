@@ -497,6 +497,10 @@ func download(version string) bool {
 	return true
 }
 
+func Update(global bool) {
+
+}
+
 func getLatestVersionByRemote() string {
 
 	var version string
