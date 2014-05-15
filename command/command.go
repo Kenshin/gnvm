@@ -211,7 +211,7 @@ var configCmd = &cobra.Command{
 					fmt.Println("Registry reset success, [" + args[0] + "] new value is " + newValue)
 				}
 			case args[0] == "noderoot":
-				fmt.Printf("Waring: [%v] Temporarily does not support.\n", args[0])
+				fmt.Printf("Waring: [%v] Temporarily does not support. See 'gnvm help config'.\n", args[0])
 			default:
 				fmt.Println("Config parameter include <registry>, your input unknown, please check your input. See 'gnvm help config'.")
 			}
