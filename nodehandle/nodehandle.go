@@ -28,6 +28,14 @@ const (
 
 var rootPath string
 
+func init() {
+	rootPath = util.GlobalNodePath + DIVIDE
+}
+
+func Exec() {
+	//fmt.Println("Current path is: " + rootPath)
+}
+
 func getCurrentPath() string {
 	path, err := os.Getwd()
 	if err != nil {
@@ -66,20 +74,6 @@ func cmd(name, arg string) error {
 func copy(src, dest string) error {
 	_, err := exec.Command("cmd", "/C", "copy", "/y", src, dest).Output()
 	return err
-}
-
-/**
- * rootPath is gnvm.exe root path,     e.g <root>
- */
-func SetRootPath() {
-
-	// set rootPath and rootNode
-	if util.GlobalNodePath == "root" {
-		rootPath = getCurrentPath() + DIVIDE
-	} else {
-		rootPath = util.GlobalNodePath + DIVIDE
-	}
-	//fmt.Println("Current path is: " + rootPath)
 }
 
 /**

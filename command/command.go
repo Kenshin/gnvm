@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	// local
-	//"gnvm/util"
 	"gnvm/config"
 	"gnvm/nodehandle"
 )
@@ -211,10 +210,7 @@ var configCmd = &cobra.Command{
 }
 
 func init() {
-	// set node.exe root to .gnvmrc
-	//config.SetConfig(config.NODEROOT, util.GlobalNodePath)
-	// set root path
-	nodehandle.SetRootPath()
+	nodehandle.Exec()
 }
 
 func Exec() {
