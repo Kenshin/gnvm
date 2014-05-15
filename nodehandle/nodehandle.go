@@ -32,10 +32,6 @@ func init() {
 	rootPath = util.GlobalNodePath + DIVIDE
 }
 
-func Exec() {
-	//fmt.Println("Current path is: " + rootPath)
-}
-
 func getCurrentPath() string {
 	path, err := os.Getwd()
 	if err != nil {
@@ -126,7 +122,7 @@ func Use(folder string) bool {
 
 	// check folder is rootVersion
 	if folder == rootVersion {
-		fmt.Printf("Current node.exe version is [%v], not re-use. See 'gnvm node-version'.", folder)
+		fmt.Printf("Current node.exe version is [%v], not re-use. See 'gnvm node-version'.\n", folder)
 		return false
 	}
 

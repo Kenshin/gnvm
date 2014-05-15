@@ -209,10 +209,6 @@ var configCmd = &cobra.Command{
 	},
 }
 
-func init() {
-	nodehandle.Exec()
-}
-
 func Exec() {
 
 	// add sub cmd to root
