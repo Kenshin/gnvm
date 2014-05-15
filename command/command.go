@@ -10,9 +10,9 @@ import (
 	"strings"
 
 	// local
+	//"gnvm/util"
 	"gnvm/config"
 	"gnvm/nodehandle"
-	"gnvm/util"
 )
 
 var (
@@ -211,11 +211,8 @@ var configCmd = &cobra.Command{
 }
 
 func init() {
-	//fmt.Println("asdfsafdasdf = " + util.GlobalNodePath)
-	// get node.exe root
-	//noderoot := nodehandle.GetGlobalNodePath()
 	// set node.exe root to .gnvmrc
-	config.SetConfig(config.NODEROOT, util.GlobalNodePath)
+	//config.SetConfig(config.NODEROOT, util.GlobalNodePath)
 	// set root path
 	nodehandle.SetRootPath()
 }

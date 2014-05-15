@@ -17,6 +17,7 @@ import (
 
 	// local
 	"gnvm/config"
+	"gnvm/util"
 )
 
 const (
@@ -25,27 +26,7 @@ const (
 	SHASUMS = "SHASUMS.txt"
 )
 
-var globalNodePath, rootPath string
-
-func GetGlobalNodePath() string {
-
-	// get node.exe path
-	file, err := exec.LookPath(NODE)
-	if err != nil {
-		globalNodePath = "root"
-	} else {
-		// relpace "\\node.exe"
-		globalNodePath = strings.Replace(file, DIVIDE+NODE, "", -1)
-	}
-
-	// gnvm.exe and node.exe the same path
-	if globalNodePath == "." {
-		globalNodePath = "root"
-	}
-	//log.Println("Node.exe path is: ", globalNodePath)
-
-	return globalNodePath
-}
+var rootPath string
 
 func getCurrentPath() string {
 	path, err := os.Getwd()
@@ -93,12 +74,12 @@ func copy(src, dest string) error {
 func SetRootPath() {
 
 	// set rootPath and rootNode
-	if globalNodePath == "root" {
+	if util.GlobalNodePath == "root" {
 		rootPath = getCurrentPath() + DIVIDE
 	} else {
-		rootPath = globalNodePath + DIVIDE
+		rootPath = util.GlobalNodePath + DIVIDE
 	}
-	//log.Println("Current path is: " + rootPath)
+	//fmt.Println("Current path is: " + rootPath)
 }
 
 /**
