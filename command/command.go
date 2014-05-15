@@ -195,13 +195,25 @@ var configCmd = &cobra.Command{
 		if len(args) == 1 {
 			fmt.Println("gnvm config [" + args[0] + "] is " + config.GetConfig(args[0]))
 		} else if len(args) == 2 {
-			switch args[0] {
-			case "registry", "noderoot":
+
+			if args[1] == "default" {
+				fmt.Println("Waring: Please use capital letter 'DEFAULT'.")
+				args[1] = "DEFAULT"
+			}
+
+			switch {
+			case args[0] == "registry" && args[1] != "DEFAULT":
 				if newValue := config.SetConfig(args[0], args[1]); newValue != "" {
 					fmt.Println("Set success, [" + args[0] + "] new value is " + newValue)
 				}
+			case args[0] == "registry" && args[1] == "DEFAULT":
+				if newValue := config.SetConfig(args[0], config.REGISTRY_VAL); newValue != "" {
+					fmt.Println("Registry reset success, [" + args[0] + "] new value is " + newValue)
+				}
+			case args[0] == "noderoot":
+				fmt.Println("Waring: Temporarily does not support")
 			default:
-				fmt.Println("Config parameter include 'registry' | 'noderoot', your input unknown, please check your input. See 'gnvm help config'.")
+				fmt.Println("Config parameter include <registry>|<noderoot>, your input unknown, please check your input. See 'gnvm help config'.")
 			}
 		} else if len(args) > 2 {
 			fmt.Println("Config parameter maximum is 2, please check your input. See 'gnvm help config'.")
