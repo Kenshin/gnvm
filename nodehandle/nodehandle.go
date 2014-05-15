@@ -32,15 +32,6 @@ func init() {
 	rootPath = util.GlobalNodePath + DIVIDE
 }
 
-func getCurrentPath() string {
-	path, err := os.Getwd()
-	if err != nil {
-		fmt.Println("Get current path Error: " + err.Error())
-		return ""
-	}
-	return path
-}
-
 func isDirExist(path string) bool {
 	_, err := os.Stat(path)
 	if err != nil {
