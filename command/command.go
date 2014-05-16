@@ -86,13 +86,19 @@ var uninstallCmd = &cobra.Command{
 	Long: `uninstall local node.js version e.g.
 gnvm uninstall x.xx.xx
 gnvm uninstall latest
-gnvm uninstall 0.10.26 0.11.2 latest`,
+gnvm uninstall 0.10.26 0.11.2 latest
+gnvm uninstall ALL`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//fmt.Println("gnvm uninstall args include " + strings.Join(args, " "))
 		if len(args) == 0 {
 			fmt.Println("Error: 'gnvm uninstall' need parameter, please check your input. See 'gnvm help uninstall'.")
 		} else {
 			for _, v := range args {
+
+				if v == "ALL" || v == "all" {
+					fmt.Println("Waring: use of the parameter 'All' is not correct, please use 'gnvm uninstall ALL'. See 'gnvm help uninstall'.")
+					continue
+				}
 
 				// get true version
 				v = nodehandle.GetTrueVersion(v, true)
