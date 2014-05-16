@@ -254,7 +254,8 @@ func Uninstall(folder string) {
 	fmt.Printf("Node.exe version [%v] uninstall success. \n", folder)
 }
 
-func LS() {
+func LS( isPrint bool ) ([]string, error) {
+	var lsArr []string
 	existVersion := false
 	err := filepath.Walk(rootPath, func(dir string, f os.FileInfo, err error) error {
 
@@ -289,7 +290,12 @@ func LS() {
 				// set true
 				existVersion = true
 
-				fmt.Println("v" + version + desc)
+				// set lsArr
+				lsArr = append(lsArr, version)
+
+				if isPrint {
+					fmt.Println("v" + version + desc)
+				}
 			}
 		}
 
@@ -300,13 +306,15 @@ func LS() {
 	// show error
 	if err != nil {
 		fmt.Printf("'gnvm ls' Error: ", err.Error())
-		return
+		return lsArr, err
 	}
 
 	// version is exist
 	if !existVersion {
-		fmt.Println("Waring: Don't have any available version, please check. See 'gnvm help install'.")
+		fmt.Println("Waring: don't have any available version, please check. See 'gnvm help install'.")
 	}
+
+	return lsArr, err
 }
 
 func LsRemote() {
