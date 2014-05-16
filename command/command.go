@@ -96,7 +96,7 @@ gnvm uninstall ALL`,
 			for _, v := range args {
 
 				if v == "ALL" || v == "all" {
-					fmt.Println("Waring: use of the parameter 'All' is not correct, please use 'gnvm uninstall ALL'. See 'gnvm help uninstall'.")
+					fmt.Println("Waring: use of the parameter 'ALL' is not correct, please use 'gnvm uninstall ALL'. See 'gnvm help uninstall'.")
 					continue
 				}
 
