@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 )
 
@@ -20,6 +21,20 @@ func init() {
 
 func Exec() {
 	//fmt.Println("GlobalNodePath = " + GlobalNodePath)
+}
+
+func ConverFloat(str string) (float64, error) {
+	args := strings.Split(str, ".")
+	var newStr string
+	for k, v := range args {
+		if k == 0 {
+			newStr = string(v) + "."
+		} else {
+			newStr = newStr + string(v)
+		}
+	}
+	version, err := strconv.ParseFloat(newStr, 64)
+	return version, err
 }
 
 func getGlobalNodePath() string {

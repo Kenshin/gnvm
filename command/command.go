@@ -7,7 +7,7 @@ import (
 	// go
 	"fmt"
 	//"strconv"
-	"strings"
+	//"strings"
 
 	// local
 	"gnvm/config"
@@ -54,6 +54,11 @@ var installCmd = &cobra.Command{
 		if len(args) == 0 {
 			fmt.Println("Error: 'gnvm install' need parameter, please check your input. See 'gnvm help install'.")
 		} else {
+
+			if global && len(args) > 1 {
+				fmt.Println("Waring: when use --global must be only one parameter, e.g. 'gnvm install x.xx.xx --global'. See 'gnvm install help'.")
+			}
+
 			for _, v := range args {
 
 				// check latest
@@ -135,12 +140,23 @@ var useCmd = &cobra.Command{
 // sub cmd
 var updateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "update global node.js",
-	Long: `update global node.js e.g.
-'gnvm update'`,
+	Short: "update latest node.js",
+	Long: `update latest node.js e.g.
+'gnvm update latest'
+'gnvm update latest --global'`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("gnvm update args include " + strings.Join(args, " "))
-		//TO DO
+		if len(args) == 1 {
+			switch args[0] {
+			case "latest":
+				nodehandle.Update(global)
+			case "gnvm":
+				fmt.Printf("Waring: [%v] Temporarily does not support. See 'gnvm help update'.\n", args[0])
+			default:
+				fmt.Println("Error: gnvm update only support 'latest' parameter. See 'gnvm help update'.")
+			}
+		} else {
+			fmt.Println("Use parameter maximum is 1, temporary support only 'latest', please check your input. See 'gnvm help update'.")
+		}
 	},
 }
 
@@ -234,7 +250,8 @@ func Exec() {
 	gnvmCmd.AddCommand(configCmd)
 
 	// flag
-	installCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "get this version global version")
+	installCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version")
+	updateCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version")
 	//useCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "get this version global version")
 	lsCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote all node.js version list")
 

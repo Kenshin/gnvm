@@ -343,9 +343,10 @@ func LsRemote() {
 
 }
 
-func Install(args []string, global bool) {
+func Install(args []string, global bool) bool {
 
 	var currentLatest string
+	var ok bool
 
 	// try catch
 	defer func() {
@@ -373,22 +374,67 @@ func Install(args []string, global bool) {
 		}
 
 		// downlaod
-		if ok := download(v); ok {
-			switch {
-			case v == currentLatest:
+		ok = download(v)
+		if ok {
+
+			if v == currentLatest {
 				config.SetConfig(config.LATEST_VERSION, v)
-				fallthrough
-			case global && len(args) == 1:
+			}
+
+			if global && len(args) == 1 {
 				if ok := Use(v); ok {
 					config.SetConfig(config.GLOBAL_VERSION, v)
 				}
-			case global && len(args) > 1:
-				fmt.Println("Waring: when use --global must be only one parameter, e.g. 'gnvm install x.xx.xx --global'. See 'gnvm install help'.")
 			}
-
 		}
 	}
 
+	return ok
+
+}
+
+func Update(global bool) {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+			os.Exit(0)
+		}
+	}()
+
+	localVersion := config.GetConfig(config.LATEST_VERSION)
+	fmt.Printf("local latest version is [%v].\n", localVersion)
+
+	remoteVersion := getLatestVersionByRemote()
+	if remoteVersion == "" {
+		fmt.Println("Get latest version error, please check. See 'gnvm config help'.")
+		return
+	}
+	fmt.Printf("remote [%v] latest version is [%v].\n", config.GetConfig("registry"), remoteVersion)
+
+	local, _ := util.ConverFloat(localVersion)
+	remote, _ := util.ConverFloat(remoteVersion)
+
+	var args []string
+	args = append(args, remoteVersion)
+
+	switch {
+	case localVersion == config.UNKNOWN:
+		fmt.Println("Waring: local latest version undefined.")
+		if ok := Install(args, global); ok {
+			config.SetConfig(config.LATEST_VERSION, remoteVersion)
+		}
+	case local == remote:
+		fmt.Printf("Remote latest version [%v] = latest version [%v].\n", remoteVersion, localVersion)
+	case local > remote:
+		fmt.Printf("Error: local latest version [%v] > remote latest version [%v], please check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
+	case local < remote:
+		fmt.Printf("Remote latest version [%v] > local latest version [%v].\n", remoteVersion, localVersion)
+		if ok := Install(args, global); ok {
+			config.SetConfig(config.LATEST_VERSION, remoteVersion)
+		}
+	}
 }
 
 func download(version string) bool {
