@@ -343,9 +343,10 @@ func LsRemote() {
 
 }
 
-func Install(args []string, global bool) {
+func Install(args []string, global bool) bool {
 
 	var currentLatest string
+	var ok bool
 
 	// try catch
 	defer func() {
@@ -373,7 +374,8 @@ func Install(args []string, global bool) {
 		}
 
 		// downlaod
-		if ok := download(v); ok == true {
+		ok = download(v)
+		if ok {
 
 			if v == currentLatest {
 				config.SetConfig(config.LATEST_VERSION, v)
@@ -386,6 +388,8 @@ func Install(args []string, global bool) {
 			}
 		}
 	}
+
+	return ok
 
 }
 
@@ -409,8 +413,9 @@ func Update(global bool) {
 		fmt.Println("Waring: local latest version undefined.")
 		var args []string
 		args = append(args, remoteVersion)
-		Install(args, global)
-		config.SetConfig(config.LATEST_VERSION, remoteVersion)
+		if ok := Install(args, global); ok {
+			config.SetConfig(config.LATEST_VERSION, remoteVersion)
+		}
 	case local == remote:
 		fmt.Printf("Remote latest version [%v] = latest version [%v].\n", remoteVersion, localVersion)
 	case local > remote:
@@ -419,8 +424,9 @@ func Update(global bool) {
 		fmt.Printf("Remote latest version [%v] > local latest version [%v].\n", remoteVersion, localVersion)
 		var args []string
 		args = append(args, remoteVersion)
-		Install(args, global)
-		config.SetConfig(config.LATEST_VERSION, remoteVersion)
+		if ok := Install(args, global); ok {
+			config.SetConfig(config.LATEST_VERSION, remoteVersion)
+		}
 	}
 }
 
