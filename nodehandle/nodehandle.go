@@ -214,12 +214,13 @@ func NodeVersion(args []string, remote bool) {
 				return
 			}
 			fmt.Printf("Node.exe remote [%v] verson is [%v].\n", config.GetConfig("registry"), remoteVersion)
+			fmt.Printf("Node.exe latest verson is [%v].\n", latest)
 		}
 	}
 
 	switch {
 	case len(args) == 0 && (global == config.UNKNOWN || latest == config.UNKNOWN):
-		fmt.Printf("Waring: When version is [%v], please Use 'gnvm init'.\n", config.UNKNOWN)
+		fmt.Printf("Waring: when version is [%v], please Use 'gnvm init'.\n", config.UNKNOWN)
 	case args[0] == "latest" && latest == config.UNKNOWN:
 		fmt.Printf("Waring: when version is [%v], please Use 'gnvm update latest'.\n", latest)
 	case args[0] == "global" && global == config.UNKNOWN:
