@@ -399,10 +399,10 @@ func Update(global bool) {
 		fmt.Println("Get latest version error, please check. See 'gnvm config help'.")
 		return
 	}
-	fmt.Printf("remote latest version is [%v].\n", remoteVersion)
+	fmt.Printf("remote [%v] latest version is [%v].\n", config.GetConfig("registry"), remoteVersion)
 
-	local, _ := strconv.ParseInt(strings.Replace(localVersion, ".", "", -1), 10, 0)
-	remote, _ := strconv.ParseInt(strings.Replace(remoteVersion, ".", "", -1), 10, 0)
+	local, _ := util.ConverFloat(localVersion)
+	remote, _ := util.ConverFloat(remoteVersion)
 
 	switch {
 	case localVersion == config.UNKNOWN:
@@ -412,11 +412,11 @@ func Update(global bool) {
 		Install(args, global)
 		config.SetConfig(config.LATEST_VERSION, remoteVersion)
 	case local == remote:
-		fmt.Printf("Remote latest version [%v] same as local latest version [%v].\n", remoteVersion, localVersion)
+		fmt.Printf("Remote latest version [%v] = latest version [%v].\n", remoteVersion, localVersion)
 	case local > remote:
-		fmt.Println("Error: local latest version [%v] greater than remote latest version [%v], please check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
+		fmt.Printf("Error: local latest version [%v] > remote latest version [%v], please check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
 	case local < remote:
-		fmt.Printf("Remote latest version [%v] greater than local latest version [%v].\n", remoteVersion, localVersion)
+		fmt.Printf("Remote latest version [%v] > local latest version [%v].\n", remoteVersion, localVersion)
 		var args []string
 		args = append(args, remoteVersion)
 		Install(args, global)

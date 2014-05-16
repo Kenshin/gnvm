@@ -155,7 +155,7 @@ var updateCmd = &cobra.Command{
 				fmt.Println("Error: gnvm update only support 'latest' parameter. See 'gnvm help update'.")
 			}
 		} else {
-			fmt.Println("Use parameter maximum is 1, please check your input. See 'gnvm help update'.")
+			fmt.Println("Use parameter maximum is 1, temporary support only 'latest', please check your input. See 'gnvm help update'.")
 		}
 	},
 }
