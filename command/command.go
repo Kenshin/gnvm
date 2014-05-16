@@ -186,11 +186,17 @@ gnvm ls --remote`,
 // sub cmd
 var nodeVersionCmd = &cobra.Command{
 	Use:   "node-version",
-	Short: "show global | latest node.js version",
-	Long: `show global | latest node.js version e.g.
+	Short: "show <global>, <latest> node.js version",
+	Long: `show <global>, <latest> node.js version e.g.
 gnvm node-version
 Node.exe global verson is [x.xx.xx]
-Node.exe latest verson is [x.xx.xx]`,
+Node.exe latest verson is [x.xx.xx]
+gnvm node-version latest
+Node.exe latest verson is [x.xx.xx]
+gnvm node-version latest --remote
+Node.exe remote [http://www.xx.com] verson is [x.xx.xx]
+gnvm node-version global
+Node.exe global verson is [x.xx.xx]`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 0 {
 			fmt.Println("Warning: gnvm node-version no parameter, please check your input. See 'gnvm help node-version'.")
@@ -250,10 +256,11 @@ func Exec() {
 	gnvmCmd.AddCommand(configCmd)
 
 	// flag
-	installCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version")
-	updateCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version")
+	installCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version.")
+	updateCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version.")
+	lsCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote all node.js version list.")
+	nodeVersionCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote node.js latest version.")
 	//useCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "get this version global version")
-	lsCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote all node.js version list")
 
 	// exec
 	gnvmCmd.Execute()
