@@ -210,7 +210,8 @@ func NodeVersion(args []string, remote bool) {
 		case args[0] == "latest" && remote:
 			remoteVersion := getLatestVersionByRemote()
 			if remoteVersion == "" {
-				fmt.Println("Get latest version error, please check. See 'gnvm config help'.")
+				fmt.Printf("Error: get remote [%v] latest version error, please check. See 'gnvm config help'.\n", config.GetConfig("registry") + config.LATEST + "/" +  config.NODELIST)
+				fmt.Printf("Node.exe latest verson is [%v].\n", latest)
 				return
 			}
 			fmt.Printf("Node.exe remote [%v] verson is [%v].\n", config.GetConfig("registry"), remoteVersion)
