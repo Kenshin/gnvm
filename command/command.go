@@ -54,6 +54,11 @@ var installCmd = &cobra.Command{
 		if len(args) == 0 {
 			fmt.Println("Error: 'gnvm install' need parameter, please check your input. See 'gnvm help install'.")
 		} else {
+
+			if global && len(args) > 1 {
+				fmt.Println("Waring: when use --global must be only one parameter, e.g. 'gnvm install x.xx.xx --global'. See 'gnvm install help'.")
+			}
+
 			for _, v := range args {
 
 				// check latest
