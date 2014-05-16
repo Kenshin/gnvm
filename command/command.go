@@ -89,26 +89,38 @@ gnvm uninstall latest
 gnvm uninstall 0.10.26 0.11.2 latest
 gnvm uninstall ALL`,
 	Run: func(cmd *cobra.Command, args []string) {
-		//fmt.Println("gnvm uninstall args include " + strings.Join(args, " "))
 		if len(args) == 0 {
 			fmt.Println("Error: 'gnvm uninstall' need parameter, please check your input. See 'gnvm help uninstall'.")
-		} else {
-			for _, v := range args {
+			return
+		} else if len(args) == 1 {
 
-				if v == "ALL" || v == "all" {
-					fmt.Println("Waring: use of the parameter 'ALL' is not correct, please use 'gnvm uninstall ALL'. See 'gnvm help uninstall'.")
-					continue
-				}
+			if args[0] == "all" {
+				fmt.Println("Waring: please use capital letter 'ALL'.")
+				args[0] = "ALL"
+			}
+			if newArr, err := nodehandle.LS(false); err != nil {
+				fmt.Println("Error: " + err.Error())
+				return
+			} else {
+				args = newArr
+			}
 
-				// get true version
-				v = nodehandle.GetTrueVersion(v, true)
+		}
+		for _, v := range args {
 
-				// check version format
-				if ok := nodehandle.VerifyNodeVersion(v); ok != true {
-					fmt.Printf("Error: [%v] format error, the correct format is x.xx.xx. \n", v)
-				} else {
-					nodehandle.Uninstall(v)
-				}
+			if v == "ALL" || v == "all" {
+				fmt.Println("Waring: use of the parameter 'ALL' is not correct, please use 'gnvm uninstall ALL'. See 'gnvm help uninstall'.")
+				continue
+			}
+
+			// get true version
+			v = nodehandle.GetTrueVersion(v, true)
+
+			// check version format
+			if ok := nodehandle.VerifyNodeVersion(v); ok != true {
+				fmt.Printf("Error: [%v] format error, the correct format is x.xx.xx. \n", v)
+			} else {
+				nodehandle.Uninstall(v)
 			}
 		}
 	},
@@ -184,7 +196,7 @@ gnvm ls --remote`,
 			nodehandle.LsRemote()
 		} else {
 			// check local ls
-			nodehandle.LS()
+			nodehandle.LS(true)
 		}
 	},
 }
