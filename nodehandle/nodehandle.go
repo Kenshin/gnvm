@@ -374,10 +374,10 @@ func Install(args []string, global bool) {
 
 		// downlaod
 		if ok := download(v); ok == true {
-			switch {
-			case v == currentLatest:
+			if v == currentLatest {
 				config.SetConfig(config.LATEST_VERSION, v)
-				fallthrough
+			}
+			switch {
 			case global && len(args) == 1:
 				if ok := Use(v); ok {
 					config.SetConfig(config.GLOBAL_VERSION, v)
