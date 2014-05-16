@@ -198,10 +198,17 @@ Node.exe remote [http://www.xx.com] verson is [x.xx.xx]
 gnvm node-version global
 Node.exe global verson is [x.xx.xx]`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) > 0 {
-			fmt.Println("Warning: gnvm node-version no parameter, please check your input. See 'gnvm help node-version'.")
+		if len(args) > 1 {
+			fmt.Println("Waring: Use parameter maximum is 1, temporary support only <global>, <latest>, please check your input. See 'gnvm help node-version'.")
+		} else if len(args) == 1 {
+			switch {
+			case args[0] != "global" && args[0] != "latest":
+				fmt.Println("Waring: gnvm node-version olny support <global>, <latest> parameter.")
+			case args[0] != "latest" && remote:
+				fmt.Println("Waring: gnvm node-version olny support <latest --remote> parameter.")
+			}
 		}
-		nodehandle.NodeVersion()
+		nodehandle.NodeVersion(args, remote)
 	},
 }
 

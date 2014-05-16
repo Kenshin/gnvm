@@ -185,7 +185,7 @@ func GetTrueVersion(latest string, isPrint bool) string {
 	return latest
 }
 
-func NodeVersion() {
+func NodeVersion(args []string, remote bool) {
 	latest := config.GetConfig(config.LATEST_VERSION)
 	global := config.GetConfig(config.GLOBAL_VERSION)
 
