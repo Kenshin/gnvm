@@ -186,12 +186,37 @@ func GetTrueVersion(latest string, isPrint bool) string {
 }
 
 func NodeVersion(args []string, remote bool) {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+			os.Exit(0)
+		}
+	}()
+
 	latest := config.GetConfig(config.LATEST_VERSION)
 	global := config.GetConfig(config.GLOBAL_VERSION)
 
-	fmt.Printf(`Node.exe global verson is [%v]
+	if len(args) == 0 || len(args) > 1 {
+		fmt.Printf(`Node.exe global verson is [%v]
 Node.exe latest verson is [%v]
 Notice: When version is [%v], please See 'gnvm use help'.`, global, latest, config.UNKNOWN)
+	} else {
+		switch {
+		case args[0] == "global":
+			fmt.Printf("Node.exe global verson is [%v].\n", global)
+		case args[0] == "latest" && !remote:
+			fmt.Printf("Node.exe latest verson is [%v].\n", latest)
+		case args[0] == "latest" && remote:
+			remoteVersion := getLatestVersionByRemote()
+			if remoteVersion == "" {
+				fmt.Println("Get latest version error, please check. See 'gnvm config help'.")
+				return
+			}
+			fmt.Printf("Node.exe remote [%v] verson is [%v].\n", config.GetConfig("registry"), remoteVersion)
+		}
+	}
 }
 
 func Uninstall(folder string) {
