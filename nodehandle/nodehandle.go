@@ -408,11 +408,12 @@ func Update(global bool) {
 	local, _ := util.ConverFloat(localVersion)
 	remote, _ := util.ConverFloat(remoteVersion)
 
+	var args []string
+	args = append(args, remoteVersion)
+
 	switch {
 	case localVersion == config.UNKNOWN:
 		fmt.Println("Waring: local latest version undefined.")
-		var args []string
-		args = append(args, remoteVersion)
 		if ok := Install(args, global); ok {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
 		}
@@ -422,8 +423,6 @@ func Update(global bool) {
 		fmt.Printf("Error: local latest version [%v] > remote latest version [%v], please check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
 	case local < remote:
 		fmt.Printf("Remote latest version [%v] > local latest version [%v].\n", remoteVersion, localVersion)
-		var args []string
-		args = append(args, remoteVersion)
 		if ok := Install(args, global); ok {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
 		}
