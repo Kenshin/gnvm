@@ -395,6 +395,14 @@ func Install(args []string, global bool) bool {
 
 func Update(global bool) {
 
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+			os.Exit(0)
+		}
+	}()
+
 	localVersion := config.GetConfig(config.LATEST_VERSION)
 	fmt.Printf("local latest version is [%v].\n", localVersion)
 
