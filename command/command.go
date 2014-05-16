@@ -226,7 +226,7 @@ var configCmd = &cobra.Command{
 		} else if len(args) == 2 {
 
 			if args[1] == "default" {
-				fmt.Println("Waring: Please use capital letter 'DEFAULT'.")
+				fmt.Println("Waring: please use capital letter 'DEFAULT'.")
 				args[1] = "DEFAULT"
 			}
 
