@@ -121,7 +121,7 @@ func Use(folder string) bool {
 
 		// create rootVersion folder
 		if err := cmd("md", rootFolder); err != nil {
-			fmt.Printf("Create %v folder Error: %v", rootVersion, err.Error())
+			fmt.Printf("Create %v folder Error: %v.\n", rootVersion, err.Error())
 			return false
 		}
 
@@ -130,13 +130,13 @@ func Use(folder string) bool {
 	if rootNodeExist {
 		// copy rootNode to <root>/rootVersion
 		if err := copy(rootNode, rootFolder); err != nil {
-			fmt.Printf("copy %v to %v folder Error: %v", rootNode, rootFolder, err.Error())
+			fmt.Printf("copy %v to %v folder Error: %v.\n", rootNode, rootFolder, err.Error())
 			return false
 		}
 
 		// delete <root>/node.exe
 		if err := os.Remove(rootNode); err != nil {
-			fmt.Printf("remove %v to %v folder Error: ", rootNode, err.Error())
+			fmt.Printf("remove %v folder Error: %v.\n", rootNode, err.Error())
 			return false
 		}
 
@@ -144,11 +144,11 @@ func Use(folder string) bool {
 
 	// copy useNode to rootPath
 	if err := copy(useNode, rootPath); err != nil {
-		fmt.Printf("copy %v to %v folder Error: ", useNode, rootPath, err.Error())
+		fmt.Printf("copy %v to %v folder Error: %v.\n", useNode, rootPath, err.Error())
 		return false
 	}
 
-	fmt.Printf("Set success, Current Node.exe version is [%v]. \n", folder)
+	fmt.Printf("Set success, Current Node.exe version is [%v].\n", folder)
 
 	return true
 
@@ -246,11 +246,11 @@ func Uninstall(folder string) {
 
 	// remove rootPath/version folder
 	if err := os.RemoveAll(removePath); err != nil {
-		fmt.Printf("Uinstall [%v] fail, Error: %v", folder, err.Error())
+		fmt.Printf("Uinstall [%v] fail, Error: %v.\n", folder, err.Error())
 		return
 	}
 
-	fmt.Printf("Node.exe version [%v] uninstall success. \n", folder)
+	fmt.Printf("Node.exe version [%v] uninstall success.\n", folder)
 }
 
 func LS(isPrint bool) ([]string, error) {
@@ -304,7 +304,7 @@ func LS(isPrint bool) ([]string, error) {
 
 	// show error
 	if err != nil {
-		fmt.Printf("'gnvm ls' Error: ", err.Error())
+		fmt.Printf("'gnvm ls' Error: %v.\n", err.Error())
 		return lsArr, err
 	}
 
@@ -331,7 +331,7 @@ func LsRemote() {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v], Error: ", url)
+			fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v], Error: %v.\n", url, err.Err())
 			fmt.Println(err)
 			os.Exit(0)
 		}
@@ -350,7 +350,7 @@ func LsRemote() {
 
 	// check state code
 	if res.StatusCode != 200 {
-		fmt.Printf("registry [%v] an [%v] error occurred, please check. See 'gnvm config help'.", url, res.StatusCode)
+		fmt.Printf("registry [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
 		return
 	}
 
@@ -396,7 +396,6 @@ func Install(args []string, global bool) int {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			//fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v], Error: ", url)
 			fmt.Println(err)
 			os.Exit(0)
 		}
@@ -600,7 +599,7 @@ func download(version string) int {
 	fi, err := file.Stat()
 	if err == nil {
 		if fi.Size() != res.ContentLength {
-			fmt.Printf("Error: Downlaod node.exe version [%v] size error, please check your network and run 'gnvm uninstall %v'. ", version, version)
+			fmt.Printf("Error: Downlaod node.exe version [%v] size error, please check your network and run 'gnvm uninstall %v'.\n", version, version)
 			return 5
 		}
 	}
