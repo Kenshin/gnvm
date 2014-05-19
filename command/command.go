@@ -6,8 +6,8 @@ import (
 
 	// go
 	"fmt"
+	"strings"
 	//"strconv"
-	//"strings"
 
 	// local
 	"gnvm/config"
@@ -94,7 +94,7 @@ gnvm uninstall ALL`,
 			return
 		} else if len(args) == 1 {
 
-			if args[0] == "all" {
+			if args[0] != "ALL" {
 				fmt.Println("Waring: please use capital letter 'ALL'.")
 				args[0] = "ALL"
 			}
@@ -108,7 +108,7 @@ gnvm uninstall ALL`,
 		}
 		for _, v := range args {
 
-			if v == "ALL" || v == "all" {
+			if strings.ToUpper(v) == "ALL" {
 				fmt.Println("Waring: use of the parameter 'ALL' is not correct, please use 'gnvm uninstall ALL'. See 'gnvm help uninstall'.")
 				continue
 			}
