@@ -94,15 +94,17 @@ gnvm uninstall ALL`,
 			return
 		} else if len(args) == 1 {
 
-			if args[0] != "ALL" {
+			if args[0] != "ALL" && strings.ToUpper(args[0]) == "ALL" {
+
 				fmt.Println("Waring: please use capital letter 'ALL'.")
 				args[0] = "ALL"
-			}
-			if newArr, err := nodehandle.LS(false); err != nil {
-				fmt.Println("Error: " + err.Error())
-				return
-			} else {
-				args = newArr
+
+				if newArr, err := nodehandle.LS(false); err != nil {
+					fmt.Println("Error: " + err.Error())
+					return
+				} else {
+					args = newArr
+				}
 			}
 
 		}
