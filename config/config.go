@@ -94,6 +94,7 @@ func createConfig() {
 
 	// success
 	fmt.Printf("Config file [%v] create success.\n", configPath)
+	fmt.Printf("Waring: latest version is [%v], please use 'gnvm update latest' or 'gnvm install latest'.\n", UNKNOWN)
 
 }
 
