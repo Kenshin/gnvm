@@ -21,9 +21,8 @@ import (
 )
 
 const (
-	DIVIDE  = "\\"
-	NODE    = "node.exe"
-	SHASUMS = "SHASUMS.txt"
+	DIVIDE = "\\"
+	NODE   = "node.exe"
 )
 
 var rootPath string
@@ -601,65 +600,9 @@ func getLatestVersionByRemote() string {
 	var version string
 
 	// set url
-	registry := config.GetConfig("registry")
+	url := config.GetConfig("registry") + "latest/" + util.SHASUMS
 
-	// set url
-	url := registry + "latest/" + SHASUMS
-
-	// get res
-	res, err := http.Get(url)
-
-	// close
-	defer res.Body.Close()
-
-	// err
-	if err != nil {
-		panic(err)
-	}
-
-	// check state code
-	if res.StatusCode != 200 {
-		fmt.Printf("Url [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
-		return ""
-	}
-
-	// set buff
-	buff := bufio.NewReader(res.Body)
-
-	for {
-		// set line
-		line, err := buff.ReadString('\n')
-
-		if line != "" {
-
-			args1 := strings.Split(line, "  ")
-			if len(args1) < 2 {
-				fmt.Printf("Error: Url [%v] format error, please change registry. See 'gnvm config help'.\n", url)
-				break
-			}
-
-			args2 := strings.Split(args1[1], "-")
-			if len(args2) < 2 {
-				fmt.Printf("Error: Url [%v] format error, please change registry. See 'gnvm config help'.\n", url)
-				break
-			}
-
-			if len(args2[1]) < 2 {
-				fmt.Printf("Error: Url [%v] format error, please change registry. See 'gnvm config help'.\n", url)
-				break
-			}
-
-			// set version
-			version = args2[1][1:]
-			break
-		}
-
-		// when EOF or err break
-		if err != nil || err == io.EOF {
-			break
-		}
-
-	}
+	version = util.GetLatestVersion(url)
 
 	return version
 
