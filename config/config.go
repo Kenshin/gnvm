@@ -14,7 +14,7 @@ import (
 	"gnvm/util"
 )
 
-var configPath string
+var configPath, globalversion, latsetversion string
 
 const (
 	VERSION  = "0.1.0"
@@ -24,6 +24,7 @@ const (
 	LATEST   = "latest"
 	NODELIST = "npm-versions.txt"
 
+	REGISTRY     = "registry"
 	REGISTRY_KEY = "registry: "
 	REGISTRY_VAL = "http://nodejs.org/dist/"
 
@@ -75,8 +76,17 @@ func createConfig() {
 		return
 	}
 
+	// get <root>/node.exe version
+	version, err := util.GetNodeVersion(util.GlobalNodePath + "\\")
+	if err != nil {
+		fmt.Println("Waring: not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
+		globalversion = GLOBAL_VERSION_VAL
+	} else {
+		globalversion = version
+	}
+
 	//write init config
-	_, fileErr := file.WriteString(REGISTRY_KEY + REGISTRY_VAL + NEWLINE + NODEROOT_KEY + configPath + NEWLINE + GLOBAL_VERSION_KEY + GLOBAL_VERSION_VAL + NEWLINE + LATEST_VERSION_KEY + LATEST_VERSION_VAL)
+	_, fileErr := file.WriteString(REGISTRY_KEY + REGISTRY_VAL + NEWLINE + NODEROOT_KEY + util.GlobalNodePath + NEWLINE + GLOBAL_VERSION_KEY + globalversion + NEWLINE + LATEST_VERSION_KEY + LATEST_VERSION_VAL)
 	if fileErr != nil {
 		fmt.Println("Write Config file Error: " + fileErr.Error())
 		return
@@ -84,6 +94,7 @@ func createConfig() {
 
 	// success
 	fmt.Printf("Config file [%v] create success.\n", configPath)
+	fmt.Printf("Waring: latest version is [%v], please use 'gnvm update latest' or 'gnvm install latest'.\n", UNKNOWN)
 
 }
 
@@ -135,7 +146,32 @@ func GetConfig(key string) string {
 		fmt.Println("GetConfig Error: " + err.Error())
 
 		// value
-		value = "unknown"
+		value = UNKNOWN
 	}
 	return value
+}
+
+func ReSetConfig() {
+	SetConfig(REGISTRY, REGISTRY_VAL)
+	SetConfig(NODEROOT, util.GlobalNodePath)
+
+	version, err := util.GetNodeVersion(util.GlobalNodePath + "\\")
+	if err != nil {
+		fmt.Println("Waring: not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
+		globalversion = GLOBAL_VERSION_VAL
+	} else {
+		globalversion = version
+	}
+	SetConfig(GLOBAL_VERSION, globalversion)
+
+	// set url
+	url := REGISTRY_VAL + "latest/" + util.SHASUMS
+	if latest := util.GetLatestVersion(url); latest != "" {
+		latsetversion = latest
+	} else {
+		latsetversion = LATEST_VERSION_VAL
+	}
+	SetConfig(LATEST_VERSION, latsetversion)
+
+	fmt.Printf("Config file [%v] init success.\n", configPath)
 }

@@ -21,9 +21,8 @@ import (
 )
 
 const (
-	DIVIDE  = "\\"
-	NODE    = "node.exe"
-	SHASUMS = "SHASUMS.txt"
+	DIVIDE = "\\"
+	NODE   = "node.exe"
 )
 
 var rootPath string
@@ -40,17 +39,6 @@ func isDirExist(path string) bool {
 		// return file.IsDir()
 		return true
 	}
-}
-
-func getNodeVersion(path string) (string, error) {
-	var newout string
-	out, err := exec.Command(path+"node", "--version").Output()
-	//string(out[:]) bytes to string
-	if err == nil {
-		// replace \r\n
-		newout = strings.Replace(string(string(out[:])[1:]), "\r\n", "", -1)
-	}
-	return newout, err
 }
 
 func cmd(name, arg string) error {
@@ -94,7 +82,7 @@ func Use(folder string) bool {
 	//log.Println("Use node.exe path is: " + usePath)
 
 	// get <root>/node.exe version
-	rootVersion, err := getNodeVersion(rootPath)
+	rootVersion, err := util.GetNodeVersion(rootPath)
 	if err != nil {
 		fmt.Println("Waring: not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
 		rootNodeExist = false
@@ -331,7 +319,7 @@ func LsRemote() {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v], Error: %v.\n", url, err.Err())
+			fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v], Error: %v.\n", url, err)
 			fmt.Println(err)
 			os.Exit(0)
 		}
@@ -523,7 +511,7 @@ func download(version string) int {
 	}
 
 	// rootPath/version/node.exe is exist
-	if _, err := getNodeVersion(rootPath + version + DIVIDE); err == nil {
+	if _, err := util.GetNodeVersion(rootPath + version + DIVIDE); err == nil {
 		fmt.Printf("Waring: [%v] folder exist.\n", version)
 		return 2
 	} else {
@@ -612,65 +600,9 @@ func getLatestVersionByRemote() string {
 	var version string
 
 	// set url
-	registry := config.GetConfig("registry")
+	url := config.GetConfig("registry") + "latest/" + util.SHASUMS
 
-	// set url
-	url := registry + "latest/" + SHASUMS
-
-	// get res
-	res, err := http.Get(url)
-
-	// close
-	defer res.Body.Close()
-
-	// err
-	if err != nil {
-		panic(err)
-	}
-
-	// check state code
-	if res.StatusCode != 200 {
-		fmt.Printf("Url [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
-		return ""
-	}
-
-	// set buff
-	buff := bufio.NewReader(res.Body)
-
-	for {
-		// set line
-		line, err := buff.ReadString('\n')
-
-		if line != "" {
-
-			args1 := strings.Split(line, "  ")
-			if len(args1) < 2 {
-				fmt.Printf("Error: Url [%v] format error, please change registry. See 'gnvm config help'.\n", url)
-				break
-			}
-
-			args2 := strings.Split(args1[1], "-")
-			if len(args2) < 2 {
-				fmt.Printf("Error: Url [%v] format error, please change registry. See 'gnvm config help'.\n", url)
-				break
-			}
-
-			if len(args2[1]) < 2 {
-				fmt.Printf("Error: Url [%v] format error, please change registry. See 'gnvm config help'.\n", url)
-				break
-			}
-
-			// set version
-			version = args2[1][1:]
-			break
-		}
-
-		// when EOF or err break
-		if err != nil || err == io.EOF {
-			break
-		}
-
-	}
+	version = util.GetLatestVersion(url)
 
 	return version
 

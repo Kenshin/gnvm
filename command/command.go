@@ -234,12 +234,26 @@ var configCmd = &cobra.Command{
 	Use:   "config",
 	Short: "set | get registry and noderoot value",
 	Long: `set | get registry and noderoot value e.g.
-'gnvm config registry'
-'registry is http://nodejs.org/dist/'
-'gnvm config registry http://dist.u.qiniudn.com/'`,
+gnvm config registry
+registry is http://nodejs.org/dist/
+gnvm config registry http://dist.u.qiniudn.com/
+gnvm config registry DEFAULT
+gnvm config INIT`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
+
+			if args[0] != "INIT" && strings.ToUpper(args[0]) == "INIT" {
+				fmt.Println("Waring: please use capital letter 'INIT'.")
+				args[0] = "INIT"
+			}
+
+			if args[0] == "INIT" {
+				config.ReSetConfig()
+				return
+			}
+
 			fmt.Println("gnvm config [" + args[0] + "] is " + config.GetConfig(args[0]))
+
 		} else if len(args) == 2 {
 
 			if args[1] != "DEFAULT" && strings.ToUpper(args[1]) == "DEFAULT" {
