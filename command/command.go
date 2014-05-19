@@ -6,8 +6,8 @@ import (
 
 	// go
 	"fmt"
+	"strings"
 	//"strconv"
-	//"strings"
 
 	// local
 	"gnvm/config"
@@ -94,21 +94,23 @@ gnvm uninstall ALL`,
 			return
 		} else if len(args) == 1 {
 
-			if args[0] == "all" {
+			if args[0] != "ALL" && strings.ToUpper(args[0]) == "ALL" {
+
 				fmt.Println("Waring: please use capital letter 'ALL'.")
 				args[0] = "ALL"
-			}
-			if newArr, err := nodehandle.LS(false); err != nil {
-				fmt.Println("Error: " + err.Error())
-				return
-			} else {
-				args = newArr
+
+				if newArr, err := nodehandle.LS(false); err != nil {
+					fmt.Println("Error: " + err.Error())
+					return
+				} else {
+					args = newArr
+				}
 			}
 
 		}
 		for _, v := range args {
 
-			if v == "ALL" || v == "all" {
+			if strings.ToUpper(v) == "ALL" {
 				fmt.Println("Waring: use of the parameter 'ALL' is not correct, please use 'gnvm uninstall ALL'. See 'gnvm help uninstall'.")
 				continue
 			}
@@ -134,9 +136,6 @@ var useCmd = &cobra.Command{
 'gnvm use x.xx.xx'
 'gnvm use latest'`,
 	Run: func(cmd *cobra.Command, args []string) {
-		//fmt.Println("gnvm use args include " + strings.Join(args, " "))
-		//fmt.Println("global flag is " + strconv.FormatBool(global))
-
 		if len(args) == 1 {
 
 			if args[0] != "latest" && nodehandle.VerifyNodeVersion(args[0]) != true {
@@ -243,7 +242,7 @@ var configCmd = &cobra.Command{
 			fmt.Println("gnvm config [" + args[0] + "] is " + config.GetConfig(args[0]))
 		} else if len(args) == 2 {
 
-			if args[1] == "default" {
+			if args[1] != "DEFAULT" && strings.ToUpper(args[1]) == "DEFAULT" {
 				fmt.Println("Waring: please use capital letter 'DEFAULT'.")
 				args[1] = "DEFAULT"
 			}

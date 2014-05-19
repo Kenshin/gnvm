@@ -74,6 +74,8 @@ func copy(src, dest string) error {
  */
 func Use(folder string) bool {
 
+	rootNodeExist := true
+
 	// get true folder, e.g. folder is latest return x.xx.xx
 	folder = GetTrueVersion(folder, true)
 
@@ -94,20 +96,14 @@ func Use(folder string) bool {
 	// get <root>/node.exe version
 	rootVersion, err := getNodeVersion(rootPath)
 	if err != nil {
-		fmt.Println("Not found global node version, please checkout. If not exist node.exe. See 'gnvm install latest'.")
-		return false
+		fmt.Println("Waring: not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
+		rootNodeExist = false
 	}
 	//log.Printf("Root node.exe verison is: %v \n", rootVersion)
 
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
-		fmt.Printf("[%v] folder is not exist. Get local node.exe version. See 'gnvm ls'.", folder)
-		return false
-	}
-
-	// <root>/node.exe is exist
-	if isDirExist(rootNode) != true {
-		fmt.Println("Not found global node version, please checkout. If not exist node.exe. See 'gnvm install latest'.")
+		fmt.Printf("[%v] folder is not exist. Get local node.exe version. See 'gnvm ls'.\n", folder)
 		return false
 	}
 
@@ -125,31 +121,34 @@ func Use(folder string) bool {
 
 		// create rootVersion folder
 		if err := cmd("md", rootFolder); err != nil {
-			fmt.Printf("Create %v folder Error: %v", rootVersion, err.Error())
+			fmt.Printf("Create %v folder Error: %v.\n", rootVersion, err.Error())
 			return false
 		}
 
 	}
 
-	// copy rootNode to <root>/rootVersion
-	if err := copy(rootNode, rootFolder); err != nil {
-		fmt.Printf("copy %v to %v folder Error: ", rootNode, rootFolder, err.Error())
-		return false
-	}
+	if rootNodeExist {
+		// copy rootNode to <root>/rootVersion
+		if err := copy(rootNode, rootFolder); err != nil {
+			fmt.Printf("copy %v to %v folder Error: %v.\n", rootNode, rootFolder, err.Error())
+			return false
+		}
 
-	// delete <root>/node.exe
-	if err := os.Remove(rootNode); err != nil {
-		fmt.Printf("remove %v to %v folder Error: ", rootNode, err.Error())
-		return false
+		// delete <root>/node.exe
+		if err := os.Remove(rootNode); err != nil {
+			fmt.Printf("remove %v folder Error: %v.\n", rootNode, err.Error())
+			return false
+		}
+
 	}
 
 	// copy useNode to rootPath
 	if err := copy(useNode, rootPath); err != nil {
-		fmt.Printf("copy %v to %v folder Error: ", useNode, rootPath, err.Error())
+		fmt.Printf("copy %v to %v folder Error: %v.\n", useNode, rootPath, err.Error())
 		return false
 	}
 
-	fmt.Printf("Set success, Current Node.exe version is [%v]. \n", folder)
+	fmt.Printf("Set success, Current Node.exe version is [%v].\n", folder)
 
 	return true
 
@@ -210,7 +209,7 @@ func NodeVersion(args []string, remote bool) {
 		case args[0] == "latest" && remote:
 			remoteVersion := getLatestVersionByRemote()
 			if remoteVersion == "" {
-				fmt.Printf("Error: get remote [%v] latest version error, please check. See 'gnvm config help'.\n", config.GetConfig("registry") + config.LATEST + "/" +  config.NODELIST)
+				fmt.Printf("Error: get remote [%v] latest version error, please check. See 'gnvm config help'.\n", config.GetConfig("registry")+config.LATEST+"/"+config.NODELIST)
 				fmt.Printf("Node.exe latest verson is [%v].\n", latest)
 				return
 			}
@@ -221,11 +220,11 @@ func NodeVersion(args []string, remote bool) {
 
 	switch {
 	case len(args) == 0 && (global == config.UNKNOWN || latest == config.UNKNOWN):
-		fmt.Printf("Waring: when version is [%v], please Use 'gnvm init'.\n", config.UNKNOWN)
-	case args[0] == "latest" && latest == config.UNKNOWN:
-		fmt.Printf("Waring: when version is [%v], please Use 'gnvm update latest'.\n", latest)
-	case args[0] == "global" && global == config.UNKNOWN:
-		fmt.Printf("Waring: when version is [%v], please Use 'gnvm init'.\n", global)
+		fmt.Printf("Waring: when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
+	case len(args) > 0 && args[0] == "latest" && latest == config.UNKNOWN:
+		fmt.Printf("Waring: when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
+	case len(args) > 0 && args[0] == "global" && global == config.UNKNOWN:
+		fmt.Printf("Waring: when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
 	}
 }
 
@@ -247,14 +246,14 @@ func Uninstall(folder string) {
 
 	// remove rootPath/version folder
 	if err := os.RemoveAll(removePath); err != nil {
-		fmt.Printf("Uinstall [%v] fail, Error: %v", folder, err.Error())
+		fmt.Printf("Uinstall [%v] fail, Error: %v.\n", folder, err.Error())
 		return
 	}
 
-	fmt.Printf("Node.exe version [%v] uninstall success. \n", folder)
+	fmt.Printf("Node.exe version [%v] uninstall success.\n", folder)
 }
 
-func LS( isPrint bool ) ([]string, error) {
+func LS(isPrint bool) ([]string, error) {
 	var lsArr []string
 	existVersion := false
 	err := filepath.Walk(rootPath, func(dir string, f os.FileInfo, err error) error {
@@ -305,7 +304,7 @@ func LS( isPrint bool ) ([]string, error) {
 
 	// show error
 	if err != nil {
-		fmt.Printf("'gnvm ls' Error: ", err.Error())
+		fmt.Printf("'gnvm ls' Error: %v.\n", err.Error())
 		return lsArr, err
 	}
 
@@ -332,7 +331,7 @@ func LsRemote() {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v], Error: ", url)
+			fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v], Error: %v.\n", url, err.Err())
 			fmt.Println(err)
 			os.Exit(0)
 		}
@@ -351,7 +350,7 @@ func LsRemote() {
 
 	// check state code
 	if res.StatusCode != 200 {
-		fmt.Printf("registry [%v] an [%v] error occurred, please check. See 'gnvm config help'.", url, res.StatusCode)
+		fmt.Printf("registry [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
 		return
 	}
 
@@ -386,15 +385,17 @@ func LsRemote() {
 
 }
 
-func Install(args []string, global bool) bool {
+/*
+ * return code same as download return code
+ */
+func Install(args []string, global bool) int {
 
 	var currentLatest string
-	var ok bool
+	var code int
 
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			//fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v], Error: ", url)
 			fmt.Println(err)
 			os.Exit(0)
 		}
@@ -417,8 +418,8 @@ func Install(args []string, global bool) bool {
 		}
 
 		// downlaod
-		ok = download(v)
-		if ok {
+		code = download(v)
+		if code == 0 || code == 2 {
 
 			if v == currentLatest {
 				config.SetConfig(config.LATEST_VERSION, v)
@@ -432,7 +433,7 @@ func Install(args []string, global bool) bool {
 		}
 	}
 
-	return ok
+	return code
 
 }
 
@@ -465,22 +466,34 @@ func Update(global bool) {
 	switch {
 	case localVersion == config.UNKNOWN:
 		fmt.Println("Waring: local latest version undefined.")
-		if ok := Install(args, global); ok {
+		if code := Install(args, global); code == 0 || code == 2 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
+			fmt.Printf("Update latest success, current latest version is [%v].\n", remoteVersion)
 		}
 	case local == remote:
 		fmt.Printf("Remote latest version [%v] = latest version [%v].\n", remoteVersion, localVersion)
 	case local > remote:
-		fmt.Printf("Error: local latest version [%v] > remote latest version [%v], please check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
+		fmt.Printf("Waring: local latest version [%v] > remote latest version [%v], please check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
 	case local < remote:
 		fmt.Printf("Remote latest version [%v] > local latest version [%v].\n", remoteVersion, localVersion)
-		if ok := Install(args, global); ok {
+		if code := Install(args, global); code == 0 || code == 2 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
+			fmt.Printf("Update latest success, current latest version is [%v].\n", remoteVersion)
 		}
 	}
 }
 
-func download(version string) bool {
+/*
+ * return code
+ * 0: success
+ * 1: status code != 200
+ * 2: folder exist
+ * 3: remove folder error
+ * 4: create folder error
+ * 5: download node.exe error
+ *
+ */
+func download(version string) int {
 
 	// get current os arch
 	amd64 := "/"
@@ -506,7 +519,19 @@ func download(version string) bool {
 	// check state code
 	if res.StatusCode != 200 {
 		fmt.Printf("Downlaod url [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
-		return false
+		return 1
+	}
+
+	// rootPath/version/node.exe is exist
+	if _, err := getNodeVersion(rootPath + version + DIVIDE); err == nil {
+		fmt.Printf("Waring: [%v] folder exist.\n", version)
+		return 2
+	} else {
+		if err := os.RemoveAll(rootPath + version); err != nil {
+			fmt.Printf("Remove [%v] fail, Error: %v\n", version, err.Error())
+			return 3
+		}
+		fmt.Printf("Remove empty [%v] folder success.\n", version)
 	}
 
 	// rootPath/version is exist
@@ -514,17 +539,13 @@ func download(version string) bool {
 		if err := os.Mkdir(rootPath+version, 0777); err != nil {
 			panic(err)
 		}
-		fmt.Printf("Create [%v] folder success.\n", version)
-	} else {
-		fmt.Printf("Waring: [%v] folder exist, please check. See 'gnvm uninstall help'.\n", version)
-		return false
 	}
 
 	// create file
 	file, createErr := os.Create(rootPath + version + DIVIDE + NODE)
 	if createErr != nil {
 		fmt.Println("Create file error, Error: " + createErr.Error())
-		return false
+		return 4
 	}
 	defer file.Close()
 
@@ -578,12 +599,12 @@ func download(version string) bool {
 	fi, err := file.Stat()
 	if err == nil {
 		if fi.Size() != res.ContentLength {
-			fmt.Printf("Error: Downlaod node.exe version [%v] size error, please check your network and run 'gnvm uninstall %v'. ", version, version)
-			return false
+			fmt.Printf("Error: Downlaod node.exe version [%v] size error, please check your network and run 'gnvm uninstall %v'.\n", version, version)
+			return 5
 		}
 	}
 
-	return true
+	return 0
 }
 
 func getLatestVersionByRemote() string {
