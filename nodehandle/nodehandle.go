@@ -475,7 +475,7 @@ func Update(global bool) {
 	case local == remote:
 		fmt.Printf("Remote latest version [%v] = latest version [%v].\n", remoteVersion, localVersion)
 	case local > remote:
-		fmt.Printf("Error: local latest version [%v] > remote latest version [%v], please check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
+		fmt.Printf("Waring: local latest version [%v] > remote latest version [%v], please check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
 	case local < remote:
 		fmt.Printf("Remote latest version [%v] > local latest version [%v].\n", remoteVersion, localVersion)
 		if code := Install(args, global); code == 0 || code == 2 {
