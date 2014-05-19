@@ -164,7 +164,7 @@ func ReSetConfig() {
 	SetConfig(GLOBAL_VERSION, globalversion)
 
 	// set url
-	url := GetConfig("registry") + "latest/" + util.SHASUMS
+	url := REGISTRY_VAL + "latest/" + util.SHASUMS
 	if latest := util.GetLatestVersion(url); latest != "" {
 		latsetversion = latest
 	} else {
