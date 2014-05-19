@@ -243,7 +243,7 @@ var configCmd = &cobra.Command{
 			fmt.Println("gnvm config [" + args[0] + "] is " + config.GetConfig(args[0]))
 		} else if len(args) == 2 {
 
-			if args[1] == "default" {
+			if args[1] != "DEFAULT" {
 				fmt.Println("Waring: please use capital letter 'DEFAULT'.")
 				args[1] = "DEFAULT"
 			}
