@@ -14,7 +14,7 @@ import (
 	"gnvm/util"
 )
 
-var configPath, globalversion string
+var configPath, globalversion, latsetversion string
 
 const (
 	VERSION  = "0.1.0"
@@ -162,7 +162,15 @@ func ReSetConfig() {
 		globalversion = version
 	}
 	SetConfig(GLOBAL_VERSION, globalversion)
-	SetConfig(LATEST_VERSION, GLOBAL_VERSION_VAL)
+
+	// set url
+	url := GetConfig("registry") + "latest/" + util.SHASUMS
+	if latest := util.GetLatestVersion(url); latest != "" {
+		latsetversion = latest
+	} else {
+		latsetversion = LATEST_VERSION_VAL
+	}
+	SetConfig(LATEST_VERSION, latsetversion)
 
 	fmt.Printf("Config file [%v] init success.\n", configPath)
 }
