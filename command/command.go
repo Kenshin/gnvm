@@ -244,6 +244,7 @@ gnvm config INIT`,
 
 			if args[0] != "INIT" && strings.ToUpper(args[0]) == "INIT" {
 				fmt.Println("Waring: please use capital letter 'INIT'.")
+				args[0] = "INIT"
 			}
 
 			if args[0] == "INIT" {
