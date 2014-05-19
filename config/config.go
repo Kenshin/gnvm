@@ -14,7 +14,7 @@ import (
 	"gnvm/util"
 )
 
-var configPath string
+var configPath, globalversion string
 
 const (
 	VERSION  = "0.1.0"
@@ -75,8 +75,17 @@ func createConfig() {
 		return
 	}
 
+	// get <root>/node.exe version
+	version, err := util.GetNodeVersion(util.GlobalNodePath + "\\")
+	if err != nil {
+		fmt.Println("Waring: not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
+		globalversion = GLOBAL_VERSION_VAL
+	} else {
+		globalversion = version
+	}
+
 	//write init config
-	_, fileErr := file.WriteString(REGISTRY_KEY + REGISTRY_VAL + NEWLINE + NODEROOT_KEY + configPath + NEWLINE + GLOBAL_VERSION_KEY + GLOBAL_VERSION_VAL + NEWLINE + LATEST_VERSION_KEY + LATEST_VERSION_VAL)
+	_, fileErr := file.WriteString(REGISTRY_KEY + REGISTRY_VAL + NEWLINE + NODEROOT_KEY + util.GlobalNodePath + NEWLINE + GLOBAL_VERSION_KEY + globalversion + NEWLINE + LATEST_VERSION_KEY + LATEST_VERSION_VAL)
 	if fileErr != nil {
 		fmt.Println("Write Config file Error: " + fileErr.Error())
 		return
