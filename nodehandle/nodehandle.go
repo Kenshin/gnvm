@@ -74,6 +74,8 @@ func copy(src, dest string) error {
  */
 func Use(folder string) bool {
 
+	rootNodeExist := true
+
 	// get true folder, e.g. folder is latest return x.xx.xx
 	folder = GetTrueVersion(folder, true)
 
@@ -94,20 +96,14 @@ func Use(folder string) bool {
 	// get <root>/node.exe version
 	rootVersion, err := getNodeVersion(rootPath)
 	if err != nil {
-		fmt.Println("Not found global node version, please checkout. If not exist node.exe. See 'gnvm install latest'.")
-		return false
+		fmt.Println("Waring: not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
+		rootNodeExist = false
 	}
 	//log.Printf("Root node.exe verison is: %v \n", rootVersion)
 
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
 		fmt.Printf("[%v] folder is not exist. Get local node.exe version. See 'gnvm ls'.\n", folder)
-		return false
-	}
-
-	// <root>/node.exe is exist
-	if isDirExist(rootNode) != true {
-		fmt.Println("Not found global node version, please checkout. If not exist node.exe. See 'gnvm install latest'.")
 		return false
 	}
 
@@ -131,16 +127,19 @@ func Use(folder string) bool {
 
 	}
 
-	// copy rootNode to <root>/rootVersion
-	if err := copy(rootNode, rootFolder); err != nil {
-		fmt.Printf("copy %v to %v folder Error: ", rootNode, rootFolder, err.Error())
-		return false
-	}
+	if rootNodeExist {
+		// copy rootNode to <root>/rootVersion
+		if err := copy(rootNode, rootFolder); err != nil {
+			fmt.Printf("copy %v to %v folder Error: %v", rootNode, rootFolder, err.Error())
+			return false
+		}
 
-	// delete <root>/node.exe
-	if err := os.Remove(rootNode); err != nil {
-		fmt.Printf("remove %v to %v folder Error: ", rootNode, err.Error())
-		return false
+		// delete <root>/node.exe
+		if err := os.Remove(rootNode); err != nil {
+			fmt.Printf("remove %v to %v folder Error: ", rootNode, err.Error())
+			return false
+		}
+
 	}
 
 	// copy useNode to rootPath
@@ -210,7 +209,7 @@ func NodeVersion(args []string, remote bool) {
 		case args[0] == "latest" && remote:
 			remoteVersion := getLatestVersionByRemote()
 			if remoteVersion == "" {
-				fmt.Printf("Error: get remote [%v] latest version error, please check. See 'gnvm config help'.\n", config.GetConfig("registry") + config.LATEST + "/" +  config.NODELIST)
+				fmt.Printf("Error: get remote [%v] latest version error, please check. See 'gnvm config help'.\n", config.GetConfig("registry")+config.LATEST+"/"+config.NODELIST)
 				fmt.Printf("Node.exe latest verson is [%v].\n", latest)
 				return
 			}
@@ -254,7 +253,7 @@ func Uninstall(folder string) {
 	fmt.Printf("Node.exe version [%v] uninstall success. \n", folder)
 }
 
-func LS( isPrint bool ) ([]string, error) {
+func LS(isPrint bool) ([]string, error) {
 	var lsArr []string
 	existVersion := false
 	err := filepath.Walk(rootPath, func(dir string, f os.FileInfo, err error) error {
@@ -525,16 +524,16 @@ func download(version string) int {
 	}
 
 	// rootPath/version/node.exe is exist
-	if _, err := getNodeVersion(rootPath+version + DIVIDE); err == nil {
+	if _, err := getNodeVersion(rootPath + version + DIVIDE); err == nil {
 		fmt.Printf("Waring: [%v] folder exist.\n", version)
 		return 2
-		} else {
-			if err := os.RemoveAll(rootPath+version); err != nil {
-				fmt.Printf("Remove [%v] fail, Error: %v\n", version, err.Error())
-				return 3
-			}
-			fmt.Printf("Remove empty [%v] folder success.\n", version)
+	} else {
+		if err := os.RemoveAll(rootPath + version); err != nil {
+			fmt.Printf("Remove [%v] fail, Error: %v\n", version, err.Error())
+			return 3
 		}
+		fmt.Printf("Remove empty [%v] folder success.\n", version)
+	}
 
 	// rootPath/version is exist
 	if isDirExist(rootPath+version) != true {
