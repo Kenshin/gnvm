@@ -42,17 +42,6 @@ func isDirExist(path string) bool {
 	}
 }
 
-func getNodeVersion(path string) (string, error) {
-	var newout string
-	out, err := exec.Command(path+"node", "--version").Output()
-	//string(out[:]) bytes to string
-	if err == nil {
-		// replace \r\n
-		newout = strings.Replace(string(string(out[:])[1:]), "\r\n", "", -1)
-	}
-	return newout, err
-}
-
 func cmd(name, arg string) error {
 	_, err := exec.Command("cmd", "/C", name, arg).Output()
 	return err
@@ -94,7 +83,7 @@ func Use(folder string) bool {
 	//log.Println("Use node.exe path is: " + usePath)
 
 	// get <root>/node.exe version
-	rootVersion, err := getNodeVersion(rootPath)
+	rootVersion, err := util.GetNodeVersion(rootPath)
 	if err != nil {
 		fmt.Println("Waring: not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
 		rootNodeExist = false
@@ -523,7 +512,7 @@ func download(version string) int {
 	}
 
 	// rootPath/version/node.exe is exist
-	if _, err := getNodeVersion(rootPath + version + DIVIDE); err == nil {
+	if _, err := util.GetNodeVersion(rootPath + version + DIVIDE); err == nil {
 		fmt.Printf("Waring: [%v] folder exist.\n", version)
 		return 2
 	} else {
