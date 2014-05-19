@@ -24,6 +24,7 @@ const (
 	LATEST   = "latest"
 	NODELIST = "npm-versions.txt"
 
+	REGISTRY     = "registry"
 	REGISTRY_KEY = "registry: "
 	REGISTRY_VAL = "http://nodejs.org/dist/"
 
@@ -144,7 +145,24 @@ func GetConfig(key string) string {
 		fmt.Println("GetConfig Error: " + err.Error())
 
 		// value
-		value = "unknown"
+		value = UNKNOWN
 	}
 	return value
+}
+
+func ReSetConfig() {
+	SetConfig(REGISTRY, REGISTRY_VAL)
+	SetConfig(NODEROOT, util.GlobalNodePath)
+
+	version, err := util.GetNodeVersion(util.GlobalNodePath + "\\")
+	if err != nil {
+		fmt.Println("Waring: not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
+		globalversion = GLOBAL_VERSION_VAL
+	} else {
+		globalversion = version
+	}
+	SetConfig(GLOBAL_VERSION, globalversion)
+	SetConfig(LATEST_VERSION, GLOBAL_VERSION_VAL)
+
+	fmt.Printf("Config file [%v] init success.\n", configPath)
 }
