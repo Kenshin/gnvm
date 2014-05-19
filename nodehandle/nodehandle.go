@@ -221,11 +221,11 @@ func NodeVersion(args []string, remote bool) {
 
 	switch {
 	case len(args) == 0 && (global == config.UNKNOWN || latest == config.UNKNOWN):
-		fmt.Printf("Waring: when version is [%v], please Use 'gnvm init'.\n", config.UNKNOWN)
-	case args[0] == "latest" && latest == config.UNKNOWN:
-		fmt.Printf("Waring: when version is [%v], please Use 'gnvm update latest'.\n", latest)
-	case args[0] == "global" && global == config.UNKNOWN:
-		fmt.Printf("Waring: when version is [%v], please Use 'gnvm init'.\n", global)
+		fmt.Printf("Waring: when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
+	case len(args) > 0 && args[0] == "latest" && latest == config.UNKNOWN:
+		fmt.Printf("Waring: when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
+	case len(args) > 0 && args[0] == "global" && global == config.UNKNOWN:
+		fmt.Printf("Waring: when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
 	}
 }
 
