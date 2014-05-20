@@ -2,6 +2,9 @@ package nodehandle
 
 import (
 
+	// lib
+	"github.com/pierrre/archivefile/zip"
+
 	// go
 	//"log"
 	"bufio"
@@ -545,13 +548,19 @@ func NpmInstall() int {
 
 	fmt.Printf("The latest version is [%v] from [%v].\n", maxVersion, config.GetConfig(config.REGISTRY), )
 
-	/*
+	// download zip
 	if code := downloadNpm(maxVersion); code == 0 {
+
 		fmt.Printf("Start unarchive file [%v].\n", maxVersion)
-		unzip(maxVersion)
+
+		//unzip(maxVersion)
+
+		if err := zip.UnarchiveFile( os.TempDir() + DIVIDE + maxVersion, config.GetConfig(config.NODEROOT), nil); err != nil {
+			panic(err)
+		}
+
 		fmt.Println("End unarchive.")
 	}
-	*/
 
 	return 0
 }
