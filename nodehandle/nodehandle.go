@@ -471,6 +471,10 @@ func Update(global bool) {
 	}
 }
 
+func NpmInstall() {
+
+}
+
 /*
  * return code
  * 0: success
