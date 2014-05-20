@@ -15,7 +15,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"archive/zip"
 
 	// local
 	"gnvm/config"
@@ -546,11 +545,13 @@ func NpmInstall() int {
 
 	fmt.Printf("The latest version is [%v] from [%v].\n", maxVersion, config.GetConfig(config.REGISTRY), )
 
+	/*
 	if code := downloadNpm(maxVersion); code == 0 {
 		fmt.Printf("Start unarchive file [%v].\n", maxVersion)
 		unzip(maxVersion)
 		fmt.Println("End unarchive.")
 	}
+	*/
 
 	return 0
 }
@@ -774,6 +775,20 @@ func downloadNpm(version string) int {
 	return 0
 }
 
+func getLatestVersionByRemote() string {
+
+	var version string
+
+	// set url
+	url := config.GetConfig("registry") + "latest/" + util.SHASUMS
+
+	version = util.GetLatestVersion(url)
+
+	return version
+
+}
+
+/*
 func unzip(version string) {
 
 	// open zip file
@@ -800,19 +815,6 @@ func unzip(version string) {
 	for _, file := range zr.File {
 		unarchiveFile(file, config.GetConfig(config.NODEROOT) )
 	}
-
-}
-
-func getLatestVersionByRemote() string {
-
-	var version string
-
-	// set url
-	url := config.GetConfig("registry") + "latest/" + util.SHASUMS
-
-	version = util.GetLatestVersion(url)
-
-	return version
 
 }
 
@@ -847,3 +849,4 @@ func unarchiveFile(zipFile *zip.File, outFilePath string) error {
 
 	return nil
 }
+*/
