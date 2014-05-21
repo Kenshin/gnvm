@@ -47,7 +47,7 @@ func New(url, name, dst string) int {
 	}
 	defer file.Close()
 
-	fmt.Printf("Start download [%v] from %v.\n", name, url)
+	fmt.Printf("Start download [%v] from %v.\n%v", name, url, "1% ")
 
 	// loop buff to file
 	buf := make([]byte, res.ContentLength)
@@ -57,7 +57,7 @@ func New(url, name, dst string) int {
 		n, err := res.Body.Read(buf)
 
 		// write complete
-		if n == 0 {
+		if n == 0 && err.Error() == "EOF" {
 			fmt.Println("100% \nEnd download.")
 			break
 		}
@@ -68,16 +68,39 @@ func New(url, name, dst string) int {
 		}
 
 		/* show console e.g.
-		 * Start download node.exe version [x.xx.xx] from http://nodejs.org/dist/.
-		 * 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+		 * Start download [x.xx.xx] from http://nodejs.org/dist/.
+		 * 1% 5% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
 		 * End download.
 		 */
 		m = m + float32(n)
 		current := int(m / float32(res.ContentLength) * 100)
 
+		switch {
+		case current > 0 && current < 6:
+			current = 5
+		case current > 5 && current < 11:
+			current = 10
+		case current > 10 && current < 21:
+			current = 20
+		case current > 20 && current < 31:
+			current = 30
+		case current > 30 && current < 41:
+			current = 40
+		case current > 40 && current < 51:
+			current = 50
+		case current > 60 && current < 71:
+			current = 60
+		case current > 70 && current < 81:
+			current = 70
+		case current > 80 && current < 91:
+			current = 80
+		case current > 90 && current < 101:
+			current = 90
+		}
+
 		if current > oldCurrent {
 			switch current {
-			case 10, 20, 30, 40, 50, 60, 70, 80, 90:
+			case 5, 10, 20, 30, 40, 50, 60, 70, 80, 90:
 				isShow = true
 			}
 
@@ -97,7 +120,7 @@ func New(url, name, dst string) int {
 	fi, err := file.Stat()
 	if err == nil {
 		if fi.Size() != res.ContentLength {
-			fmt.Printf("Error: Downlaod [%v] size error, please check your network and run 'gnvm uninstall %v'.\n", name, name)
+			fmt.Printf("Error: Downlaod [%v] size error, please check your network.\n", name)
 			return -3
 		}
 	}
