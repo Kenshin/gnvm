@@ -2,6 +2,9 @@ package nodehandle
 
 import (
 
+	// lib
+	"github.com/pierrre/archivefile/zip"
+
 	// go
 	//"log"
 	"bufio"
@@ -14,6 +17,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"time"
 
 	// local
 	"gnvm/config"
@@ -21,8 +25,9 @@ import (
 )
 
 const (
-	DIVIDE = "\\"
-	NODE   = "node.exe"
+	DIVIDE      = "\\"
+	NODE        = "node.exe"
+	TIMEFORMART = "02-Jan-2006 15:04"
 )
 
 var rootPath string
@@ -471,6 +476,105 @@ func Update(global bool) {
 	}
 }
 
+func NpmInstall() {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+			os.Exit(0)
+		}
+	}()
+
+	url := config.GetConfig(config.REGISTRY) + "npm"
+
+	// get res
+	res, err := http.Get(url)
+
+	// close
+	defer res.Body.Close()
+
+	// err
+	if err != nil {
+		panic(err)
+	}
+
+	// check state code
+	if res.StatusCode != 200 {
+		fmt.Printf("URL [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
+		return
+	}
+
+	// set buff
+	buff := bufio.NewReader(res.Body)
+
+	maxTime, _ := time.Parse(TIMEFORMART, TIMEFORMART)
+	var maxVersion string
+
+	for {
+		// set line
+		line, err := buff.ReadString('\n')
+
+		// when EOF or err break
+		if err != nil || err == io.EOF {
+			break
+		}
+
+		if strings.Index(line, `<a href="`) == 0 && strings.Contains(line, ".zip") {
+
+			// parse
+			newLine := strings.Replace(line, `<a href="`, "", -1)
+			newLine = strings.Replace(newLine, `</a`, "", -1)
+			newLine = strings.Replace(newLine, `">`, " ", -1)
+
+			// e.g. npm-1.3.9.zip npm-1.3.9.zip> 23-Aug-2013 21:14 1535885
+			orgArr := strings.Fields(newLine)
+
+			// e.g. npm-1.3.9.zip
+			version := orgArr[0:1][0]
+
+			// e.g. 23-Aug-2013 21:14
+			sTime := strings.Join(orgArr[2:len(orgArr)-1], " ")
+
+			// bubble sort
+			if t, err := time.Parse(TIMEFORMART, sTime); err == nil {
+				if t.Sub(maxTime).Seconds() > 0 {
+					maxTime = t
+					maxVersion = version
+				}
+			}
+		}
+	}
+
+	if maxVersion == "" {
+		fmt.Printf("Error: get npm version fail from [%v], please check. See 'gnvm help config'.\n", url)
+		return
+	}
+
+	fmt.Printf("The latest version is [%v] from [%v].\n", maxVersion, config.GetConfig(config.REGISTRY))
+
+	// download zip
+	zipPath := os.TempDir() + DIVIDE + maxVersion
+	if code := downloadNpm(maxVersion); code == 0 {
+
+		fmt.Printf("Start unarchive file [%v].\n", maxVersion)
+
+		//unzip(maxVersion)
+
+		if err := zip.UnarchiveFile(zipPath, config.GetConfig(config.NODEROOT), nil); err != nil {
+			panic(err)
+		}
+
+		fmt.Println("End unarchive.")
+	}
+
+	// remove temp zip file
+	if err := os.RemoveAll(zipPath); err != nil {
+		fmt.Printf("Waring: remove zip file fail from [%v], Error: %v.\n", zipPath, err.Error())
+	}
+
+}
+
 /*
  * return code
  * 0: success
@@ -595,6 +699,101 @@ func download(version string) int {
 	return 0
 }
 
+/*
+ * return code
+ * 0: success
+ * 1: status code != 200
+ * 2: folder exist
+ * 3: remove folder error
+ *
+ */
+func downloadNpm(version string) int {
+
+	url := config.GetConfig(config.REGISTRY) + "npm/" + version
+
+	// get res
+	res, err := http.Get(url)
+
+	// close
+	defer res.Body.Close()
+
+	// err
+	if err != nil {
+		panic(err)
+	}
+
+	// check state code
+	if res.StatusCode != 200 {
+		fmt.Printf("Downlaod npm [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
+		return 1
+	}
+
+	// create file
+	file, createErr := os.Create(os.TempDir() + DIVIDE + version)
+	if createErr != nil {
+		fmt.Println("Create file error, Error: " + createErr.Error())
+		return 2
+	}
+	defer file.Close()
+
+	fmt.Printf("Start download [%v] from %v.\n", version, url)
+
+	// loop buff to file
+	buf := make([]byte, res.ContentLength)
+	var m float32
+	isShow, oldCurrent := false, 0
+	for {
+		n, err := res.Body.Read(buf)
+
+		// write complete
+		if n == 0 {
+			fmt.Println("100% \nEnd download.")
+			break
+		}
+
+		//error
+		if err != nil {
+			panic(err)
+		}
+
+		/* show console e.g.
+		 * Start download node.exe version [x.xx.xx] from http://nodejs.org/dist/.
+		 * 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+		 * End download.
+		 */
+		m = m + float32(n)
+		current := int(m / float32(res.ContentLength) * 100)
+
+		if current > oldCurrent {
+			switch current {
+			case 10, 20, 30, 40, 50, 60, 70, 80, 90:
+				isShow = true
+			}
+
+			if isShow {
+				fmt.Printf("%d%v", current, "% ")
+			}
+
+			isShow = false
+		}
+
+		oldCurrent = current
+
+		file.WriteString(string(buf[:n]))
+	}
+
+	// valid download exe
+	fi, err := file.Stat()
+	if err == nil {
+		if fi.Size() != res.ContentLength {
+			fmt.Printf("Error: Downlaod [%v] size error, please check your network. See 'gnvm help config'.\n", version)
+			return 3
+		}
+	}
+
+	return 0
+}
+
 func getLatestVersionByRemote() string {
 
 	var version string
@@ -607,3 +806,66 @@ func getLatestVersionByRemote() string {
 	return version
 
 }
+
+/*
+func unzip(version string) {
+
+	// open zip file
+	fr, err := os.Open( os.TempDir() + DIVIDE + version )
+	if err != nil {
+		panic(err)
+	}
+	defer fr.Close()
+
+	// get zip size
+	fi, err := fr.Stat()
+	if err != nil {
+		panic(err)
+	}
+	size := fi.Size()
+
+	// new zip reader
+	zr, err := zip.NewReader(fr, size)
+	if err != nil {
+		panic(err)
+	}
+
+	// unarchive
+	for _, file := range zr.File {
+		unarchiveFile(file, config.GetConfig(config.NODEROOT) )
+	}
+
+}
+
+func unarchiveFile(zipFile *zip.File, outFilePath string) error {
+	if zipFile.FileInfo().IsDir() {
+		return nil
+	}
+
+	zipFileReader, err := zipFile.Open()
+	if err != nil {
+		return err
+	}
+	defer zipFileReader.Close()
+
+	filePath := filepath.Join(outFilePath, filepath.Join(strings.Split(zipFile.Name, "/")...))
+
+	err = os.MkdirAll(filepath.Dir(filePath), os.FileMode(0755))
+	if err != nil {
+		return err
+	}
+
+	file, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	_, err = io.Copy(file, zipFileReader)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+*/
