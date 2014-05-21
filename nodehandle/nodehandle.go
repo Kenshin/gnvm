@@ -594,6 +594,12 @@ func download(version string) int {
 
 	// download
 	if code := curl.New(url, version, rootPath+version+DIVIDE+NODE); code != 0 {
+		if code == -1 {
+			if err := os.RemoveAll(rootPath + version); err != nil {
+				fmt.Printf("Remove [%v] fail, Error: %v\n", version, err.Error())
+				return 1
+			}
+		}
 		return code
 	}
 
