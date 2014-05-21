@@ -48,8 +48,7 @@ func Get(url string) (code int, res *http.Response, err error) {
  *
  * return code
  * 0: success
- * -1: status code != 200 ( from Get() method )
- * -2: create folder error
+ * -2: create file error
  * -3: download node.exe error
  *
  */
