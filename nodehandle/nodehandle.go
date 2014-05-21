@@ -624,94 +624,95 @@ func download(version string) int {
 /*
  * return code
  * 0: success
- * 1: status code != 200
- * 2: folder exist
- * 3: remove folder error
  *
  */
 func downloadNpm(version string) int {
 
+	// set url
 	url := config.GetConfig(config.REGISTRY) + "npm/" + version
 
-	// get res
-	res, err := http.Get(url)
-
-	// close
-	defer res.Body.Close()
-
-	// err
-	if err != nil {
-		panic(err)
+	// download
+	if code := curl.New(url, version, os.TempDir()+DIVIDE+version); code != 0 {
+		return code
 	}
 
-	// check state code
-	if res.StatusCode != 200 {
-		fmt.Printf("Downlaod npm [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
-		return 1
-	}
+	/*
 
-	// create file
-	file, createErr := os.Create(os.TempDir() + DIVIDE + version)
-	if createErr != nil {
-		fmt.Println("Create file error, Error: " + createErr.Error())
-		return 2
-	}
-	defer file.Close()
+		// get res
+		res, err := http.Get(url)
 
-	fmt.Printf("Start download [%v] from %v.\n", version, url)
+		// close
+		defer res.Body.Close()
 
-	// loop buff to file
-	buf := make([]byte, res.ContentLength)
-	var m float32
-	isShow, oldCurrent := false, 0
-	for {
-		n, err := res.Body.Read(buf)
-
-		// write complete
-		if n == 0 {
-			fmt.Println("100% \nEnd download.")
-			break
-		}
-
-		//error
+		// err
 		if err != nil {
 			panic(err)
 		}
 
-		/* show console e.g.
-		 * Start download node.exe version [x.xx.xx] from http://nodejs.org/dist/.
-		 * 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
-		 * End download.
-		 */
-		m = m + float32(n)
-		current := int(m / float32(res.ContentLength) * 100)
-
-		if current > oldCurrent {
-			switch current {
-			case 10, 20, 30, 40, 50, 60, 70, 80, 90:
-				isShow = true
-			}
-
-			if isShow {
-				fmt.Printf("%d%v", current, "% ")
-			}
-
-			isShow = false
+		// check state code
+		if res.StatusCode != 200 {
+			fmt.Printf("Downlaod npm [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
+			return 1
 		}
 
-		oldCurrent = current
-
-		file.WriteString(string(buf[:n]))
-	}
-
-	// valid download exe
-	fi, err := file.Stat()
-	if err == nil {
-		if fi.Size() != res.ContentLength {
-			fmt.Printf("Error: Downlaod [%v] size error, please check your network. See 'gnvm help config'.\n", version)
-			return 3
+		// create file
+		file, createErr := os.Create(os.TempDir() + DIVIDE + version)
+		if createErr != nil {
+			fmt.Println("Create file error, Error: " + createErr.Error())
+			return 2
 		}
-	}
+		defer file.Close()
+
+		fmt.Printf("Start download [%v] from %v.\n", version, url)
+
+		// loop buff to file
+		buf := make([]byte, res.ContentLength)
+		var m float32
+		isShow, oldCurrent := false, 0
+		for {
+			n, err := res.Body.Read(buf)
+
+			// write complete
+			if n == 0 {
+				fmt.Println("100% \nEnd download.")
+				break
+			}
+
+			//error
+			if err != nil {
+				panic(err)
+			}
+
+			m = m + float32(n)
+			current := int(m / float32(res.ContentLength) * 100)
+
+			if current > oldCurrent {
+				switch current {
+				case 10, 20, 30, 40, 50, 60, 70, 80, 90:
+					isShow = true
+				}
+
+				if isShow {
+					fmt.Printf("%d%v", current, "% ")
+				}
+
+				isShow = false
+			}
+
+			oldCurrent = current
+
+			file.WriteString(string(buf[:n]))
+		}
+
+		// valid download exe
+		fi, err := file.Stat()
+		if err == nil {
+			if fi.Size() != res.ContentLength {
+				fmt.Printf("Error: Downlaod [%v] size error, please check your network. See 'gnvm help config'.\n", version)
+				return 3
+			}
+		}
+	*/
 
 	return 0
 }
