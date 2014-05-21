@@ -312,41 +312,30 @@ func LS(isPrint bool) ([]string, error) {
 
 func LsRemote() {
 
-	// set exist version
-	isExistVersion := false
-
 	// set url
-	registry := config.GetConfig("registry")
-	url := registry + config.NODELIST
-
-	// print
-	fmt.Println("Read all Node.exe version list from " + url + ", please wait.")
+	url := config.GetConfig(config.REGISTRY) + config.NODELIST
 
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v], Error: %v.\n", url, err)
-			fmt.Println(err)
+			fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v]. \nError: %v.\n", url, err)
 			os.Exit(0)
 		}
 	}()
 
-	// get res
-	res, err := http.Get(url)
+	// set exist version
+	isExistVersion := false
 
-	// close
-	defer res.Body.Close()
+	// print
+	fmt.Println("Read all Node.exe version list from " + url + ", please wait.")
 
-	// err
-	if err != nil {
-		panic(err)
-	}
-
-	// check state code
-	if res.StatusCode != 200 {
-		fmt.Printf("registry [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
+	// get
+	code, res, _ := curl.Get(url)
+	if code != 0 {
 		return
 	}
+	// close
+	defer res.Body.Close()
 
 	// set buff
 	buff := bufio.NewReader(res.Body)
