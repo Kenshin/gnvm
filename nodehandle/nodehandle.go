@@ -25,8 +25,8 @@ import (
 )
 
 const (
-	DIVIDE = "\\"
-	NODE   = "node.exe"
+	DIVIDE      = "\\"
+	NODE        = "node.exe"
 	TIMEFORMART = "02-Jan-2006 15:04"
 )
 
@@ -476,7 +476,7 @@ func Update(global bool) {
 	}
 }
 
-func NpmInstall() int {
+func NpmInstall() {
 
 	// try catch
 	defer func() {
@@ -502,7 +502,7 @@ func NpmInstall() int {
 	// check state code
 	if res.StatusCode != 200 {
 		fmt.Printf("URL [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
-		return 1
+		return
 	}
 
 	// set buff
@@ -534,7 +534,7 @@ func NpmInstall() int {
 			version := orgArr[0:1][0]
 
 			// e.g. 23-Aug-2013 21:14
-			sTime := strings.Join( orgArr[2:len(orgArr)-1], " " )
+			sTime := strings.Join(orgArr[2:len(orgArr)-1], " ")
 
 			// bubble sort
 			if t, err := time.Parse(TIMEFORMART, sTime); err == nil {
@@ -546,7 +546,12 @@ func NpmInstall() int {
 		}
 	}
 
-	fmt.Printf("The latest version is [%v] from [%v].\n", maxVersion, config.GetConfig(config.REGISTRY), )
+	if maxVersion == "" {
+		fmt.Printf("Error: get npm version fail from [%v], please check. See 'gnvm help config'.\n", url)
+		return
+	}
+
+	fmt.Printf("The latest version is [%v] from [%v].\n", maxVersion, config.GetConfig(config.REGISTRY))
 
 	// download zip
 	if code := downloadNpm(maxVersion); code == 0 {
@@ -555,14 +560,13 @@ func NpmInstall() int {
 
 		//unzip(maxVersion)
 
-		if err := zip.UnarchiveFile( os.TempDir() + DIVIDE + maxVersion, config.GetConfig(config.NODEROOT), nil); err != nil {
+		if err := zip.UnarchiveFile(os.TempDir()+DIVIDE+maxVersion, config.GetConfig(config.NODEROOT), nil); err != nil {
 			panic(err)
 		}
 
 		fmt.Println("End unarchive.")
 	}
 
-	return 0
 }
 
 /*
