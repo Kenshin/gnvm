@@ -34,7 +34,7 @@ func Get(url string) (code int, res *http.Response, err error) {
 
 	// check state code
 	if res.StatusCode != 200 {
-		fmt.Printf("Downlaod url [%v] an [%v] error occurred, please check.", url, res.StatusCode)
+		fmt.Printf("URL [%v] an [%v] error occurred, please check.", url, res.StatusCode)
 		return -1, res, err
 	}
 
