@@ -22,6 +22,7 @@ import (
 	// local
 	"gnvm/config"
 	"gnvm/util"
+	"gnvm/util/curl"
 )
 
 const (
@@ -578,11 +579,8 @@ func NpmInstall() {
 /*
  * return code
  * 0: success
- * 1: status code != 200
+ * 1: remove folder error
  * 2: folder exist
- * 3: remove folder error
- * 4: create folder error
- * 5: download node.exe error
  *
  */
 func download(version string) int {
@@ -593,27 +591,6 @@ func download(version string) int {
 		amd64 = "/x64/"
 	}
 
-	// set url
-	registry := config.GetConfig("registry")
-	url := registry + "v" + version + amd64 + NODE
-
-	// get res
-	res, err := http.Get(url)
-
-	// close
-	defer res.Body.Close()
-
-	// err
-	if err != nil {
-		panic(err)
-	}
-
-	// check state code
-	if res.StatusCode != 200 {
-		fmt.Printf("Downlaod url [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
-		return 1
-	}
-
 	// rootPath/version/node.exe is exist
 	if _, err := util.GetNodeVersion(rootPath + version + DIVIDE); err == nil {
 		fmt.Printf("Waring: [%v] folder exist.\n", version)
@@ -621,7 +598,7 @@ func download(version string) int {
 	} else {
 		if err := os.RemoveAll(rootPath + version); err != nil {
 			fmt.Printf("Remove [%v] fail, Error: %v\n", version, err.Error())
-			return 3
+			return 1
 		}
 		fmt.Printf("Remove empty [%v] folder success.\n", version)
 	}
@@ -633,68 +610,90 @@ func download(version string) int {
 		}
 	}
 
-	// create file
-	file, createErr := os.Create(rootPath + version + DIVIDE + NODE)
-	if createErr != nil {
-		fmt.Println("Create file error, Error: " + createErr.Error())
-		return 4
+	// set url
+	url := config.GetConfig(config.REGISTRY) + "v" + version + amd64 + NODE
+
+	// download
+	if code := curl.New(url, version, rootPath+version+DIVIDE+NODE); code != 0 {
+		return code
 	}
-	defer file.Close()
 
-	fmt.Printf("Start download node.exe version [%v] from %v.\n", version, url)
+	/*
+		// get res
+		res, err := http.Get(url)
 
-	// loop buff to file
-	buf := make([]byte, res.ContentLength)
-	var m float32
-	isShow, oldCurrent := false, 0
-	for {
-		n, err := res.Body.Read(buf)
+		// close
+		defer res.Body.Close()
 
-		// write complete
-		if n == 0 {
-			fmt.Println("100% \nEnd download.")
-			break
-		}
-
-		//error
+		// err
 		if err != nil {
 			panic(err)
 		}
 
-		/* show console e.g.
-		 * Start download node.exe version [x.xx.xx] from http://nodejs.org/dist/.
-		 * 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
-		 * End download.
-		 */
-		m = m + float32(n)
-		current := int(m / float32(res.ContentLength) * 100)
-
-		if current > oldCurrent {
-			switch current {
-			case 10, 20, 30, 40, 50, 60, 70, 80, 90:
-				isShow = true
-			}
-
-			if isShow {
-				fmt.Printf("%d%v", current, "% ")
-			}
-
-			isShow = false
+		// check state code
+		if res.StatusCode != 200 {
+			fmt.Printf("Downlaod url [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
+			return 1
 		}
 
-		oldCurrent = current
-
-		file.WriteString(string(buf[:n]))
-	}
-
-	// valid download exe
-	fi, err := file.Stat()
-	if err == nil {
-		if fi.Size() != res.ContentLength {
-			fmt.Printf("Error: Downlaod node.exe version [%v] size error, please check your network and run 'gnvm uninstall %v'.\n", version, version)
-			return 5
+		// create file
+		file, createErr := os.Create(rootPath + version + DIVIDE + NODE)
+		if createErr != nil {
+			fmt.Println("Create file error, Error: " + createErr.Error())
+			return 4
 		}
-	}
+		defer file.Close()
+
+		fmt.Printf("Start download node.exe version [%v] from %v.\n", version, url)
+
+		// loop buff to file
+		buf := make([]byte, res.ContentLength)
+		var m float32
+		isShow, oldCurrent := false, 0
+		for {
+			n, err := res.Body.Read(buf)
+
+			// write complete
+			if n == 0 {
+				fmt.Println("100% \nEnd download.")
+				break
+			}
+
+			//error
+			if err != nil {
+				panic(err)
+			}
+
+			m = m + float32(n)
+			current := int(m / float32(res.ContentLength) * 100)
+
+			if current > oldCurrent {
+				switch current {
+				case 10, 20, 30, 40, 50, 60, 70, 80, 90:
+					isShow = true
+				}
+
+				if isShow {
+					fmt.Printf("%d%v", current, "% ")
+				}
+
+				isShow = false
+			}
+
+			oldCurrent = current
+
+			file.WriteString(string(buf[:n]))
+		}
+
+		// valid download exe
+		fi, err := file.Stat()
+		if err == nil {
+			if fi.Size() != res.ContentLength {
+				fmt.Printf("Error: Downlaod node.exe version [%v] size error, please check your network and run 'gnvm uninstall %v'.\n", version, version)
+				return 5
+			}
+		}
+	*/
 
 	return 0
 }
