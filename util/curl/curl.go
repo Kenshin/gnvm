@@ -10,20 +10,19 @@ import (
  *
  * parameter
  * url: download url e.g. http://nodejs.org/dist/v0.10.0/node.exe
- * name: download file name e.g. node.exe
- * dst: downlaod path
  *
  * return code
  * 0: success
  * -1: status code != 200
- * -2: create folder error
- * -3: download node.exe error
+ *
+ * return res
+ * return err
  *
  */
-func New(url, name, dst string) int {
+func Get(url string) (code int, res *http.Response, err error) {
 
 	// get res
-	res, err := http.Get(url)
+	res, err = http.Get(url)
 
 	// close
 	defer res.Body.Close()
@@ -36,7 +35,33 @@ func New(url, name, dst string) int {
 	// check state code
 	if res.StatusCode != 200 {
 		fmt.Printf("Downlaod url [%v] an [%v] error occurred, please check.", url, res.StatusCode)
-		return -1
+		return -1, res, err
+	}
+
+	return 0, res, err
+
+}
+
+/*
+ *
+ * parameter
+ * url: download url e.g. http://nodejs.org/dist/v0.10.0/node.exe
+ * name: download file name e.g. node.exe
+ * dst: download path
+ *
+ * return code
+ * 0: success
+ * -1: status code != 200 ( from Get() method )
+ * -2: create folder error
+ * -3: download node.exe error
+ *
+ */
+func New(url, name, dst string) int {
+
+	// get url
+	code, res, err := Get(url)
+	if code != 0 {
+		return code
 	}
 
 	// create file
