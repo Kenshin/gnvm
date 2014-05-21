@@ -554,17 +554,23 @@ func NpmInstall() {
 	fmt.Printf("The latest version is [%v] from [%v].\n", maxVersion, config.GetConfig(config.REGISTRY))
 
 	// download zip
+	zipPath := os.TempDir() + DIVIDE + maxVersion
 	if code := downloadNpm(maxVersion); code == 0 {
 
 		fmt.Printf("Start unarchive file [%v].\n", maxVersion)
 
 		//unzip(maxVersion)
 
-		if err := zip.UnarchiveFile(os.TempDir()+DIVIDE+maxVersion, config.GetConfig(config.NODEROOT), nil); err != nil {
+		if err := zip.UnarchiveFile(zipPath, config.GetConfig(config.NODEROOT), nil); err != nil {
 			panic(err)
 		}
 
 		fmt.Println("End unarchive.")
+	}
+
+	// remove temp zip file
+	if err := os.RemoveAll(zipPath); err != nil {
+		fmt.Printf("Waring: remove zip file fail from [%v], Error: %v.\n", zipPath, err.Error())
 	}
 
 }
