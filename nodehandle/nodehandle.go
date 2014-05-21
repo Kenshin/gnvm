@@ -378,7 +378,7 @@ func Install(args []string, global bool) int {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("'gnvm install %v' an error has occurred. \nError: %v.\n", args, err)
+			fmt.Printf("\n'gnvm install %v' an error has occurred. \nError: %v.\n", args, err)
 			os.Exit(0)
 		}
 	}()
@@ -560,6 +560,7 @@ func NpmInstall() {
  * 0: success
  * 1: remove folder error
  * 2: folder exist
+ * 3: create folder error
  *
  */
 func download(version string) int {
@@ -585,7 +586,8 @@ func download(version string) int {
 	// rootPath/version is exist
 	if isDirExist(rootPath+version) != true {
 		if err := os.Mkdir(rootPath+version, 0777); err != nil {
-			panic(err)
+			fmt.Printf("Create [%v] fail, Error: %v\n", version, err.Error())
+			return 3
 		}
 	}
 
