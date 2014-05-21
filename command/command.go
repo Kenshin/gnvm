@@ -61,6 +61,11 @@ gnvm install npm`,
 			}
 
 			if len(args) == 1 && strings.ToLower(args[0]) == "npm" {
+
+				if args[0] != "npm" {
+					fmt.Println("Waring: please use lower case 'npm'.")
+				}
+
 				nodehandle.NpmInstall()
 				return
 			}
