@@ -10,7 +10,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -471,29 +470,20 @@ func NpmInstall() {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Println(err)
+			fmt.Printf("'gnvm install npm' an error has occurred. \nError: %v.\n", err)
 			os.Exit(0)
 		}
 	}()
 
 	url := config.GetConfig(config.REGISTRY) + "npm"
 
-	// get res
-	res, err := http.Get(url)
-
-	// close
-	defer res.Body.Close()
-
-	// err
-	if err != nil {
-		panic(err)
-	}
-
-	// check state code
-	if res.StatusCode != 200 {
-		fmt.Printf("URL [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
+	// get
+	code, res, _ := curl.Get(url)
+	if code != 0 {
 		return
 	}
+	// close
+	defer res.Body.Close()
 
 	// set buff
 	buff := bufio.NewReader(res.Body)
