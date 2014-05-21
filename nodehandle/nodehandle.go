@@ -600,7 +600,7 @@ func download(version string) int {
 			fmt.Printf("Remove [%v] fail, Error: %v\n", version, err.Error())
 			return 1
 		}
-		fmt.Printf("Remove empty [%v] folder success.\n", version)
+		//fmt.Printf("Remove empty [%v] folder success.\n", version)
 	}
 
 	// rootPath/version is exist
