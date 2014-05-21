@@ -24,9 +24,6 @@ func Get(url string) (code int, res *http.Response, err error) {
 	// get res
 	res, err = http.Get(url)
 
-	// close
-	defer res.Body.Close()
-
 	// err
 	if err != nil {
 		panic(err)
@@ -63,6 +60,9 @@ func New(url, name, dst string) int {
 	if code != 0 {
 		return code
 	}
+
+	// close
+	defer res.Body.Close()
 
 	// create file
 	file, createErr := os.Create(dst)
