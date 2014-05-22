@@ -246,6 +246,32 @@ func Uninstall(folder string) {
 	fmt.Printf("Node.exe version [%v] uninstall success.\n", folder)
 }
 
+func UninstallNpm() {
+
+	removeFlag := true
+
+	if !isDirExist(rootPath + "npm.cmd") {
+		fmt.Printf("Waring: [%v] not exist npm.\n", rootPath)
+		return
+	}
+
+	// remove npm.cmd
+	if err := os.RemoveAll( rootPath + "npm.cmd" ); err != nil {
+		removeFlag = false
+		fmt.Printf("Error: remove [npm.cmd] file fail from [%v], Error: %v.\n", rootPath, err.Error())
+	}
+
+	// remove node_modules/npm
+	if err := os.RemoveAll( rootPath + "node_modules" + DIVIDE + "npm" ); err != nil {
+		removeFlag = false
+		fmt.Printf("Error: remove [npm] folder fail from [%v], Error: %v.\n", rootPath + "node_modules", err.Error())
+	}
+
+	if removeFlag {
+		fmt.Printf("npm uninstall success from [%v].\n", rootPath)
+	}
+}
+
 func LS(isPrint bool) ([]string, error) {
 	var lsArr []string
 	existVersion := false
