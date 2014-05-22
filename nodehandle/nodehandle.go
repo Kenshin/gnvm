@@ -83,7 +83,7 @@ func Use(folder string) bool {
 	folder = GetTrueVersion(folder, true)
 
 	if folder == config.UNKNOWN {
-		P(WARING, "Unassigned Node.js latest version. See 'gnvm install latest'.")
+		P(ERROR, "unassigned Node.js latest version. See 'gnvm install latest'.")
 		return false
 	}
 
@@ -103,13 +103,13 @@ func Use(folder string) bool {
 
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
-		P("Waring", "[%v] folder is not exist from [%v]. Get local node.exe version. See 'gnvm ls'.", folder, rootPath)
+		P(WARING, "[%v] folder is not exist from [%v]. Get local node.exe version. See 'gnvm ls'.", folder, rootPath)
 		return false
 	}
 
 	// check folder is rootVersion
 	if folder == rootVersion {
-		P("Waring", "Current node.exe version is [%v], not re-use. See 'gnvm node-version'.", folder)
+		P(WARING, "current node.exe version is [%v], not re-use. See 'gnvm node-version'.", folder)
 		return false
 	}
 
@@ -121,7 +121,7 @@ func Use(folder string) bool {
 
 		// create rootVersion folder
 		if err := cmd("md", rootFolder); err != nil {
-			P(ERROR, "Create %v folder Error: %v.", rootVersion, err.Error())
+			P(ERROR, "create %v folder Error: %v.", rootVersion, err.Error())
 			return false
 		}
 
@@ -148,7 +148,7 @@ func Use(folder string) bool {
 		return false
 	}
 
-	P("", "Set success, Current Node.exe version is [%v].\n", folder)
+	P(DEFAULT, "Set success, Current Node.exe version is [%v].\n", folder)
 
 	return true
 }
