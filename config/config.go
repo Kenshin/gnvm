@@ -5,13 +5,13 @@ import (
 	"github.com/tsuru/config"
 
 	// go
-	"fmt"
 	"os"
 	"regexp"
 	"strings"
 
 	// local
 	"gnvm/util"
+	. "gnvm/util/p"
 )
 
 var configPath, globalversion, latsetversion string
@@ -54,10 +54,7 @@ func init() {
 	file, err := os.Open(configPath)
 	defer file.Close()
 	if err != nil && os.IsNotExist(err) {
-		// print error
-		fmt.Printf("Waring: Config file [%v] is not exist.\n", configPath)
-
-		// create .gnvmrc file and write
+		P(WARING, "config file [%v] is not exist.\n", configPath)
 		createConfig()
 	}
 
@@ -72,14 +69,14 @@ func createConfig() {
 	file, err := os.Create(configPath)
 	defer file.Close()
 	if err != nil {
-		fmt.Println("Config file create Error: " + err.Error())
+		P(ERROR, "config file create Error: %v", err.Error())
 		return
 	}
 
 	// get <root>/node.exe version
 	version, err := util.GetNodeVersion(util.GlobalNodePath + "\\")
 	if err != nil {
-		fmt.Println("Waring: not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
+		P(WARING, "not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
 		globalversion = GLOBAL_VERSION_VAL
 	} else {
 		globalversion = version
@@ -88,19 +85,19 @@ func createConfig() {
 	//write init config
 	_, fileErr := file.WriteString(REGISTRY_KEY + REGISTRY_VAL + NEWLINE + NODEROOT_KEY + util.GlobalNodePath + NEWLINE + GLOBAL_VERSION_KEY + globalversion + NEWLINE + LATEST_VERSION_KEY + LATEST_VERSION_VAL)
 	if fileErr != nil {
-		fmt.Println("Write Config file Error: " + fileErr.Error())
+		P(ERROR, "write config file Error: %v", fileErr.Error())
 		return
 	}
 
 	// success
-	fmt.Printf("Config file [%v] create success.\n", configPath)
-	fmt.Printf("Waring: latest version is [%v], please use 'gnvm update latest' or 'gnvm install latest'.\n", UNKNOWN)
+	P(DEFAULT, "Config file [%v] create success.\n", configPath)
+	P(WARING, "latest version is [%v], please use 'gnvm update latest' or 'gnvm install latest'.\n", UNKNOWN)
 
 }
 
 func readConfig() {
 	if err := config.ReadConfigFile(configPath); err != nil {
-		fmt.Println("Read Config file Error: ", err.Error())
+		P(ERROR, "read Config file. Error: %v", err.Error())
 		return
 	}
 }
@@ -113,7 +110,7 @@ func SetConfig(key string, value interface{}) string {
 
 		switch {
 		case !reg.MatchString(value.(string)):
-			fmt.Printf("Error: registry must url valid, current registry is [%v].\n", value.(string))
+			P(ERROR, "registry value [%v] must url valid.\n", value.(string))
 			return ""
 		case !strings.HasSuffix(value.(string), "/"):
 			value = value.(string) + "/"
@@ -125,14 +122,12 @@ func SetConfig(key string, value interface{}) string {
 
 	// delete old config
 	if err := os.Remove(configPath); err != nil {
-		// print error
-		fmt.Println("Remove Config Error: ", err.Error())
+		P(ERROR, "remove config file Error: %v", err.Error())
 	}
 
 	// write new config
 	if err := config.WriteConfigFile(configPath, 0777); err != nil {
-		// print error
-		fmt.Println("Write Config Error: ", err.Error())
+		P(ERROR, "write config file Error: %v", err.Error())
 	}
 
 	return value.(string)
@@ -142,10 +137,7 @@ func SetConfig(key string, value interface{}) string {
 func GetConfig(key string) string {
 	value, err := config.GetString(key)
 	if err != nil {
-		// print error
-		fmt.Println("GetConfig Error: " + err.Error())
-
-		// value
+		P(ERROR, "get config Error: %v", err.Error())
 		value = UNKNOWN
 	}
 	return value
@@ -157,7 +149,7 @@ func ReSetConfig() {
 
 	version, err := util.GetNodeVersion(util.GlobalNodePath + "\\")
 	if err != nil {
-		fmt.Println("Waring: not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
+		P(WARING, "not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
 		globalversion = GLOBAL_VERSION_VAL
 	} else {
 		globalversion = version
@@ -173,5 +165,5 @@ func ReSetConfig() {
 	}
 	SetConfig(LATEST_VERSION, latsetversion)
 
-	fmt.Printf("Config file [%v] init success.\n", configPath)
+	P(DEFAULT, "Config file [%v] init success.\n", configPath)
 }

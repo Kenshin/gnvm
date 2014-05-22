@@ -275,7 +275,7 @@ gnvm config INIT`,
 		if len(args) == 1 {
 
 			if args[0] != "INIT" && strings.ToUpper(args[0]) == "INIT" {
-				fmt.Println("Waring: please use capital letter 'INIT'.")
+				P(WARING, "please use capital letter 'INIT'.")
 				args[0] = "INIT"
 			}
 
@@ -284,31 +284,31 @@ gnvm config INIT`,
 				return
 			}
 
-			fmt.Println("gnvm config [" + args[0] + "] is " + config.GetConfig(args[0]))
+			P(DEFAULT, "gnvm config [%v] is ", args[0], config.GetConfig(args[0]))
 
 		} else if len(args) == 2 {
 
 			if args[1] != "DEFAULT" && strings.ToUpper(args[1]) == "DEFAULT" {
-				fmt.Println("Waring: please use capital letter 'DEFAULT'.")
+				P(WARING, "please use capital letter 'DEFAULT'.")
 				args[1] = "DEFAULT"
 			}
 
 			switch {
 			case args[0] == "registry" && args[1] != "DEFAULT":
 				if newValue := config.SetConfig(args[0], args[1]); newValue != "" {
-					fmt.Println("Set success, [" + args[0] + "] new value is " + newValue)
+					P(DEFAULT, "Set success, [%v] new value is %v", args[0], newValue)
 				}
 			case args[0] == "registry" && args[1] == "DEFAULT":
 				if newValue := config.SetConfig(args[0], config.REGISTRY_VAL); newValue != "" {
-					fmt.Println("Registry reset success, [" + args[0] + "] new value is " + newValue)
+					P(DEFAULT, "Registry reset success, [%v] new value is %v", args[0], newValue)
 				}
 			case args[0] == "noderoot":
-				fmt.Printf("Waring: [%v] Temporarily does not support. See 'gnvm help config'.\n", args[0])
+				P(ERROR, "[%v] Temporarily does not support. See 'gnvm help config'.\n", args[0])
 			default:
-				fmt.Println("Config parameter include <registry>, your input unknown, please check your input. See 'gnvm help config'.")
+				P(ERROR, "Config parameter include <registry>, your input unknown, please check your input. See 'gnvm help config'.")
 			}
 		} else if len(args) > 2 {
-			fmt.Println("Config parameter maximum is 2, please check your input. See 'gnvm help config'.")
+			P(ERROR, "config parameter maximum is 2, please check your input. See 'gnvm help config'.")
 		}
 	},
 }
