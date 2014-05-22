@@ -50,6 +50,10 @@ func P(flag, message string, args ...interface{}) {
 		}
 	}
 
+	if !strings.HasSuffix(message, "\n") {
+		fmt.Printf("\n")
+	}
+
 }
 
 /*
