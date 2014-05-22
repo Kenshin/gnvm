@@ -378,7 +378,7 @@ func Install(args []string, global bool) int {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("\n'gnvm install %v' an error has occurred. \nError: %v.\n", args, err)
+			fmt.Printf("\n'gnvm install %v' an error has occurred. \nError: %v.\n", strings.Join(args, " "), err)
 			os.Exit(0)
 		}
 	}()
@@ -424,7 +424,7 @@ func Update(global bool) {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Println(err)
+			fmt.Printf("\n'gnvm updte latest' an error has occurred. \nError: %v.\n", err)
 			os.Exit(0)
 		}
 	}()

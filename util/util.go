@@ -60,7 +60,7 @@ func GetLatestVersion(url string) string {
 
 	var version string
 
-	// get
+	// curl
 	code, res, _ := curl.Get(url)
 	if code != 0 {
 		return ""
