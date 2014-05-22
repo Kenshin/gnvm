@@ -154,7 +154,7 @@ gnvm uninstall ALL`,
 			if ok := nodehandle.VerifyNodeVersion(v); ok != true {
 				fmt.Printf("Error: [%v] format error, the correct format is x.xx.xx. \n", v)
 			} else {
-				//nodehandle.Uninstall(v)
+				nodehandle.Uninstall(v)
 			}
 		}
 	},
