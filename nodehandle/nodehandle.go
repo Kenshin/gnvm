@@ -261,7 +261,7 @@ func UninstallNpm() {
 		fmt.Printf("Error: remove [npm.cmd] file fail from [%v], Error: %v.\n", rootPath, err.Error())
 	}
 
-	// remove npm.cmd
+	// remove node_modules/npm
 	if err := os.RemoveAll( rootPath + "node_modules" + DIVIDE + "npm" ); err != nil {
 		removeFlag = false
 		fmt.Printf("Error: remove [npm] folder fail from [%v], Error: %v.\n", rootPath + "node_modules", err.Error())
