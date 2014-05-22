@@ -248,18 +248,23 @@ func Uninstall(folder string) {
 
 func UninstallNpm() {
 
+	removeFlag := true
+
 	// remove npm.cmd
 	if err := os.RemoveAll( rootPath + "npm.cmd" ); err != nil {
-		fmt.Printf("Error: remove [%v] file fail from [%v], Error: %v.\n", rootPath + "npm.cmd", err.Error())
+		removeFlag = false
+		fmt.Printf("Error: remove [npm.cmd] file fail from [%v], Error: %v.\n", rootPath, err.Error())
 	}
 
 	// remove npm.cmd
 	if err := os.RemoveAll( rootPath + "node_modules" + DIVIDE + "npm" ); err != nil {
-		fmt.Printf("Error: remove [%v] folder fail from [%v], Error: %v.\n", rootPath + "node_modules" + DIVIDE + "npm", err.Error())
-		return
+		removeFlag = false
+		fmt.Printf("Error: remove [npm] folder fail from [%v], Error: %v.\n", rootPath + "node_modules", err.Error())
 	}
 
-	fmt.Printf("npm uninstall success from [%v].\n", rootPath)
+	if removeFlag {
+		fmt.Printf("npm uninstall success from [%v].\n", rootPath)
+	}
 }
 
 func LS(isPrint bool) ([]string, error) {
