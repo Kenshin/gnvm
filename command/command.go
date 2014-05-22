@@ -172,17 +172,16 @@ var useCmd = &cobra.Command{
 		if len(args) == 1 {
 
 			if args[0] != "latest" && nodehandle.VerifyNodeVersion(args[0]) != true {
-				fmt.Println("Use parameter support 'latest' or 'x.xx.xx', e.g. 0.10.28, please check your input. See 'gnvm help use'.")
+				P(ERROR, "Use parameter support '%v' or '%v', e.g. 0.10.28, please check your input. See 'gnvm help use'.", "latest", "x.xx.xx")
 				return
 			}
 
 			// set use
 			if ok := nodehandle.Use(args[0]); ok == true {
-				// set global version
 				config.SetConfig(config.GLOBAL_VERSION, nodehandle.GetTrueVersion(args[0], false))
 			}
 		} else {
-			fmt.Println("Use parameter maximum is 1, please check your input. See 'gnvm help use'.")
+			P(ERROR, "Use parameter maximum is 1, please check your input. See 'gnvm help use'.\n")
 		}
 	},
 }
