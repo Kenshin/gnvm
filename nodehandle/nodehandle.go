@@ -71,7 +71,8 @@ func Use(folder string) bool {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("'gnvm use [%v]' an error has occurred. please check. \nError: %v.\n", folder, err)
+			msg := fmt.Sprintf("'gnvm use [%v]' an error has occurred. please check. \nError: ", folder)
+			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
@@ -82,37 +83,33 @@ func Use(folder string) bool {
 	folder = GetTrueVersion(folder, true)
 
 	if folder == config.UNKNOWN {
-		fmt.Println("Waring: Unassigned Node.js latest version. See 'gnvm install latest'.")
+		P(WARING, "Unassigned Node.js latest version. See 'gnvm install latest'.")
 		return false
 	}
 
 	// set rootNode
 	rootNode := rootPath + NODE
-	//log.Println("Root node path is: " + rootNode)
 
 	// set usePath and useNode
 	usePath := rootPath + folder + DIVIDE
 	useNode := usePath + NODE
-	//log.Println("Use node.exe path is: " + usePath)
 
 	// get <root>/node.exe version
 	rootVersion, err := util.GetNodeVersion(rootPath)
 	if err != nil {
-		fmt.Println("Waring: not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
+		P(WARING, "not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
 		rootNodeExist = false
 	}
-	//log.Printf("Root node.exe verison is: %v \n", rootVersion)
 
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
-		//fmt.Printf("Waring: [%v] folder is not exist. Get local node.exe version. See 'gnvm ls'.\n", folder)
-		P("Waring", "[%v] folder is not exist from [%v]. Get local node.exe version. See 'gnvm ls'.\n", folder, rootPath)
+		P("Waring", "[%v] folder is not exist from [%v]. Get local node.exe version. See 'gnvm ls'.", folder, rootPath)
 		return false
 	}
 
 	// check folder is rootVersion
 	if folder == rootVersion {
-		P("Waring", "Current node.exe version is [%v], not re-use. See 'gnvm node-version'.\n", folder)
+		P("Waring", "Current node.exe version is [%v], not re-use. See 'gnvm node-version'.", folder)
 		return false
 	}
 
@@ -124,7 +121,7 @@ func Use(folder string) bool {
 
 		// create rootVersion folder
 		if err := cmd("md", rootFolder); err != nil {
-			fmt.Printf("Create %v folder Error: %v.\n", rootVersion, err.Error())
+			P(ERROR, "Create %v folder Error: %v.", rootVersion, err.Error())
 			return false
 		}
 
@@ -133,13 +130,13 @@ func Use(folder string) bool {
 	if rootNodeExist {
 		// copy rootNode to <root>/rootVersion
 		if err := copy(rootNode, rootFolder); err != nil {
-			fmt.Printf("copy %v to %v folder Error: %v.\n", rootNode, rootFolder, err.Error())
+			P(ERROR, "copy %v to %v folder Error: %v.\n", rootNode, rootFolder, err.Error())
 			return false
 		}
 
 		// delete <root>/node.exe
 		if err := os.Remove(rootNode); err != nil {
-			fmt.Printf("remove %v folder Error: %v.\n", rootNode, err.Error())
+			P(ERROR, "remove %v folder Error: %v.\n", rootNode, err.Error())
 			return false
 		}
 
@@ -147,14 +144,13 @@ func Use(folder string) bool {
 
 	// copy useNode to rootPath
 	if err := copy(useNode, rootPath); err != nil {
-		fmt.Printf("copy %v to %v folder Error: %v.\n", useNode, rootPath, err.Error())
+		P(ERROR, "copy %v to %v folder Error: %v.\n", useNode, rootPath, err.Error())
 		return false
 	}
 
-	fmt.Printf("Set success, Current Node.exe version is [%v].\n", folder)
+	P("", "Set success, Current Node.exe version is [%v].\n", folder)
 
 	return true
-
 }
 
 func VerifyNodeVersion(version string) bool {
