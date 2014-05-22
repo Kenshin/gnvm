@@ -12,7 +12,6 @@ import (
 
 	// local
 	"gnvm/util"
-	//"gnvm/util/curl"
 )
 
 var configPath, globalversion, latsetversion string

@@ -22,6 +22,7 @@ import (
 	"gnvm/config"
 	"gnvm/util"
 	"gnvm/util/curl"
+	. "gnvm/util/p"
 )
 
 const (
@@ -67,6 +68,14 @@ func copy(src, dest string) error {
  */
 func Use(folder string) bool {
 
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Printf("'gnvm use [%v]' an error has occurred. please check. \nError: %v.\n", folder, err)
+			os.Exit(0)
+		}
+	}()
+
 	rootNodeExist := true
 
 	// get true folder, e.g. folder is latest return x.xx.xx
@@ -96,13 +105,14 @@ func Use(folder string) bool {
 
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
-		fmt.Printf("[%v] folder is not exist. Get local node.exe version. See 'gnvm ls'.\n", folder)
+		//fmt.Printf("Waring: [%v] folder is not exist. Get local node.exe version. See 'gnvm ls'.\n", folder)
+		P("Waring", "[%v] folder is not exist from [%v]. Get local node.exe version. See 'gnvm ls'.\n", folder, rootPath)
 		return false
 	}
 
 	// check folder is rootVersion
 	if folder == rootVersion {
-		fmt.Printf("Current node.exe version is [%v], not re-use. See 'gnvm node-version'.\n", folder)
+		P("Waring", "Current node.exe version is [%v], not re-use. See 'gnvm node-version'.\n", folder)
 		return false
 	}
 
@@ -182,7 +192,7 @@ func NodeVersion(args []string, remote bool) {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("'gnvm node-version [%v]' an error has occurred. please check. \nError: %v.\n", strings.Join(args," "), err)
+			fmt.Printf("'gnvm node-version [%v]' an error has occurred. please check. \nError: %v.\n", strings.Join(args, " "), err)
 			os.Exit(0)
 		}
 	}()
@@ -256,15 +266,15 @@ func UninstallNpm() {
 	}
 
 	// remove npm.cmd
-	if err := os.RemoveAll( rootPath + "npm.cmd" ); err != nil {
+	if err := os.RemoveAll(rootPath + "npm.cmd"); err != nil {
 		removeFlag = false
 		fmt.Printf("Error: remove [npm.cmd] file fail from [%v], Error: %v.\n", rootPath, err.Error())
 	}
 
 	// remove node_modules/npm
-	if err := os.RemoveAll( rootPath + "node_modules" + DIVIDE + "npm" ); err != nil {
+	if err := os.RemoveAll(rootPath + "node_modules" + DIVIDE + "npm"); err != nil {
 		removeFlag = false
-		fmt.Printf("Error: remove [npm] folder fail from [%v], Error: %v.\n", rootPath + "node_modules", err.Error())
+		fmt.Printf("Error: remove [npm] folder fail from [%v], Error: %v.\n", rootPath+"node_modules", err.Error())
 	}
 
 	if removeFlag {

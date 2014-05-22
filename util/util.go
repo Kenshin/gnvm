@@ -13,7 +13,6 @@ import (
 
 	// local
 	"gnvm/util/curl"
-	"gnvm/util/p"
 )
 
 const (
@@ -26,7 +25,6 @@ var GlobalNodePath string
 
 func init() {
 	GlobalNodePath = getGlobalNodePath()
-	p.Exec()
 }
 
 func Exec() {
