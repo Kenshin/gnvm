@@ -1,14 +1,18 @@
 package util
 
 import (
+
+	// go
 	"bufio"
 	"fmt"
 	"io"
-	"net/http"
 	"os"
 	"os/exec"
 	"strconv"
 	"strings"
+
+	// local
+	"gnvm/util/curl"
 )
 
 const (
@@ -56,22 +60,13 @@ func GetLatestVersion(url string) string {
 
 	var version string
 
-	// get res
-	res, err := http.Get(url)
-
-	// close
-	defer res.Body.Close()
-
-	// err
-	if err != nil {
-		panic(err)
-	}
-
-	// check state code
-	if res.StatusCode != 200 {
-		fmt.Printf("Url [%v] an [%v] error occurred, please check. See 'gnvm config help'.\n", url, res.StatusCode)
+	// curl
+	code, res, _ := curl.Get(url)
+	if code != 0 {
 		return ""
 	}
+	// close
+	defer res.Body.Close()
 
 	// set buff
 	buff := bufio.NewReader(res.Body)
@@ -84,18 +79,18 @@ func GetLatestVersion(url string) string {
 
 			args1 := strings.Split(line, "  ")
 			if len(args1) < 2 {
-				fmt.Printf("Error: Url [%v] format error, please change registry. See 'gnvm help config'.\n", url)
+				fmt.Printf("Error: URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
 				break
 			}
 
 			args2 := strings.Split(args1[1], "-")
 			if len(args2) < 2 {
-				fmt.Printf("Error: Url [%v] format error, please change registry. See 'gnvm help config'.\n", url)
+				fmt.Printf("Error: URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
 				break
 			}
 
 			if len(args2[1]) < 2 {
-				fmt.Printf("Error: Url [%v] format error, please change registry. See 'gnvm help config'.\n", url)
+				fmt.Printf("Error: URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
 				break
 			}
 
