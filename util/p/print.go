@@ -19,10 +19,11 @@ const (
 )
 
 /*
- * parse console message
- * flag: include: 'Waring', 'Error'
- * message: variable parameter
- * args: variable parameter
+ * Print color console message
+ *
+ * flag   : include: 'Waring', 'Error'
+ * message: print content
+ * args   : variable parameter
  *
  * e.g. P( "Waring", Remote latest version [%v] = latest version [%v].\n", param1, param2 )
  *
@@ -51,6 +52,16 @@ func P(flag, message string, args ...interface{}) {
 
 }
 
+/*
+ * Print error color console message
+ *
+ * flag   : include: 'Waring', 'Error'
+ * message: print content
+ * err    : err content
+ *
+ * e.g. Error(ERROR, "util/print.go an error has occurred. Error: ", err)
+ *
+ */
 func Error(flag, message string, err interface{}) {
 
 	// set flag
