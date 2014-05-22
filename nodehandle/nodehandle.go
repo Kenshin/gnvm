@@ -182,7 +182,7 @@ func NodeVersion(args []string, remote bool) {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Println(err)
+			fmt.Printf("'gnvm node-version [%v]' an error has occurred. please check. \nError: %v.\n", strings.Join(args," "), err)
 			os.Exit(0)
 		}
 	}()
