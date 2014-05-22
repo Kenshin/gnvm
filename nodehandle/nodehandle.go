@@ -246,6 +246,9 @@ func Uninstall(folder string) {
 	fmt.Printf("Node.exe version [%v] uninstall success.\n", folder)
 }
 
+func UninstallNpm() {
+}
+
 func LS(isPrint bool) ([]string, error) {
 	var lsArr []string
 	existVersion := false

@@ -103,6 +103,7 @@ var uninstallCmd = &cobra.Command{
 	Long: `uninstall local node.js version e.g.
 gnvm uninstall x.xx.xx
 gnvm uninstall latest
+gnvm uninstall npm
 gnvm uninstall 0.10.26 0.11.2 latest
 gnvm uninstall ALL`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -110,6 +111,15 @@ gnvm uninstall ALL`,
 			fmt.Println("Error: 'gnvm uninstall' need parameter, please check your input. See 'gnvm help uninstall'.")
 			return
 		} else if len(args) == 1 {
+
+			if strings.ToLower(args[0]) == "npm" {
+
+				if args[0] != "npm" {
+					fmt.Println("Waring: please use lower case 'npm'.")
+				}
+				nodehandle.UninstallNpm()
+				return
+			}
 
 			if args[0] != "ALL" && strings.ToUpper(args[0]) == "ALL" {
 
@@ -127,6 +137,11 @@ gnvm uninstall ALL`,
 		}
 		for _, v := range args {
 
+			if strings.ToLower(v) == "npm" {
+				fmt.Println("Waring: use format error, the correct format is 'gnvm uninstall npm'. See 'gnvm help uninstall'.")
+				continue
+			}
+
 			if strings.ToUpper(v) == "ALL" {
 				fmt.Println("Waring: use of the parameter 'ALL' is not correct, please use 'gnvm uninstall ALL'. See 'gnvm help uninstall'.")
 				continue
@@ -139,7 +154,7 @@ gnvm uninstall ALL`,
 			if ok := nodehandle.VerifyNodeVersion(v); ok != true {
 				fmt.Printf("Error: [%v] format error, the correct format is x.xx.xx. \n", v)
 			} else {
-				nodehandle.Uninstall(v)
+				//nodehandle.Uninstall(v)
 			}
 		}
 	},
