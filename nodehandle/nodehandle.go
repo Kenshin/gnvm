@@ -247,6 +247,19 @@ func Uninstall(folder string) {
 }
 
 func UninstallNpm() {
+
+	// remove npm.cmd
+	if err := os.RemoveAll( rootPath + "npm.cmd" ); err != nil {
+		fmt.Printf("Error: remove [%v] file fail from [%v], Error: %v.\n", rootPath + "npm.cmd", err.Error())
+	}
+
+	// remove npm.cmd
+	if err := os.RemoveAll( rootPath + "node_modules" + DIVIDE + "npm" ); err != nil {
+		fmt.Printf("Error: remove [%v] folder fail from [%v], Error: %v.\n", rootPath + "node_modules" + DIVIDE + "npm", err.Error())
+		return
+	}
+
+	fmt.Printf("npm uninstall success from [%v].\n", rootPath)
 }
 
 func LS(isPrint bool) ([]string, error) {
