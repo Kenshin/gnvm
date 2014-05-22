@@ -90,6 +90,9 @@ func stateColor(state string) {
 	case ERROR:
 		ct.ChangeColor(ct.Red, false, ct.Green, false)
 		fmt.Printf("Error: ")
+	default:
+		//ct.ChangeColor(ct.Blue, false, ct.White, false)
+		//fmt.Printf("Notice: ")
 	}
 	ct.ResetColor()
 }
