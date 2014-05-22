@@ -250,6 +250,11 @@ func UninstallNpm() {
 
 	removeFlag := true
 
+	if !isDirExist(rootPath + "npm.cmd") {
+		fmt.Printf("Waring: [%v] not exist npm.\n", rootPath)
+		return
+	}
+
 	// remove npm.cmd
 	if err := os.RemoveAll( rootPath + "npm.cmd" ); err != nil {
 		removeFlag = false
