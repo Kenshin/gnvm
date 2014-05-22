@@ -12,6 +12,7 @@ import (
 	// local
 	"gnvm/config"
 	"gnvm/nodehandle"
+	. "gnvm/util/p"
 )
 
 var (
@@ -36,7 +37,7 @@ var versionCmd = &cobra.Command{
 	Short: "Print the version number of Gnvm",
 	Long:  `Print the version number of Gnvm`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("v" + config.VERSION)
+		P("", "%v%v", "v", config.VERSION)
 	},
 }
 
