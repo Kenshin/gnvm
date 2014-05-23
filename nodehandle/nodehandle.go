@@ -359,12 +359,12 @@ func LsRemote() {
 	// close
 	defer res.Body.Close()
 
-	writeVersion := func(line string) {
+	writeVersion := func(content string, line int) {
 		// replace '\n'
-		line = strings.Replace(line, "\n", "", -1)
+		content = strings.Replace(content, "\n", "", -1)
 
 		// splite 'vx.xx.xx  1.1.0-alpha-2'
-		args := strings.Split(line, " ")
+		args := strings.Split(content, " ")
 
 		if ok := util.VerifyNodeVersion(args[0][1:]); ok {
 			isExistVersion = true
@@ -454,11 +454,11 @@ func InstallNpm() {
 	maxTime, _ := time.Parse(TIMEFORMART, TIMEFORMART)
 	var maxVersion string
 
-	getNpmVersion := func(line string) {
-		if strings.Index(line, `<a href="`) == 0 && strings.Contains(line, ".zip") {
+	getNpmVersion := func(content string, line int) {
+		if strings.Index(content, `<a href="`) == 0 && strings.Contains(content, ".zip") {
 
 			// parse
-			newLine := strings.Replace(line, `<a href="`, "", -1)
+			newLine := strings.Replace(content, `<a href="`, "", -1)
 			newLine = strings.Replace(newLine, `</a`, "", -1)
 			newLine = strings.Replace(newLine, `">`, " ", -1)
 
