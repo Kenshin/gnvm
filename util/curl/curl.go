@@ -8,7 +8,7 @@ import (
 	"bufio"
 )
 
-type ProcessFunc func(line string)
+type ProcessFunc func(content string, line int)
 
 /*
  *
@@ -52,22 +52,23 @@ func Get(url string) (code int, res *http.Response, err error) {
  */
 func ReadLine(body io.ReadCloser, process ProcessFunc ) error {
 
-	var line string
+	var content string
 	var err error
+	var line int = 1
 
 	// set buff
 	buff := bufio.NewReader(body)
 
 	for {
-		// set line
-		line, err = buff.ReadString('\n')
+		content, err = buff.ReadString('\n')
 
-		// when EOF or err break
-		if err != nil || err == io.EOF {
+		if line > 1 && ( err != nil || err == io.EOF ) {
 			break
 		}
 
-		process(line)
+		process(content, line)
+
+		line++
 	}
 
 	return err
