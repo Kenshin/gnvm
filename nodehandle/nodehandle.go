@@ -36,6 +36,16 @@ func init() {
 	rootPath = util.GlobalNodePath + DIVIDE
 }
 
+func TransLatestVersion(latest string, isPrint bool) string {
+	if latest == config.LATEST {
+		latest = config.GetConfig(config.LATEST_VERSION)
+		if isPrint {
+			P(NOTICE, "current latest version is [%v]", latest)
+		}
+	}
+	return latest
+}
+
 /**
  * rootNode is rootPath + "/node.exe", e.g. <root>/node.exe
  *
@@ -59,7 +69,7 @@ func Use(folder string) bool {
 	rootNodeExist := true
 
 	// get true folder, e.g. folder is latest return x.xx.xx
-	folder = GetTrueVersion(folder, true)
+	folder = TransLatestVersion(folder, true)
 
 	if folder == config.UNKNOWN {
 		P(ERROR, "unassigned Node.js latest version. See 'gnvm install latest'.")
@@ -587,17 +597,6 @@ func cmd(name, arg string) error {
 func copy(src, dest string) error {
 	_, err := exec.Command("cmd", "/C", "copy", "/y", src, dest).Output()
 	return err
-}
-
-func GetTrueVersion(latest string, isPrint bool) string {
-	if latest == config.LATEST {
-		latest = config.GetConfig(config.LATEST_VERSION)
-		if isPrint {
-			P(NOTICE, "current latest version is [%v]", latest)
-
-		}
-	}
-	return latest
 }
 
 /*

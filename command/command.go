@@ -148,7 +148,7 @@ gnvm uninstall ALL`,
 			}
 
 			// get true version
-			v = nodehandle.GetTrueVersion(v, true)
+			v = nodehandle.TransLatestVersion(v, true)
 
 			// check version format
 			if ok := util.VerifyNodeVersion(v); ok != true {
@@ -177,7 +177,7 @@ var useCmd = &cobra.Command{
 
 			// set use
 			if ok := nodehandle.Use(args[0]); ok == true {
-				config.SetConfig(config.GLOBAL_VERSION, nodehandle.GetTrueVersion(args[0], false))
+				config.SetConfig(config.GLOBAL_VERSION, nodehandle.TransLatestVersion(args[0], false))
 			}
 		} else {
 			P(ERROR, "Use parameter maximum is 1, please check your input. See 'gnvm help use'.\n")
