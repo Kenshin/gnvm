@@ -60,11 +60,9 @@ func ReadLine(body io.ReadCloser, process ProcessFunc ) error {
 	buff := bufio.NewReader(body)
 
 	for {
-		// set line
 		content, err = buff.ReadString('\n')
 
-		// when EOF or err break
-		if err != nil || err == io.EOF {
+		if line > 1 && ( err != nil || err == io.EOF ) {
 			break
 		}
 
