@@ -1,7 +1,0 @@
-*.*
-
-!gnvm.go
-!command/**
-!config/**
-!nodehandle/**
-!util/**

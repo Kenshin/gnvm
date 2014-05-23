@@ -4,7 +4,6 @@ import (
 
 	// go
 	"bufio"
-	"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -13,6 +12,7 @@ import (
 
 	// local
 	"gnvm/util/curl"
+	. "gnvm/util/p"
 )
 
 const (
@@ -79,18 +79,18 @@ func GetLatestVersion(url string) string {
 
 			args1 := strings.Split(line, "  ")
 			if len(args1) < 2 {
-				fmt.Printf("Error: URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
+				P(ERROR, "URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
 				break
 			}
 
 			args2 := strings.Split(args1[1], "-")
 			if len(args2) < 2 {
-				fmt.Printf("Error: URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
+				P(ERROR, "URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
 				break
 			}
 
 			if len(args2[1]) < 2 {
-				fmt.Printf("Error: URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
+				P(ERROR, "URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
 				break
 			}
 
@@ -131,7 +131,7 @@ func getGlobalNodePath() string {
 func getCurrentPath() string {
 	path, err := os.Getwd()
 	if err != nil {
-		fmt.Println("Get current path Error: " + err.Error())
+		P(ERROR, "get current path Error: %v", err.Error())
 		return ""
 	}
 	return path
