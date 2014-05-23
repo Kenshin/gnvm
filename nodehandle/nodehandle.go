@@ -376,36 +376,6 @@ func LsRemote() {
 		P(ERROR, "gnvm ls --remote Error: %v", err)
 	}
 
-	/*
-	// set buff
-	buff := bufio.NewReader(res.Body)
-
-	for {
-		// set line
-		line, err := buff.ReadString('\n')
-
-		// when EOF or err break
-		if err != nil || err == io.EOF {
-			break
-		}
-
-		// replace '\n'
-		line = strings.Replace(line, "\n", "", -1)
-
-		// splite 'vx.xx.xx  1.1.0-alpha-2'
-		args := strings.Split(line, " ")
-
-		if ok := util.VerifyNodeVersion(args[0][1:]); ok {
-			isExistVersion = true
-			P(DEFAULT, args[0])
-		}
-	}
-
-	if !isExistVersion {
-		P(ERROR, "not found any Node.exe version list from %v, please check it.", url)
-	}
-	*/
-
 }
 
 /*
@@ -515,43 +485,6 @@ func InstallNpm() {
 		P(ERROR, "parse npm version Error: %v, from %v", err, url)
 		return
 	}
-
-	/*
-	for {
-		// set line
-		line, err := buff.ReadString('\n')
-
-		// when EOF or err break
-		if err != nil || err == io.EOF {
-			break
-		}
-
-		if strings.Index(line, `<a href="`) == 0 && strings.Contains(line, ".zip") {
-
-			// parse
-			newLine := strings.Replace(line, `<a href="`, "", -1)
-			newLine = strings.Replace(newLine, `</a`, "", -1)
-			newLine = strings.Replace(newLine, `">`, " ", -1)
-
-			// e.g. npm-1.3.9.zip npm-1.3.9.zip> 23-Aug-2013 21:14 1535885
-			orgArr := strings.Fields(newLine)
-
-			// e.g. npm-1.3.9.zip
-			version := orgArr[0:1][0]
-
-			// e.g. 23-Aug-2013 21:14
-			sTime := strings.Join(orgArr[2:len(orgArr)-1], " ")
-
-			// bubble sort
-			if t, err := time.Parse(TIMEFORMART, sTime); err == nil {
-				if t.Sub(maxTime).Seconds() > 0 {
-					maxTime = t
-					maxVersion = version
-				}
-			}
-		}
-	}
-	*/
 
 	if maxVersion == "" {
 		P(ERROR, "get npm version fail from [%v], please check. See 'gnvm help config'.\n", url)
