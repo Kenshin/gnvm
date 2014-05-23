@@ -199,12 +199,12 @@ var updateCmd = &cobra.Command{
 			case "latest":
 				nodehandle.Update(global)
 			case "gnvm":
-				fmt.Printf("Waring: [%v] Temporarily does not support. See 'gnvm help update'.\n", args[0])
+				P(WARING, "[%v] Temporarily does not support. See 'gnvm help update'.\n", args[0])
 			default:
-				fmt.Println("Error: gnvm update only support 'latest' parameter. See 'gnvm help update'.")
+				P(ERROR, "gnvm update only support 'latest' parameter. See 'gnvm help update'.")
 			}
 		} else {
-			fmt.Println("Use parameter maximum is 1, temporary support only 'latest', please check your input. See 'gnvm help update'.")
+			P(ERROR, "use parameter maximum is 1, temporary support only 'latest', please check your input. See 'gnvm help update'.")
 		}
 	},
 }

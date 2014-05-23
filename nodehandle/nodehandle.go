@@ -77,10 +77,6 @@ func Use(folder string) bool {
 		}
 	}()
 
-	s := [1]string{"sss"}
-	i := 1
-	fmt.Println(s[i])
-
 	rootNodeExist := true
 
 	// get true folder, e.g. folder is latest return x.xx.xx
@@ -466,20 +462,20 @@ func Update(global bool) {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("\n'gnvm updte latest' an error has occurred. \nError: %v.\n", err)
+			Error(ERROR, "'gnvm updte latest' an error has occurred. \nError: ", err)
 			os.Exit(0)
 		}
 	}()
 
 	localVersion := config.GetConfig(config.LATEST_VERSION)
-	fmt.Printf("local latest version is [%v].\n", localVersion)
+	P(NOTICE, "local latest version is [%v].\n", localVersion)
 
 	remoteVersion := getLatestVersionByRemote()
 	if remoteVersion == "" {
-		fmt.Println("Get latest version error, please check. See 'gnvm config help'.")
+		P(ERROR, "get latest version error, please check. See 'gnvm config help'.")
 		return
 	}
-	fmt.Printf("remote [%v] latest version is [%v].\n", config.GetConfig("registry"), remoteVersion)
+	P(NOTICE, "remote [%v] latest version is [%v].\n", config.GetConfig("registry"), remoteVersion)
 
 	local, _ := util.ConverFloat(localVersion)
 	remote, _ := util.ConverFloat(remoteVersion)
@@ -489,20 +485,20 @@ func Update(global bool) {
 
 	switch {
 	case localVersion == config.UNKNOWN:
-		fmt.Println("Waring: local latest version undefined.")
+		P(WARING, "local latest version undefined.")
 		if code := Install(args, global); code == 0 || code == 2 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
-			fmt.Printf("Update latest success, current latest version is [%v].\n", remoteVersion)
+			P(DEFAULT, "Update latest success, current latest version is [%v].\n", remoteVersion)
 		}
 	case local == remote:
-		fmt.Printf("Remote latest version [%v] = latest version [%v].\n", remoteVersion, localVersion)
+		P(DEFAULT, "Remote latest version [%v] = latest version [%v].\n", remoteVersion, localVersion)
 	case local > remote:
-		fmt.Printf("Waring: local latest version [%v] > remote latest version [%v], please check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
+		P(WARING, "local latest version [%v] > remote latest version [%v].\nPlease check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
 	case local < remote:
-		fmt.Printf("Remote latest version [%v] > local latest version [%v].\n", remoteVersion, localVersion)
+		P(WARING, "remote latest version [%v] > local latest version [%v].\n", remoteVersion, localVersion)
 		if code := Install(args, global); code == 0 || code == 2 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
-			fmt.Printf("Update latest success, current latest version is [%v].\n", remoteVersion)
+			P(DEFAULT, "Update latest success, current latest version is [%v].\n", remoteVersion)
 		}
 	}
 }
