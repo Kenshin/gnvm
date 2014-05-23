@@ -419,7 +419,8 @@ func Install(args []string, global bool) int {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("\n'gnvm install %v' an error has occurred. \nError: %v.\n", strings.Join(args, " "), err)
+			msg := fmt.Sprintf("'gnvm install %v' an error has occurred. \nError: ", strings.Join(args, " "))
+			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
@@ -430,14 +431,14 @@ func Install(args []string, global bool) int {
 
 			version := getLatestVersionByRemote()
 			if version == "" {
-				fmt.Println("Get latest version error, please check. See 'gnvm config help'.")
+				P(ERROR, "get latest version error, please check. See 'gnvm config help'.")
 				break
 			}
 
 			// set v
 			v = version
 			currentLatest = version
-			fmt.Printf("Current latest version is [%v]\n", version)
+			P(NOTICE, "current latest version is [%v]", version)
 		}
 
 		// downlaod
@@ -614,11 +615,11 @@ func download(version string) int {
 
 	// rootPath/version/node.exe is exist
 	if _, err := util.GetNodeVersion(rootPath + version + DIVIDE); err == nil {
-		fmt.Printf("Waring: [%v] folder exist.\n", version)
+		P(WARING, "[%v] folder exist.\n", version)
 		return 2
 	} else {
 		if err := os.RemoveAll(rootPath + version); err != nil {
-			fmt.Printf("Remove [%v] fail, Error: %v\n", version, err.Error())
+			P(ERROR, "remove [%v] fail, Error: %v\n", version, err.Error())
 			return 1
 		}
 		//fmt.Printf("Remove empty [%v] folder success.\n", version)
@@ -627,7 +628,7 @@ func download(version string) int {
 	// rootPath/version is exist
 	if isDirExist(rootPath+version) != true {
 		if err := os.Mkdir(rootPath+version, 0777); err != nil {
-			fmt.Printf("Create [%v] fail, Error: %v\n", version, err.Error())
+			P(ERROR, "create [%v] fail, Error: %v\n", version, err.Error())
 			return 3
 		}
 	}
@@ -639,7 +640,7 @@ func download(version string) int {
 	if code := curl.New(url, version, rootPath+version+DIVIDE+NODE); code != 0 {
 		if code == -1 {
 			if err := os.RemoveAll(rootPath + version); err != nil {
-				fmt.Printf("Remove [%v] fail, Error: %v\n", version, err.Error())
+				P(ERROR, "remove [%v] fail, Error: %v\n", version, err.Error())
 				return 1
 			}
 		}

@@ -54,17 +54,17 @@ gnvm install npm`,
 		var newArgs []string
 
 		if len(args) == 0 {
-			fmt.Println("Error: 'gnvm install' need parameter, please check your input. See 'gnvm help install'.")
+			P(ERROR, "'gnvm install' need parameter, please check your input. See 'gnvm help install'.")
 		} else {
 
 			if global && len(args) > 1 {
-				fmt.Println("Waring: when use --global must be only one parameter, e.g. 'gnvm install x.xx.xx --global'. See 'gnvm install help'.")
+				P(WARING, "when use --global must be only one parameter, e.g. 'gnvm install x.xx.xx --global'. See 'gnvm install help'.")
 			}
 
 			if len(args) == 1 && strings.ToLower(args[0]) == "npm" {
 
 				if args[0] != "npm" {
-					fmt.Println("Waring: please use lower case 'npm'.")
+					P(WARING, "please use lower case 'npm'.")
 				}
 
 				nodehandle.NpmInstall()
@@ -75,7 +75,7 @@ gnvm install npm`,
 
 				// check npm
 				if strings.ToLower(v) == "npm" {
-					fmt.Println("Waring: use format error, the correct format is 'gnvm install npm'. See 'gnvm help install'.")
+					P(WARING, "use format error, the correct format is 'gnvm install npm'. See 'gnvm help install'.")
 					continue
 				}
 
@@ -87,7 +87,7 @@ gnvm install npm`,
 
 				// check version format
 				if ok := nodehandle.VerifyNodeVersion(v); ok != true {
-					fmt.Printf("Error: [%v] format error, the correct format is x.xx.xx. \n", v)
+					P(ERROR, "[%v] format error, the correct format is x.xx.xx. \n", v)
 				} else {
 					newArgs = append(newArgs, v)
 				}
