@@ -34,9 +34,15 @@ var gnvmCmd = &cobra.Command{
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the version number of Gnvm",
-	Long:  `Print the version number of Gnvm`,
+	Long:  `Print the version number of Gnvm. e.g.
+gnvm version
+gnvm version --remote`,
 	Run: func(cmd *cobra.Command, args []string) {
-		P("", "%v%v", "v", config.VERSION)
+		// check args
+		if len(args) > 0 {
+			P(WARING, "'gnvm version' no parameter, please check your input. See 'gnvm help version'.")
+		}
+		nodehandle.Version(remote)
 	},
 }
 
@@ -171,7 +177,7 @@ var useCmd = &cobra.Command{
 		if len(args) == 1 {
 
 			if args[0] != "latest" && util.VerifyNodeVersion(args[0]) != true {
-				P(ERROR, "Use parameter support '%v' or '%v', e.g. 0.10.28, please check your input. See 'gnvm help use'.", "latest", "x.xx.xx")
+				P(ERROR, "use parameter support '%v' or '%v', e.g. 0.10.28, please check your input. See 'gnvm help use'.", "latest", "x.xx.xx")
 				return
 			}
 
@@ -180,7 +186,7 @@ var useCmd = &cobra.Command{
 				config.SetConfig(config.GLOBAL_VERSION, nodehandle.TransLatestVersion(args[0], false))
 			}
 		} else {
-			P(ERROR, "Use parameter maximum is 1, please check your input. See 'gnvm help use'.\n")
+			P(ERROR, "use parameter maximum is 1, please check your input. See 'gnvm help use'.\n")
 		}
 	},
 }
@@ -329,6 +335,7 @@ func init() {
 	updateCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version.")
 	lsCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote all node.js version list.")
 	nodeVersionCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote node.js latest version.")
+	versionCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote gnvm latest version.")
 
 	// exec
 	gnvmCmd.Execute()

@@ -27,6 +27,7 @@ const (
 	DIVIDE      = "\\"
 	NODE        = "node.exe"
 	TIMEFORMART = "02-Jan-2006 15:04"
+	GNVMHOST    = "http://k-zone.cn/gnvm/version.txt"
 )
 
 var rootPath string
@@ -559,6 +560,48 @@ func Update(global bool) {
 			P(DEFAULT, "Update latest success, current latest version is [%v].\n", remoteVersion)
 		}
 	}
+}
+
+func Version(remote bool) {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			Error(ERROR, "'gnvm version --remote' an error has occurred. \nError: ", err)
+			os.Exit(0)
+		}
+	}()
+
+	P(DEFAULT, "Current version %v", config.VERSION)
+
+	if !remote {
+		return
+	}
+
+	code, res, _ := curl.Get(GNVMHOST)
+	if code != 0 {
+		return
+	}
+	defer res.Body.Close()
+
+	versionFunc := func(content string, line int) {
+		if content != "" && line == 1 {
+			arr := strings.Fields(content)
+			if len(arr) == 2 {
+				P(DEFAULT, "Latest version %v, publish data %v", arr[0][1:], arr[1])
+			} else {
+				return
+			}
+		}
+		if line > 1 {
+			P(DEFAULT, content)
+		}
+	}
+
+	if err := curl.ReadLine(res.Body, versionFunc); err != nil && err != io.EOF {
+		P(ERROR, "gnvm version --remote Error: %v", err)
+	}
+
 }
 
 func isDirExist(path string) bool {
