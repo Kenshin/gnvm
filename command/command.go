@@ -220,7 +220,7 @@ gnvm ls --remote`,
 
 		// check args
 		if len(args) > 0 {
-			fmt.Println("Waring: gnvm ls no parameter, please check your input. See 'gnvm help ls'.")
+			P(WARING, "gnvm ls no parameter, please check your input. See 'gnvm help ls'.")
 		}
 
 		if remote == true {

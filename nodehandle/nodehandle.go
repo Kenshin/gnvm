@@ -71,11 +71,15 @@ func Use(folder string) bool {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm use [%v]' an error has occurred. please check. \nError: ", folder)
+			msg := fmt.Sprintf("'gnvm use %v' an error has occurred. please check. \nError: ", folder)
 			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
+
+	s := [1]string{"sss"}
+	i := 1
+	fmt.Println(s[i])
 
 	rootNodeExist := true
 
@@ -318,7 +322,12 @@ func LS(isPrint bool) ([]string, error) {
 				lsArr = append(lsArr, version)
 
 				if isPrint {
-					fmt.Println("v" + version + desc)
+					if desc == "" {
+						P(DEFAULT, "v"+version+desc)
+					} else {
+						P(DEFAULT, "%v", "v"+version+desc)
+					}
+
 				}
 			}
 		}
@@ -329,13 +338,13 @@ func LS(isPrint bool) ([]string, error) {
 
 	// show error
 	if err != nil {
-		fmt.Printf("'gnvm ls' Error: %v.\n", err.Error())
+		P(ERROR, "'gnvm ls' Error: %v.\n", err.Error())
 		return lsArr, err
 	}
 
 	// version is exist
 	if !existVersion {
-		fmt.Println("Waring: don't have any available version, please check. See 'gnvm help install'.")
+		P(WARING, "don't have any available version, please check. See 'gnvm help install'.")
 	}
 
 	return lsArr, err
@@ -349,7 +358,8 @@ func LsRemote() {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("'gnvm ls --remote' an error has occurred. please check registry: [%v]. \nError: %v.\n", url, err)
+			msg := fmt.Sprintf("'gnvm ls --remote' an error has occurred. please check registry: [%v]. \nError: ", url)
+			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
@@ -358,7 +368,7 @@ func LsRemote() {
 	isExistVersion := false
 
 	// print
-	fmt.Println("Read all Node.exe version list from " + url + ", please wait.")
+	P(DEFAULT, "Read all Node.exe version list from [%v], please wait.", url)
 
 	// get
 	code, res, _ := curl.Get(url)
@@ -388,13 +398,12 @@ func LsRemote() {
 
 		if ok := VerifyNodeVersion(args[0][1:]); ok {
 			isExistVersion = true
-			// print all node.exe version
-			fmt.Println(args[0])
+			P(DEFAULT, args[0])
 		}
 	}
 
 	if !isExistVersion {
-		fmt.Printf("Not found any Node.exe version list from %v, please check it.\n", url)
+		P(ERROR, "not found any Node.exe version list from %v, please check it.", url)
 	}
 
 }
