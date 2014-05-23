@@ -360,6 +360,24 @@ func LsRemote() {
 	// close
 	defer res.Body.Close()
 
+	writeVersion := func(line string) {
+		// replace '\n'
+		line = strings.Replace(line, "\n", "", -1)
+
+		// splite 'vx.xx.xx  1.1.0-alpha-2'
+		args := strings.Split(line, " ")
+
+		if ok := util.VerifyNodeVersion(args[0][1:]); ok {
+			isExistVersion = true
+			P(DEFAULT, args[0])
+		}
+	}
+
+	if err := curl.ReadLine(res.Body, writeVersion); err != nil && err != io.EOF {
+		P(ERROR, "gnvm ls --remote Error: %v", err)
+	}
+
+	/*
 	// set buff
 	buff := bufio.NewReader(res.Body)
 
@@ -387,6 +405,7 @@ func LsRemote() {
 	if !isExistVersion {
 		P(ERROR, "not found any Node.exe version list from %v, please check it.", url)
 	}
+	*/
 
 }
 
