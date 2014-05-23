@@ -7,14 +7,12 @@ import (
 
 	// go
 	//"log"
-	"bufio"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strconv"
 	"strings"
 	"time"
 
@@ -37,24 +35,14 @@ func init() {
 	rootPath = util.GlobalNodePath + DIVIDE
 }
 
-func isDirExist(path string) bool {
-	_, err := os.Stat(path)
-	if err != nil {
-		return os.IsExist(err)
-	} else {
-		// return file.IsDir()
-		return true
+func TransLatestVersion(latest string, isPrint bool) string {
+	if latest == config.LATEST {
+		latest = config.GetConfig(config.LATEST_VERSION)
+		if isPrint {
+			P(NOTICE, "current latest version is [%v]", latest)
+		}
 	}
-}
-
-func cmd(name, arg string) error {
-	_, err := exec.Command("cmd", "/C", name, arg).Output()
-	return err
-}
-
-func copy(src, dest string) error {
-	_, err := exec.Command("cmd", "/C", "copy", "/y", src, dest).Output()
-	return err
+	return latest
 }
 
 /**
@@ -80,7 +68,7 @@ func Use(folder string) bool {
 	rootNodeExist := true
 
 	// get true folder, e.g. folder is latest return x.xx.xx
-	folder = GetTrueVersion(folder, true)
+	folder = TransLatestVersion(folder, true)
 
 	if folder == config.UNKNOWN {
 		P(ERROR, "unassigned Node.js latest version. See 'gnvm install latest'.")
@@ -151,36 +139,6 @@ func Use(folder string) bool {
 	P(DEFAULT, "Set success, Current Node.exe version is [%v].\n", folder)
 
 	return true
-}
-
-func VerifyNodeVersion(version string) bool {
-	result := true
-	if version == config.UNKNOWN {
-		return true
-	}
-	arr := strings.Split(version, ".")
-	if len(arr) != 3 {
-		return false
-	}
-	for _, v := range arr {
-		_, err := strconv.ParseInt(v, 10, 0)
-		if err != nil {
-			result = false
-			break
-		}
-	}
-	return result
-}
-
-func GetTrueVersion(latest string, isPrint bool) string {
-	if latest == config.LATEST {
-		latest = config.GetConfig(config.LATEST_VERSION)
-		if isPrint {
-			P(NOTICE, "current latest version is [%v]", latest)
-
-		}
-	}
-	return latest
 }
 
 func NodeVersion(args []string, remote bool) {
@@ -324,7 +282,7 @@ func LS(isPrint bool) ([]string, error) {
 		version := f.Name()
 
 		// check node version
-		if ok := VerifyNodeVersion(version); ok {
+		if ok := util.VerifyNodeVersion(version); ok {
 
 			// <root>/x.xx.xx/node.exe is exist
 			if isDirExist(rootPath + version + DIVIDE + NODE) {
@@ -401,32 +359,21 @@ func LsRemote() {
 	// close
 	defer res.Body.Close()
 
-	// set buff
-	buff := bufio.NewReader(res.Body)
-
-	for {
-		// set line
-		line, err := buff.ReadString('\n')
-
-		// when EOF or err break
-		if err != nil || err == io.EOF {
-			break
-		}
-
+	writeVersion := func(line string) {
 		// replace '\n'
 		line = strings.Replace(line, "\n", "", -1)
 
 		// splite 'vx.xx.xx  1.1.0-alpha-2'
 		args := strings.Split(line, " ")
 
-		if ok := VerifyNodeVersion(args[0][1:]); ok {
+		if ok := util.VerifyNodeVersion(args[0][1:]); ok {
 			isExistVersion = true
 			P(DEFAULT, args[0])
 		}
 	}
 
-	if !isExistVersion {
-		P(ERROR, "not found any Node.exe version list from %v, please check it.", url)
+	if err := curl.ReadLine(res.Body, writeVersion); err != nil && err != io.EOF {
+		P(ERROR, "gnvm ls --remote Error: %v", err)
 	}
 
 }
@@ -484,6 +431,90 @@ func Install(args []string, global bool) int {
 
 }
 
+func InstallNpm() {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			Error(ERROR, "'gnvm install npm' an error has occurred. \nError: ", err)
+			os.Exit(0)
+		}
+	}()
+
+	url := config.GetConfig(config.REGISTRY) + "npm"
+
+	// get
+	code, res, _ := curl.Get(url)
+	if code != 0 {
+		return
+	}
+	// close
+	defer res.Body.Close()
+
+	maxTime, _ := time.Parse(TIMEFORMART, TIMEFORMART)
+	var maxVersion string
+
+	getNpmVersion := func(line string) {
+		if strings.Index(line, `<a href="`) == 0 && strings.Contains(line, ".zip") {
+
+			// parse
+			newLine := strings.Replace(line, `<a href="`, "", -1)
+			newLine = strings.Replace(newLine, `</a`, "", -1)
+			newLine = strings.Replace(newLine, `">`, " ", -1)
+
+			// e.g. npm-1.3.9.zip npm-1.3.9.zip> 23-Aug-2013 21:14 1535885
+			orgArr := strings.Fields(newLine)
+
+			// e.g. npm-1.3.9.zip
+			version := orgArr[0:1][0]
+
+			// e.g. 23-Aug-2013 21:14
+			sTime := strings.Join(orgArr[2:len(orgArr)-1], " ")
+
+			// bubble sort
+			if t, err := time.Parse(TIMEFORMART, sTime); err == nil {
+				if t.Sub(maxTime).Seconds() > 0 {
+					maxTime = t
+					maxVersion = version
+				}
+			}
+		}
+	}
+
+	if err := curl.ReadLine(res.Body, getNpmVersion); err != nil && err != io.EOF {
+		P(ERROR, "parse npm version Error: %v, from %v", err, url)
+		return
+	}
+
+	if maxVersion == "" {
+		P(ERROR, "get npm version fail from [%v], please check. See 'gnvm help config'.\n", url)
+		return
+	}
+
+	P(NOTICE, "the latest version is [%v] from [%v].\n", maxVersion, config.GetConfig(config.REGISTRY))
+
+	// download zip
+	zipPath := os.TempDir() + DIVIDE + maxVersion
+	if code := downloadNpm(maxVersion); code == 0 {
+
+		P(DEFAULT, "Start unarchive file [%v].\n", maxVersion)
+
+		//unzip(maxVersion)
+
+		if err := zip.UnarchiveFile(zipPath, config.GetConfig(config.NODEROOT), nil); err != nil {
+			panic(err)
+		}
+
+		P(DEFAULT, "End unarchive.")
+	}
+
+	// remove temp zip file
+	if err := os.RemoveAll(zipPath); err != nil {
+		P(ERROR, "remove zip file fail from [%v], Error: %v.\n", zipPath, err.Error())
+	}
+
+}
+
 func Update(global bool) {
 
 	// try catch
@@ -530,94 +561,24 @@ func Update(global bool) {
 	}
 }
 
-func NpmInstall() {
-
-	// try catch
-	defer func() {
-		if err := recover(); err != nil {
-			Error(ERROR, "'gnvm install npm' an error has occurred. \nError: ", err)
-			os.Exit(0)
-		}
-	}()
-
-	url := config.GetConfig(config.REGISTRY) + "npm"
-
-	// get
-	code, res, _ := curl.Get(url)
-	if code != 0 {
-		return
+func isDirExist(path string) bool {
+	_, err := os.Stat(path)
+	if err != nil {
+		return os.IsExist(err)
+	} else {
+		// return file.IsDir()
+		return true
 	}
-	// close
-	defer res.Body.Close()
+}
 
-	// set buff
-	buff := bufio.NewReader(res.Body)
+func cmd(name, arg string) error {
+	_, err := exec.Command("cmd", "/C", name, arg).Output()
+	return err
+}
 
-	maxTime, _ := time.Parse(TIMEFORMART, TIMEFORMART)
-	var maxVersion string
-
-	for {
-		// set line
-		line, err := buff.ReadString('\n')
-
-		// when EOF or err break
-		if err != nil || err == io.EOF {
-			break
-		}
-
-		if strings.Index(line, `<a href="`) == 0 && strings.Contains(line, ".zip") {
-
-			// parse
-			newLine := strings.Replace(line, `<a href="`, "", -1)
-			newLine = strings.Replace(newLine, `</a`, "", -1)
-			newLine = strings.Replace(newLine, `">`, " ", -1)
-
-			// e.g. npm-1.3.9.zip npm-1.3.9.zip> 23-Aug-2013 21:14 1535885
-			orgArr := strings.Fields(newLine)
-
-			// e.g. npm-1.3.9.zip
-			version := orgArr[0:1][0]
-
-			// e.g. 23-Aug-2013 21:14
-			sTime := strings.Join(orgArr[2:len(orgArr)-1], " ")
-
-			// bubble sort
-			if t, err := time.Parse(TIMEFORMART, sTime); err == nil {
-				if t.Sub(maxTime).Seconds() > 0 {
-					maxTime = t
-					maxVersion = version
-				}
-			}
-		}
-	}
-
-	if maxVersion == "" {
-		P(ERROR, "get npm version fail from [%v], please check. See 'gnvm help config'.\n", url)
-		return
-	}
-
-	P(NOTICE, "the latest version is [%v] from [%v].\n", maxVersion, config.GetConfig(config.REGISTRY))
-
-	// download zip
-	zipPath := os.TempDir() + DIVIDE + maxVersion
-	if code := downloadNpm(maxVersion); code == 0 {
-
-		P(DEFAULT, "Start unarchive file [%v].\n", maxVersion)
-
-		//unzip(maxVersion)
-
-		if err := zip.UnarchiveFile(zipPath, config.GetConfig(config.NODEROOT), nil); err != nil {
-			panic(err)
-		}
-
-		P(DEFAULT, "End unarchive.")
-	}
-
-	// remove temp zip file
-	if err := os.RemoveAll(zipPath); err != nil {
-		P(ERROR, "remove zip file fail from [%v], Error: %v.\n", zipPath, err.Error())
-	}
-
+func copy(src, dest string) error {
+	_, err := exec.Command("cmd", "/C", "copy", "/y", src, dest).Output()
+	return err
 }
 
 /*
@@ -703,66 +664,3 @@ func getLatestVersionByRemote() string {
 	return version
 
 }
-
-/*
-func unzip(version string) {
-
-	// open zip file
-	fr, err := os.Open( os.TempDir() + DIVIDE + version )
-	if err != nil {
-		panic(err)
-	}
-	defer fr.Close()
-
-	// get zip size
-	fi, err := fr.Stat()
-	if err != nil {
-		panic(err)
-	}
-	size := fi.Size()
-
-	// new zip reader
-	zr, err := zip.NewReader(fr, size)
-	if err != nil {
-		panic(err)
-	}
-
-	// unarchive
-	for _, file := range zr.File {
-		unarchiveFile(file, config.GetConfig(config.NODEROOT) )
-	}
-
-}
-
-func unarchiveFile(zipFile *zip.File, outFilePath string) error {
-	if zipFile.FileInfo().IsDir() {
-		return nil
-	}
-
-	zipFileReader, err := zipFile.Open()
-	if err != nil {
-		return err
-	}
-	defer zipFileReader.Close()
-
-	filePath := filepath.Join(outFilePath, filepath.Join(strings.Split(zipFile.Name, "/")...))
-
-	err = os.MkdirAll(filepath.Dir(filePath), os.FileMode(0755))
-	if err != nil {
-		return err
-	}
-
-	file, err := os.Create(filePath)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	_, err = io.Copy(file, zipFileReader)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-*/

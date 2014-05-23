@@ -19,16 +19,13 @@ const (
 	NODE    = "node.exe"
 	DIVIDE  = "\\"
 	SHASUMS = "SHASUMS.txt"
+	UNKNOWN = "unknown"
 )
 
 var GlobalNodePath string
 
 func init() {
 	GlobalNodePath = getGlobalNodePath()
-}
-
-func Exec() {
-	//fmt.Println("GlobalNodePath = " + GlobalNodePath)
 }
 
 func ConverFloat(str string) (float64, error) {
@@ -108,6 +105,25 @@ func GetLatestVersion(url string) string {
 
 	return version
 
+}
+
+func VerifyNodeVersion(version string) bool {
+	result := true
+	if version == UNKNOWN {
+		return true
+	}
+	arr := strings.Split(version, ".")
+	if len(arr) != 3 {
+		return false
+	}
+	for _, v := range arr {
+		_, err := strconv.ParseInt(v, 10, 0)
+		if err != nil {
+			result = false
+			break
+		}
+	}
+	return result
 }
 
 func getGlobalNodePath() string {

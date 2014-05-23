@@ -10,6 +10,7 @@ import (
 	// local
 	"gnvm/config"
 	"gnvm/nodehandle"
+	"gnvm/util"
 	. "gnvm/util/p"
 )
 
@@ -65,7 +66,7 @@ gnvm install npm`,
 					P(WARING, "please use lower case 'npm'.")
 				}
 
-				nodehandle.NpmInstall()
+				nodehandle.InstallNpm()
 				return
 			}
 
@@ -84,7 +85,7 @@ gnvm install npm`,
 				}
 
 				// check version format
-				if ok := nodehandle.VerifyNodeVersion(v); ok != true {
+				if ok := util.VerifyNodeVersion(v); ok != true {
 					P(ERROR, "[%v] format error, the correct format is x.xx.xx. \n", v)
 				} else {
 					newArgs = append(newArgs, v)
@@ -147,10 +148,10 @@ gnvm uninstall ALL`,
 			}
 
 			// get true version
-			v = nodehandle.GetTrueVersion(v, true)
+			v = nodehandle.TransLatestVersion(v, true)
 
 			// check version format
-			if ok := nodehandle.VerifyNodeVersion(v); ok != true {
+			if ok := util.VerifyNodeVersion(v); ok != true {
 				P(ERROR, "[%v] format error, the correct format is x.xx.xx.", v)
 			} else {
 				nodehandle.Uninstall(v)
@@ -169,14 +170,14 @@ var useCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
 
-			if args[0] != "latest" && nodehandle.VerifyNodeVersion(args[0]) != true {
+			if args[0] != "latest" && util.VerifyNodeVersion(args[0]) != true {
 				P(ERROR, "Use parameter support '%v' or '%v', e.g. 0.10.28, please check your input. See 'gnvm help use'.", "latest", "x.xx.xx")
 				return
 			}
 
 			// set use
 			if ok := nodehandle.Use(args[0]); ok == true {
-				config.SetConfig(config.GLOBAL_VERSION, nodehandle.GetTrueVersion(args[0], false))
+				config.SetConfig(config.GLOBAL_VERSION, nodehandle.TransLatestVersion(args[0], false))
 			}
 		} else {
 			P(ERROR, "Use parameter maximum is 1, please check your input. See 'gnvm help use'.\n")
@@ -311,7 +312,7 @@ gnvm config INIT`,
 	},
 }
 
-func Exec() {
+func init() {
 
 	// add sub cmd to root
 	gnvmCmd.AddCommand(versionCmd)

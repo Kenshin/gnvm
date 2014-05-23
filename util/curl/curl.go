@@ -4,7 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"io"
+	"bufio"
 )
+
+type ProcessFunc func(line string)
 
 /*
  *
@@ -37,6 +41,36 @@ func Get(url string) (code int, res *http.Response, err error) {
 
 	return 0, res, err
 
+}
+
+/*
+ *
+ * Read line from io.ReadCloser
+ *
+ * return err
+ *
+ */
+func ReadLine(body io.ReadCloser, process ProcessFunc ) error {
+
+	var line string
+	var err error
+
+	// set buff
+	buff := bufio.NewReader(body)
+
+	for {
+		// set line
+		line, err = buff.ReadString('\n')
+
+		// when EOF or err break
+		if err != nil || err == io.EOF {
+			break
+		}
+
+		process(line)
+	}
+
+	return err
 }
 
 /*
