@@ -311,7 +311,7 @@ gnvm config INIT`,
 	},
 }
 
-func Exec() {
+func init() {
 
 	// add sub cmd to root
 	gnvmCmd.AddCommand(versionCmd)

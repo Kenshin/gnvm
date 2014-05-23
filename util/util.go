@@ -27,10 +27,6 @@ func init() {
 	GlobalNodePath = getGlobalNodePath()
 }
 
-func Exec() {
-	//fmt.Println("GlobalNodePath = " + GlobalNodePath)
-}
-
 func ConverFloat(str string) (float64, error) {
 	args := strings.Split(str, ".")
 	var newStr string
