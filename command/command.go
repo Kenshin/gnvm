@@ -5,9 +5,7 @@ import (
 	"github.com/spf13/cobra"
 
 	// go
-	"fmt"
 	"strings"
-	//"strconv"
 
 	// local
 	"gnvm/config"
@@ -248,13 +246,13 @@ gnvm node-version global
 Node.exe global verson is [x.xx.xx]`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 1 {
-			fmt.Println("Waring: Use parameter maximum is 1, temporary support only <global>, <latest>, please check your input. See 'gnvm help node-version'.")
+			P(WARING, "use parameter maximum is 1, temporary support only <global>, <latest>, please check your input. See 'gnvm help node-version'.")
 		} else if len(args) == 1 {
 			switch {
 			case args[0] != "global" && args[0] != "latest":
-				fmt.Println("Waring: gnvm node-version olny support <global>, <latest> parameter.")
+				P(WARING, "gnvm node-version olny support <%v>, <%v> parameter.", "global", "latest")
 			case args[0] != "latest" && remote:
-				fmt.Println("Waring: gnvm node-version olny support <latest --remote> parameter.")
+				P(WARING, "gnvm node-version olny support <%v> parameter.", "latest --remote")
 			}
 		}
 		nodehandle.NodeVersion(args, remote)
@@ -330,7 +328,6 @@ func Exec() {
 	updateCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version.")
 	lsCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote all node.js version list.")
 	nodeVersionCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote node.js latest version.")
-	//useCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "get this version global version")
 
 	// exec
 	gnvmCmd.Execute()

@@ -188,7 +188,8 @@ func NodeVersion(args []string, remote bool) {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("'gnvm node-version [%v]' an error has occurred. please check. \nError: %v.\n", strings.Join(args, " "), err)
+			msg := fmt.Sprintf("'gnvm node-version %v' an error has occurred. please check. \nError: ", strings.Join(args, " "))
+			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
@@ -197,33 +198,33 @@ func NodeVersion(args []string, remote bool) {
 	global := config.GetConfig(config.GLOBAL_VERSION)
 
 	if len(args) == 0 || len(args) > 1 {
-		fmt.Printf("Node.exe latest verson is [%v].\n", latest)
-		fmt.Printf("Node.exe global verson is [%v].\n", global)
+		P(DEFAULT, "Node.exe latest verson is [%v].\n", latest)
+		P(DEFAULT, "Node.exe global verson is [%v].\n", global)
 	} else {
 		switch {
 		case args[0] == "global":
-			fmt.Printf("Node.exe global verson is [%v].\n", global)
+			P(DEFAULT, "Node.exe global verson is [%v].\n", global)
 		case args[0] == "latest" && !remote:
-			fmt.Printf("Node.exe latest verson is [%v].\n", latest)
+			P(DEFAULT, "Node.exe latest verson is [%v].\n", latest)
 		case args[0] == "latest" && remote:
 			remoteVersion := getLatestVersionByRemote()
 			if remoteVersion == "" {
-				fmt.Printf("Error: get remote [%v] latest version error, please check. See 'gnvm config help'.\n", config.GetConfig("registry")+config.LATEST+"/"+config.NODELIST)
-				fmt.Printf("Node.exe latest verson is [%v].\n", latest)
+				P(ERROR, "get remote [%v] latest version error, please check. See 'gnvm config help'.\n", config.GetConfig("registry")+config.LATEST+"/"+config.NODELIST)
+				P(DEFAULT, "Node.exe latest verson is [%v].\n", latest)
 				return
 			}
-			fmt.Printf("Node.exe remote [%v] verson is [%v].\n", config.GetConfig("registry"), remoteVersion)
-			fmt.Printf("Node.exe latest verson is [%v].\n", latest)
+			P(DEFAULT, "Node.exe remote [%v] verson is [%v].\n", config.GetConfig("registry"), remoteVersion)
+			P(DEFAULT, "Node.exe latest verson is [%v].\n", latest)
 		}
 	}
 
 	switch {
 	case len(args) == 0 && (global == config.UNKNOWN || latest == config.UNKNOWN):
-		fmt.Printf("Waring: when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
+		P(WARING, "when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
 	case len(args) > 0 && args[0] == "latest" && latest == config.UNKNOWN:
-		fmt.Printf("Waring: when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
+		P(WARING, "when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
 	case len(args) > 0 && args[0] == "global" && global == config.UNKNOWN:
-		fmt.Printf("Waring: when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
+		P(WARING, "when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
 	}
 }
 
@@ -618,7 +619,7 @@ func download(version string) int {
 			P(ERROR, "remove [%v] fail, Error: %v\n", version, err.Error())
 			return 1
 		}
-		//fmt.Printf("Remove empty [%v] folder success.\n", version)
+		//P(DEFAULT, "Remove empty [%v] folder success.\n", version)
 	}
 
 	// rootPath/version is exist
