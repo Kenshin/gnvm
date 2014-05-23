@@ -14,7 +14,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strconv"
 	"strings"
 	"time"
 
@@ -274,7 +273,7 @@ func LS(isPrint bool) ([]string, error) {
 		version := f.Name()
 
 		// check node version
-		if ok := VerifyNodeVersion(version); ok {
+		if ok := util.VerifyNodeVersion(version); ok {
 
 			// <root>/x.xx.xx/node.exe is exist
 			if isDirExist(rootPath + version + DIVIDE + NODE) {
@@ -369,7 +368,7 @@ func LsRemote() {
 		// splite 'vx.xx.xx  1.1.0-alpha-2'
 		args := strings.Split(line, " ")
 
-		if ok := VerifyNodeVersion(args[0][1:]); ok {
+		if ok := util.VerifyNodeVersion(args[0][1:]); ok {
 			isExistVersion = true
 			P(DEFAULT, args[0])
 		}
@@ -588,25 +587,6 @@ func cmd(name, arg string) error {
 func copy(src, dest string) error {
 	_, err := exec.Command("cmd", "/C", "copy", "/y", src, dest).Output()
 	return err
-}
-
-func VerifyNodeVersion(version string) bool {
-	result := true
-	if version == config.UNKNOWN {
-		return true
-	}
-	arr := strings.Split(version, ".")
-	if len(arr) != 3 {
-		return false
-	}
-	for _, v := range arr {
-		_, err := strconv.ParseInt(v, 10, 0)
-		if err != nil {
-			result = false
-			break
-		}
-	}
-	return result
 }
 
 func GetTrueVersion(latest string, isPrint bool) string {

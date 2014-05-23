@@ -10,6 +10,7 @@ import (
 	// local
 	"gnvm/config"
 	"gnvm/nodehandle"
+	"gnvm/util"
 	. "gnvm/util/p"
 )
 
@@ -84,7 +85,7 @@ gnvm install npm`,
 				}
 
 				// check version format
-				if ok := nodehandle.VerifyNodeVersion(v); ok != true {
+				if ok := util.VerifyNodeVersion(v); ok != true {
 					P(ERROR, "[%v] format error, the correct format is x.xx.xx. \n", v)
 				} else {
 					newArgs = append(newArgs, v)
@@ -150,7 +151,7 @@ gnvm uninstall ALL`,
 			v = nodehandle.GetTrueVersion(v, true)
 
 			// check version format
-			if ok := nodehandle.VerifyNodeVersion(v); ok != true {
+			if ok := util.VerifyNodeVersion(v); ok != true {
 				P(ERROR, "[%v] format error, the correct format is x.xx.xx.", v)
 			} else {
 				nodehandle.Uninstall(v)
@@ -169,7 +170,7 @@ var useCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
 
-			if args[0] != "latest" && nodehandle.VerifyNodeVersion(args[0]) != true {
+			if args[0] != "latest" && util.VerifyNodeVersion(args[0]) != true {
 				P(ERROR, "Use parameter support '%v' or '%v', e.g. 0.10.28, please check your input. See 'gnvm help use'.", "latest", "x.xx.xx")
 				return
 			}
