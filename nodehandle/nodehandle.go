@@ -37,26 +37,6 @@ func init() {
 	rootPath = util.GlobalNodePath + DIVIDE
 }
 
-func isDirExist(path string) bool {
-	_, err := os.Stat(path)
-	if err != nil {
-		return os.IsExist(err)
-	} else {
-		// return file.IsDir()
-		return true
-	}
-}
-
-func cmd(name, arg string) error {
-	_, err := exec.Command("cmd", "/C", name, arg).Output()
-	return err
-}
-
-func copy(src, dest string) error {
-	_, err := exec.Command("cmd", "/C", "copy", "/y", src, dest).Output()
-	return err
-}
-
 /**
  * rootNode is rootPath + "/node.exe", e.g. <root>/node.exe
  *
@@ -151,36 +131,6 @@ func Use(folder string) bool {
 	P(DEFAULT, "Set success, Current Node.exe version is [%v].\n", folder)
 
 	return true
-}
-
-func VerifyNodeVersion(version string) bool {
-	result := true
-	if version == config.UNKNOWN {
-		return true
-	}
-	arr := strings.Split(version, ".")
-	if len(arr) != 3 {
-		return false
-	}
-	for _, v := range arr {
-		_, err := strconv.ParseInt(v, 10, 0)
-		if err != nil {
-			result = false
-			break
-		}
-	}
-	return result
-}
-
-func GetTrueVersion(latest string, isPrint bool) string {
-	if latest == config.LATEST {
-		latest = config.GetConfig(config.LATEST_VERSION)
-		if isPrint {
-			P(NOTICE, "current latest version is [%v]", latest)
-
-		}
-	}
-	return latest
 }
 
 func NodeVersion(args []string, remote bool) {
@@ -484,52 +434,6 @@ func Install(args []string, global bool) int {
 
 }
 
-func Update(global bool) {
-
-	// try catch
-	defer func() {
-		if err := recover(); err != nil {
-			Error(ERROR, "'gnvm updte latest' an error has occurred. \nError: ", err)
-			os.Exit(0)
-		}
-	}()
-
-	localVersion := config.GetConfig(config.LATEST_VERSION)
-	P(NOTICE, "local latest version is [%v].\n", localVersion)
-
-	remoteVersion := getLatestVersionByRemote()
-	if remoteVersion == "" {
-		P(ERROR, "get latest version error, please check. See 'gnvm config help'.")
-		return
-	}
-	P(NOTICE, "remote [%v] latest version is [%v].\n", config.GetConfig("registry"), remoteVersion)
-
-	local, _ := util.ConverFloat(localVersion)
-	remote, _ := util.ConverFloat(remoteVersion)
-
-	var args []string
-	args = append(args, remoteVersion)
-
-	switch {
-	case localVersion == config.UNKNOWN:
-		P(WARING, "local latest version undefined.")
-		if code := Install(args, global); code == 0 || code == 2 {
-			config.SetConfig(config.LATEST_VERSION, remoteVersion)
-			P(DEFAULT, "Update latest success, current latest version is [%v].\n", remoteVersion)
-		}
-	case local == remote:
-		P(DEFAULT, "Remote latest version [%v] = latest version [%v].\n", remoteVersion, localVersion)
-	case local > remote:
-		P(WARING, "local latest version [%v] > remote latest version [%v].\nPlease check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
-	case local < remote:
-		P(WARING, "remote latest version [%v] > local latest version [%v].\n", remoteVersion, localVersion)
-		if code := Install(args, global); code == 0 || code == 2 {
-			config.SetConfig(config.LATEST_VERSION, remoteVersion)
-			P(DEFAULT, "Update latest success, current latest version is [%v].\n", remoteVersion)
-		}
-	}
-}
-
 func NpmInstall() {
 
 	// try catch
@@ -618,6 +522,102 @@ func NpmInstall() {
 		P(ERROR, "remove zip file fail from [%v], Error: %v.\n", zipPath, err.Error())
 	}
 
+}
+
+func Update(global bool) {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			Error(ERROR, "'gnvm updte latest' an error has occurred. \nError: ", err)
+			os.Exit(0)
+		}
+	}()
+
+	localVersion := config.GetConfig(config.LATEST_VERSION)
+	P(NOTICE, "local latest version is [%v].\n", localVersion)
+
+	remoteVersion := getLatestVersionByRemote()
+	if remoteVersion == "" {
+		P(ERROR, "get latest version error, please check. See 'gnvm config help'.")
+		return
+	}
+	P(NOTICE, "remote [%v] latest version is [%v].\n", config.GetConfig("registry"), remoteVersion)
+
+	local, _ := util.ConverFloat(localVersion)
+	remote, _ := util.ConverFloat(remoteVersion)
+
+	var args []string
+	args = append(args, remoteVersion)
+
+	switch {
+	case localVersion == config.UNKNOWN:
+		P(WARING, "local latest version undefined.")
+		if code := Install(args, global); code == 0 || code == 2 {
+			config.SetConfig(config.LATEST_VERSION, remoteVersion)
+			P(DEFAULT, "Update latest success, current latest version is [%v].\n", remoteVersion)
+		}
+	case local == remote:
+		P(DEFAULT, "Remote latest version [%v] = latest version [%v].\n", remoteVersion, localVersion)
+	case local > remote:
+		P(WARING, "local latest version [%v] > remote latest version [%v].\nPlease check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
+	case local < remote:
+		P(WARING, "remote latest version [%v] > local latest version [%v].\n", remoteVersion, localVersion)
+		if code := Install(args, global); code == 0 || code == 2 {
+			config.SetConfig(config.LATEST_VERSION, remoteVersion)
+			P(DEFAULT, "Update latest success, current latest version is [%v].\n", remoteVersion)
+		}
+	}
+}
+
+func isDirExist(path string) bool {
+	_, err := os.Stat(path)
+	if err != nil {
+		return os.IsExist(err)
+	} else {
+		// return file.IsDir()
+		return true
+	}
+}
+
+func cmd(name, arg string) error {
+	_, err := exec.Command("cmd", "/C", name, arg).Output()
+	return err
+}
+
+func copy(src, dest string) error {
+	_, err := exec.Command("cmd", "/C", "copy", "/y", src, dest).Output()
+	return err
+}
+
+func VerifyNodeVersion(version string) bool {
+	result := true
+	if version == config.UNKNOWN {
+		return true
+	}
+	arr := strings.Split(version, ".")
+	if len(arr) != 3 {
+		return false
+	}
+	for _, v := range arr {
+		_, err := strconv.ParseInt(v, 10, 0)
+		if err != nil {
+			result = false
+			break
+		}
+	}
+	return result
+}
+
+func GetTrueVersion(latest string, isPrint bool) string {
+	if latest == config.LATEST {
+		latest = config.GetConfig(config.LATEST_VERSION)
+		if isPrint {
+			P(NOTICE, "current latest version is [%v]", latest)
+
+		}
+	}
+	return latest
 }
 
 /*
