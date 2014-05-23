@@ -230,6 +230,15 @@ func NodeVersion(args []string, remote bool) {
 
 func Uninstall(folder string) {
 
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			msg := fmt.Sprintf("'gnvm uninstall %v' an error has occurred. please check. \nError: ", folder)
+			Error(ERROR, msg, err)
+			os.Exit(0)
+		}
+	}()
+
 	// set removePath
 	removePath := rootPath + folder
 
@@ -254,6 +263,14 @@ func Uninstall(folder string) {
 }
 
 func UninstallNpm() {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			Error(ERROR, "'gnvm uninstall npm' an error has occurred. please check. \nError: ", err)
+			os.Exit(0)
+		}
+	}()
 
 	removeFlag := true
 
@@ -280,6 +297,15 @@ func UninstallNpm() {
 }
 
 func LS(isPrint bool) ([]string, error) {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			Error(ERROR, "'gnvm ls' an error has occurred. please check. \nError: ", err)
+			os.Exit(0)
+		}
+	}()
+
 	var lsArr []string
 	existVersion := false
 	err := filepath.Walk(rootPath, func(dir string, f os.FileInfo, err error) error {
