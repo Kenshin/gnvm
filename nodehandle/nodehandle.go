@@ -508,7 +508,7 @@ func NpmInstall() {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Printf("'gnvm install npm' an error has occurred. \nError: %v.\n", err)
+			Error(ERROR, "'gnvm install npm' an error has occurred. \nError: ", err)
 			os.Exit(0)
 		}
 	}()
@@ -565,17 +565,17 @@ func NpmInstall() {
 	}
 
 	if maxVersion == "" {
-		fmt.Printf("Error: get npm version fail from [%v], please check. See 'gnvm help config'.\n", url)
+		P(ERROR, "get npm version fail from [%v], please check. See 'gnvm help config'.\n", url)
 		return
 	}
 
-	fmt.Printf("The latest version is [%v] from [%v].\n", maxVersion, config.GetConfig(config.REGISTRY))
+	P(NOTICE, "the latest version is [%v] from [%v].\n", maxVersion, config.GetConfig(config.REGISTRY))
 
 	// download zip
 	zipPath := os.TempDir() + DIVIDE + maxVersion
 	if code := downloadNpm(maxVersion); code == 0 {
 
-		fmt.Printf("Start unarchive file [%v].\n", maxVersion)
+		P(DEFAULT, "Start unarchive file [%v].\n", maxVersion)
 
 		//unzip(maxVersion)
 
@@ -583,12 +583,12 @@ func NpmInstall() {
 			panic(err)
 		}
 
-		fmt.Println("End unarchive.")
+		P(DEFAULT, "End unarchive.")
 	}
 
 	// remove temp zip file
 	if err := os.RemoveAll(zipPath); err != nil {
-		fmt.Printf("Waring: remove zip file fail from [%v], Error: %v.\n", zipPath, err.Error())
+		P(ERROR, "remove zip file fail from [%v], Error: %v.\n", zipPath, err.Error())
 	}
 
 }
