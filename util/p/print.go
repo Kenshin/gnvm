@@ -12,9 +12,10 @@ import (
 )
 
 const (
+	DEFAULT = ""
 	WARING  = "Waring"
 	ERROR   = "Error"
-	DEFAULT = ""
+	NOTICE  = "Notice"
 	SPLIT   = "%v"
 )
 
@@ -84,6 +85,9 @@ func Error(flag, message string, err interface{}) {
 
 func stateColor(state string) {
 	switch state {
+	case NOTICE:
+		ct.ChangeColor(ct.Blue, false, ct.White, false)
+		fmt.Printf("Notice: ")
 	case WARING:
 		ct.ChangeColor(ct.Green, false, ct.Red, false)
 		fmt.Printf("Waring: ")
