@@ -434,7 +434,7 @@ func Install(args []string, global bool) int {
 
 }
 
-func NpmInstall() {
+func InstallNpm() {
 
 	// try catch
 	defer func() {

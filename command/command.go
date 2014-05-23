@@ -65,7 +65,7 @@ gnvm install npm`,
 					P(WARING, "please use lower case 'npm'.")
 				}
 
-				nodehandle.NpmInstall()
+				nodehandle.InstallNpm()
 				return
 			}
 
