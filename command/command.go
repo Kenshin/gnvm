@@ -109,14 +109,14 @@ gnvm uninstall 0.10.26 0.11.2 latest
 gnvm uninstall ALL`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
-			fmt.Println("Error: 'gnvm uninstall' need parameter, please check your input. See 'gnvm help uninstall'.")
+			P(ERROR, "'gnvm uninstall' need parameter, please check your input. See 'gnvm help uninstall'.")
 			return
 		} else if len(args) == 1 {
 
 			if strings.ToLower(args[0]) == "npm" {
 
 				if args[0] != "npm" {
-					fmt.Println("Waring: please use lower case 'npm'.")
+					P(WARING, "please use lower case 'npm'.")
 				}
 				nodehandle.UninstallNpm()
 				return
@@ -124,11 +124,11 @@ gnvm uninstall ALL`,
 
 			if args[0] != "ALL" && strings.ToUpper(args[0]) == "ALL" {
 
-				fmt.Println("Waring: please use capital letter 'ALL'.")
+				P(WARING, "please use capital letter 'ALL'.")
 				args[0] = "ALL"
 
 				if newArr, err := nodehandle.LS(false); err != nil {
-					fmt.Println("Error: " + err.Error())
+					P(ERROR, "remove all folder Error: %v", err.Error())
 					return
 				} else {
 					args = newArr
@@ -139,12 +139,12 @@ gnvm uninstall ALL`,
 		for _, v := range args {
 
 			if strings.ToLower(v) == "npm" {
-				fmt.Println("Waring: use format error, the correct format is 'gnvm uninstall npm'. See 'gnvm help uninstall'.")
+				P(WARING, "use format error, the correct format is 'gnvm uninstall npm'. See 'gnvm help uninstall'.")
 				continue
 			}
 
 			if strings.ToUpper(v) == "ALL" {
-				fmt.Println("Waring: use of the parameter 'ALL' is not correct, please use 'gnvm uninstall ALL'. See 'gnvm help uninstall'.")
+				P(WARING, "use of the parameter 'ALL' is not correct, please use 'gnvm uninstall ALL'. See 'gnvm help uninstall'.")
 				continue
 			}
 
@@ -153,7 +153,7 @@ gnvm uninstall ALL`,
 
 			// check version format
 			if ok := nodehandle.VerifyNodeVersion(v); ok != true {
-				fmt.Printf("Error: [%v] format error, the correct format is x.xx.xx. \n", v)
+				P(ERROR, "[%v] format error, the correct format is x.xx.xx.", v)
 			} else {
 				nodehandle.Uninstall(v)
 			}

@@ -180,7 +180,7 @@ func GetTrueVersion(latest string, isPrint bool) string {
 	if latest == config.LATEST {
 		latest = config.GetConfig(config.LATEST_VERSION)
 		if isPrint {
-			fmt.Printf("Current latest version is [%v] \n", latest)
+			P(NOTICE, "current latest version is [%v]", latest)
 
 		}
 	}
@@ -237,23 +237,23 @@ func Uninstall(folder string) {
 	removePath := rootPath + folder
 
 	if folder == config.UNKNOWN {
-		fmt.Println("Waring: Unassigned Node.js latest version. See 'gnvm install latest'.")
+		P(ERROR, "unassigned Node.js latest version. See 'gnvm install latest'.")
 		return
 	}
 
 	// rootPath/version is exist
 	if isDirExist(removePath) != true {
-		fmt.Printf("Waring: [%v] folder is not exist. Get local node.exe version. See 'gnvm ls'.\n", folder)
+		P(ERROR, "[%v] folder is not exist. Get local node.exe version. See 'gnvm ls'.\n", folder)
 		return
 	}
 
 	// remove rootPath/version folder
 	if err := os.RemoveAll(removePath); err != nil {
-		fmt.Printf("Uinstall [%v] fail, Error: %v.\n", folder, err.Error())
+		P(ERROR, "uinstall [%v] fail, Error: %v.\n", folder, err.Error())
 		return
 	}
 
-	fmt.Printf("Node.exe version [%v] uninstall success.\n", folder)
+	P(DEFAULT, "Node.exe version [%v] uninstall success.\n", folder)
 }
 
 func UninstallNpm() {
@@ -261,24 +261,24 @@ func UninstallNpm() {
 	removeFlag := true
 
 	if !isDirExist(rootPath + "npm.cmd") {
-		fmt.Printf("Waring: [%v] not exist npm.\n", rootPath)
+		P(ERROR, "[%v] not exist npm.\n", rootPath)
 		return
 	}
 
 	// remove npm.cmd
 	if err := os.RemoveAll(rootPath + "npm.cmd"); err != nil {
 		removeFlag = false
-		fmt.Printf("Error: remove [npm.cmd] file fail from [%v], Error: %v.\n", rootPath, err.Error())
+		P(ERROR, "remove [%v] file fail from [%v], Error: %v.\n", "npm.cmd", rootPath, err.Error())
 	}
 
 	// remove node_modules/npm
 	if err := os.RemoveAll(rootPath + "node_modules" + DIVIDE + "npm"); err != nil {
 		removeFlag = false
-		fmt.Printf("Error: remove [npm] folder fail from [%v], Error: %v.\n", rootPath+"node_modules", err.Error())
+		P(ERROR, "remove [%v] folder fail from [%v], Error: %v.\n", "npm", rootPath+"node_modules", err.Error())
 	}
 
 	if removeFlag {
-		fmt.Printf("npm uninstall success from [%v].\n", rootPath)
+		P(DEFAULT, "npm uninstall success from [%v].\n", rootPath)
 	}
 }
 
