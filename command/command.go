@@ -1,11 +1,9 @@
 package command
 
 import (
+
 	// lib
 	"github.com/spf13/cobra"
-
-	// go
-	"strings"
 
 	// local
 	"gnvm/config"
@@ -66,20 +64,20 @@ gnvm install npm`,
 				P(WARING, "when use --global must be only one parameter, e.g. 'gnvm install x.xx.xx --global'. See 'gnvm install help'.")
 			}
 
-			if len(args) == 1 && strings.ToLower(args[0]) == "npm" {
-
-				if args[0] != "npm" {
-					P(WARING, "please use lower case 'npm'.")
+			if len(args) == 1 {
+				if value := util.EqualAbs("npm", args[0]); value == "npm" {
+					nodehandle.InstallNpm()
 				}
-
-				nodehandle.InstallNpm()
 				return
 			}
 
 			for _, v := range args {
 
+				v = util.EqualAbs("latest", v)
+				v = util.EqualAbs("npm", v)
+
 				// check npm
-				if strings.ToLower(v) == "npm" {
+				if v == "npm" {
 					P(WARING, "use format error, the correct format is 'gnvm install npm'. See 'gnvm help install'.")
 					continue
 				}
@@ -118,19 +116,15 @@ gnvm uninstall ALL`,
 			return
 		} else if len(args) == 1 {
 
-			if strings.ToLower(args[0]) == "npm" {
+			args[0] = util.EqualAbs("npm", args[0])
+			args[0] = util.EqualAbs("ALL", args[0])
 
-				if args[0] != "npm" {
-					P(WARING, "please use lower case 'npm'.")
-				}
+			if args[0] == "npm" {
 				nodehandle.UninstallNpm()
 				return
 			}
 
-			if args[0] != "ALL" && strings.ToUpper(args[0]) == "ALL" {
-
-				P(WARING, "please use capital letter 'ALL'.")
-				args[0] = "ALL"
+			if args[0] == "ALL" {
 
 				if newArr, err := nodehandle.LS(false); err != nil {
 					P(ERROR, "remove all folder Error: %v", err.Error())
@@ -141,15 +135,20 @@ gnvm uninstall ALL`,
 			}
 
 		}
+
 		for _, v := range args {
 
-			if strings.ToLower(v) == "npm" {
+			v = util.EqualAbs("ALL", v)
+			v = util.EqualAbs("latest", v)
+			v = util.EqualAbs("npm", v)
+
+			if v == "npm" {
 				P(WARING, "use format error, the correct format is 'gnvm uninstall npm'. See 'gnvm help uninstall'.")
 				continue
 			}
 
-			if strings.ToUpper(v) == "ALL" {
-				P(WARING, "use of the parameter 'ALL' is not correct, please use 'gnvm uninstall ALL'. See 'gnvm help uninstall'.")
+			if v == "ALL" {
+				P(WARING, "use format error, the correct format is 'gnvm uninstall ALL'. See 'gnvm help uninstall'.")
 				continue
 			}
 
@@ -176,6 +175,8 @@ var useCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
 
+			args[0] = util.EqualAbs("latest", args[0])
+
 			if args[0] != "latest" && util.VerifyNodeVersion(args[0]) != true {
 				P(ERROR, "use parameter support '%v' or '%v', e.g. 0.10.28, please check your input. See 'gnvm help use'.", "latest", "x.xx.xx")
 				return
@@ -200,6 +201,8 @@ var updateCmd = &cobra.Command{
 'gnvm update latest --global'`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
+			args[0] = util.EqualAbs("latest", args[0])
+			args[0] = util.EqualAbs("gnvm", args[0])
 			switch args[0] {
 			case "latest":
 				nodehandle.Update(global)
@@ -255,6 +258,10 @@ Node.exe global verson is [x.xx.xx]`,
 		if len(args) > 1 {
 			P(WARING, "use parameter maximum is 1, temporary support only <global>, <latest>, please check your input. See 'gnvm help node-version'.")
 		} else if len(args) == 1 {
+
+			args[0] = util.EqualAbs("global", args[0])
+			args[0] = util.EqualAbs("latest", args[0])
+
 			switch {
 			case args[0] != "global" && args[0] != "latest":
 				P(WARING, "gnvm node-version olny support <%v>, <%v> parameter.", "global", "latest")
@@ -279,10 +286,9 @@ gnvm config INIT`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
 
-			if args[0] != "INIT" && strings.ToUpper(args[0]) == "INIT" {
-				P(WARING, "please use capital letter 'INIT'.")
-				args[0] = "INIT"
-			}
+			args[0] = util.EqualAbs("registry", args[0])
+			args[0] = util.EqualAbs("noderoot", args[0])
+			args[0] = util.EqualAbs("INIT", args[0])
 
 			if args[0] == "INIT" {
 				config.ReSetConfig()
@@ -292,12 +298,9 @@ gnvm config INIT`,
 			P(DEFAULT, "gnvm config [%v] is ", args[0], config.GetConfig(args[0]))
 
 		} else if len(args) == 2 {
-
-			if args[1] != "DEFAULT" && strings.ToUpper(args[1]) == "DEFAULT" {
-				P(WARING, "please use capital letter 'DEFAULT'.")
-				args[1] = "DEFAULT"
-			}
-
+			args[0] = util.EqualAbs("registry", args[0])
+			args[0] = util.EqualAbs("noderoot", args[0])
+			args[1] = util.EqualAbs("DEFAULT", args[1])
 			switch {
 			case args[0] == "registry" && args[1] != "DEFAULT":
 				if newValue := config.SetConfig(args[0], args[1]); newValue != "" {
@@ -308,9 +311,9 @@ gnvm config INIT`,
 					P(DEFAULT, "Registry reset success, [%v] new value is %v", args[0], newValue)
 				}
 			case args[0] == "noderoot":
-				P(ERROR, "[%v] Temporarily does not support. See 'gnvm help config'.\n", args[0])
+				P(ERROR, "[%v] read-only, temporarily does not support set way. See 'gnvm help config'.\n", args[0])
 			default:
-				P(ERROR, "Config parameter include <registry>, your input unknown, please check your input. See 'gnvm help config'.")
+				P(ERROR, "config parameter include <registry>, your input unknown, please check your input. See 'gnvm help config'.")
 			}
 		} else if len(args) > 2 {
 			P(ERROR, "config parameter maximum is 2, please check your input. See 'gnvm help config'.")
