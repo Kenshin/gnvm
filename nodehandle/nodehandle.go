@@ -40,7 +40,7 @@ func TransLatestVersion(latest string, isPrint bool) string {
 	if latest == config.LATEST {
 		latest = config.GetConfig(config.LATEST_VERSION)
 		if isPrint {
-			P(NOTICE, "current latest version is [%v]", latest)
+			P(NOTICE, "current latest version is [%v]\n", latest)
 		}
 	}
 	return latest
@@ -72,7 +72,7 @@ func Use(folder string) bool {
 	folder = TransLatestVersion(folder, true)
 
 	if folder == config.UNKNOWN {
-		P(ERROR, "unassigned Node.js latest version. See 'gnvm install latest'.")
+		P(ERROR, "unassigned Node.js latest version. See 'gnvm install latest'.\n")
 		return false
 	}
 
@@ -86,19 +86,19 @@ func Use(folder string) bool {
 	// get <root>/node.exe version
 	rootVersion, err := util.GetNodeVersion(rootPath)
 	if err != nil {
-		P(WARING, "not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.")
+		P(WARING, "not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.\n")
 		rootNodeExist = false
 	}
 
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
-		P(WARING, "[%v] folder is not exist from [%v]. Get local node.exe version. See 'gnvm ls'.", folder, rootPath)
+		P(WARING, "[%v] folder is not exist from [%v]. Get local node.exe version. See 'gnvm ls'.\n", folder, rootPath)
 		return false
 	}
 
 	// check folder is rootVersion
 	if folder == rootVersion {
-		P(WARING, "current node.exe version is [%v], not re-use. See 'gnvm node-version'.", folder)
+		P(WARING, "current node.exe version is [%v], not re-use. See 'gnvm node-version'.\n", folder)
 		return false
 	}
 
@@ -110,7 +110,7 @@ func Use(folder string) bool {
 
 		// create rootVersion folder
 		if err := cmd("md", rootFolder); err != nil {
-			P(ERROR, "create %v folder Error: %v.", rootVersion, err.Error())
+			P(ERROR, "create %v folder Error: %v.\n", rootVersion, err.Error())
 			return false
 		}
 
@@ -202,7 +202,7 @@ func Uninstall(folder string) {
 	removePath := rootPath + folder
 
 	if folder == config.UNKNOWN {
-		P(ERROR, "unassigned Node.js latest version. See 'gnvm install latest'.")
+		P(ERROR, "unassigned Node.js latest version. See 'gnvm install latest'.\n")
 		return
 	}
 
@@ -305,9 +305,9 @@ func LS(isPrint bool) ([]string, error) {
 
 				if isPrint {
 					if desc == "" {
-						P(DEFAULT, "v"+version+desc)
+						P(DEFAULT, "v"+version+desc, "\n")
 					} else {
-						P(DEFAULT, "%v", "v"+version+desc)
+						P(DEFAULT, "%v", "v"+version+desc, "\n")
 					}
 
 				}
@@ -326,7 +326,7 @@ func LS(isPrint bool) ([]string, error) {
 
 	// version is exist
 	if !existVersion {
-		P(WARING, "don't have any available version, please check. See 'gnvm help install'.")
+		P(WARING, "don't have any available version, please check. See 'gnvm help install'.\n")
 	}
 
 	return lsArr, err
@@ -350,7 +350,7 @@ func LsRemote() {
 	isExistVersion := false
 
 	// print
-	P(DEFAULT, "Read all Node.exe version list from [%v], please wait.", url)
+	P(DEFAULT, "Read all Node.exe version list from [%v], please wait.\n", url)
 
 	// get
 	code, res, _ := curl.Get(url)
@@ -369,12 +369,12 @@ func LsRemote() {
 
 		if ok := util.VerifyNodeVersion(args[0][1:]); ok {
 			isExistVersion = true
-			P(DEFAULT, args[0])
+			P(DEFAULT, args[0], "\n")
 		}
 	}
 
 	if err := curl.ReadLine(res.Body, writeVersion); err != nil && err != io.EOF {
-		P(ERROR, "gnvm ls --remote Error: %v", err)
+		P(ERROR, "gnvm ls --remote Error: %v\n", err)
 	}
 
 }
@@ -402,14 +402,14 @@ func Install(args []string, global bool) int {
 
 			version := getLatestVersionByRemote()
 			if version == "" {
-				P(ERROR, "get latest version error, please check. See 'gnvm config help'.")
+				P(ERROR, "get latest version error, please check. See 'gnvm config help'.\n")
 				break
 			}
 
 			// set v
 			v = version
 			currentLatest = version
-			P(NOTICE, "current latest version is [%v]", version)
+			P(NOTICE, "current latest version is [%v]\n", version)
 		}
 
 		// downlaod
@@ -483,7 +483,7 @@ func InstallNpm() {
 	}
 
 	if err := curl.ReadLine(res.Body, getNpmVersion); err != nil && err != io.EOF {
-		P(ERROR, "parse npm version Error: %v, from %v", err, url)
+		P(ERROR, "parse npm version Error: %v, from %v\n", err, url)
 		return
 	}
 
@@ -506,7 +506,7 @@ func InstallNpm() {
 			panic(err)
 		}
 
-		P(DEFAULT, "End unarchive.")
+		P(DEFAULT, "End unarchive.\n")
 	}
 
 	// remove temp zip file
@@ -531,7 +531,7 @@ func Update(global bool) {
 
 	remoteVersion := getLatestVersionByRemote()
 	if remoteVersion == "" {
-		P(ERROR, "get latest version error, please check. See 'gnvm config help'.")
+		P(ERROR, "get latest version error, please check. See 'gnvm config help'.\n")
 		return
 	}
 	P(NOTICE, "remote [%v] latest version is [%v].\n", config.GetConfig("registry"), remoteVersion)
@@ -544,31 +544,34 @@ func Update(global bool) {
 
 	switch {
 	case localVersion == config.UNKNOWN:
-		P(WARING, "local latest version undefined.")
+		P(WARING, "local latest version undefined.\n")
 		if code := Install(args, global); code == 0 || code == 2 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
 			P(DEFAULT, "Update latest success, current latest version is [%v].\n", remoteVersion)
 		}
 	case local == remote:
 
-		if isDirExist(rootPath+localVersion) {
-			P(DEFAULT, "Remote latest version [%v] = latest version [%v], don't need to upgrade.\n", remoteVersion, localVersion)
+		if isDirExist(rootPath + localVersion) {
+			cc := CC{Red, false, None, false, "="}
+			P(DEFAULT, "Remote latest version [%v] %v latest version [%v], don't need to upgrade.\n", remoteVersion, cc, localVersion)
 			if global {
 				if ok := Use(localVersion); ok {
 					config.SetConfig(config.GLOBAL_VERSION, localVersion)
 				}
 			}
-		} else if !isDirExist(rootPath+localVersion) {
-			P(WARING, "local not exist %v", localVersion)
+		} else if !isDirExist(rootPath + localVersion) {
+			P(WARING, "local not exist %v\n", localVersion)
 			if code := Install(args, global); code == 0 || code == 2 {
-				P(DEFAULT, "Download latest version [%v] success.\n",localVersion)
+				P(DEFAULT, "Download latest version [%v] success.\n", localVersion)
 			}
 		}
 
 	case local > remote:
-		P(WARING, "local latest version [%v] > remote latest version [%v].\nPlease check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
+		cc := CC{Red, false, None, false, ">"}
+		P(WARING, "local latest version [%v] %v remote latest version [%v].\nPlease check your registry. See 'gnvm help config'.\n", localVersion, cc, remoteVersion)
 	case local < remote:
-		P(WARING, "remote latest version [%v] > local latest version [%v].\n", remoteVersion, localVersion)
+		cc := CC{Red, false, None, false, ">"}
+		P(WARING, "remote latest version [%v] %v local latest version [%v].\n", remoteVersion, cc, localVersion)
 		if code := Install(args, global); code == 0 || code == 2 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
 			P(DEFAULT, "Update latest success, current latest version is [%v].\n", remoteVersion)
@@ -588,7 +591,7 @@ func Version(remote bool) {
 
 	localVersion := config.VERSION
 
-	P(DEFAULT, "Current version %v", localVersion)
+	P(DEFAULT, "Current version %v", localVersion, "\n")
 
 	if !remote {
 		return
@@ -605,22 +608,22 @@ func Version(remote bool) {
 			arr := strings.Fields(content)
 			if len(arr) == 2 {
 
-				P(DEFAULT, "Latest version %v, publish data %v", arr[0][1:], arr[1])
+				P(DEFAULT, "Latest version %v, publish data %v", arr[0][1:], arr[1], "\n")
 
 				latestVersion, msg := arr[0][1:], ""
 				localArr, latestArr := strings.Split(localVersion, "."), strings.Split(latestVersion, ".")
 
 				switch {
 				case latestArr[0] > localArr[0]:
-					msg = "must be upgraded"
+					msg = "must be upgraded."
 				case latestArr[1] > localArr[1]:
-					msg = "suggest to upgrade"
+					msg = "suggest to upgrade."
 				case latestArr[2] > localArr[2]:
-					msg = "optional upgrade"
+					msg = "optional upgrade."
 				}
 
 				if msg != "" {
-					P(NOTICE,msg)
+					P(NOTICE, msg, "\n")
 				}
 
 			} else {
@@ -628,12 +631,12 @@ func Version(remote bool) {
 			}
 		}
 		if line > 1 {
-			P(DEFAULT, content)
+			P(DEFAULT, content, "\n")
 		}
 	}
 
 	if err := curl.ReadLine(res.Body, versionFunc); err != nil && err != io.EOF {
-		P(ERROR, "gnvm version --remote Error: %v", err)
+		P(ERROR, "gnvm version --remote Error: %v\n", err)
 	}
 
 }
