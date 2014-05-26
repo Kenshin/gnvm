@@ -550,7 +550,21 @@ func Update(global bool) {
 			P(DEFAULT, "Update latest success, current latest version is [%v].\n", remoteVersion)
 		}
 	case local == remote:
-		P(DEFAULT, "Remote latest version [%v] = latest version [%v].\n", remoteVersion, localVersion)
+
+		if isDirExist(rootPath+localVersion) {
+			P(DEFAULT, "Remote latest version [%v] = latest version [%v], don't need to upgrade.\n", remoteVersion, localVersion)
+			if global {
+				if ok := Use(localVersion); ok {
+					config.SetConfig(config.GLOBAL_VERSION, localVersion)
+				}
+			}
+		} else if !isDirExist(rootPath+localVersion) {
+			P(WARING, "local not exist %v", localVersion)
+			if code := Install(args, global); code == 0 || code == 2 {
+				P(DEFAULT, "Download latest version [%v] success.\n",localVersion)
+			}
+		}
+
 	case local > remote:
 		P(WARING, "local latest version [%v] > remote latest version [%v].\nPlease check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
 	case local < remote:
