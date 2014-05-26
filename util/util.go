@@ -126,6 +126,14 @@ func VerifyNodeVersion(version string) bool {
 	return result
 }
 
+func EqualAbs( key, value string ) string {
+	if strings.EqualFold(value, key) && value != key {
+		P(WARING, "current value is [%v], please use [%v].", value, key)
+		value = key
+	}
+	return value
+}
+
 func getGlobalNodePath() string {
 	var path string
 	file, err := exec.LookPath(NODE)
