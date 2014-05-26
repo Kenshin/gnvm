@@ -46,10 +46,12 @@ type CC struct {
  * flag   : include 'Waring', 'Error'
  * message: print content
  * args   : variable parameter, include string, CC type
+ *          when args last value is "\n", auto new line.
  *
  * e.g. P( "Waring", Remote latest version [%v] = latest version [%v].\n", param1, param2 )
  * e.g. cc := CC{1, true, 2, true, localVersion}
  *      P(DEFAULT, "Current version %v, publish data: ", cc, "2014-05-31")
+ * e.g. P(DEFAULT, "Current version %v", localVersion, "\n")
  *
  */
 func P(flag string, message interface{}, args ...interface{}) {
@@ -80,10 +82,6 @@ func P(flag string, message interface{}, args ...interface{}) {
 				normalColor(args[k])
 			}
 		}
-	}
-
-	if !strings.HasSuffix(message.(string), "\n") {
-		fmt.Printf("\n")
 	}
 
 }
