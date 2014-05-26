@@ -8,6 +8,7 @@ import (
 	// go
 	"fmt"
 	"os"
+	"reflect"
 	"strings"
 )
 
@@ -19,17 +20,39 @@ const (
 	SPLIT   = "%v"
 )
 
+const (
+	None = iota
+	Black
+	Red
+	Green
+	Yellow
+	Blue
+	Magenta
+	Cyan
+	White
+)
+
+type CC struct {
+	FgColor  int
+	FgBright bool
+	BgColor  int
+	BgBright bool
+	Value    string
+}
+
 /*
  * Print color console message
  *
- * flag   : include: 'Waring', 'Error'
+ * flag   : include 'Waring', 'Error'
  * message: print content
- * args   : variable parameter
+ * args   : variable parameter, include string, CC type
  *
  * e.g. P( "Waring", Remote latest version [%v] = latest version [%v].\n", param1, param2 )
+ * e.g. cc := CC{1, true, 2, true, localVersion}
+ *      P(DEFAULT, "Current version %v, publish data: ", cc, "2014-05-31")
  *
  */
-func P(flag, message string, args ...interface{}) {
+func P(flag string, message interface{}, args ...interface{}) {
 
 	// try catch
 	defer func() {
@@ -42,16 +65,24 @@ func P(flag, message string, args ...interface{}) {
 	// set state
 	stateColor(flag)
 
-	// set key message
-	msgArr := strings.Split(message, SPLIT)
+	// set color message
+	msgArr := strings.Split(message.(string), SPLIT)
 	for k, v := range msgArr {
 		fmt.Print(v)
 		if k < len(args) {
-			normalColor(args[k])
+			t := reflect.TypeOf(args[k])
+			switch t.Name() {
+			case "string":
+				normalColor(args[k])
+			case "CC":
+				customColor(args[k])
+			default:
+				normalColor(args[k])
+			}
 		}
 	}
 
-	if !strings.HasSuffix(message, "\n") {
+	if !strings.HasSuffix(message.(string), "\n") {
 		fmt.Printf("\n")
 	}
 
@@ -98,6 +129,28 @@ func stateColor(state string) {
 		//ct.ChangeColor(ct.Blue, false, ct.White, false)
 		//fmt.Printf("Notice: ")
 	}
+	ct.ResetColor()
+}
+
+func customColor(cc interface{}) {
+
+	value := reflect.ValueOf(cc)
+
+	fgColor := value.FieldByName("FgColor").Int()
+	fgBright := value.FieldByName("FgBright").Bool()
+	bgColor := value.FieldByName("BgColor").Int()
+	bgBright := value.FieldByName("BgBright").Bool()
+	msg := value.FieldByName("Value").String()
+
+	if fgColor > 8 || fgColor < 0 || bgColor > 8 || bgColor < 0 {
+		normalColor(msg)
+		fmt.Println()
+		Error(WARING, "values range error, values range include 0 ~ 8, Error: ", "index out of range")
+		return
+	}
+
+	ct.ChangeColor(ct.Color(fgColor), fgBright, ct.Color(bgColor), bgBright)
+	fmt.Printf(msg)
 	ct.ResetColor()
 }
 
