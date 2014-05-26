@@ -364,7 +364,7 @@ func LsRemote() {
 		// replace '\n'
 		content = strings.Replace(content, "\n", "", -1)
 
-		// splite 'vx.xx.xx  1.1.0-alpha-2'
+		// split 'vx.xx.xx  1.1.0-alpha-2'
 		args := strings.Split(content, " ")
 
 		if ok := util.VerifyNodeVersion(args[0][1:]); ok {
@@ -572,7 +572,9 @@ func Version(remote bool) {
 		}
 	}()
 
-	P(DEFAULT, "Current version %v", config.VERSION)
+	localVersion := config.VERSION
+
+	P(DEFAULT, "Current version %v", localVersion)
 
 	if !remote {
 		return
@@ -588,7 +590,25 @@ func Version(remote bool) {
 		if content != "" && line == 1 {
 			arr := strings.Fields(content)
 			if len(arr) == 2 {
+
 				P(DEFAULT, "Latest version %v, publish data %v", arr[0][1:], arr[1])
+
+				latestVersion, msg := arr[0][1:], ""
+				localArr, latestArr := strings.Split(localVersion, "."), strings.Split(latestVersion, ".")
+
+				switch {
+				case latestArr[0] > localArr[0]:
+					msg = "must be upgraded"
+				case latestArr[1] > localArr[1]:
+					msg = "suggest to upgrade"
+				case latestArr[2] > localArr[2]:
+					msg = "optional upgrade"
+				}
+
+				if msg != "" {
+					P(NOTICE,msg)
+				}
+
 			} else {
 				return
 			}
