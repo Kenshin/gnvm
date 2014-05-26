@@ -551,24 +551,27 @@ func Update(global bool) {
 		}
 	case local == remote:
 
-		if isDirExist(rootPath+localVersion) {
-			P(DEFAULT, "Remote latest version [%v] = latest version [%v], don't need to upgrade.\n", remoteVersion, localVersion)
+		if isDirExist(rootPath + localVersion) {
+			cc := CC{Red, false, None, false, "="}
+			P(DEFAULT, "Remote latest version [%v] %v latest version [%v], don't need to upgrade.\n", remoteVersion, cc, localVersion)
 			if global {
 				if ok := Use(localVersion); ok {
 					config.SetConfig(config.GLOBAL_VERSION, localVersion)
 				}
 			}
-		} else if !isDirExist(rootPath+localVersion) {
+		} else if !isDirExist(rootPath + localVersion) {
 			P(WARING, "local not exist %v", localVersion)
 			if code := Install(args, global); code == 0 || code == 2 {
-				P(DEFAULT, "Download latest version [%v] success.\n",localVersion)
+				P(DEFAULT, "Download latest version [%v] success.\n", localVersion)
 			}
 		}
 
 	case local > remote:
-		P(WARING, "local latest version [%v] > remote latest version [%v].\nPlease check your registry. See 'gnvm help config'.\n", localVersion, remoteVersion)
+		cc := CC{Red, false, None, false, ">"}
+		P(WARING, "local latest version [%v] %v remote latest version [%v].\nPlease check your registry. See 'gnvm help config'.\n", localVersion, cc, remoteVersion)
 	case local < remote:
-		P(WARING, "remote latest version [%v] > local latest version [%v].\n", remoteVersion, localVersion)
+		cc := CC{Red, false, None, false, ">"}
+		P(WARING, "remote latest version [%v] %v local latest version [%v].\n", remoteVersion, cc, localVersion)
 		if code := Install(args, global); code == 0 || code == 2 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
 			P(DEFAULT, "Update latest success, current latest version is [%v].\n", remoteVersion)
@@ -620,7 +623,7 @@ func Version(remote bool) {
 				}
 
 				if msg != "" {
-					P(NOTICE,msg)
+					P(NOTICE, msg)
 				}
 
 			} else {
