@@ -113,6 +113,11 @@ func SetConfig(key string, value interface{}) string {
 
 	if key == "registry" {
 
+		if !strings.HasSuffix(value.(string), "http://") {
+			P(WARING, "%v need %v", value.(string), "http://", "\n")
+			value = "http://" + value.(string)
+		}
+
 		reg := regexp.MustCompile(`(http|https)://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?`)
 
 		switch {
