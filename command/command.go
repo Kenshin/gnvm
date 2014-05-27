@@ -47,8 +47,8 @@ gnvm version --remote`,
 // sub cmd
 var installCmd = &cobra.Command{
 	Use:   "install",
-	Short: "install any node.js version",
-	Long: `install any node.js version e.g.
+	Short: "install any node.exe version",
+	Long: `install any node.exe version e.g.
 gnvm install latest
 gnvm install x.xx.xx y.yy.yy
 gnvm install x.xx.xx --global
@@ -57,18 +57,18 @@ gnvm install npm`,
 		var newArgs []string
 
 		if len(args) == 0 {
-			P(ERROR, "'gnvm install' need parameter, please check your input. See 'gnvm help install'.\n")
+			P(ERROR, "'%v' need parameter, please check your input. See '%v'.\n", "gnvm install", "gnvm help install")
 		} else {
 
 			if global && len(args) > 1 {
-				P(WARING, "when use --global must be only one parameter, e.g. 'gnvm install x.xx.xx --global'. See 'gnvm install help'.\n")
+				P(WARING, "when use --global must be only one parameter, e.g. '%v'. See 'gnvm install help'.\n", "gnvm install x.xx.xx --global")
 			}
 
 			if len(args) == 1 {
 				if value := util.EqualAbs("npm", args[0]); value == "npm" {
 					nodehandle.InstallNpm()
+					return
 				}
-				return
 			}
 
 			for _, v := range args {
@@ -78,7 +78,7 @@ gnvm install npm`,
 
 				// check npm
 				if v == "npm" {
-					P(WARING, "use format error, the correct format is 'gnvm install npm'. See 'gnvm help install'.\n")
+					P(WARING, "use format error, the correct format is '%v'. See '%v'.\n", "gnvm install npm", "gnvm help install")
 					continue
 				}
 
@@ -90,7 +90,7 @@ gnvm install npm`,
 
 				// check version format
 				if ok := util.VerifyNodeVersion(v); ok != true {
-					P(ERROR, "[%v] format error, the correct format is x.xx.xx. \n", v)
+					P(ERROR, "%v format error, the correct format is %v. \n", v, "x.xx.xx")
 				} else {
 					newArgs = append(newArgs, v)
 				}

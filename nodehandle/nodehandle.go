@@ -402,14 +402,14 @@ func Install(args []string, global bool) int {
 
 			version := getLatestVersionByRemote()
 			if version == "" {
-				P(ERROR, "get latest version error, please check. See 'gnvm config help'.\n")
+				P(ERROR, "get latest version error, please check. See '%v'.\n", "gnvm config help")
 				break
 			}
 
 			// set v
 			v = version
 			currentLatest = version
-			P(NOTICE, "current latest version is [%v]\n", version)
+			P(NOTICE, "current latest version is %v\n", version)
 		}
 
 		// downlaod
@@ -441,6 +441,12 @@ func InstallNpm() {
 			os.Exit(0)
 		}
 	}()
+
+	out, err := exec.Command(rootPath+"npm", "--version").Output()
+	if err == nil {
+		P(WARING, "current path %v exist npm version is %v", rootPath, string(out[:]), "\n")
+		return
+	}
 
 	url := config.GetConfig(config.REGISTRY) + "npm"
 
@@ -488,17 +494,17 @@ func InstallNpm() {
 	}
 
 	if maxVersion == "" {
-		P(ERROR, "get npm version fail from [%v], please check. See 'gnvm help config'.\n", url)
+		P(ERROR, "get npm version fail from %v, please check. See '%v'.\n", url, "gnvm help config")
 		return
 	}
 
-	P(NOTICE, "the latest version is [%v] from [%v].\n", maxVersion, config.GetConfig(config.REGISTRY))
+	P(NOTICE, "the latest version is %v from %v.\n", maxVersion, config.GetConfig(config.REGISTRY))
 
 	// download zip
 	zipPath := os.TempDir() + DIVIDE + maxVersion
 	if code := downloadNpm(maxVersion); code == 0 {
 
-		P(DEFAULT, "Start unarchive file [%v].\n", maxVersion)
+		P(DEFAULT, "Start unarchive file %v.\n", maxVersion)
 
 		//unzip(maxVersion)
 
@@ -511,7 +517,7 @@ func InstallNpm() {
 
 	// remove temp zip file
 	if err := os.RemoveAll(zipPath); err != nil {
-		P(ERROR, "remove zip file fail from [%v], Error: %v.\n", zipPath, err.Error())
+		P(ERROR, "remove zip file fail from %v, Error: %v.\n", zipPath, err.Error())
 	}
 
 }
