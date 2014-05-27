@@ -40,7 +40,7 @@ func TransLatestVersion(latest string, isPrint bool) string {
 	if latest == config.LATEST {
 		latest = config.GetConfig(config.LATEST_VERSION)
 		if isPrint {
-			P(NOTICE, "current latest version is [%v]\n", latest)
+			P(NOTICE, "current latest version is %v\n", latest)
 		}
 	}
 	return latest
@@ -202,23 +202,23 @@ func Uninstall(folder string) {
 	removePath := rootPath + folder
 
 	if folder == config.UNKNOWN {
-		P(ERROR, "unassigned Node.js latest version. See 'gnvm install latest'.\n")
+		P(ERROR, "unassigned node.exe latest version. See '%v'.\n", "gnvm config INIT")
 		return
 	}
 
 	// rootPath/version is exist
 	if isDirExist(removePath) != true {
-		P(ERROR, "[%v] folder is not exist. Get local node.exe version. See 'gnvm ls'.\n", folder)
+		P(ERROR, "%v folder is not exist. See '%v'.\n", folder, "gnvm ls")
 		return
 	}
 
 	// remove rootPath/version folder
 	if err := os.RemoveAll(removePath); err != nil {
-		P(ERROR, "uinstall [%v] fail, Error: %v.\n", folder, err.Error())
+		P(ERROR, "uninstall %v fail, Error: %v.\n", folder, err.Error())
 		return
 	}
 
-	P(DEFAULT, "Node.exe version [%v] uninstall success.\n", folder)
+	P(DEFAULT, "Node.exe version %v uninstall success.\n", folder)
 }
 
 func UninstallNpm() {
@@ -234,24 +234,24 @@ func UninstallNpm() {
 	removeFlag := true
 
 	if !isDirExist(rootPath + "npm.cmd") {
-		P(ERROR, "[%v] not exist npm.\n", rootPath)
+		P(WARING, "%v not exist %v.\n", rootPath, "npm.cmd")
 		return
 	}
 
 	// remove npm.cmd
 	if err := os.RemoveAll(rootPath + "npm.cmd"); err != nil {
 		removeFlag = false
-		P(ERROR, "remove [%v] file fail from [%v], Error: %v.\n", "npm.cmd", rootPath, err.Error())
+		P(ERROR, "remove %v file fail from %v, Error: %v.\n", "npm.cmd", rootPath, err.Error())
 	}
 
 	// remove node_modules/npm
 	if err := os.RemoveAll(rootPath + "node_modules" + DIVIDE + "npm"); err != nil {
 		removeFlag = false
-		P(ERROR, "remove [%v] folder fail from [%v], Error: %v.\n", "npm", rootPath+"node_modules", err.Error())
+		P(ERROR, "remove %v folder fail from %v, Error: %v.\n", "npm", rootPath+"node_modules", err.Error())
 	}
 
 	if removeFlag {
-		P(DEFAULT, "npm uninstall success from [%v].\n", rootPath)
+		P(DEFAULT, "npm uninstall success from %v.\n", rootPath)
 	}
 }
 
@@ -326,7 +326,7 @@ func LS(isPrint bool) ([]string, error) {
 
 	// version is exist
 	if !existVersion {
-		P(WARING, "don't have any available version, please check. See 'gnvm help install'.\n")
+		P(WARING, "don't have any available version, please check. See '%v'.\n", "gnvm help install")
 	}
 
 	return lsArr, err

@@ -103,16 +103,16 @@ gnvm install npm`,
 // sub cmd
 var uninstallCmd = &cobra.Command{
 	Use:   "uninstall",
-	Short: "uninstall local node.js version",
-	Long: `uninstall local node.js version e.g.
-gnvm uninstall x.xx.xx
+	Short: "uninstall local node.exe version",
+	Long: `uninstall local node.exe version e.g.
+gnvm uninstall 0.10.28
 gnvm uninstall latest
 gnvm uninstall npm
 gnvm uninstall 0.10.26 0.11.2 latest
 gnvm uninstall ALL`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
-			P(ERROR, "'gnvm uninstall' need parameter, please check your input. See 'gnvm help uninstall'.\n")
+			P(ERROR, "'%v' need parameter, please check your input. See '%v'.\n", "gnvm uninstall", "gnvm help uninstall")
 			return
 		} else if len(args) == 1 {
 
@@ -143,12 +143,12 @@ gnvm uninstall ALL`,
 			v = util.EqualAbs("npm", v)
 
 			if v == "npm" {
-				P(WARING, "use format error, the correct format is 'gnvm uninstall npm'. See 'gnvm help uninstall'.\n")
+				P(WARING, "use format error, the correct format is '%v'. See '%v'.\n", "gnvm uninstall npm", "gnvm help uninstall")
 				continue
 			}
 
 			if v == "ALL" {
-				P(WARING, "use format error, the correct format is 'gnvm uninstall ALL'. See 'gnvm help uninstall'.\n")
+				P(WARING, "use format error, the correct format is '%v'. See '%v'.\n", "gnvm uninstall ALL", "gnvm help uninstall")
 				continue
 			}
 
@@ -157,7 +157,7 @@ gnvm uninstall ALL`,
 
 			// check version format
 			if ok := util.VerifyNodeVersion(v); ok != true {
-				P(ERROR, "[%v] format error, the correct format is x.xx.xx.\n", v)
+				P(ERROR, "%v format error, the correct format is %v.\n", v, "x.xx.xx")
 			} else {
 				nodehandle.Uninstall(v)
 			}
