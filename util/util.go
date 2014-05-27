@@ -25,6 +25,15 @@ const (
 var GlobalNodePath string
 
 func init() {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			Error(ERROR, "initialize gnvm.exe an error has occurred. please check. \nError: ", err)
+			os.Exit(0)
+		}
+	}()
+
 	GlobalNodePath = getGlobalNodePath()
 }
 
@@ -128,7 +137,7 @@ func VerifyNodeVersion(version string) bool {
 
 func EqualAbs(key, value string) string {
 	if strings.EqualFold(value, key) && value != key {
-		P(WARING, "current value is [%v], please use [%v].\n", value, key)
+		P(WARING, "current value is %v, please use %v.\n", value, key)
 		value = key
 	}
 	return value
@@ -155,8 +164,7 @@ func getGlobalNodePath() string {
 func getCurrentPath() string {
 	path, err := os.Getwd()
 	if err != nil {
-		P(ERROR, "get current path Error: %v\n", err.Error())
-		return ""
+		panic("get current path Error: " + err.Error())
 	}
 	return path
 }

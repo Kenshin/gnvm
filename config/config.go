@@ -47,6 +47,14 @@ const (
 
 func init() {
 
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			Error(ERROR, "gnvm.exe an error has occurred. please check. \nError: ", err)
+			os.Exit(0)
+		}
+	}()
+
 	// set config path
 	configPath = util.GlobalNodePath + "\\" + CONFIG
 
@@ -54,7 +62,7 @@ func init() {
 	file, err := os.Open(configPath)
 	defer file.Close()
 	if err != nil && os.IsNotExist(err) {
-		P(WARING, "config file [%v] is not exist.\n", configPath)
+		P(WARING, "config file %v is not exist.\n", configPath)
 		createConfig()
 	}
 
@@ -76,7 +84,7 @@ func createConfig() {
 	// get <root>/node.exe version
 	version, err := util.GetNodeVersion(util.GlobalNodePath + "\\")
 	if err != nil {
-		P(WARING, "not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.\n")
+		P(WARING, "not found global node.exe version, please use '%v'. See '%v'.\n", "gnvm install x.xx.xx -g", "gnvm help install")
 		globalversion = GLOBAL_VERSION_VAL
 	} else {
 		globalversion = version
@@ -89,15 +97,14 @@ func createConfig() {
 		return
 	}
 
-	// success
-	P(DEFAULT, "Config file [%v] create success.\n", configPath)
-	P(WARING, "latest version is [%v], please use 'gnvm update latest' or 'gnvm install latest'.\n", UNKNOWN)
+	P(DEFAULT, "Config file %v create success.\n", configPath)
+	P(NOTICE, "latest version is %v, please use '%v'.\n", UNKNOWN, "gnvm config init")
 
 }
 
 func readConfig() {
 	if err := config.ReadConfigFile(configPath); err != nil {
-		P(ERROR, "read Config file. Error: %v\n", err.Error())
+		P(ERROR, "read config file fail, please use '%v'. \nError: %v\n", "gnvm config init", err.Error())
 		return
 	}
 }
@@ -110,7 +117,7 @@ func SetConfig(key string, value interface{}) string {
 
 		switch {
 		case !reg.MatchString(value.(string)):
-			P(ERROR, "registry value [%v] must url valid.\n", value.(string))
+			P(ERROR, "registry value %v must url valid.\n", value.(string))
 			return ""
 		case !strings.HasSuffix(value.(string), "/"):
 			value = value.(string) + "/"
@@ -149,7 +156,7 @@ func ReSetConfig() {
 
 	version, err := util.GetNodeVersion(util.GlobalNodePath + "\\")
 	if err != nil {
-		P(WARING, "not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.\n")
+		P(WARING, "not found global node.exe version, please use '%v'. See '%v'.\n", "gnvm install x.xx.xx -g", "gnvm help install")
 		globalversion = GLOBAL_VERSION_VAL
 	} else {
 		globalversion = version
@@ -165,5 +172,5 @@ func ReSetConfig() {
 	}
 	SetConfig(LATEST_VERSION, latsetversion)
 
-	P(DEFAULT, "Config file [%v] init success.\n", configPath)
+	P(DEFAULT, "Config file %v init success.\n", configPath)
 }

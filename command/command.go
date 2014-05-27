@@ -276,10 +276,9 @@ Node.exe global verson is [x.xx.xx]`,
 // sub cmd
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "set | get registry and noderoot value",
-	Long: `set | get registry and noderoot value e.g.
+	Short: "setter or getter registry value",
+	Long: `setter or getter value e.g.
 gnvm config registry
-registry is http://nodejs.org/dist/
 gnvm config registry http://dist.u.qiniudn.com/
 gnvm config registry DEFAULT
 gnvm config INIT`,
@@ -295,7 +294,7 @@ gnvm config INIT`,
 				return
 			}
 
-			P(DEFAULT, "gnvm config [%v] is %v\n", args[0], config.GetConfig(args[0]))
+			P(DEFAULT, "gnvm config %v is %v\n", args[0], config.GetConfig(args[0]))
 
 		} else if len(args) == 2 {
 			args[0] = util.EqualAbs("registry", args[0])
@@ -304,19 +303,19 @@ gnvm config INIT`,
 			switch {
 			case args[0] == "registry" && args[1] != "DEFAULT":
 				if newValue := config.SetConfig(args[0], args[1]); newValue != "" {
-					P(DEFAULT, "Set success, [%v] new value is %v\n", args[0], newValue)
+					P(DEFAULT, "Set success, %v new value is %v\n", args[0], newValue)
 				}
 			case args[0] == "registry" && args[1] == "DEFAULT":
 				if newValue := config.SetConfig(args[0], config.REGISTRY_VAL); newValue != "" {
-					P(DEFAULT, "Registry reset success, [%v] new value is %v\n", args[0], newValue)
+					P(DEFAULT, "Reset success, %v new value is %v\n", args[0], newValue)
 				}
 			case args[0] == "noderoot":
-				P(ERROR, "[%v] read-only, temporarily does not support set way. See 'gnvm help config'.\n", args[0])
+				P(ERROR, "%v read-only, temporarily does not support set way. See '%v'.\n", args[0], "gnvm help config")
 			default:
-				P(ERROR, "config parameter include <registry>, your input unknown, please check your input. See 'gnvm help config'.\n")
+				P(ERROR, "config parameter only include %v, please check your input. See '%v'.\n", "registry", "gnvm help config")
 			}
 		} else if len(args) > 2 {
-			P(ERROR, "config parameter maximum is 2, please check your input. See 'gnvm help config'.\n")
+			P(ERROR, "config parameter maximum is 2, please check your input. See '%v'.\n", "gnvm help config")
 		}
 	},
 }
