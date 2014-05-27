@@ -113,7 +113,7 @@ func SetConfig(key string, value interface{}) string {
 
 	if key == "registry" {
 
-		if !strings.HasSuffix(value.(string), "http://") {
+		if !strings.HasPrefix(value.(string), "http://") {
 			P(WARING, "%v need %v", value.(string), "http://", "\n")
 			value = "http://" + value.(string)
 		}

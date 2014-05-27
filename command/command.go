@@ -220,15 +220,15 @@ var updateCmd = &cobra.Command{
 // sub cmd
 var lsCmd = &cobra.Command{
 	Use:   "ls",
-	Short: "list show all local | remote node.js version",
-	Long: `list show all local | remote node.js version e.g.
+	Short: "list show all <local> <remote> node.exe version",
+	Long: `list show all <local> <remote> node.exe version e.g.
 gnvm ls
 gnvm ls --remote`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// check args
 		if len(args) > 0 {
-			P(WARING, "gnvm ls no parameter, please check your input. See 'gnvm help ls'.\n")
+			P(WARING, "gnvm ls no parameter, please check your input. See '%v'.\n", "gnvm help ls")
 		}
 
 		if remote == true {

@@ -320,7 +320,7 @@ func LS(isPrint bool) ([]string, error) {
 
 	// show error
 	if err != nil {
-		P(ERROR, "'gnvm ls' Error: %v.\n", err.Error())
+		P(ERROR, "'%v' Error: %v.\n", "gnvm ls", err.Error())
 		return lsArr, err
 	}
 
@@ -340,7 +340,7 @@ func LsRemote() {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm ls --remote' an error has occurred. please check registry: [%v]. \nError: ", url)
+			msg := fmt.Sprintf("'gnvm ls --remote' an error has occurred. please check registry: %v. \nError: ", url)
 			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
@@ -350,7 +350,7 @@ func LsRemote() {
 	isExistVersion := false
 
 	// print
-	P(DEFAULT, "Read all Node.exe version list from [%v], please wait.\n", url)
+	P(DEFAULT, "Read all node.exe version list from %v, please wait.\n", url)
 
 	// get
 	code, res, _ := curl.Get(url)
@@ -374,7 +374,7 @@ func LsRemote() {
 	}
 
 	if err := curl.ReadLine(res.Body, writeVersion); err != nil && err != io.EOF {
-		P(ERROR, "gnvm ls --remote Error: %v\n", err)
+		P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
 	}
 
 }
