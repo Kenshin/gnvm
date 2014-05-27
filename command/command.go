@@ -38,7 +38,7 @@ gnvm version --remote`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// check args
 		if len(args) > 0 {
-			P(WARING, "'gnvm version' no parameter, please check your input. See 'gnvm help version'.\n")
+			P(WARING, "'%v' no parameter, please check your input. See '%v'.\n", "gnvm version", "gnvm help version")
 		}
 		nodehandle.Version(remote)
 	},

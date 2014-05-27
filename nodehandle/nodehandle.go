@@ -608,7 +608,8 @@ func Version(remote bool) {
 			arr := strings.Fields(content)
 			if len(arr) == 2 {
 
-				P(DEFAULT, "Latest version %v, publish data %v", arr[0][1:], arr[1], "\n")
+				cp := CC{Red, true, None, true, arr[0][1:]}
+				P(DEFAULT, "Latest version %v, publish data %v", cp, arr[1], "\n")
 
 				latestVersion, msg := arr[0][1:], ""
 				localArr, latestArr := strings.Split(localVersion, "."), strings.Split(latestVersion, ".")
