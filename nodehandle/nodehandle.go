@@ -340,7 +340,7 @@ func LsRemote() {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm ls --remote' an error has occurred. please check registry: %v. \nError: ", url)
+			msg := fmt.Sprintf("'gnvm ls --remote' an error has occurred. please check registry %v. \nError: ", url)
 			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
