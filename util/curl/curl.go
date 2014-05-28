@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-type ProcessFunc func(content string, line int)
+type ProcessFunc func(content string, line int) bool
 
 /*
  *
@@ -66,7 +66,9 @@ func ReadLine(body io.ReadCloser, process ProcessFunc) error {
 			break
 		}
 
-		process(content, line)
+		if ok := process(content, line); ok {
+			break
+		}
 
 		line++
 	}
