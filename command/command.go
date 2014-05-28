@@ -243,20 +243,15 @@ gnvm ls --remote`,
 // sub cmd
 var nodeVersionCmd = &cobra.Command{
 	Use:   "node-version",
-	Short: "show <global>, <latest> node.js version",
-	Long: `show <global>, <latest> node.js version e.g.
+	Short: "show <global>, <latest> node.exe version",
+	Long: `show <global>, <latest> node.exe version e.g.
 gnvm node-version
-Node.exe global verson is [x.xx.xx]
-Node.exe latest verson is [x.xx.xx]
 gnvm node-version latest
-Node.exe latest verson is [x.xx.xx]
 gnvm node-version latest --remote
-Node.exe remote [http://www.xx.com] verson is [x.xx.xx]
-gnvm node-version global
-Node.exe global verson is [x.xx.xx]`,
+gnvm node-version global`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 1 {
-			P(WARING, "use parameter maximum is 1, temporary support only <global>, <latest>, please check your input. See 'gnvm help node-version'.\n")
+			P(WARING, "use parameter maximum is 1, temporary only support <%v>, <%v>, please check your input. See '%v'.\n", "global", "latest", "gnvm help node-version")
 		} else if len(args) == 1 {
 
 			args[0] = util.EqualAbs("global", args[0])
@@ -264,9 +259,9 @@ Node.exe global verson is [x.xx.xx]`,
 
 			switch {
 			case args[0] != "global" && args[0] != "latest":
-				P(WARING, "gnvm node-version olny support <%v>, <%v> parameter.\n", "global", "latest")
+				P(WARING, "gnvm node-version only support <%v>, <%v> parameter.\n", "global", "latest")
 			case args[0] != "latest" && remote:
-				P(WARING, "gnvm node-version olny support <%v> parameter.\n", "latest --remote")
+				P(WARING, "gnvm node-version only support <%v> parameter.\n", "latest --remote")
 			}
 		}
 		nodehandle.NodeVersion(args, remote)

@@ -157,33 +157,37 @@ func NodeVersion(args []string, remote bool) {
 	global := config.GetConfig(config.GLOBAL_VERSION)
 
 	if len(args) == 0 || len(args) > 1 {
-		P(DEFAULT, "Node.exe latest verson is [%v].\n", latest)
-		P(DEFAULT, "Node.exe global verson is [%v].\n", global)
+		P(DEFAULT, "Node.exe %v version is %v.\n", "latest", latest)
+		P(DEFAULT, "Node.exe %v version is %v.\n", "global", global)
 	} else {
 		switch {
 		case args[0] == "global":
-			P(DEFAULT, "Node.exe global verson is [%v].\n", global)
+			P(DEFAULT, "Node.exe global version is %v.\n", global)
 		case args[0] == "latest" && !remote:
-			P(DEFAULT, "Node.exe latest verson is [%v].\n", latest)
+			P(DEFAULT, "Node.exe latest version is %v.\n", latest)
 		case args[0] == "latest" && remote:
 			remoteVersion := getLatestVersionByRemote()
 			if remoteVersion == "" {
-				P(ERROR, "get remote [%v] latest version error, please check. See 'gnvm config help'.\n", config.GetConfig("registry")+config.LATEST+"/"+config.NODELIST)
-				P(DEFAULT, "Node.exe latest verson is [%v].\n", latest)
+				P(ERROR, "get remote %v latest version error, please check. See '%v'.\n", config.GetConfig("registry")+config.LATEST+"/"+config.NODELIST, "gnvm help config")
+				P(DEFAULT, "Node.exe latest version is %v.\n", latest)
 				return
 			}
-			P(DEFAULT, "Node.exe remote [%v] verson is [%v].\n", config.GetConfig("registry"), remoteVersion)
-			P(DEFAULT, "Node.exe latest verson is [%v].\n", latest)
+			P(DEFAULT, "Node.exe remote %v version is %v.\n", config.GetConfig("registry"), remoteVersion)
+			P(DEFAULT, "Node.exe latest version is %v.\n", latest)
 		}
 	}
 
+	isPrint := false
 	switch {
 	case len(args) == 0 && (global == config.UNKNOWN || latest == config.UNKNOWN):
-		P(WARING, "when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
+		isPrint = true
 	case len(args) > 0 && args[0] == "latest" && latest == config.UNKNOWN:
-		P(WARING, "when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
+		isPrint = true
 	case len(args) > 0 && args[0] == "global" && global == config.UNKNOWN:
-		P(WARING, "when version is [%v], please Use 'gnvm config INIT'. See 'gnvm help config'.\n", config.UNKNOWN)
+		isPrint = true
+	}
+	if isPrint {
+		P(WARING, "when version is %v, please use '%v'. See '%v'.\n", config.UNKNOWN, "gnvm config INIT", "gnvm help config")
 	}
 }
 
