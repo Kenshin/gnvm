@@ -41,9 +41,9 @@ GNVM: Node.exe version manager for Windows by GO
 最佳实践
 ---
 * 在cmd中运行`gnvm.exe`需要管理员权限。
-* 第一次运行`gnvm.exe`时，使用`gnvm config INIT`
+* 虽然可以直接使用`gnvm`的各种命令，但第一次运行`gnvm.exe`时，建议使用`gnvm config INIT`来初始化一些配置参数。
 * 虽然`gnvm.exe`支持任意文件夹，但建议将`node.exe`与`gnvm.exe`放在同一目录下。
-* 使用`gnvm config registry xxx`更换库，默认库：<http://nodejs.org/dist/>，只要xxx的结构与默认库一致就可以使用。
+* 使用`gnvm config registry xxx`更换库，默认库：<http://nodejs.org/dist/>，只要xxx的结构与默认库一致即可。
 * `gnvm.exe`的使用依赖与`.gnvmrc`，请不要手动修改此文件。
 * `gnvm install npm`支持安装最新版的npm，但`0.1.0`版本只支持安装最新版本到`node.exe`所在文件夹，不可自定义`npm`的文件夹。（npm的最新版本取决于`gnvm config registry`对应的最新版本。）
 
@@ -82,6 +82,18 @@ A. 建议将`gnvm.exe`加入白名单。
 
 #### Q. `gnvm`与`nvmw` `nvm`有什么区别？
 A. `gnvm`是单文件CLI，同时比`nvmw`多了一些实用功能，如`gnvm update`, `gnvm install npm`, `gnvm config registry xxxx`等，在功能上更贴近`nvm`。
+
+CHANGELOG
+---
+* **2014-05-31 version `0.1.0`** support:
+    * version
+    * install
+    * uninstall
+    * use
+    * update
+    * ls
+    * node-version
+    * config
 
 LICENSE
 ---
