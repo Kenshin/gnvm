@@ -51,7 +51,7 @@ GNVM: Node.exe version manager for Windows by GO
 ---
     gnvm config INIT （第一次使用时，推荐做法）
     gnvm config registry dist.u.qiniudn.com （更换库）
-    gnvm update lateset （如果本机的latest过低，可以使用此方式升级。或者使用gnvm install latest）
+    gnvm update latest （如果本机的latest过低，可以使用此方式升级。或者使用gnvm install latest）
     gnvm install 0.11.1 0.11.2 0.11.3 （下载任意版本的node.exe）
     gnvm use 0.11.1 （切换本机已安装的任意版本node.exe）
     gnvm ls （查看当前共有多少个node.exe）
