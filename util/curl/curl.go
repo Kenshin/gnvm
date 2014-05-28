@@ -90,6 +90,14 @@ func ReadLine(body io.ReadCloser, process ProcessFunc) error {
  */
 func New(url, name, dst string) int {
 
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			msg := fmt.Sprintf("CURL Error: Download %v from %v an error has occurred. \nError: %v", name, url, err)
+			panic(msg)
+		}
+	}()
+
 	// get url
 	code, res, err := Get(url)
 	if code != 0 {
