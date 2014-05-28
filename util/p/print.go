@@ -32,7 +32,7 @@ const (
 	White
 )
 
-type CC struct {
+type CP struct {
 	FgColor  int
 	FgBright bool
 	BgColor  int
