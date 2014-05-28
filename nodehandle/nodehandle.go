@@ -72,7 +72,7 @@ func Use(folder string) bool {
 	folder = TransLatestVersion(folder, true)
 
 	if folder == config.UNKNOWN {
-		P(ERROR, "unassigned Node.js latest version. See 'gnvm install latest'.\n")
+		P(ERROR, "unassigned node.exe latest version, use %v. See '%v'.\n", "gnvm config INIT", "gnvm help config")
 		return false
 	}
 
@@ -92,13 +92,13 @@ func Use(folder string) bool {
 
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
-		P(WARING, "[%v] folder is not exist from [%v]. Get local node.exe version. See 'gnvm ls'.\n", folder, rootPath)
+		P(WARING, "%v folder is not exist from %v, use '%v' get local node.exe list. See '%v'.\n", folder, rootPath, "gnvm ls", "gnvm help ls")
 		return false
 	}
 
 	// check folder is rootVersion
 	if folder == rootVersion {
-		P(WARING, "current node.exe version is [%v], not re-use. See 'gnvm node-version'.\n", folder)
+		P(WARING, "current node.exe version is %v, not re-use. See 'gnvm node-version'.\n", folder)
 		return false
 	}
 
@@ -137,7 +137,7 @@ func Use(folder string) bool {
 		return false
 	}
 
-	P(DEFAULT, "Set success, Current Node.exe version is [%v].\n", folder)
+	P(DEFAULT, "Set success, current node.exe version is %v.\n", folder)
 
 	return true
 }

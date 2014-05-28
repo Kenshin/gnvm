@@ -170,15 +170,15 @@ var useCmd = &cobra.Command{
 	Use:   "use",
 	Short: "use the specific version by global",
 	Long: `use the specific version by global e.g.
-'gnvm use x.xx.xx'
-'gnvm use latest'`,
+gnvm use x.xx.xx
+gnvm use latest`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
 
 			args[0] = util.EqualAbs("latest", args[0])
 
 			if args[0] != "latest" && util.VerifyNodeVersion(args[0]) != true {
-				P(ERROR, "use parameter support '%v' or '%v', e.g. 0.10.28, please check your input. See 'gnvm help use'.\n", "latest", "x.xx.xx")
+				P(ERROR, "use parameter support '%v' or '%v', e.g. %v, please check your input. See '%v'.\n", "latest", "x.xx.xx", "0.10.28", "gnvm help use")
 				return
 			}
 
@@ -187,7 +187,7 @@ var useCmd = &cobra.Command{
 				config.SetConfig(config.GLOBAL_VERSION, nodehandle.TransLatestVersion(args[0], false))
 			}
 		} else {
-			P(ERROR, "use parameter maximum is 1, please check your input. See 'gnvm help use'.\n")
+			P(ERROR, "use parameter maximum is 1, please check your input. See '%v'.\n", "gnvm help use")
 		}
 	},
 }
