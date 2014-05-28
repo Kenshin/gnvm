@@ -85,7 +85,7 @@ A. `gnvm`是单文件CLI，同时比`nvmw`多了一些实用功能，如`gnvm up
 
 CHANGELOG
 ---
-* **2014-05-31 version `0.1.0`** support:
+* **2014-05-31 version `0.1.0` support：**
     * version
     * install
     * uninstall
