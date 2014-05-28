@@ -390,6 +390,9 @@ func Install(args []string, global bool) int {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
+			if strings.HasPrefix(err.(string), "CURL Error:") {
+				fmt.Printf("\n")
+			}
 			msg := fmt.Sprintf("'gnvm install %v' an error has occurred. \nError: ", strings.Join(args, " "))
 			Error(ERROR, msg, err)
 			os.Exit(0)
