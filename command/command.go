@@ -20,8 +20,8 @@ var (
 // defind root cmd
 var gnvmCmd = &cobra.Command{
 	Use:   "gnvm",
-	Short: "Gnvm is Node.js version manage by GO on Win",
-	Long: `Gnvm is Node.js version manage by GO on Win
+	Short: "Gnvm is Node.exe version manager for Windows by GO",
+	Long: `Gnvm is Node.exe version manager for Windows by GO
            like nvm. Complete documentation is available at https://github.com/kenshin/gnvm`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TO DO
@@ -31,8 +31,8 @@ var gnvmCmd = &cobra.Command{
 // sub cmd
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Print the version number of Gnvm",
-	Long: `Print the version number of Gnvm. e.g.
+	Short: "Print the version number of gnvm.exe",
+	Long: `Print the version number of gnvm.exe e.g.
 gnvm version
 gnvm version --remote`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -47,8 +47,8 @@ gnvm version --remote`,
 // sub cmd
 var installCmd = &cobra.Command{
 	Use:   "install",
-	Short: "install any node.exe version",
-	Long: `install any node.exe version e.g.
+	Short: "Install any node.exe version",
+	Long: `Install any node.exe version e.g.
 gnvm install latest
 gnvm install x.xx.xx y.yy.yy
 gnvm install x.xx.xx --global
@@ -103,8 +103,8 @@ gnvm install npm`,
 // sub cmd
 var uninstallCmd = &cobra.Command{
 	Use:   "uninstall",
-	Short: "uninstall local node.exe version",
-	Long: `uninstall local node.exe version e.g.
+	Short: "Uninstall local node.exe version",
+	Long: `Uninstall local node.exe version e.g.
 gnvm uninstall 0.10.28
 gnvm uninstall latest
 gnvm uninstall npm
@@ -168,8 +168,8 @@ gnvm uninstall ALL`,
 // sub cmd
 var useCmd = &cobra.Command{
 	Use:   "use",
-	Short: "use the specific version by global",
-	Long: `use the specific version by global e.g.
+	Short: "Use any version of the local already exists",
+	Long: `Use any version of the local already exists e.g.
 gnvm use x.xx.xx
 gnvm use latest`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -195,8 +195,8 @@ gnvm use latest`,
 // sub cmd
 var updateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "update latest node.exe",
-	Long: `update latest node.exe e.g.
+	Short: "Update latest node.exe",
+	Long: `Update latest node.exe e.g.
 gnvm update latest
 gnvm update latest --global`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -220,8 +220,8 @@ gnvm update latest --global`,
 // sub cmd
 var lsCmd = &cobra.Command{
 	Use:   "ls",
-	Short: "list show all <local> <remote> node.exe version",
-	Long: `list show all <local> <remote> node.exe version e.g.
+	Short: "List show all <local> <remote> node.exe version",
+	Long: `List show all <local> <remote> node.exe version e.g.
 gnvm ls
 gnvm ls --remote`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -243,8 +243,8 @@ gnvm ls --remote`,
 // sub cmd
 var nodeVersionCmd = &cobra.Command{
 	Use:   "node-version",
-	Short: "show <global>, <latest> node.exe version",
-	Long: `show <global>, <latest> node.exe version e.g.
+	Short: "Show <global> <latest> node.exe version",
+	Long: `Show <global> <latest> node.exe version e.g.
 gnvm node-version
 gnvm node-version latest
 gnvm node-version latest --remote
@@ -271,8 +271,8 @@ gnvm node-version global`,
 // sub cmd
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "setter or getter registry value",
-	Long: `setter or getter value e.g.
+	Short: "Setter and getter registry",
+	Long: `Setter and getter registry e.g.
 gnvm config registry
 gnvm config registry http://dist.u.qiniudn.com/
 gnvm config registry DEFAULT
