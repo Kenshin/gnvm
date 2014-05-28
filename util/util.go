@@ -85,18 +85,18 @@ func GetLatestVersion(url string) string {
 
 			args1 := strings.Split(line, "  ")
 			if len(args1) < 2 {
-				P(ERROR, "URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
+				P(ERROR, "URL %v format error, please change registry. See 'gnvm help config'.\n", url)
 				break
 			}
 
 			args2 := strings.Split(args1[1], "-")
 			if len(args2) < 2 {
-				P(ERROR, "URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
+				P(ERROR, "URL %v format error, please change registry. See 'gnvm help config'.\n", url)
 				break
 			}
 
 			if len(args2[1]) < 2 {
-				P(ERROR, "URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
+				P(ERROR, "URL %v format error, please change registry. See 'gnvm help config'.\n", url)
 				break
 			}
 
