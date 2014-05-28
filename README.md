@@ -65,7 +65,6 @@ GNVM: Node.exe version manager for Windows by GO
     gnvm ls （查看当前共有多少个node.exe）
     gnvm install npm （安装最新版本的npm到node.exe所在目录）
 
-
 使用的第三方lib
 ---
 * <https://github.com/spf13/cobra>
@@ -73,6 +72,10 @@ GNVM: Node.exe version manager for Windows by GO
 * <https://github.com/pierrre/archivefile/zip>
 * <https://github.com/daviddengcn/go-colortext>
 * icon <http://www.easyicon.net/1143807-update_icon.html>
+
+功能一览
+---
+![功能一览](https://trello-attachments.s3.amazonaws.com/535f6fd8cb08b7fd799c2051/53606254da7b8f8b2f6c9d87/981x580/0f884cd02400ac42e0eb64c778a371d8/gnvm_0.0.13.png)
 
 FAQ
 ---
