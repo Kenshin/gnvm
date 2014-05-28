@@ -364,7 +364,7 @@ func LsRemote() {
 	// close
 	defer res.Body.Close()
 
-	writeVersion := func(content string, line int) {
+	writeVersion := func(content string, line int) bool {
 		// replace '\n'
 		content = strings.Replace(content, "\n", "", -1)
 
@@ -375,6 +375,7 @@ func LsRemote() {
 			isExistVersion = true
 			P(DEFAULT, args[0], "\n")
 		}
+		return false
 	}
 
 	if err := curl.ReadLine(res.Body, writeVersion); err != nil && err != io.EOF {
@@ -471,7 +472,7 @@ func InstallNpm() {
 	maxTime, _ := time.Parse(TIMEFORMART, TIMEFORMART)
 	var maxVersion string
 
-	getNpmVersion := func(content string, line int) {
+	getNpmVersion := func(content string, line int) bool {
 		if strings.Index(content, `<a href="`) == 0 && strings.Contains(content, ".zip") {
 
 			// parse
@@ -496,6 +497,7 @@ func InstallNpm() {
 				}
 			}
 		}
+		return false
 	}
 
 	if err := curl.ReadLine(res.Body, getNpmVersion); err != nil && err != io.EOF {
@@ -619,7 +621,7 @@ func Version(remote bool) {
 	}
 	defer res.Body.Close()
 
-	versionFunc := func(content string, line int) {
+	versionFunc := func(content string, line int) bool {
 		if content != "" && line == 1 {
 			arr := strings.Fields(content)
 			if len(arr) == 2 {
@@ -642,14 +644,14 @@ func Version(remote bool) {
 				if msg != "" {
 					P(NOTICE, msg + " Please download latest %v from %v", "gnvm.exe", "https://github.com/kenshin/gnvm", "\n")
 				}
-
-			} else {
-				return
 			}
+
 		}
 		if line > 1 {
 			P(DEFAULT, content, "\n")
 		}
+
+		return false
 	}
 
 	if err := curl.ReadLine(res.Body, versionFunc); err != nil && err != io.EOF {
