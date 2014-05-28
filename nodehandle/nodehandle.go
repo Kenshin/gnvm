@@ -233,7 +233,7 @@ func UninstallNpm() {
 
 	removeFlag := true
 
-	if !isDirExist(rootPath + "npm.cmd") {
+	if !isDirExist(rootPath + "npm.cmd") && !isDirExist(rootPath + "node_modules" + DIVIDE + "npm") {
 		P(WARING, "%v not exist %v.\n", rootPath, "npm.cmd")
 		return
 	}
@@ -440,6 +440,9 @@ func InstallNpm() {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
+			if strings.HasPrefix(err.(string), "CURL Error:") {
+				fmt.Printf("\n")
+			}
 			Error(ERROR, "'gnvm install npm' an error has occurred. \nError: ", err)
 			os.Exit(0)
 		}
@@ -447,7 +450,7 @@ func InstallNpm() {
 
 	out, err := exec.Command(rootPath+"npm", "--version").Output()
 	if err == nil {
-		P(WARING, "current path %v exist npm version is %v", rootPath, string(out[:]), "\n")
+		P(WARING, "current path %v exist npm, version is %v", rootPath, string(out[:]), "\n")
 		return
 	}
 
