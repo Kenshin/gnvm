@@ -77,11 +77,11 @@ GNVM: Node.exe version manager for Windows by GO
 FAQ
 ---
 
-#### Q. 在某些Win 7环境下，如果安装了XXX卫士，那么在使用`gnvm`的时候，如`gnvm use x.xx.xx`会弹出警告。
+#### Q. 在安装了XXX卫士的某些Windows系统下，使用诸如`gnvm use x.xx.xx`的命令会弹出警告。
 A. 建议将`gnvm.exe`加入白名单。
 
 #### Q. `gnvm`与`nvmw` `nvm`有什么区别？
-A. `gnvm`是单文件CLI，同时比`nvmw`多了一些实用功能，如`gnvm update` `gnvm install npm` `gnvm config registry xxxx`等，在功能上更贴近`nvm`。
+A. `gnvm`是单文件CLI，同时比`nvmw`多了一些实用功能，如`gnvm update`, `gnvm install npm`, `gnvm config registry xxxx`等，在功能上更贴近`nvm`。
 
 LICENSE
 ---
