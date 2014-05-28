@@ -86,7 +86,7 @@ func Use(folder string) bool {
 	// get <root>/node.exe version
 	rootVersion, err := util.GetNodeVersion(rootPath)
 	if err != nil {
-		P(WARING, "not found global node version, please use 'gnvm install x.xx.xx -g'. See 'gnvm help install'.\n")
+		P(WARING, "not found global node.exe version.\n")
 		rootNodeExist = false
 	}
 
@@ -630,7 +630,7 @@ func Version(remote bool) {
 				}
 
 				if msg != "" {
-					P(NOTICE, msg, "\n")
+					P(NOTICE, msg + " Please download latest %v from %v", "gnvm.exe", "https://github.com/kenshin/gnvm", "\n")
 				}
 
 			} else {
