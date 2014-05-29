@@ -1,21 +1,23 @@
 ::===========================================================
-:: GNVM: Node.exe version manage by GO
+:: GNVM  : Node.exe version manager by GO
+:: HOST  : https://github.com/kenshin/gnvm
+:: author: Kenshin<kenshin@ksria.com>
 ::===========================================================
 
-@echo off
+@ECHO off
 
-IF "%1" == "icon" goto icon
-IF "%1" == "go" goto go
+IF "%1" == "icon" GOTO icon
+IF "%1" == "go" GOTO go
 
 :icon
-@echo rsrc -ico gnvm.ico -o gnvm.syso
+@ECHO run rsrc.exe build syso
 rsrc -ico gnvm.ico -o gnvm.syso
-goto exit
+IF "%1" == "icon" GOTO exit
 
 :go
-@echo go install -ldflags "-w -s"
+@ECHO run go install
 go install -ldflags "-w -s"
-goto exit
+GOTO exit
 
 :exit
-@echo create complete.
+@ECHO create complete.

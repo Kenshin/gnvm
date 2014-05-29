@@ -3,7 +3,6 @@ package util
 import (
 
 	// go
-	"bufio"
 	"io"
 	"os"
 	"os/exec"
@@ -25,6 +24,15 @@ const (
 var GlobalNodePath string
 
 func init() {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			Error(ERROR, "initialize gnvm.exe an error has occurred. please check. \nError: ", err)
+			os.Exit(0)
+		}
+	}()
+
 	GlobalNodePath = getGlobalNodePath()
 }
 
@@ -65,9 +73,40 @@ func GetLatestVersion(url string) string {
 	// close
 	defer res.Body.Close()
 
-	// set buff
-	buff := bufio.NewReader(res.Body)
+	latestVersion := func(content string, line int) bool {
+		if content != "" && line == 1 {
 
+			args1 := strings.Split(content, "  ")
+			if len(args1) < 2 {
+				P(ERROR, "URL %v format error, please change registry. See '%v'.\n", url, "gnvm help config")
+				return true
+			}
+
+			args2 := strings.Split(args1[1], "-")
+			if len(args2) < 2 {
+				P(ERROR, "URL %v format error, please change registry. See '%v'.\n", url, "gnvm help config")
+				return true
+			}
+
+			if len(args2[1]) < 2 {
+				P(ERROR, "URL %v format error, please change registry. See '%v'.\n", url, "gnvm help config")
+				return true
+			}
+
+			version = args2[1][1:]
+		}
+
+		return false
+
+	}
+
+	if err := curl.ReadLine(res.Body, latestVersion); err != nil && err != io.EOF {
+		P(ERROR, "%v Error: %v\n", "gnvm update latest", err)
+	}
+
+	return version
+
+	/*
 	for {
 		// set line
 		line, err := buff.ReadString('\n')
@@ -76,18 +115,18 @@ func GetLatestVersion(url string) string {
 
 			args1 := strings.Split(line, "  ")
 			if len(args1) < 2 {
-				P(ERROR, "URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
+				P(ERROR, "URL %v format error, please change registry. See 'gnvm help config'.\n", url)
 				break
 			}
 
 			args2 := strings.Split(args1[1], "-")
 			if len(args2) < 2 {
-				P(ERROR, "URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
+				P(ERROR, "URL %v format error, please change registry. See 'gnvm help config'.\n", url)
 				break
 			}
 
 			if len(args2[1]) < 2 {
-				P(ERROR, "URL [%v] format error, please change registry. See 'gnvm help config'.\n", url)
+				P(ERROR, "URL %v format error, please change registry. See 'gnvm help config'.\n", url)
 				break
 			}
 
@@ -102,8 +141,7 @@ func GetLatestVersion(url string) string {
 		}
 
 	}
-
-	return version
+	*/
 
 }
 
@@ -128,7 +166,7 @@ func VerifyNodeVersion(version string) bool {
 
 func EqualAbs(key, value string) string {
 	if strings.EqualFold(value, key) && value != key {
-		P(WARING, "current value is [%v], please use [%v].\n", value, key)
+		P(WARING, "current value is %v, please use %v.\n", value, key)
 		value = key
 	}
 	return value
@@ -155,8 +193,7 @@ func getGlobalNodePath() string {
 func getCurrentPath() string {
 	path, err := os.Getwd()
 	if err != nil {
-		P(ERROR, "get current path Error: %v\n", err.Error())
-		return ""
+		panic("get current path Error: " + err.Error())
 	}
 	return path
 }

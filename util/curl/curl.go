@@ -1,14 +1,14 @@
 package curl
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
-	"io"
-	"bufio"
 )
 
-type ProcessFunc func(content string, line int)
+type ProcessFunc func(content string, line int) bool
 
 /*
  *
@@ -50,7 +50,7 @@ func Get(url string) (code int, res *http.Response, err error) {
  * return err
  *
  */
-func ReadLine(body io.ReadCloser, process ProcessFunc ) error {
+func ReadLine(body io.ReadCloser, process ProcessFunc) error {
 
 	var content string
 	var err error
@@ -62,11 +62,13 @@ func ReadLine(body io.ReadCloser, process ProcessFunc ) error {
 	for {
 		content, err = buff.ReadString('\n')
 
-		if line > 1 && ( err != nil || err == io.EOF ) {
+		if line > 1 && (err != nil || err == io.EOF) {
 			break
 		}
 
-		process(content, line)
+		if ok := process(content, line); ok {
+			break
+		}
 
 		line++
 	}
@@ -85,9 +87,18 @@ func ReadLine(body io.ReadCloser, process ProcessFunc ) error {
  * 0: success
  * -2: create file error
  * -3: download node.exe error
+ * -4: content length = -1
  *
  */
 func New(url, name, dst string) int {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			msg := fmt.Sprintf("CURL Error: Download %v from %v an error has occurred. \nError: %v", name, url, err)
+			panic(msg)
+		}
+	}()
 
 	// get url
 	code, res, err := Get(url)
@@ -105,6 +116,11 @@ func New(url, name, dst string) int {
 		return -2
 	}
 	defer file.Close()
+
+	if res.ContentLength == -1 {
+		fmt.Printf("Download %v fail from %v.\n", name, url)
+		return -4
+	}
 
 	fmt.Printf("Start download [%v] from %v.\n%v", name, url, "1% ")
 

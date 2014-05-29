@@ -32,7 +32,7 @@ const (
 	White
 )
 
-type CC struct {
+type CP struct {
 	FgColor  int
 	FgBright bool
 	BgColor  int
@@ -45,12 +45,12 @@ type CC struct {
  *
  * flag   : include 'Waring', 'Error'
  * message: print content
- * args   : variable parameter, include string, CC type
+ * args   : variable parameter, include string, CP type
  *          when args last value is "\n", auto new line.
  *
  * e.g. P( "Waring", Remote latest version [%v] = latest version [%v].\n", param1, param2 )
- * e.g. cc := CC{1, true, 2, true, localVersion}
- *      P(DEFAULT, "Current version %v, publish data: ", cc, "2014-05-31")
+ * e.g. cp := CP{1, true, 2, true, localVersion}
+ *      P(DEFAULT, "Current version %v, publish data: ", cp, "2014-05-31")
  * e.g. P(DEFAULT, "Current version %v", localVersion, "\n")
  *
  */
@@ -76,7 +76,7 @@ func P(flag string, message interface{}, args ...interface{}) {
 			switch t.Name() {
 			case "string":
 				normalColor(args[k])
-			case "CC":
+			case "CP":
 				customColor(args[k])
 			default:
 				normalColor(args[k])
@@ -130,9 +130,9 @@ func stateColor(state string) {
 	ct.ResetColor()
 }
 
-func customColor(cc interface{}) {
+func customColor(cp interface{}) {
 
-	value := reflect.ValueOf(cc)
+	value := reflect.ValueOf(cp)
 
 	fgColor := value.FieldByName("FgColor").Int()
 	fgBright := value.FieldByName("FgBright").Bool()

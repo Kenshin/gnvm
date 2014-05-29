@@ -1,0 +1,16 @@
+language: go
+
+go:
+  - 1.0
+  - 1.1
+  - 1.2
+  - tip
+
+before_install:
+  - go get github.com/spf13/cobra
+  - go get github.com/tsuru/config
+  - go get github.com/pierrre/archivefile/zip
+  - go get github.com/daviddengcn/go-colortext
+
+script:
+  - ./run.bat
