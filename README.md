@@ -48,7 +48,7 @@ Best practices
 * The first run `gnvm` need use `gnvm config INIT`(**recommended**)
 * `gnvm.exe` support any folder, suggest `gnvm.exe` in `node.exe` folder.
 * Use `gnvm config registry xxx`change reigistry，default registry is<http://nodejs.org/dist/>.
-* `gnvm.exe` depend on`.gnvmrc`, please don't modify manually.
+* `gnvm` depend on`.gnvmrc`, please don't modify manually.
 * `gnvm install npm` support latest npm，but `0.1.0` version only support install npm to `node.exe` folder，can't custom npm path.
 
 Usage scenarios( exist node.exe)
@@ -85,7 +85,7 @@ FAQ
 ---
 
 #### Q. The difference between `gnvm` and `nvmw` `nvm`?
-A. `gnvm` is single cli file，more than `nvmw` feature，e.g. `gnvm update`, `gnvm install npm`, `gnvm config registry xxxx`, similar `nvm`.
+A. `gnvm` is single cli file，more than `nvmw` feature，e.g. `gnvm update`, `gnvm install npm`, `gnvm config registry xxxx`, more like `nvm`.
 
 Help
 ---
