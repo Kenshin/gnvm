@@ -75,7 +75,7 @@ GNVM: Node.exe version manager for Windows by GO
 
 功能一览
 ---
-![功能一览](https://trello-attachments.s3.amazonaws.com/535f6fd8cb08b7fd799c2051/53606254da7b8f8b2f6c9d87/981x580/0f884cd02400ac42e0eb64c778a371d8/gnvm_0.0.13.png)
+![功能一览](https://trello-attachments.s3.amazonaws.com/535f6fd8cb08b7fd799c2051/53606254da7b8f8b2f6c9d87/981x580/f6e58f47691d3d352f0b97ba94263df8/gnvm_0.1.0.png)
 
 FAQ
 ---
