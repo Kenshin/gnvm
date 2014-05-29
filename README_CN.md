@@ -8,7 +8,7 @@ GNVM: Node.exe version manager for Windows by GO
 
 下载
 ---
-<http://pan.baidu.com/s/1jGgdjiI>
+[32-bit](http://pan.baidu.com/s/1jGgdjiI#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F32-bit) | [64-bit](http://pan.baidu.com/s/1jGgdjiI#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F64-bit)
 
 配置
 ---

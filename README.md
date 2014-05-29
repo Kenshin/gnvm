@@ -8,7 +8,7 @@ Documentation
 
 Download
 ---
-<http://pan.baidu.com/s/1jGgdjiI>
+[32-bit](https://app.box.com/gnvm/1/2014967291) | [64-bit](https://app.box.com/gnvm/1/2014967689)
 
 Installation
 ---
