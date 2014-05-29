@@ -609,7 +609,11 @@ func Version(remote bool) {
 
 	localVersion := config.VERSION
 
+	cp := CP{Red, true, None, true, "Kenshin Wang"}
 	P(DEFAULT, "Current version %v", localVersion, "\n")
+	P(DEFAULT, "Copyright (C) 2014 %v <kenshin@ksria.com>", cp, "\n")
+	cp.FgColor, cp.Value = Blue, "https://github.com/kenshin/gnvm"
+	P(DEFAULT, "See %v for more information.", cp, "\n")
 
 	if !remote {
 		return
@@ -648,7 +652,7 @@ func Version(remote bool) {
 
 		}
 		if line > 1 {
-			P(DEFAULT, content, "\n")
+			P(DEFAULT, content)
 		}
 
 		return false
