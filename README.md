@@ -1,26 +1,30 @@
 GNVM: Node.exe version manager for Windows by GO
 ================================
-`gnvm` 是个Windows下面的多Node.exe版本管理工具，类似 [nvm](https://github.com/creationix/nvm) [nvmw](https://github.com/hakobera/nvmw)
+`gnvm` is simple multi node.exe version manager，like [nvm](https://github.com/creationix/nvm) [nvmw](https://github.com/hakobera/nvmw)
 
-下载
+Documentation
+---
+[中文版](https://github.com/kenshin/gnvm/blob/master/README_CN.md)
+
+Download
 ---
 <http://pan.baidu.com/s/1jGgdjiI>
 
-配置
+Installation
 ---
 
-#### 本机已有node.exe
-* 方式1: 将下载的`gnvm.exe`放到`node.exe`目录下。（推荐方式）
-* 方式2: 将下载的`gnvm.exe`放到任意文件夹下。（确保此文件夹在Path环境下，或者手动添加此文件夹到Path）
+#### exist node.exe
+* Download `gnvm.exe` in `node.exe` folder.(**recommended**)
+* Download `gnvm.exe` in any folder, add this folder to `path` environment variable.
 
-#### 本机没有node.exe
-* 将下载的`gnvm.exe`放到任意文件夹下。（确保此文件夹在Path环境下，或者手动添加此文件夹到Path）
+#### not exist node.exe
+* Download `gnvm.exe` in any folder, add this folder to `path` environment variable.
 
-验证
+Validation
 ---
-在cmd下（如是Win7/8系统，确保获取管理员权限）输入：`gnvm version`，如有`Current version x.x.x`则说明配置成功。（注：`x.xx.xx`以下载的版本为准。）
+Run `cmd`(administrator permissions) and input `gnvm version`，if output print `Current version x.x.x` configuration is successful.
 
-使用
+Usage
 ---
 
     Usage:
@@ -38,57 +42,59 @@ GNVM: Node.exe version manager for Windows by GO
       config                    :: Setter and getter registry
       help [command]            :: Help about any command
 
-最佳实践
+Best practices
 ---
-* 在cmd中运行`gnvm.exe`需要管理员权限。
-* 虽然可以直接使用`gnvm`的各种命令，但第一次运行`gnvm.exe`时，建议使用`gnvm config INIT`来初始化一些配置参数。
-* 虽然`gnvm.exe`支持任意文件夹，但建议将`node.exe`与`gnvm.exe`放在同一目录下。
-* 使用`gnvm config registry xxx`更换库，默认库：<http://nodejs.org/dist/>，只要xxx的结构与默认库一致即可。
-* `gnvm.exe`的使用依赖与`.gnvmrc`，请不要手动修改此文件。
-* `gnvm install npm`支持安装最新版的npm，但`0.1.0`版本只支持安装最新版本到`node.exe`所在文件夹，不可自定义`npm`的文件夹。（npm的最新版本取决于`gnvm config registry`对应的最新版本。）
+* Run `gnvm` need administrator permissions.
+* The first run `gnvm` need use `gnvm config INIT`(**recommended**)
+* `gnvm.exe` support any folder, suggest `gnvm.exe` in `node.exe` folder.
+* Use `gnvm config registry xxx`change reigistry，default registry is<http://nodejs.org/dist/>.
+* `gnvm.exe` depend on`.gnvmrc`, please don't modify manually.
+* `gnvm install npm` support latest npm，but `0.1.0` version only support install npm to `node.exe` folder，can't custom npm path.
 
-使用场景之一（本机已有node.exe）
+Usage scenarios( exist node.exe)
 ---
-    gnvm config INIT （第一次使用时，推荐做法）
-    gnvm config registry dist.u.qiniudn.com （更换库）
-    gnvm update latest （如果本机的latest过低，可以使用此方式升级。或者使用gnvm install latest）
-    gnvm install 0.11.1 0.11.2 0.11.3 （下载任意版本的node.exe）
-    gnvm use 0.11.1 （切换本机已安装的任意版本node.exe）
-    gnvm ls （查看当前共有多少个node.exe）
-    gnvm uninstall 0.11.1 （删除0.11.1）
+    gnvm config INIT
+    gnvm config registry dist.u.qiniudn.com
+    gnvm update latest
+    gnvm install 0.11.1 0.11.2 0.11.3
+    gnvm use 0.11.1
+    gnvm ls
+    gnvm uninstall 0.11.1
 
-使用场景之二（本机没有node.exe）
+Usage scenarios( not exist node.exe)
 ---
-    gnvm config INIT （第一次使用时，推荐做法）
-    gnvm config registry dist.u.qiniudn.com （更换库）
-    gnvm install latest -g （下载最新版本的latest并设置为全局node.exe）
-    gnvm ls （查看当前共有多少个node.exe）
-    gnvm install npm （安装最新版本的npm到node.exe所在目录）
+    gnvm config INIT
+    gnvm config registry dist.u.qiniudn.com
+    gnvm install latest -g
+    gnvm ls
+    gnvm install npm
 
-使用的第三方lib
+Use third lib
 ---
 * <https://github.com/spf13/cobra>
 * <https://github.com/tsuru/config>
-* <https://github.com/pierrre/archivefile/zip>
+* <https://github.com/pierrre/archivefile>
 * <https://github.com/daviddengcn/go-colortext>
 * icon <http://www.easyicon.net/1143807-update_icon.html>
 
-功能一览
+Feature
 ---
-![功能一览](https://trello-attachments.s3.amazonaws.com/535f6fd8cb08b7fd799c2051/53606254da7b8f8b2f6c9d87/981x580/f6e58f47691d3d352f0b97ba94263df8/gnvm_0.1.0.png)
+![Feature](https://trello-attachments.s3.amazonaws.com/535f6fd8cb08b7fd799c2051/53606254da7b8f8b2f6c9d87/981x580/f6e58f47691d3d352f0b97ba94263df8/gnvm_0.1.0.png)
 
 FAQ
 ---
 
-#### Q. 在安装了XXX卫士的某些Windows系统下，使用诸如`gnvm use x.xx.xx`的命令会弹出警告。
-A. 建议将`gnvm.exe`加入白名单。
+#### Q. The difference between `gnvm` and `nvmw` `nvm`?
+A. `gnvm` is single cli file，more than `nvmw` feature，e.g. `gnvm update`, `gnvm install npm`, `gnvm config registry xxxx`, similar `nvm`.
 
-#### Q. `gnvm`与`nvmw` `nvm`有什么区别？
-A. `gnvm`是单文件CLI，同时比`nvmw`多了一些实用功能，如`gnvm update`, `gnvm install npm`, `gnvm config registry xxxx`等，在功能上更贴近`nvm`。
+Help
+---
+* Email<kenshin@ksria.com>
+* Github issue
 
 CHANGELOG
 ---
-* **2014-05-31 version `0.1.0` support：**
+* **2014-05-29 version `0.1.0` support：**
     * version
     * install
     * uninstall

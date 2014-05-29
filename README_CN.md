@@ -69,7 +69,7 @@ GNVM: Node.exe version manager for Windows by GO
 ---
 * <https://github.com/spf13/cobra>
 * <https://github.com/tsuru/config>
-* <https://github.com/pierrre/archivefile/zip>
+* <https://github.com/pierrre/archivefile>
 * <https://github.com/daviddengcn/go-colortext>
 * icon <http://www.easyicon.net/1143807-update_icon.html>
 
@@ -85,6 +85,11 @@ A. 建议将`gnvm.exe`加入白名单。
 
 #### Q. `gnvm`与`nvmw` `nvm`有什么区别？
 A. `gnvm`是单文件CLI，同时比`nvmw`多了一些实用功能，如`gnvm update`, `gnvm install npm`, `gnvm config registry xxxx`等，在功能上更贴近`nvm`。
+
+Help
+---
+* Email <kenshin@ksria.com>
+* Github issue
 
 CHANGELOG
 ---
