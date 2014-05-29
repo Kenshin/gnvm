@@ -89,7 +89,7 @@ A. `gnvm` is single cli file，more than `nvmw` feature，e.g. `gnvm update`, `g
 
 Help
 ---
-* Email<kenshin@ksria.com>
+* Email <kenshin@ksria.com>
 * Github issue
 
 CHANGELOG
