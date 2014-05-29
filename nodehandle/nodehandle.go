@@ -237,7 +237,7 @@ func UninstallNpm() {
 
 	removeFlag := true
 
-	if !isDirExist(rootPath + "npm.cmd") && !isDirExist(rootPath + "node_modules" + DIVIDE + "npm") {
+	if !isDirExist(rootPath+"npm.cmd") && !isDirExist(rootPath+"node_modules"+DIVIDE+"npm") {
 		P(WARING, "%v not exist %v.\n", rootPath, "npm.cmd")
 		return
 	}
@@ -646,7 +646,7 @@ func Version(remote bool) {
 				}
 
 				if msg != "" {
-					P(NOTICE, msg + " Please download latest %v from %v", "gnvm.exe", "https://github.com/kenshin/gnvm", "\n")
+					P(NOTICE, msg+" Please download latest %v from %v", "gnvm.exe", "https://github.com/kenshin/gnvm", "\n")
 				}
 			}
 
@@ -702,11 +702,11 @@ func download(version string) int {
 
 	// rootPath/version/node.exe is exist
 	if _, err := util.GetNodeVersion(rootPath + version + DIVIDE); err == nil {
-		P(WARING, "[%v] folder exist.\n", version)
+		P(WARING, "%v folder exist.\n", version)
 		return 2
 	} else {
 		if err := os.RemoveAll(rootPath + version); err != nil {
-			P(ERROR, "remove [%v] fail, Error: %v\n", version, err.Error())
+			P(ERROR, "remove %v fail, Error: %v\n", version, err.Error())
 			return 1
 		}
 		//P(DEFAULT, "Remove empty [%v] folder success.\n", version)
@@ -715,7 +715,7 @@ func download(version string) int {
 	// rootPath/version is exist
 	if isDirExist(rootPath+version) != true {
 		if err := os.Mkdir(rootPath+version, 0777); err != nil {
-			P(ERROR, "create [%v] fail, Error: %v\n", version, err.Error())
+			P(ERROR, "create %v fail, Error: %v\n", version, err.Error())
 			return 3
 		}
 	}
@@ -727,7 +727,7 @@ func download(version string) int {
 	if code := curl.New(url, version, rootPath+version+DIVIDE+NODE); code != 0 {
 		if code == -1 {
 			if err := os.RemoveAll(rootPath + version); err != nil {
-				P(ERROR, "remove [%v] fail, Error: %v\n", version, err.Error())
+				P(ERROR, "remove %v fail, Error: %v\n", version, err.Error())
 				return 1
 			}
 		}
