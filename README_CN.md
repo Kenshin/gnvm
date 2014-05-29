@@ -24,6 +24,11 @@ GNVM: Node.exe version manager for Windows by GO
 ---
 在cmd下（如是Win7/8系统，确保获取管理员权限）输入：`gnvm version`，如有`Current version x.x.x`则说明配置成功。（注：`x.xx.xx`以下载的版本为准。）
 
+术语
+---
+* `global` 当前使用的node.exe。
+* `latest` 稳定版本的node.exe。
+
 使用
 ---
 
@@ -56,6 +61,7 @@ GNVM: Node.exe version manager for Windows by GO
     gnvm config INIT （第一次使用时，推荐做法）
     gnvm config registry dist.u.qiniudn.com （更换库）
     gnvm update latest （如果本机的latest过低，可以使用此方式升级。或者使用gnvm install latest）
+    gnvm node-version（查看本机global与latest node.exe版本）
     gnvm install 0.11.1 0.11.2 0.11.3 （下载任意版本的node.exe）
     gnvm use 0.11.1 （切换本机已安装的任意版本node.exe）
     gnvm ls （查看当前共有多少个node.exe）
@@ -66,6 +72,7 @@ GNVM: Node.exe version manager for Windows by GO
     gnvm config INIT （第一次使用时，推荐做法）
     gnvm config registry dist.u.qiniudn.com （更换库）
     gnvm install latest -g （下载最新版本的latest并设置为全局node.exe）
+    gnvm node-version（查看本机global与latest node.exe版本）
     gnvm ls （查看当前共有多少个node.exe）
     gnvm install npm （安装最新版本的npm到node.exe所在目录）
 

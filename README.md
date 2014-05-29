@@ -24,6 +24,11 @@ Validation
 ---
 Run `cmd`(administrator permissions) and input `gnvm version`，if output print `Current version x.x.x` configuration is successful.
 
+Definitions
+---
+* `global` The current node.exe version.
+* `latest` The stable node.exe version.
+
 Usage
 ---
 
@@ -56,6 +61,7 @@ Usage scenarios( exist node.exe)
     gnvm config INIT
     gnvm config registry dist.u.qiniudn.com
     gnvm update latest
+    gnvm node-version
     gnvm install 0.11.1 0.11.2 0.11.3
     gnvm use 0.11.1
     gnvm ls
@@ -66,6 +72,7 @@ Usage scenarios( not exist node.exe)
     gnvm config INIT
     gnvm config registry dist.u.qiniudn.com
     gnvm install latest -g
+    gnvm node-version
     gnvm ls
     gnvm install npm
 
