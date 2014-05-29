@@ -1,6 +1,6 @@
 GNVM: Node.exe version manager for Windows by GO
 ================================
-`gnvm` 是个Windows下面的多Node.exe版本管理工具，类似 [nvm](https://github.com/creationix/nvm) [nvmw](https://github.com/hakobera/nvmw)
+`GNVM` 基于Windows的多Node.exe版本管理工具，类似 [nvm](https://github.com/creationix/nvm) [nvmw](https://github.com/hakobera/nvmw)
 
 文档
 ---
@@ -14,15 +14,16 @@ GNVM: Node.exe version manager for Windows by GO
 ---
 
 #### 本机已有node.exe
-* 方式1: 将下载的`gnvm.exe`放到`node.exe`目录下。（推荐方式）
-* 方式2: 将下载的`gnvm.exe`放到任意文件夹下。（确保此文件夹在Path环境下，或者手动添加此文件夹到Path）
+* 方式1: 将下载的`gnvm.exe`放到`node.exe`目录下。（**推荐方式**）
+* 方式2: 将下载的`gnvm.exe`放到任意文件夹下。（确保此文件夹在Path环境下，或者手动添加此文件夹到Path环境）
 
 #### 本机没有node.exe
-* 将下载的`gnvm.exe`放到任意文件夹下。（确保此文件夹在Path环境下，或者手动添加此文件夹到Path）
+* 将下载的`gnvm.exe`放到任意文件夹下。（确保此文件夹在Path环境下，或者手动添加此文件夹到Path环境）
 
 验证
 ---
-在cmd下（如是Win7/8系统，确保获取管理员权限）输入：`gnvm version`，如有`Current version x.x.x`则说明配置成功。（注：`x.xx.xx`以下载的版本为准。）
+在cmd下（确保获取管理员权限），输入：`gnvm version`，如有`Current version x.x.x`则说明配置成功。（注：`x.xx.xx`以下载的版本为准。）
+![gnvm version](http://i.imgur.com/AlH2mSx.png)
 
 术语
 ---
@@ -49,9 +50,9 @@ GNVM: Node.exe version manager for Windows by GO
 
 最佳实践
 ---
-* 在cmd中运行`gnvm.exe`需要管理员权限。
-* 虽然可以直接使用`gnvm`的各种命令，但第一次运行`gnvm.exe`时，建议使用`gnvm config INIT`来初始化一些配置参数。
-* 虽然`gnvm.exe`支持任意文件夹，但建议将`node.exe`与`gnvm.exe`放在同一目录下。
+* 在cmd中运行`gnvm`需要管理员权限。
+* 虽然可以直接使用`gnvm`的各种命令，但第一次运行`gnvm`时，建议使用`gnvm config INIT`来初始化一些配置参数。
+* 虽然`gnvm`支持任意文件夹，但建议将`node.exe`与`gnvm.exe`放在同一目录下。
 * 使用`gnvm config registry xxx`更换库，默认库：<http://nodejs.org/dist/>，只要xxx的结构与默认库一致即可。
 * `gnvm`的使用依赖与`.gnvmrc`，请不要手动修改此文件。
 * `gnvm install npm`支持安装最新版的npm，但`0.1.0`版本只支持安装最新版本到`node.exe`所在文件夹，不可自定义`npm`的文件夹。（npm的最新版本取决于`gnvm config registry`对应的最新版本。）
@@ -104,7 +105,7 @@ Help
 
 CHANGELOG
 ---
-* **2014-05-29 version `0.1.0` support：**
+* **2014-05-29, Version `0.1.0` support:**
     * version
     * install
     * uninstall

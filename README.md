@@ -1,6 +1,6 @@
 GNVM: Node.exe version manager for Windows by GO
 ================================
-`gnvm` is simple multi node.exe version manager，like [nvm](https://github.com/creationix/nvm) [nvmw](https://github.com/hakobera/nvmw)
+`gnvm` is simple multi node.exe version manager, like [nvm](https://github.com/creationix/nvm) [nvmw](https://github.com/hakobera/nvmw)
 
 Documentation
 ---
@@ -22,7 +22,8 @@ Installation
 
 Validation
 ---
-Run `cmd`(administrator permissions) and input `gnvm version`，if output print `Current version x.x.x` configuration is successful.
+Run `cmd`(administrator permissions) and input `gnvm version`, if output print `Current version x.x.x` configuration is successful.
+![gnvm version](http://i.imgur.com/AlH2mSx.png)
 
 Definitions
 ---
@@ -51,12 +52,12 @@ Best practices
 ---
 * Run `gnvm` need administrator permissions.
 * The first run `gnvm` need use `gnvm config INIT`(**recommended**)
-* `gnvm.exe` support any folder, suggest `gnvm.exe` in `node.exe` folder.
-* Use `gnvm config registry xxx`change reigistry，default registry is<http://nodejs.org/dist/>.
+* `gnvm` can download to any folder, suggest `gnvm.exe` in `node.exe` folder.
+* Use `gnvm config registry xxx` change reigistry, default registry is <http://nodejs.org/dist/>.
 * `gnvm` depend on`.gnvmrc`, please don't modify manually.
-* `gnvm install npm` support latest npm，but `0.1.0` version only support install npm to `node.exe` folder，can't custom npm path.
+* `gnvm install npm` support latest npm, but `0.1.0` version only support install npm to `node.exe` folder, can't custom npm path.
 
-Usage scenarios( exist node.exe)
+Usage scenarios( exist node.exe )
 ---
     gnvm config INIT
     gnvm config registry dist.u.qiniudn.com
@@ -67,7 +68,7 @@ Usage scenarios( exist node.exe)
     gnvm ls
     gnvm uninstall 0.11.1
 
-Usage scenarios( not exist node.exe)
+Usage scenarios( not exist node.exe )
 ---
     gnvm config INIT
     gnvm config registry dist.u.qiniudn.com
@@ -76,7 +77,7 @@ Usage scenarios( not exist node.exe)
     gnvm ls
     gnvm install npm
 
-Use third lib
+Third lib
 ---
 * <https://github.com/spf13/cobra>
 * <https://github.com/tsuru/config>
@@ -91,8 +92,8 @@ Feature
 FAQ
 ---
 
-#### Q. The difference between `gnvm` and `nvmw` `nvm`?
-A. `gnvm` is single cli file，more than `nvmw` feature，e.g. `gnvm update`, `gnvm install npm`, `gnvm config registry xxxx`, more like `nvm`.
+#### Q. The difference between `gnvm` and `nvmw`, `nvm`?
+A. `gnvm` is single cli file, more than `nvmw` feature, e.g. `gnvm update`, `gnvm install npm`, `gnvm config registry xxxx`, more like `nvm`.
 
 Help
 ---
@@ -101,7 +102,7 @@ Help
 
 CHANGELOG
 ---
-* **2014-05-29 version `0.1.0` support：**
+* **2014-05-29, Version `0.1.0` support:**
     * version
     * install
     * uninstall
