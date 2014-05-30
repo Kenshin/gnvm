@@ -103,7 +103,7 @@ Help
 
 CHANGELOG
 ---
-* **2014-05-29, Version `0.1.0` support:**
+* **2014-05-30, Version `0.1.0` support:**
     * version
     * install
     * uninstall
