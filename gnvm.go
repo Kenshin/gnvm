@@ -2,8 +2,8 @@ package main
 
 import (
 	// local
-	_ "gnvm/util"
 	_ "gnvm/command"
+	_ "gnvm/util"
 )
 
 func main() {
