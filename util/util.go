@@ -105,44 +105,6 @@ func GetLatestVersion(url string) string {
 	}
 
 	return version
-
-	/*
-	for {
-		// set line
-		line, err := buff.ReadString('\n')
-
-		if line != "" {
-
-			args1 := strings.Split(line, "  ")
-			if len(args1) < 2 {
-				P(ERROR, "URL %v format error, please change registry. See 'gnvm help config'.\n", url)
-				break
-			}
-
-			args2 := strings.Split(args1[1], "-")
-			if len(args2) < 2 {
-				P(ERROR, "URL %v format error, please change registry. See 'gnvm help config'.\n", url)
-				break
-			}
-
-			if len(args2[1]) < 2 {
-				P(ERROR, "URL %v format error, please change registry. See 'gnvm help config'.\n", url)
-				break
-			}
-
-			// set version
-			version = args2[1][1:]
-			break
-		}
-
-		// when EOF or err break
-		if err != nil || err == io.EOF {
-			break
-		}
-
-	}
-	*/
-
 }
 
 func VerifyNodeVersion(version string) bool {
