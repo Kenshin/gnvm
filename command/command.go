@@ -212,7 +212,7 @@ gnvm update latest --global`,
 				P(ERROR, "gnvm update only support <%v> parameter. See '%v'.\n", "latest", "gnvm help update")
 			}
 		} else {
-			P(ERROR, "use parameter maximum is 1, temporary support only <%v>, please check your input. See '%v'.\n", "latest" , "gnvm help update")
+			P(ERROR, "use parameter maximum is 1, temporary support only <%v>, please check your input. See '%v'.\n", "latest", "gnvm help update")
 		}
 	},
 }
