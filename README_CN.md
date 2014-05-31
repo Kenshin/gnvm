@@ -1,6 +1,6 @@
-GNVM: Node.exe version manager on Windows by GO
+GNVM: Node.js version manager on Windows by GO
 ================================
-`GNVM` 基于Windows的多Node.exe版本管理工具，类似 [nvm](https://github.com/creationix/nvm) [nvmw](https://github.com/hakobera/nvmw)
+`GNVM` Windows下的Node.js多版本管理器，类似 [nvm](https://github.com/creationix/nvm) [nvmw](https://github.com/hakobera/nvmw) [nodist](https://github.com/marcelklehr/nodist)
 
 文档
 ---
