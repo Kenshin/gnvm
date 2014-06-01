@@ -1,6 +1,6 @@
 GNVM: Node.js version manager on Windows by GO
 ================================
-`GNVM` is simple multi node.js version manager on Windows by GO, like [nvm](https://github.com/creationix/nvm) [nvmw](https://github.com/hakobera/nvmw) [nodist](https://github.com/marcelklehr/nodist)
+`GNVM` is simple multi node.js version manager on Windows by GO, like `nvm` `nvmw` `nodist`
 
 Documentation
 ---
@@ -8,7 +8,23 @@ Documentation
 
 Download
 ---
-[32-bit](https://app.box.com/gnvm/1/2014967291) | [64-bit](https://app.box.com/gnvm/1/2014967689)
+* [32-bit](https://app.box.com/gnvm/1/2014967291) | [64-bit](https://app.box.com/gnvm/1/2014967689) **Host by Box.com**
+* [32-bit](https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe) | [64-bit](https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe) **Host by Github.com**
+
+Geek way
+---
+* For go user, usage **go get**
+
+  `go get github.com/Kenshin/gnvm`
+* For git user, usage **git clone**
+
+  `git clone git@github.com:Kenshin/gnvm-bin.git`
+* For curl user, usage **curl -O**
+
+  `curl -O https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe`
+
+  `curl -O https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe`
+
 
 Installation
 ---
