@@ -1,15 +1,30 @@
 GNVM: Node.js version manager on Windows by GO
 ================================
-`GNVM` Windows下的Node.js多版本管理器，类似 [nvm](https://github.com/creationix/nvm) [nvmw](https://github.com/hakobera/nvmw) [nodist](https://github.com/marcelklehr/nodist)
+`GNVM` Windows下的Node.js多版本管理器，类似 `nvm` `nvmw` `nodist`
 
 文档
 ---
 [English](https://github.com/kenshin/gnvm/blob/master/README.md)
 
-下载
+网盘下载
 ---
 * [32-bit](https://app.box.com/gnvm/1/2014967291) | [64-bit](https://app.box.com/gnvm/1/2014967689) **常用地址，Box，速度稍慢**
 * [32-bit](http://pan.baidu.com/s/1gdmVgen#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F32-bit) | [64-bit](http://pan.baidu.com/s/1gdmVgen#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F64-bit) **备用地址，百度网盘，速度快**
+* [32-bit](https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe) | [64-bit](https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe) **备用地址，Github**
+
+其他方式
+---
+* 已经安装了go的用户，使用 **go get**
+
+  `go get github.com/Kenshin/gnvm`
+* 已经安装了git的用户，使用 **git clone**
+
+  `git clone git@github.com:Kenshin/gnvm-bin.git`
+* 已经安装了curl的用户，使用 **curl -O**
+
+  `curl -O https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe`
+
+  `curl -O https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe`
 
 配置
 ---
