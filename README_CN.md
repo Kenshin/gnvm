@@ -14,13 +14,13 @@ GNVM: Node.js version manager on Windows by GO
 
 其他方式
 ---
-* 已经安装了go的用户，使用**go get**
+* 已经安装了go的用户，使用 **go get**
 
   `go get github.com/Kenshin/gnvm`
-* 已经安装了git的用户，使用**git clone**
+* 已经安装了git的用户，使用 **git clone**
 
   `git clone git@github.com:Kenshin/gnvm-bin.git`
-* 已经安装了curl的用户，使用**curl -O**
+* 已经安装了curl的用户，使用 **curl -O**
 
   `curl -O https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe`
 
