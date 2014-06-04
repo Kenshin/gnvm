@@ -3,6 +3,8 @@ package nodehandle
 import (
 
 	// lib
+	. "github.com/Kenshin/cprint"
+	"github.com/Kenshin/curl"
 	"github.com/pierrre/archivefile/zip"
 
 	// go
@@ -19,8 +21,6 @@ import (
 	// local
 	"gnvm/config"
 	"gnvm/util"
-	"gnvm/util/curl"
-	. "gnvm/util/p"
 )
 
 const (

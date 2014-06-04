@@ -2,16 +2,16 @@ package util
 
 import (
 
+	// lib
+	. "github.com/Kenshin/cprint"
+	"github.com/Kenshin/curl"
+
 	// go
 	"io"
 	"os"
 	"os/exec"
 	"strconv"
 	"strings"
-
-	// local
-	"gnvm/util/curl"
-	. "gnvm/util/p"
 )
 
 const (

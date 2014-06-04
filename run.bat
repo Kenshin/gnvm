@@ -7,14 +7,14 @@
 @ECHO off
 
 IF "%1" == "icon" GOTO icon
-IF "%1" == "go" GOTO go
+IF "%1" == "install" GOTO install
 
 :icon
 @ECHO run rsrc.exe build syso
 rsrc -ico gnvm.ico -o gnvm.syso
 IF "%1" == "icon" GOTO exit
 
-:go
+:install
 @ECHO run go install
 go install -ldflags "-w -s"
 GOTO exit
