@@ -1,0 +1,18 @@
+language: go
+
+go:
+  - 1.2.2
+
+install:
+  - go get github.com/spf13/cobra
+  - go get github.com/tsuru/config
+  - go get github.com/pierrre/archivefile/zip
+  - go get github.com/Kenshin/cprint
+  - go get github.com/Kenshin/curl
+  - go get github.com/Kenshin/command/
+  - go get github.com/Kenshin/config
+  - go get github.com/Kenshin/nodehandle
+  - go get github.com/Kenshin/util
+
+scrpit:
+  - go run gnvm.go version
