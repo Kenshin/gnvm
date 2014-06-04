@@ -9,10 +9,10 @@ install:
   - go get github.com/pierrre/archivefile/zip
   - go get github.com/Kenshin/cprint
   - go get github.com/Kenshin/curl
-  - go get github.com/Kenshin/command/
-  - go get github.com/Kenshin/config
-  - go get github.com/Kenshin/nodehandle
-  - go get github.com/Kenshin/util
+  - go get github.com/Kenshin/gnvm/command/
+  - go get github.com/Kenshin/gnvm/config
+  - go get github.com/Kenshin/gnvm/nodehandle
+  - go get github.com/Kenshin/gnvm/util
 
 scrpit:
   - go run gnvm.go version
