@@ -11,6 +11,7 @@ before_install:
 
 install:
   - go get -d -v ./...
+  - go test
 
 notifications:
   email: false
