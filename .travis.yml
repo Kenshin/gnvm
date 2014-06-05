@@ -11,7 +11,7 @@ before_install:
 
 install:
   - go get -d -v ./...
-  - go test
+  - go test gnvm_test.go
 
 notifications:
   email: false
