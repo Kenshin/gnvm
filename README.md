@@ -1,4 +1,4 @@
-GNVM: Node.js version manager on Windows by GO
+GNVM: Node.js version manager on Windows by GO [![Build Status](https://travis-ci.org/Kenshin/gnvm.svg?branch=master)](https://travis-ci.org/Kenshin/gnvm)
 ================================
 `GNVM` is simple multi node.js version manager on Windows by GO, like `nvm` `nvmw` `nodist`
 
