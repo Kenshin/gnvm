@@ -1,7 +1,7 @@
 language: go
 
 go:
-  - 1.1
+  - 1.2.2
 
 before_install:
   - cp -r  $TRAVIS_BUILD_DIR $HOME/gopath/src
@@ -11,6 +11,7 @@ before_install:
 
 install:
   - go get -d -v ./...
+  - go run gnvm.go version
 
 notifications:
   email: false
