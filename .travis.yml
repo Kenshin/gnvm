@@ -11,7 +11,6 @@ before_install:
 
 install:
   - go get -d -v ./...
-  - go run gnvm.go version
 
 notifications:
   email: false

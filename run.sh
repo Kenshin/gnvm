@@ -5,4 +5,4 @@
 # Author: Kenshin<kenshin@ksria.com>
 #===========================================================
 echo run go install
-go run gnvm.go version
+go install -ldflags "-w -s"
