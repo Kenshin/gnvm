@@ -3,16 +3,15 @@ language: go
 go:
   - 1.2.2
 
-install:
-  - go get github.com/spf13/cobra
-  - go get github.com/tsuru/config
-  - go get github.com/pierrre/archivefile/zip
-  - go get github.com/Kenshin/cprint
-  - go get github.com/Kenshin/curl
-  - go get github.com/Kenshin/gnvm/command/
-  - go get github.com/Kenshin/gnvm/config
-  - go get github.com/Kenshin/gnvm/nodehandle
-  - go get github.com/Kenshin/gnvm/util
+before_install:
+  - cp -r  $TRAVIS_BUILD_DIR $HOME/gopath/src
+  - cd $HOME/gopath/src/gnvm
+  - ls -a -l
+  - export PATH=$PATH:/home/travis/gopath/bin
 
-scrpit:
+install:
+  - go get -d -v ./...
   - go run gnvm.go version
+
+notifications:
+  email: false

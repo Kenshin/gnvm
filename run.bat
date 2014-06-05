@@ -1,7 +1,7 @@
 ::===========================================================
-:: GNVM  : Node.exe version manager by GO
+:: GNVM  : Node.js version manager by GO
 :: HOST  : https://github.com/kenshin/gnvm
-:: author: Kenshin<kenshin@ksria.com>
+:: Author: Kenshin<kenshin@ksria.com>
 ::===========================================================
 
 @ECHO off
