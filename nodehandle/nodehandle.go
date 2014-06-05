@@ -109,11 +109,10 @@ func Use(folder string) bool {
 	if isDirExist(rootFolder) != true {
 
 		// create rootVersion folder
-		if err := cmd("md", rootFolder); err != nil {
+		if err := os.Mkdir(rootFolder, 0777); err != nil {
 			P(ERROR, "create %v folder Error: %v.\n", rootVersion, err.Error())
 			return false
 		}
-
 	}
 
 	if rootNodeExist {
@@ -672,11 +671,6 @@ func isDirExist(path string) bool {
 		// return file.IsDir()
 		return true
 	}
-}
-
-func cmd(name, arg string) error {
-	_, err := exec.Command("cmd", "/C", name, arg).Output()
-	return err
 }
 
 func copy(src, dest string) error {
