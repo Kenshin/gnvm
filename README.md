@@ -94,13 +94,18 @@ Usage scenarios( not exist node.exe )
     gnvm ls
     gnvm install npm
 
-Third lib
+Dependency
 ---
+* <https://github.com/Kenshin/curl>
+* <https://github.com/Kenshin/cprint>
 * <https://github.com/spf13/cobra>
 * <https://github.com/tsuru/config>
 * <https://github.com/pierrre/archivefile>
 * <https://github.com/daviddengcn/go-colortext>
-* icon <http://www.easyicon.net/1143807-update_icon.html>
+
+ICON
+---
+* <http://www.easyicon.net/1143807-update_icon.html>
 
 Feature
 ---

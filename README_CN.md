@@ -94,13 +94,18 @@ GNVM: Node.js version manager on Windows by GO [![Build Status](https://travis-c
     gnvm ls （查看当前共有多少个node.exe）
     gnvm install npm （安装最新版本的npm到node.exe所在目录）
 
-使用的第三方LIB
+依赖
 ---
+* <https://github.com/Kenshin/curl>
+* <https://github.com/Kenshin/cprint>
 * <https://github.com/spf13/cobra>
 * <https://github.com/tsuru/config>
 * <https://github.com/pierrre/archivefile>
 * <https://github.com/daviddengcn/go-colortext>
-* icon <http://www.easyicon.net/1143807-update_icon.html>
+
+图标
+---
+* <http://www.easyicon.net/1143807-update_icon.html>
 
 功能一览
 ---
