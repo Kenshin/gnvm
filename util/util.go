@@ -16,6 +16,7 @@ import (
 
 const (
 	NODE    = "node.exe"
+	GNVM    = "gnvm.exe"
 	DIVIDE  = "\\"
 	SHASUMS = "SHASUMS.txt"
 	UNKNOWN = "unknown"
@@ -138,9 +139,12 @@ func getGlobalNodePath() string {
 	var path string
 	file, err := exec.LookPath(NODE)
 	if err != nil {
-		path = getCurrentPath()
+		if file, err := exec.LookPath(GNVM); err != nil {
+			path = getCurrentPath()
+		} else {
+			path = strings.Replace(file, DIVIDE+GNVM, "", -1)
+		}
 	} else {
-		// relpace "\\node.exe"
 		path = strings.Replace(file, DIVIDE+NODE, "", -1)
 	}
 
