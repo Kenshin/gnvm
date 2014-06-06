@@ -119,7 +119,15 @@ Help
 
 CHANGELOG
 ---
-* **2014-05-30, Version `0.1.0` support:**
+* **2014-06-06, Version `0.1.1`:**
+    * Change util/p/print.go to github.com/Kenshin/cprint.
+    * change util/curl/curl.go to github.com/Kenshin/curl.
+    * Add this project to travis-ci.org.
+    * Remove nodehandle.cmd method.
+    * Optimize nodehandle.copy method logic.
+    * Fix bug of When not global node.exe, need get gnvm.exe path.
+
+* **2014-05-30, Version `0.1.0`:**
     * version
     * install
     * uninstall
