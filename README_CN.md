@@ -40,7 +40,7 @@ GNVM: Node.js version manager on Windows by GO [![Build Status](https://travis-c
 ---
 在cmd下（确保获取管理员权限），输入：`gnvm version`，如有`Current version x.x.x`则说明配置成功。（注：`x.xx.xx`以下载的版本为准。）
 
-![gnvm version](http://i.imgur.com/AlH2mSx.png)
+![gnvm version](http://i.imgur.com/hEyXZnl.png)
 
 术语
 ---

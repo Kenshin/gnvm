@@ -40,7 +40,7 @@ Validation
 ---
 Run `cmd`(administrator permissions) and input `gnvm version`, if output print `Current version x.x.x` configuration is successful.
 
-![gnvm version](http://i.imgur.com/AlH2mSx.png)
+![gnvm version](http://i.imgur.com/hEyXZnl.png)
 
 Definitions
 ---
