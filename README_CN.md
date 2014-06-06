@@ -1,4 +1,4 @@
-GNVM: Node.js version manager on Windows by GO
+GNVM: Node.js version manager on Windows by GO [![Build Status](https://travis-ci.org/Kenshin/gnvm.svg?branch=master)](https://travis-ci.org/Kenshin/gnvm)
 ================================
 `GNVM` Windows下的Node.js多版本管理器，类似 `nvm` `nvmw` `nodist`
 
@@ -10,7 +10,7 @@ GNVM: Node.js version manager on Windows by GO
 ---
 * [32-bit](https://app.box.com/gnvm/1/2014967291) | [64-bit](https://app.box.com/gnvm/1/2014967689) **常用地址，Box，速度稍慢**
 * [32-bit](http://pan.baidu.com/s/1gdmVgen#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F32-bit) | [64-bit](http://pan.baidu.com/s/1gdmVgen#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F64-bit) **备用地址，百度网盘，速度快**
-* [32-bit](https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe) | [64-bit](https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe) **备用地址，Github**
+* [32-bit](https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true) | [64-bit](https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true) **备用地址，Github**
 
 其他方式
 ---
@@ -22,9 +22,9 @@ GNVM: Node.js version manager on Windows by GO
   `git clone git@github.com:Kenshin/gnvm-bin.git`
 * 已经安装了curl的用户，使用 **curl -O**
 
-  `curl -O https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe`
+  `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true -o gnvm.exe`
 
-  `curl -O https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe`
+  `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true -o gnvm.exe`
 
 配置
 ---
@@ -40,7 +40,7 @@ GNVM: Node.js version manager on Windows by GO
 ---
 在cmd下（确保获取管理员权限），输入：`gnvm version`，如有`Current version x.x.x`则说明配置成功。（注：`x.xx.xx`以下载的版本为准。）
 
-![gnvm version](http://i.imgur.com/AlH2mSx.png)
+![gnvm version](http://i.imgur.com/hEyXZnl.png)
 
 术语
 ---
@@ -94,13 +94,21 @@ GNVM: Node.js version manager on Windows by GO
     gnvm ls （查看当前共有多少个node.exe）
     gnvm install npm （安装最新版本的npm到node.exe所在目录）
 
-使用的第三方LIB
+依赖
+---
+* <https://github.com/Kenshin/curl>
+* <https://github.com/Kenshin/cprint>
+
+第三方包
 ---
 * <https://github.com/spf13/cobra>
 * <https://github.com/tsuru/config>
 * <https://github.com/pierrre/archivefile>
 * <https://github.com/daviddengcn/go-colortext>
-* icon <http://www.easyicon.net/1143807-update_icon.html>
+
+图标
+---
+* <http://www.easyicon.net/1143807-update_icon.html>
 
 功能一览
 ---
@@ -122,7 +130,15 @@ Help
 
 CHANGELOG
 ---
-* **2014-05-30, Version `0.1.0` support:**
+* **2014-06-06, Version `0.1.1`:**
+    * Change `util/p/print.go` to `github.com/Kenshin/cprint`.
+    * change `util/curl/curl.go` to `github.com/Kenshin/curl`.
+    * Add this project to travis-ci.org.
+    * Remove `nodehandle.cmd` method.
+    * Optimize `nodehandle.copy` method logic.
+    * Fix bug of When not global node.exe, need get gnvm.exe path.
+
+* **2014-05-30, Version `0.1.0`:**
     * version
     * install
     * uninstall

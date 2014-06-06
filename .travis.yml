@@ -1,0 +1,17 @@
+language: go
+
+go:
+  - 1.2.2
+
+before_install:
+  - cp -r  $TRAVIS_BUILD_DIR $HOME/gopath/src
+  - cd $HOME/gopath/src/gnvm
+  - ls -a -l
+  - export PATH=$PATH:/home/travis/gopath/bin
+
+install:
+  - go get -d -v ./...
+  - go run gnvm.go version
+
+notifications:
+  email: false

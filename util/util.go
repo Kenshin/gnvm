@@ -2,20 +2,21 @@ package util
 
 import (
 
+	// lib
+	. "github.com/Kenshin/cprint"
+	"github.com/Kenshin/curl"
+
 	// go
 	"io"
 	"os"
 	"os/exec"
 	"strconv"
 	"strings"
-
-	// local
-	"gnvm/util/curl"
-	. "gnvm/util/p"
 )
 
 const (
 	NODE    = "node.exe"
+	GNVM    = "gnvm.exe"
 	DIVIDE  = "\\"
 	SHASUMS = "SHASUMS.txt"
 	UNKNOWN = "unknown"
@@ -138,9 +139,12 @@ func getGlobalNodePath() string {
 	var path string
 	file, err := exec.LookPath(NODE)
 	if err != nil {
-		path = getCurrentPath()
+		if file, err := exec.LookPath(GNVM); err != nil {
+			path = getCurrentPath()
+		} else {
+			path = strings.Replace(file, DIVIDE+GNVM, "", -1)
+		}
 	} else {
-		// relpace "\\node.exe"
 		path = strings.Replace(file, DIVIDE+NODE, "", -1)
 	}
 
