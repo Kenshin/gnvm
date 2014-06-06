@@ -3,6 +3,8 @@ package nodehandle
 import (
 
 	// lib
+	. "github.com/Kenshin/cprint"
+	"github.com/Kenshin/curl"
 	"github.com/pierrre/archivefile/zip"
 
 	// go
@@ -19,8 +21,6 @@ import (
 	// local
 	"gnvm/config"
 	"gnvm/util"
-	"gnvm/util/curl"
-	. "gnvm/util/p"
 )
 
 const (
@@ -109,11 +109,10 @@ func Use(folder string) bool {
 	if isDirExist(rootFolder) != true {
 
 		// create rootVersion folder
-		if err := cmd("md", rootFolder); err != nil {
+		if err := os.Mkdir(rootFolder, 0777); err != nil {
 			P(ERROR, "create %v folder Error: %v.\n", rootVersion, err.Error())
 			return false
 		}
-
 	}
 
 	if rootNodeExist {
@@ -674,13 +673,23 @@ func isDirExist(path string) bool {
 	}
 }
 
-func cmd(name, arg string) error {
-	_, err := exec.Command("cmd", "/C", name, arg).Output()
-	return err
-}
-
 func copy(src, dest string) error {
-	_, err := exec.Command("cmd", "/C", "copy", "/y", src, dest).Output()
+	//_, err := exec.Command("cmd", "/C", "copy", "/y", src, dest).Output()
+
+	srcFile, errSrc := os.Open(src)
+	if errSrc != nil {
+		return errSrc
+	}
+	defer srcFile.Close()
+
+	dstFile, errDst := os.OpenFile(dest + DIVIDE + NODE, os.O_WRONLY|os.O_CREATE, 0644)
+	if errDst != nil {
+		return errSrc
+	}
+	defer dstFile.Close()
+
+	_, err := io.Copy(dstFile, srcFile)
+
 	return err
 }
 

@@ -3,13 +3,13 @@ package command
 import (
 
 	// lib
+	. "github.com/Kenshin/cprint"
 	"github.com/spf13/cobra"
 
 	// local
 	"gnvm/config"
 	"gnvm/nodehandle"
 	"gnvm/util"
-	. "gnvm/util/p"
 )
 
 var (

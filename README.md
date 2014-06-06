@@ -1,4 +1,4 @@
-GNVM: Node.js version manager on Windows by GO
+GNVM: Node.js version manager on Windows by GO [![Build Status](https://travis-ci.org/Kenshin/gnvm.svg?branch=master)](https://travis-ci.org/Kenshin/gnvm)
 ================================
 `GNVM` is simple multi node.js version manager on Windows by GO, like `nvm` `nvmw` `nodist`
 
@@ -9,7 +9,7 @@ Documentation
 Download
 ---
 * [32-bit](https://app.box.com/gnvm/1/2014967291) | [64-bit](https://app.box.com/gnvm/1/2014967689) **Host by Box.com**
-* [32-bit](https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe) | [64-bit](https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe) **Host by Github.com**
+* [32-bit](https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true) | [64-bit](https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true) **Host by Github.com**
 
 Geek way
 ---
@@ -21,9 +21,9 @@ Geek way
   `git clone git@github.com:Kenshin/gnvm-bin.git`
 * For curl user, usage **curl -O**
 
-  `curl -O https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe`
+  `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true -o gnvm.exe`
 
-  `curl -O https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe`
+  `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true -o gnvm.exe`
 
 
 Installation
@@ -40,7 +40,7 @@ Validation
 ---
 Run `cmd`(administrator permissions) and input `gnvm version`, if output print `Current version x.x.x` configuration is successful.
 
-![gnvm version](http://i.imgur.com/AlH2mSx.png)
+![gnvm version](http://i.imgur.com/hEyXZnl.png)
 
 Definitions
 ---
@@ -94,13 +94,21 @@ Usage scenarios( not exist node.exe )
     gnvm ls
     gnvm install npm
 
-Third lib
+Dependency
+---
+* <https://github.com/Kenshin/curl>
+* <https://github.com/Kenshin/cprint>
+
+Other package
 ---
 * <https://github.com/spf13/cobra>
 * <https://github.com/tsuru/config>
 * <https://github.com/pierrre/archivefile>
 * <https://github.com/daviddengcn/go-colortext>
-* icon <http://www.easyicon.net/1143807-update_icon.html>
+
+Icon
+---
+* <http://www.easyicon.net/1143807-update_icon.html>
 
 Feature
 ---
@@ -119,7 +127,15 @@ Help
 
 CHANGELOG
 ---
-* **2014-05-30, Version `0.1.0` support:**
+* **2014-06-06, Version `0.1.1`:**
+    * Change `util/p/print.go` to `github.com/Kenshin/cprint`.
+    * change `util/curl/curl.go` to `github.com/Kenshin/curl`.
+    * Add this project to travis-ci.org.
+    * Remove `nodehandle.cmd` method.
+    * Optimize `nodehandle.copy` method logic.
+    * Fix bug of When not global node.exe, need get gnvm.exe path.
+
+* **2014-05-30, Version `0.1.0`:**
     * version
     * install
     * uninstall

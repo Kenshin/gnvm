@@ -2,6 +2,7 @@ package config
 
 import (
 	// lib
+	. "github.com/Kenshin/cprint"
 	"github.com/tsuru/config"
 
 	// go
@@ -11,13 +12,12 @@ import (
 
 	// local
 	"gnvm/util"
-	. "gnvm/util/p"
 )
 
 var configPath, globalversion, latsetversion string
 
 const (
-	VERSION  = "0.1.0"
+	VERSION  = "0.1.1"
 	CONFIG   = ".gnvmrc"
 	NEWLINE  = "\n"
 	UNKNOWN  = "unknown"
