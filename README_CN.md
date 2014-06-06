@@ -22,9 +22,9 @@ GNVM: Node.js version manager on Windows by GO [![Build Status](https://travis-c
   `git clone git@github.com:Kenshin/gnvm-bin.git`
 * 已经安装了curl的用户，使用 **curl -O**
 
-  `curl -O https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe`
+  `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true -o gnvm.exe`
 
-  `curl -O https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe`
+  `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true -o gnvm.exe`
 
 配置
 ---

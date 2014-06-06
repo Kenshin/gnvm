@@ -21,9 +21,9 @@ Geek way
   `git clone git@github.com:Kenshin/gnvm-bin.git`
 * For curl user, usage **curl -O**
 
-  `curl -O https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe`
+  `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true -o gnvm.exe`
 
-  `curl -O https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe`
+  `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true -o gnvm.exe`
 
 
 Installation
