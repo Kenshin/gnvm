@@ -123,10 +123,10 @@ func Use(folder string) bool {
 		}
 
 		// delete <root>/node.exe
-		if err := os.Remove(rootNode); err != nil {
+		/*if err := os.Remove(rootNode); err != nil {
 			P(ERROR, "remove %v folder Error: %v.\n", rootNode, err.Error())
 			return false
-		}
+		}*/
 
 	}
 
@@ -682,7 +682,7 @@ func copy(src, dest string) error {
 	}
 	defer srcFile.Close()
 
-	dstFile, errDst := os.OpenFile(dest + DIVIDE + NODE, os.O_WRONLY|os.O_CREATE, 0644)
+	dstFile, errDst := os.OpenFile(dest+DIVIDE+NODE, os.O_WRONLY|os.O_CREATE, 0644)
 	if errDst != nil {
 		return errDst
 	}
