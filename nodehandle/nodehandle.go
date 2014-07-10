@@ -684,7 +684,7 @@ func copy(src, dest string) error {
 
 	dstFile, errDst := os.OpenFile(dest + DIVIDE + NODE, os.O_WRONLY|os.O_CREATE, 0644)
 	if errDst != nil {
-		return errSrc
+		return errDst
 	}
 	defer dstFile.Close()
 
