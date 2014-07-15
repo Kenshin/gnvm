@@ -40,7 +40,7 @@ func TransLatestVersion(latest string, isPrint bool) string {
 	if latest == config.LATEST {
 		latest = config.GetConfig(config.LATEST_VERSION)
 		if isPrint {
-			P(NOTICE, "current latest version is %v\n", latest)
+			P(NOTICE, "current latest version is %v.\n", latest)
 		}
 	}
 	return latest
@@ -416,7 +416,7 @@ func Install(args []string, global bool) int {
 			// set v
 			v = version
 			currentLatest = version
-			P(NOTICE, "current latest version is %v\n", version)
+			P(NOTICE, "current latest version is %v.\n", version)
 		}
 
 		// downlaod
