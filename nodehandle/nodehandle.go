@@ -40,7 +40,7 @@ func TransLatestVersion(latest string, isPrint bool) string {
 	if latest == config.LATEST {
 		latest = config.GetConfig(config.LATEST_VERSION)
 		if isPrint {
-			P(NOTICE, "current latest version is %v\n", latest)
+			P(NOTICE, "current latest version is %v.\n", latest)
 		}
 	}
 	return latest
@@ -123,10 +123,10 @@ func Use(folder string) bool {
 		}
 
 		// delete <root>/node.exe
-		if err := os.Remove(rootNode); err != nil {
+		/*if err := os.Remove(rootNode); err != nil {
 			P(ERROR, "remove %v folder Error: %v.\n", rootNode, err.Error())
 			return false
-		}
+		}*/
 
 	}
 
@@ -416,7 +416,7 @@ func Install(args []string, global bool) int {
 			// set v
 			v = version
 			currentLatest = version
-			P(NOTICE, "current latest version is %v\n", version)
+			P(NOTICE, "current latest version is %v.\n", version)
 		}
 
 		// downlaod
@@ -682,9 +682,9 @@ func copy(src, dest string) error {
 	}
 	defer srcFile.Close()
 
-	dstFile, errDst := os.OpenFile(dest + DIVIDE + NODE, os.O_WRONLY|os.O_CREATE, 0644)
+	dstFile, errDst := os.OpenFile(dest+DIVIDE+NODE, os.O_WRONLY|os.O_CREATE, 0644)
 	if errDst != nil {
-		return errSrc
+		return errDst
 	}
 	defer dstFile.Close()
 
