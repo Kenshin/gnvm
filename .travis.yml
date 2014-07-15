@@ -2,7 +2,6 @@ language: go
 
 go:
   - 1.2.2
-  - 1.3
 
 before_install:
   - cp -r  $TRAVIS_BUILD_DIR $HOME/gopath/src
