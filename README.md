@@ -127,6 +127,10 @@ Help
 
 CHANGELOG
 ---
+* **2014-07-15, Version `0.1.2`:**
+    * Adapter go version 1.3.
+    * Fix bug of usage `gnvm update latest -g` adapter go version error.
+
 * **2014-06-06, Version `0.1.1`:**
     * Change `util/p/print.go` to `github.com/Kenshin/cprint`.
     * change `util/curl/curl.go` to `github.com/Kenshin/curl`.
