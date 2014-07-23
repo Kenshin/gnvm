@@ -695,7 +695,7 @@ func copy(src, dest string) error {
 			return errDst
 		}
 
-		P(WARING, "wirte %v fail, Error: %v\n", dest+DIVIDE+NODE, PROCESSTAKEUP)
+		P(WARING, "write %v fail, Error: %v\n", dest+DIVIDE+NODE, PROCESSTAKEUP)
 
 		if _, err := exec.Command("taskkill.exe", "/f", "/im", NODE).Output(); err != nil && strings.Index(err.Error(), "exit status") == -1 {
 			return err
