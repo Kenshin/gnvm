@@ -25,7 +25,6 @@ Geek way
 
   `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true -o gnvm.exe`
 
-
 Installation
 ---
 
@@ -40,7 +39,9 @@ Validation
 ---
 Run `cmd`(administrator permissions) and input `gnvm version`, if output print `Current version x.x.x` configuration is successful.
 
-![gnvm version](http://i.imgur.com/hEyXZnl.png)
+Screenshots
+---
+![gnvm](http://i.imgur.com/8yOv5pc.gif)
 
 Definitions
 ---
@@ -127,6 +128,10 @@ Help
 
 CHANGELOG
 ---
+* **2014-07-23, Version `0.1.3`:**
+    * Fixbug of `node.exe` process to take up, `gnvm use x.xx.xx` not work.
+    * When usage `gnvm use x.xx.xx`, kill `node.exe` process automatically.
+
 * **2014-07-15, Version `0.1.2`:**
     * Adapter go version 1.3.
     * Fix bug of usage `gnvm update latest -g` adapter go version error.
