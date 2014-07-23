@@ -40,7 +40,7 @@ GNVM: Node.js version manager on Windows by GO [![Build Status](https://travis-c
 ---
 在cmd下（确保获取管理员权限），输入：`gnvm version`，如有`Current version x.x.x`则说明配置成功。（注：`x.xx.xx`以下载的版本为准。）
 
-![gnvm version](http://i.imgur.com/hEyXZnl.png)
+![gnvm](http://i.imgur.com/8yOv5pc.gif)
 
 术语
 ---
@@ -130,6 +130,10 @@ Help
 
 CHANGELOG
 ---
+* **2014-07-23, Version `0.1.3`:**
+    * Fixbug of `node.exe` process to take up, `gnvm use x.xx.xx` not work.
+    * When usage `gnvm use x.xx.xx`, kill `node.exe` process automatically.
+
 * **2014-07-15, Version `0.1.2`:**
     * Adapter go version 1.3.
     * Fix bug of usage `gnvm update latest -g` adapter go version error.
