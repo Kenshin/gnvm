@@ -24,10 +24,11 @@ import (
 )
 
 const (
-	DIVIDE      = "\\"
-	NODE        = "node.exe"
-	TIMEFORMART = "02-Jan-2006 15:04"
-	GNVMHOST    = "http://k-zone.cn/gnvm/version.txt"
+	DIVIDE        = "\\"
+	NODE          = "node.exe"
+	TIMEFORMART   = "02-Jan-2006 15:04"
+	GNVMHOST      = "http://k-zone.cn/gnvm/version.txt"
+	PROCESSTAKEUP = "The process cannot access the file because it is being used by another process."
 )
 
 var rootPath string
@@ -682,9 +683,31 @@ func copy(src, dest string) error {
 	}
 	defer srcFile.Close()
 
-	dstFile, errDst := os.OpenFile(dest+DIVIDE+NODE, os.O_WRONLY|os.O_CREATE, 0644)
+	srcInfo, errInfor := srcFile.Stat()
+	if errInfor != nil {
+		return errInfor
+	}
+
+	dstFile, errDst := os.OpenFile(dest+DIVIDE+NODE, os.O_CREATE|os.O_TRUNC|os.O_RDWR, srcInfo.Mode().Perm())
 	if errDst != nil {
-		return errDst
+
+		if errDst.(*os.PathError).Err.Error() != PROCESSTAKEUP {
+			return errDst
+		}
+
+		P(WARING,"wirte %v fail, Error: %v\n", dest+DIVIDE+NODE, PROCESSTAKEUP)
+
+		if _, err := exec.Command("taskkill.exe", "/f", "/im", NODE).Output(); err != nil {
+			return err
+		}
+
+		P(NOTICE,"%v process kill ok.\n", dest+DIVIDE+NODE)
+
+		dstFile, errDst = os.OpenFile(dest+DIVIDE+NODE, os.O_WRONLY|os.O_CREATE, 0644)
+		if errDst != nil {
+			return errDst
+		}
+
 	}
 	defer dstFile.Close()
 
