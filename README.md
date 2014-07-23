@@ -25,7 +25,6 @@ Geek way
 
   `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true -o gnvm.exe`
 
-
 Installation
 ---
 
@@ -40,6 +39,8 @@ Validation
 ---
 Run `cmd`(administrator permissions) and input `gnvm version`, if output print `Current version x.x.x` configuration is successful.
 
+Screenshots
+---
 ![gnvm](http://i.imgur.com/8yOv5pc.gif)
 
 Definitions
