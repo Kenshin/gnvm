@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="gnvm : Node.js version manager on Windows by GO" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>gnvm</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Kenshin/gnvm">View on GitHub</a>
+
+          <h1 id="project_title">gnvm</h1>
+          <h2 id="project_tagline">Node.js version manager on Windows by GO</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/Kenshin/gnvm/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/Kenshin/gnvm/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="gnvm-nodejs-version-manager-on-windows-by-go-" class="anchor" href="#gnvm-nodejs-version-manager-on-windows-by-go-"><span class="octicon octicon-link"></span></a>GNVM: Node.js version manager on Windows by GO <a href="https://travis-ci.org/Kenshin/gnvm"><img src="https://travis-ci.org/Kenshin/gnvm.svg?branch=master" alt="Build Status"></a>
+</h1>
+
+<p><code>GNVM</code> is simple multi node.js version manager on Windows by GO, like <code>nvm</code> <code>nvmw</code> <code>nodist</code></p>
+
+<h2>
+<a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h2>
+
+<p><a href="https://github.com/kenshin/gnvm/blob/master/README_CN.md">中文版</a></p>
+
+<h2>
+<a name="download" class="anchor" href="#download"><span class="octicon octicon-link"></span></a>Download</h2>
+
+<ul>
+<li>
+<a href="https://app.box.com/gnvm/1/2014967291">32-bit</a> | <a href="https://app.box.com/gnvm/1/2014967689">64-bit</a> <strong>Host by Box.com</strong>
+</li>
+<li>
+<a href="https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true">32-bit</a> | <a href="https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true">64-bit</a> <strong>Host by Github.com</strong>
+</li>
+</ul><h2>
+<a name="geek-way" class="anchor" href="#geek-way"><span class="octicon octicon-link"></span></a>Geek way</h2>
+
+<ul>
+<li>
+<p>For go user, usage <strong>go get</strong></p>
+
+<p><code>go get github.com/Kenshin/gnvm</code></p>
+</li>
+<li>
+<p>For git user, usage <strong>git clone</strong></p>
+
+<p><code>git clone git@github.com:Kenshin/gnvm-bin.git</code></p>
+</li>
+<li>
+<p>For curl user, usage <strong>curl -O</strong></p>
+
+<p><code>curl -L https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true -o gnvm.exe</code></p>
+
+<p><code>curl -L https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true -o gnvm.exe</code></p>
+</li>
+</ul><h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<h4>
+<a name="exist-nodeexe" class="anchor" href="#exist-nodeexe"><span class="octicon octicon-link"></span></a>exist node.exe</h4>
+
+<ul>
+<li>Download <code>gnvm.exe</code> in <code>node.exe</code> folder.(<strong>recommended</strong>)</li>
+<li>Download <code>gnvm.exe</code> in any folder, add this folder to <code>path</code> environment variable.</li>
+</ul><h4>
+<a name="not-exist-nodeexe" class="anchor" href="#not-exist-nodeexe"><span class="octicon octicon-link"></span></a>not exist node.exe</h4>
+
+<ul>
+<li>Download <code>gnvm.exe</code> in any folder, add this folder to <code>path</code> environment variable.</li>
+</ul><h2>
+<a name="validation" class="anchor" href="#validation"><span class="octicon octicon-link"></span></a>Validation</h2>
+
+<p>Run <code>cmd</code>(administrator permissions) and input <code>gnvm version</code>, if output print <code>Current version x.x.x</code> configuration is successful.</p>
+
+<h2>
+<a name="screenshots" class="anchor" href="#screenshots"><span class="octicon octicon-link"></span></a>Screenshots</h2>
+
+<p><img src="http://i.imgur.com/8yOv5pc.gif" alt="gnvm"></p>
+
+<h2>
+<a name="definitions" class="anchor" href="#definitions"><span class="octicon octicon-link"></span></a>Definitions</h2>
+
+<ul>
+<li>
+<code>global</code> The current node.exe version.</li>
+<li>
+<code>latest</code> The stable node.exe version.</li>
+</ul><h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<pre><code>Usage:
+  gnvm
+  gnvm [command]
+
+Available Commands:
+  version                   :: Print the version number of gnvm.exe
+  install                   :: Install any node.exe version
+  uninstall                 :: Uninstall local node.exe version
+  use                       :: Use any version of the local already exists
+  update                    :: Update latest node.exe
+  ls                        :: List show all &lt;local&gt; &lt;remote&gt; node.exe version
+  node-version              :: Show &lt;global&gt; &lt;latest&gt; node.exe version
+  config                    :: Setter and getter registry
+  help [command]            :: Help about any command
+</code></pre>
+
+<h2>
+<a name="best-practices" class="anchor" href="#best-practices"><span class="octicon octicon-link"></span></a>Best practices</h2>
+
+<ul>
+<li>Run <code>gnvm</code> need administrator permissions.</li>
+<li>The first run <code>gnvm</code> need use <code>gnvm config INIT</code>(<strong>recommended</strong>)</li>
+<li>
+<code>gnvm</code> can download to any folder, suggest <code>gnvm.exe</code> in <code>node.exe</code> folder.</li>
+<li>Use <code>gnvm config registry xxx</code> change reigistry, default registry is <a href="http://nodejs.org/dist/">http://nodejs.org/dist/</a>.</li>
+<li>
+<code>gnvm</code> depend on<code>.gnvmrc</code>, please don't modify manually.</li>
+<li>
+<code>gnvm install npm</code> support latest npm, but <code>0.1.0</code> version only support install npm to <code>node.exe</code> folder, can't custom npm path.</li>
+</ul><h2>
+<a name="usage-scenarios-exist-nodeexe-" class="anchor" href="#usage-scenarios-exist-nodeexe-"><span class="octicon octicon-link"></span></a>Usage scenarios( exist node.exe )</h2>
+
+<pre><code>gnvm config INIT
+gnvm config registry dist.u.qiniudn.com
+gnvm update latest
+gnvm node-version
+gnvm install 0.11.1 0.11.2 0.11.3
+gnvm use 0.11.1
+gnvm ls
+gnvm uninstall 0.11.1
+</code></pre>
+
+<h2>
+<a name="usage-scenarios-not-exist-nodeexe-" class="anchor" href="#usage-scenarios-not-exist-nodeexe-"><span class="octicon octicon-link"></span></a>Usage scenarios( not exist node.exe )</h2>
+
+<pre><code>gnvm config INIT
+gnvm config registry dist.u.qiniudn.com
+gnvm install latest -g
+gnvm node-version
+gnvm ls
+gnvm install npm
+</code></pre>
+
+<h2>
+<a name="dependency" class="anchor" href="#dependency"><span class="octicon octicon-link"></span></a>Dependency</h2>
+
+<ul>
+<li><a href="https://github.com/Kenshin/curl">https://github.com/Kenshin/curl</a></li>
+<li><a href="https://github.com/Kenshin/cprint">https://github.com/Kenshin/cprint</a></li>
+</ul><h2>
+<a name="other-package" class="anchor" href="#other-package"><span class="octicon octicon-link"></span></a>Other package</h2>
+
+<ul>
+<li><a href="https://github.com/spf13/cobra">https://github.com/spf13/cobra</a></li>
+<li><a href="https://github.com/tsuru/config">https://github.com/tsuru/config</a></li>
+<li><a href="https://github.com/pierrre/archivefile">https://github.com/pierrre/archivefile</a></li>
+<li><a href="https://github.com/daviddengcn/go-colortext">https://github.com/daviddengcn/go-colortext</a></li>
+</ul><h2>
+<a name="icon" class="anchor" href="#icon"><span class="octicon octicon-link"></span></a>Icon</h2>
+
+<ul>
+<li><a href="http://www.easyicon.net/1143807-update_icon.html">http://www.easyicon.net/1143807-update_icon.html</a></li>
+</ul><h2>
+<a name="feature" class="anchor" href="#feature"><span class="octicon octicon-link"></span></a>Feature</h2>
+
+<p><img src="https://trello-attachments.s3.amazonaws.com/535f6fd8cb08b7fd799c2051/53606254da7b8f8b2f6c9d87/981x580/f6e58f47691d3d352f0b97ba94263df8/gnvm_0.1.0.png" alt="Feature"></p>
+
+<h2>
+<a name="faq" class="anchor" href="#faq"><span class="octicon octicon-link"></span></a>FAQ</h2>
+
+<h4>
+<a name="q-the-difference-between-gnvm-and-nvmw-nvm" class="anchor" href="#q-the-difference-between-gnvm-and-nvmw-nvm"><span class="octicon octicon-link"></span></a>Q. The difference between <code>gnvm</code> and <code>nvmw</code>, <code>nvm</code>?</h4>
+
+<p>A. <code>gnvm</code> is single cli file, more than <code>nvmw</code> feature, e.g. <code>gnvm update</code>, <code>gnvm install npm</code>, <code>gnvm config registry xxxx</code>, more like <code>nvm</code>.</p>
+
+<h2>
+<a name="help" class="anchor" href="#help"><span class="octicon octicon-link"></span></a>Help</h2>
+
+<ul>
+<li>Email <a href="mailto:kenshin@ksria.com">kenshin@ksria.com</a>
+</li>
+<li>Github issue</li>
+</ul><h2>
+<a name="changelog" class="anchor" href="#changelog"><span class="octicon octicon-link"></span></a>CHANGELOG</h2>
+
+<ul>
+<li>
+<p><strong>2014-07-23, Version <code>0.1.3</code>:</strong></p>
+
+<ul>
+<li>Fixbug of <code>node.exe</code> process to take up, <code>gnvm use x.xx.xx</code> not work.</li>
+<li>When usage <code>gnvm use x.xx.xx</code>, kill <code>node.exe</code> process automatically.</li>
+</ul>
+</li>
+<li>
+<p><strong>2014-07-15, Version <code>0.1.2</code>:</strong></p>
+
+<ul>
+<li>Adapter go version 1.3.</li>
+<li>Fix bug of usage <code>gnvm update latest -g</code> adapter go version error.</li>
+</ul>
+</li>
+<li>
+<p><strong>2014-06-06, Version <code>0.1.1</code>:</strong></p>
+
+<ul>
+<li>Change <code>util/p/print.go</code> to <code>github.com/Kenshin/cprint</code>.</li>
+<li>change <code>util/curl/curl.go</code> to <code>github.com/Kenshin/curl</code>.</li>
+<li>Add this project to travis-ci.org.</li>
+<li>Remove <code>nodehandle.cmd</code> method.</li>
+<li>Optimize <code>nodehandle.copy</code> method logic.</li>
+<li>Fix bug of When not global node.exe, need get gnvm.exe path.</li>
+</ul>
+</li>
+<li>
+<p><strong>2014-05-30, Version <code>0.1.0</code>:</strong></p>
+
+<ul>
+<li>version</li>
+<li>install</li>
+<li>uninstall</li>
+<li>use</li>
+<li>update</li>
+<li>ls</li>
+<li>node-version</li>
+<li>config</li>
+</ul>
+</li>
+</ul><h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>LICENSE</h2>
+
+<p>(The MIT License)</p>
+
+<p>Copyright (c) 2014 Kenshin Wang <a href="mailto:kenshin@ksria.com">kenshin@ksria.com</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">gnvm maintained by <a href="https://github.com/Kenshin">Kenshin</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
