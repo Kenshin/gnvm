@@ -32,6 +32,8 @@ h3, h4, h5, h6 {
   color:#494949;
 }
 
+
+
 a {
   color:#39c;
   font-weight:400;
@@ -46,7 +48,7 @@ a small {
 }
 
 .wrapper {
-  width:860px;
+  width:100%;
   margin:0 auto;
 }
 
@@ -63,12 +65,25 @@ code, pre {
   font-size:12px;
 }
 
+code {
+  border: 1px solid #e0e0e0;
+  background: #F8F8F8;
+  padding: 0 5px;
+  margin: 0 2px;
+  font-size: 11px;
+  font-family: Menlo, monospace;
+}
+
 pre {
   padding:8px 15px;
-  background: #f8f8f8;  
+  background: #f8f8f8;
   border-radius:5px;
   border:1px solid #e5e5e5;
   overflow-x: auto;
+}
+
+pre code {
+  border:0px;
 }
 
 table {
@@ -101,12 +116,17 @@ header {
   position:fixed;
 }
 
+header div {
+  text-align: center;
+  margin: 5px;
+}
+
 header ul {
   list-style:none;
   height:40px;
-  
+
   padding:0;
-  
+
   background: #eee;
   background: -moz-linear-gradient(top, #f8f8f8 0%, #dddddd 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#dddddd));
@@ -114,7 +134,7 @@ header ul {
   background: -o-linear-gradient(top, #f8f8f8 0%,#dddddd 100%);
   background: -ms-linear-gradient(top, #f8f8f8 0%,#dddddd 100%);
   background: linear-gradient(top, #f8f8f8 0%,#dddddd 100%);
-  
+
   border-radius:5px;
   border:1px solid #d2d2d2;
   box-shadow:inset #fff 0 1px 0, inset rgba(0,0,0,0.03) 0 -1px 0;
@@ -141,6 +161,7 @@ header ul a {
 strong {
   color:#222;
   font-weight:700;
+  margin-top: 3px;
 }
 
 header ul li + li {
@@ -160,7 +181,7 @@ header ul a strong {
 }
 
 section {
-  width:500px;
+  width:65%;
   float:right;
   padding-bottom:50px;
 }
@@ -183,34 +204,38 @@ footer {
   bottom:50px;
 }
 
+footer p {
+  margin: 0px;
+}
+
 @media print, screen and (max-width: 960px) {
-  
+
   div.wrapper {
     width:auto;
     margin:0;
   }
-  
+
   header, section, footer {
     float:none;
     position:static;
     width:auto;
   }
-  
+
   header {
     padding-right:320px;
   }
-  
+
   section {
     border:1px solid #e5e5e5;
     border-width:1px 0;
     padding:20px 0;
     margin:0 0 20px;
   }
-  
+
   header a small {
     display:inline;
   }
-  
+
   header ul {
     position:absolute;
     right:50px;
@@ -222,15 +247,15 @@ footer {
   body {
     word-wrap:break-word;
   }
-  
+
   header {
     padding:0;
   }
-  
+
   header ul, header p.view {
     position:static;
   }
-  
+
   pre, code {
     word-wrap:normal;
   }
@@ -240,7 +265,7 @@ footer {
   body {
     padding:15px;
   }
-  
+
   header ul {
     display:none;
   }
