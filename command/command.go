@@ -274,8 +274,9 @@ var configCmd = &cobra.Command{
 	Short: "Setter and getter registry",
 	Long: `Setter and getter registry e.g.
 gnvm config registry
-gnvm config registry http://dist.u.qiniudn.com/
+gnvm config registry http://npm.taobao.org/mirrors/node
 gnvm config registry DEFAULT
+gnvm config registry TAOBAO
 gnvm config INIT`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
@@ -295,14 +296,19 @@ gnvm config INIT`,
 			args[0] = util.EqualAbs("registry", args[0])
 			args[0] = util.EqualAbs("noderoot", args[0])
 			args[1] = util.EqualAbs("DEFAULT", args[1])
+			args[1] = util.EqualAbs("TAOBAO", args[1])
 			switch {
-			case args[0] == "registry" && args[1] != "DEFAULT":
-				if newValue := config.SetConfig(args[0], args[1]); newValue != "" {
-					P(DEFAULT, "Set success, %v new value is %v\n", args[0], newValue)
-				}
 			case args[0] == "registry" && args[1] == "DEFAULT":
 				if newValue := config.SetConfig(args[0], config.REGISTRY_VAL); newValue != "" {
 					P(DEFAULT, "Reset success, %v new value is %v\n", args[0], newValue)
+				}
+			case args[0] == "registry" && args[1] == "TAOBAO":
+				if newValue := config.SetConfig(args[0], config.TAOBAO); newValue != "" {
+					P(DEFAULT, "Reset success, %v new value is %v\n", args[0], newValue)
+				}
+			case args[0] == "registry" && args[1] != "DEFAULT" && args[1] != "TAOBAO":
+				if newValue := config.SetConfig(args[0], args[1]); newValue != "" {
+					P(DEFAULT, "Set success, %v new value is %v\n", args[0], newValue)
 				}
 			case args[0] == "noderoot":
 				P(ERROR, "%v read-only, temporarily does not support set way. See '%v'.\n", args[0], "gnvm help config")

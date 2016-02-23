@@ -27,6 +27,7 @@ const (
 	REGISTRY     = "registry"
 	REGISTRY_KEY = "registry: "
 	REGISTRY_VAL = "http://nodejs.org/dist/"
+	TAOBAO       = "http://npm.taobao.org/mirrors/node"
 
 	NODEROOT     = "noderoot"
 	NODEROOT_KEY = "noderoot: "
@@ -118,7 +119,7 @@ func SetConfig(key string, value interface{}) string {
 			value = "http://" + value.(string)
 		}
 
-		reg := regexp.MustCompile(`(http|https)://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?`)
+		reg, _ := regexp.Compile(`^https?:\/\/(w{3}\.)?(\w+\.)+([a-zA-Z]{2,})(:\d{1,4})?\/?($)?`)
 
 		switch {
 		case !reg.MatchString(value.(string)):
