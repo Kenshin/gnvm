@@ -17,12 +17,12 @@ import (
 var configPath, globalversion, latsetversion string
 
 const (
-	VERSION  = "0.1.3"
+	VERSION  = "0.1.4"
 	CONFIG   = ".gnvmrc"
 	NEWLINE  = "\n"
 	UNKNOWN  = "unknown"
 	LATEST   = "latest"
-	NODELIST = "npm-versions.txt"
+	NODELIST = "index.json"
 
 	REGISTRY     = "registry"
 	REGISTRY_KEY = "registry: "
@@ -168,7 +168,7 @@ func ReSetConfig() {
 	}
 	SetConfig(GLOBAL_VERSION, globalversion)
 
-	// set url
+	// get lasest node.exe url
 	url := REGISTRY_VAL + "latest/" + util.SHASUMS
 	if latest := util.GetLatestVersion(url); latest != "" {
 		latsetversion = latest
