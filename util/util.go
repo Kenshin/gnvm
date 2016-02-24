@@ -115,7 +115,9 @@ func GetLatestVersion(url string) string {
 func VerifyNodeVersion(version string) bool {
 	result := true
 	reg, _ := regexp.Compile(`^(0|[^0]\d?)(\.\d+){2}$`)
-	if format := reg.MatchString(version); !format {
+	if version == UNKNOWN {
+		return true
+	} else if format := reg.MatchString(version); !format {
 		result = false
 	}
 
