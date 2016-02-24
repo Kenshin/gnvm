@@ -14,7 +14,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"time"
 
@@ -726,12 +725,6 @@ func copy(src, dest string) error {
  */
 func download(version string) int {
 
-	// get current os arch
-	amd64 := "/"
-	if runtime.GOARCH == "amd64" {
-		amd64 = "/x64/"
-	}
-
 	// rootPath/version/node.exe is exist
 	if _, err := util.GetNodeVersion(rootPath + version + DIVIDE); err == nil {
 		P(WARING, "%v folder exist.\n", version)
@@ -752,8 +745,14 @@ func download(version string) int {
 		}
 	}
 
+	// get current os arch
+	/*amd64 := "/"
+	if runtime.GOARCH == "amd64" {
+		amd64 = "/x64/"
+	}
 	// set url
-	url := config.GetConfig(config.REGISTRY) + "v" + version + amd64 + NODE
+	url := config.GetConfig(config.REGISTRY) + "v" + version + amd64 + NODE*/
+	url := config.GetConfig(config.REGISTRY) + GetNodePath(version) + NODE
 
 	// download
 	if code := curl.New(url, version, rootPath+version+DIVIDE+NODE); code != 0 {
