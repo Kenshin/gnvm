@@ -236,6 +236,7 @@ gnvm ls --remote`,
 		} else {
 			// check local ls
 			nodehandle.LS(true)
+
 		}
 	},
 }
