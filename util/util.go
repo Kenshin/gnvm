@@ -114,20 +114,27 @@ func GetLatestVersion(url string) string {
 
 func VerifyNodeVersion(version string) bool {
 	result := true
-	if version == UNKNOWN {
-		return true
+	reg, _ := regexp.Compile(`^(0|[^0]\d?)(\.\d+){2}$`)
+	if format := reg.MatchString(version); !format {
+		result = false
 	}
-	arr := strings.Split(version, ".")
-	if len(arr) != 3 {
-		return false
-	}
-	for _, v := range arr {
-		_, err := strconv.ParseInt(v, 10, 0)
-		if err != nil {
-			result = false
-			break
+
+	/*
+		if version == UNKNOWN {
+			return true
 		}
-	}
+		arr := strings.Split(version, ".")
+		if len(arr) != 3 {
+			return false
+		}
+		for _, v := range arr {
+			_, err := strconv.ParseInt(v, 10, 0)
+			if err != nil {
+				result = false
+				break
+			}
+		}
+	*/
 	return result
 }
 

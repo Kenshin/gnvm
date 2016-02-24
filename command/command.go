@@ -90,7 +90,7 @@ gnvm install npm`,
 
 				// check version format
 				if ok := util.VerifyNodeVersion(v); ok != true {
-					P(ERROR, "%v format error, the correct format is %v. \n", v, "x.xx.xx")
+					P(ERROR, "%v format error, the correct format is %v or %v. \n", v, "0.xx.xx", "^0.xx.xx")
 				} else {
 					newArgs = append(newArgs, v)
 				}

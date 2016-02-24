@@ -1,7 +1,6 @@
 package nodehandle
 
 import (
-	"errors"
 	. "github.com/Kenshin/cprint"
 	"regexp"
 	"runtime"
@@ -27,11 +26,6 @@ type NodeList struct {
 */
 
 func GetNodePath(version string) string {
-	reg, _ := regexp.Compile(`^(0|[^0]\d?)(\.\d+){2}$`)
-	// version format verify
-	if format := reg.MatchString(version); !format {
-		P(ERROR, "downlaod node.exe version: %v, invalid format. See '%v'.\n", version, "gnvm help install")
-	}
 	reg1, _ := regexp.Compile(`^0\.`)
 	// version format include: 0.xx.xx and ^0.xx.xx
 	// if 0.xx.xx get 0.xx else get ^0.xx * 10.0
