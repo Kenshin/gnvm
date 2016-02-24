@@ -7,7 +7,6 @@ import (
 	"strconv"
 )
 
-/*
 type Node struct {
 	version string
 	exec    string
@@ -23,7 +22,6 @@ type NodeList struct {
 	Node
 	NPM
 }
-*/
 
 func GetNodePath(version string) string {
 	reg1, _ := regexp.Compile(`^0\.`)

@@ -5,6 +5,7 @@ import (
 	// lib
 	. "github.com/Kenshin/cprint"
 	"github.com/Kenshin/curl"
+	"github.com/bitly/go-simplejson"
 	"github.com/pierrre/archivefile/zip"
 
 	// go
@@ -392,7 +393,7 @@ func LsRemote() {
 	}()
 
 	// set exist version
-	isExistVersion := false
+	//isExistVersion := false
 
 	// print
 	P(DEFAULT, "Read all node.exe version list from %v, please wait.\n", url)
@@ -405,23 +406,49 @@ func LsRemote() {
 	// close
 	defer res.Body.Close()
 
-	writeVersion := func(content string, line int) bool {
-		// replace '\n'
-		content = strings.Replace(content, "\n", "", -1)
-
-		// split 'vx.xx.xx  1.1.0-alpha-2'
-		args := strings.Split(content, " ")
-
-		if ok := util.VerifyNodeVersion(args[0][1:]); ok {
-			isExistVersion = true
-			P(DEFAULT, args[0], "\n")
-		}
-		return false
-	}
-
-	if err := curl.ReadLine(res.Body, writeVersion); err != nil && err != io.EOF {
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
 		P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
 	}
+
+	json, err := simplejson.NewJson(body)
+	if err != nil {
+		P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
+	}
+	arr, err := json.Array()
+	if err != nil {
+		P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
+	}
+	nodeDB := make(map[string]NodeList)
+	for idx, element := range arr {
+		if value, ok := element.(map[string]interface{}); ok {
+			ver, _ := value["version"].(string)
+			date, _ := value["date"].(string)
+			npm, _ := value["npm"].(string)
+			nodeDB[ver] = NodeList{idx, date, Node{ver, "x64"}, NPM{npm}}
+			P(DEFAULT, ver, "\n")
+		}
+	}
+
+	/*
+		writeVersion := func(content string, line int) bool {
+			// replace '\n'
+			content = strings.Replace(content, "\n", "", -1)
+
+			// split 'vx.xx.xx  1.1.0-alpha-2'
+			args := strings.Split(content, " ")
+
+			if ok := util.VerifyNodeVersion(args[0][1:]); ok {
+				isExistVersion = true
+				P(DEFAULT, args[0], "\n")
+			}
+			return false
+		}
+
+		if err := curl.ReadLine(res.Body, writeVersion); err != nil && err != io.EOF {
+			P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
+		}
+	*/
 
 }
 
