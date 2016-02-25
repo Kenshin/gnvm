@@ -174,7 +174,7 @@ func NodeVersion(args []string, remote bool) {
 				return
 			}
 			P(DEFAULT, "Node.exe remote %v version is %v.\n", config.GetConfig("registry"), remoteVersion)
-			P(DEFAULT, "Node.exe latest version is %v.\n", latest)
+			P(DEFAULT, "Node.exe local latest version is %v.\n", latest)
 		}
 	}
 
