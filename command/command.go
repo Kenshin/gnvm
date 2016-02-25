@@ -301,11 +301,11 @@ gnvm config INIT`,
 			switch {
 			case args[0] == "registry" && args[1] == "DEFAULT":
 				if newValue := config.SetConfig(args[0], config.REGISTRY_VAL); newValue != "" {
-					P(DEFAULT, "Reset success, %v new value is %v\n", args[0], newValue)
+					P(DEFAULT, "Set success, %v new value is %v\n", args[0], newValue)
 				}
 			case args[0] == "registry" && args[1] == "TAOBAO":
 				if newValue := config.SetConfig(args[0], config.TAOBAO); newValue != "" {
-					P(DEFAULT, "Reset success, %v new value is %v\n", args[0], newValue)
+					P(DEFAULT, "Set success, %v new value is %v\n", args[0], newValue)
 				}
 			case args[0] == "registry" && args[1] != "DEFAULT" && args[1] != "TAOBAO":
 				if newValue := config.SetConfig(args[0], args[1]); newValue != "" {

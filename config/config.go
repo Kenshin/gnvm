@@ -99,13 +99,13 @@ func createConfig() {
 	}
 
 	P(DEFAULT, "Config file %v create success.\n", configPath)
-	P(NOTICE, "latest version is %v, please use '%v'.\n", UNKNOWN, "gnvm config init")
+	//P(NOTICE, "if you first run gnvm.exe, please use %v or %v.", "gnvm config INIT", "gnvm config registry TAOBAO", "\n")
 
 }
 
 func readConfig() {
 	if err := config.ReadConfigFile(configPath); err != nil {
-		P(ERROR, "read config file fail, please use '%v'. \nError: %v\n", "gnvm config init", err.Error())
+		P(ERROR, "read config file fail, please use '%v'. \nError: %v\n", "gnvm config INIT", err.Error())
 		return
 	}
 }
@@ -157,9 +157,12 @@ func GetConfig(key string) string {
 }
 
 func ReSetConfig() {
-	SetConfig(REGISTRY, REGISTRY_VAL)
-	SetConfig(NODEROOT, util.GlobalNodePath)
-
+	if newValue := SetConfig(REGISTRY, REGISTRY_VAL); newValue != "" {
+		P(NOTICE, "%v      init success, new value is %v\n", REGISTRY, newValue)
+	}
+	if newValue := SetConfig(NODEROOT, util.GlobalNodePath); newValue != "" {
+		P(NOTICE, "%v      init success, new value is %v\n", NODEROOT, newValue)
+	}
 	version, err := util.GetNodeVersion(util.GlobalNodePath + "\\")
 	if err != nil {
 		P(WARING, "not found global node.exe version, please use '%v'. See '%v'.\n", "gnvm install x.xx.xx -g", "gnvm help install")
@@ -167,16 +170,19 @@ func ReSetConfig() {
 	} else {
 		globalversion = version
 	}
-	SetConfig(GLOBAL_VERSION, globalversion)
-
-	// get lasest node.exe url
-	url := REGISTRY_VAL + "latest/" + util.SHASUMS
-	if latest := util.GetLatestVersion(url); latest != "" {
-		latsetversion = latest
-	} else {
-		latsetversion = LATEST_VERSION_VAL
+	if newValue := SetConfig(GLOBAL_VERSION, globalversion); newValue != "" {
+		P(NOTICE, "%v init success, new value is %v\n", GLOBAL_VERSION, newValue)
 	}
-	SetConfig(LATEST_VERSION, latsetversion)
-
-	P(DEFAULT, "Config file %v init success.\n", configPath)
+	/*
+		url := REGISTRY_VAL + "latest/" + util.SHASUMS
+		P(NOTICE, "get node.exe latest version from %v, please wait.", url, "\n")
+		if latest := util.GetLatestVersion(url); latest != "" {
+			latsetversion = latest
+		} else {
+			latsetversion = LATEST_VERSION_VAL
+		}
+		if newValue := SetConfig(LATEST_VERSION, latsetversion); newValue != "" {
+			P(NOTICE, "%v init success, new value is %v\n", LATEST_VERSION, newValue)
+		}
+	*/
 }
