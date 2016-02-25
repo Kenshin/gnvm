@@ -454,7 +454,7 @@ func LsRemote() {
  */
 func Install(args []string, global bool) int {
 
-	var currentLatest string
+	var localVersion string
 	var code int
 
 	// try catch
@@ -473,6 +473,9 @@ func Install(args []string, global bool) int {
 
 		if v == config.LATEST {
 
+			localVersion = config.GetConfig(config.LATEST_VERSION)
+			P(NOTICE, "local  latest version is %v.\n", localVersion)
+
 			version := getLatestVersionByRemote()
 			if version == "" {
 				P(ERROR, "get latest version error, please check. See '%v'.\n", "gnvm config help")
@@ -481,16 +484,16 @@ func Install(args []string, global bool) int {
 
 			// set v
 			v = version
-			currentLatest = version
-			P(NOTICE, "current latest version is %v.\n", version)
+			P(NOTICE, "remote latest version is %v.\n", version)
 		}
 
 		// downlaod
 		code = download(v)
 		if code == 0 || code == 2 {
 
-			if v == currentLatest {
+			if v != localVersion {
 				config.SetConfig(config.LATEST_VERSION, v)
+				P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, v)
 			}
 
 			if global && len(args) == 1 {
