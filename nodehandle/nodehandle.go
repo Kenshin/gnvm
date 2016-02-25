@@ -627,7 +627,6 @@ func Update(global bool) {
 
 	switch {
 	case localVersion == config.UNKNOWN:
-		P(WARING, "local latest version is %v.\n", config.UNKNOWN)
 		if code := Install(args, global); code == 0 || code == 2 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
 			P(DEFAULT, "Update latest success, current latest version is %v.\n", remoteVersion)
