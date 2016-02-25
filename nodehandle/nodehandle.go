@@ -74,7 +74,7 @@ func Use(folder string) bool {
 	folder = TransLatestVersion(folder, true)
 
 	if folder == config.UNKNOWN {
-		P(ERROR, "unassigned node.exe latest version, use %v. See '%v'.\n", "gnvm config INIT", "gnvm help config")
+		P(ERROR, "node.exe latest version not exist, use %v. See '%v'.\n", "gnvm node-version latest -r", "gnvm help node-version")
 		return false
 	}
 
