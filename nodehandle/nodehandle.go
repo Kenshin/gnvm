@@ -160,6 +160,14 @@ func NodeVersion(args []string, remote bool) {
 	if len(args) == 0 || len(args) > 1 {
 		P(DEFAULT, "Node.exe %v version is %v.\n", "latest", latest)
 		P(DEFAULT, "Node.exe %v version is %v.\n", "global", global)
+
+		if latest == config.UNKNOWN {
+			P(WARING, "latest version is %v, please use '%v'. See '%v'.\n", config.UNKNOWN, "gnvm node-version latest -r", "gnvm help node-version")
+		}
+
+		if global == config.UNKNOWN {
+			P(WARING, "global version is %v, please use '%v' or '%v'. See '%v'.\n", config.UNKNOWN, "gnvm install latest -g", "gnvm install x.xx.xx -g", "gnvm help install")
+		}
 	} else {
 		switch {
 		case args[0] == "global":
@@ -175,21 +183,27 @@ func NodeVersion(args []string, remote bool) {
 			}
 			P(DEFAULT, "Node.exe remote %v version is %v.\n", config.GetConfig("registry"), remoteVersion)
 			P(DEFAULT, "Node.exe local latest version is %v.\n", latest)
+			if latest == config.UNKNOWN {
+				config.SetConfig(config.LATEST_VERSION, remoteVersion)
+				P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, remoteVersion)
+			}
 		}
 	}
 
-	isPrint := false
-	switch {
-	case len(args) == 0 && (global == config.UNKNOWN || latest == config.UNKNOWN):
-		isPrint = true
-	case len(args) > 0 && args[0] == "latest" && latest == config.UNKNOWN:
-		isPrint = true
-	case len(args) > 0 && args[0] == "global" && global == config.UNKNOWN:
-		isPrint = true
-	}
-	if isPrint {
-		P(WARING, "when version is %v, please use '%v'. See '%v'.\n", config.UNKNOWN, "gnvm config INIT", "gnvm help config")
-	}
+	/*
+		isPrint := false
+		switch {
+		case len(args) == 0 && (global == config.UNKNOWN || latest == config.UNKNOWN):
+			isPrint = true
+		case len(args) > 0 && args[0] == "latest" && latest == config.UNKNOWN:
+			isPrint = true
+		case len(args) > 0 && args[0] == "global" && global == config.UNKNOWN:
+			isPrint = true
+		}
+		if isPrint {
+			P(WARING, "when version is %v, please use '%v'. See '%v'.\n", config.UNKNOWN, "gnvm config INIT", "gnvm help config")
+		}
+	*/
 }
 
 func Uninstall(folder string) {
@@ -491,7 +505,7 @@ func Install(args []string, global bool) int {
 		code = download(v)
 		if code == 0 || code == 2 {
 
-			if v != localVersion {
+			if v != localVersion && v == "latest" {
 				config.SetConfig(config.LATEST_VERSION, v)
 				P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, v)
 			}
