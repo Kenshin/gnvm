@@ -419,13 +419,9 @@ func LsRemote() {
 	if err != nil {
 		P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
 	}
-	nodeDB := make(map[string]NodeList)
-	for idx, element := range arr {
+	for _, element := range arr {
 		if value, ok := element.(map[string]interface{}); ok {
 			ver, _ := value["version"].(string)
-			date, _ := value["date"].(string)
-			npm, _ := value["npm"].(string)
-			nodeDB[ver] = NodeList{idx, date, Node{ver, "x64"}, NPM{npm}}
 			P(DEFAULT, ver, "\n")
 		}
 	}
