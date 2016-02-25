@@ -15,6 +15,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"time"
 
@@ -672,9 +673,13 @@ func Version(remote bool) {
 	}()
 
 	localVersion := config.VERSION
+	arch := "32 bit"
+	if runtime.GOARCH == "amd64" {
+		arch = "64 bit"
+	}
 
 	cp := CP{Red, true, None, true, "Kenshin Wang"}
-	P(DEFAULT, "Current version %v.", localVersion, "\n")
+	P(DEFAULT, "Current version %v %v.", localVersion, arch, "\n")
 	P(DEFAULT, "Copyright (C) 2014-2016 %v <kenshin@ksria.com>", cp, "\n")
 	cp.FgColor, cp.Value = Blue, "https://github.com/kenshin/gnvm"
 	P(DEFAULT, "See %v for more information.", cp, "\n")
