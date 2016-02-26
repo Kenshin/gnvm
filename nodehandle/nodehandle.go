@@ -451,7 +451,9 @@ func LsRemote(limit int) {
 		}
 	}
 
-	nl.Detail()
+	if limit != -1 {
+		nl.Detail()
+	}
 
 	/*
 		writeVersion := func(content string, line int) bool {
