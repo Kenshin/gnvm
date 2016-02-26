@@ -101,8 +101,8 @@ func (nl *NL) Print(nodeist NodeList) {
 }
 
 func (nl NL) Detail() {
-	fmt.Println(`No.   date         node ver    exec      npm ver
---------------------------------------------------`)
+	fmt.Println("No.   date         node ver    exec      npm ver  ")
+	fmt.Println("--------------------------------------------------")
 	for _, value := range nl {
 		id := format(strconv.Itoa(value.ID), 6)
 		date := format(value.Date, 13)
