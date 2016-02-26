@@ -440,12 +440,18 @@ func LsRemote(limit int) {
 	if err != nil {
 		P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
 	}
-	for _, element := range arr {
+	nl := make(NL)
+	for idx, element := range arr {
 		if value, ok := element.(map[string]interface{}); ok {
-			ver, _ := value["version"].(string)
-			P(DEFAULT, ver, "\n")
+			nd := nl.New(idx, value)
+			//nl.Print(nd)
+			if limit == -1 {
+				P(DEFAULT, nd.Node.Version, "\n")
+			}
 		}
 	}
+
+	nl.Detail()
 
 	/*
 		writeVersion := func(content string, line int) bool {

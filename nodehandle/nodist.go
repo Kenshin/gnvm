@@ -1,6 +1,7 @@
 package nodehandle
 
 import (
+	"fmt"
 	. "github.com/Kenshin/cprint"
 	"regexp"
 	"runtime"
@@ -8,20 +9,22 @@ import (
 )
 
 type Node struct {
-	version string
-	exec    string
+	Version string
+	Exec    string
 }
 
 type NPM struct {
-	version string
+	Version string
 }
 
 type NodeList struct {
-	id   int
-	date string
+	ID   int
+	Date string
 	Node
 	NPM
 }
+
+type NL map[string]NodeList
 
 func GetNodePath(version string) string {
 	reg1, _ := regexp.Compile(`^0\.`)
@@ -56,4 +59,56 @@ func GetNodePath(version string) string {
 		}
 	}
 	return "v" + version + path
+}
+
+func filter(files []interface{}) string {
+	exec := ""
+	reg, _ := regexp.Compile(`x(86|64)`)
+	for _, file := range files {
+		if ok, err := regexp.MatchString("^win-x(86|64)-exe", file.(string)); ok && err == nil {
+			exec += reg.FindString(file.(string)) + " "
+		}
+	}
+	if exec == "" {
+		exec = "[x]"
+	}
+	return exec
+}
+
+func format(value string, max int) string {
+	newValue := ""
+	for idx := 0; idx < max-len(value); idx++ {
+		newValue = newValue + " "
+	}
+	return value + newValue
+}
+
+func (nl NL) New(idx int, value map[string]interface{}) NodeList {
+	ver, _ := value["version"].(string)
+	date, _ := value["date"].(string)
+	npm, _ := value["npm"].(string)
+	if npm == "" {
+		npm = "[x]"
+	}
+	exe := filter(value["files"].([]interface{}))
+	nl[ver] = NodeList{idx, date, Node{ver, exe}, NPM{npm}}
+	return nl[ver]
+}
+
+func (nl *NL) Print(nodeist NodeList) {
+	msg := fmt.Sprintf("id: %v date: %v node version: %v os support: %v npm version: %v", nodeist.ID, nodeist.Date, nodeist.Node.Version, nodeist.Node.Exec, nodeist.NPM.Version)
+	fmt.Println(msg)
+}
+
+func (nl NL) Detail() {
+	fmt.Println(`No.   date         node ver    exec      npm ver
+--------------------------------------------------`)
+	for _, value := range nl {
+		id := format(strconv.Itoa(value.ID), 6)
+		date := format(value.Date, 13)
+		ver := format(value.Node.Version, 12)
+		exe := format(value.Node.Exec, 10)
+		npm := format(value.NPM.Version, 9)
+		fmt.Println(id + date + ver + exe + npm)
+	}
 }
