@@ -187,6 +187,12 @@ func NodeVersion(args []string, remote bool) {
 				config.SetConfig(config.LATEST_VERSION, remoteVersion)
 				P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, remoteVersion)
 			}
+			v1, _ := util.ConverFloat(latest)
+			v2, _ := util.ConverFloat(remoteVersion)
+			if v1 < v2 {
+				cp := CP{Red, false, None, false, ">"}
+				P(WARING, "remote latest version %v %v local latest version %v, suggest to upgrade, usage 'gnvm update latest' or 'gnvm update latest -g'.\n", remoteVersion, cp, latest)
+			}
 		}
 	}
 
