@@ -10,6 +10,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -18,7 +19,7 @@ const (
 	NODE    = "node.exe"
 	GNVM    = "gnvm.exe"
 	DIVIDE  = "\\"
-	SHASUMS = "SHASUMS.txt"
+	SHASUMS = "SHASUMS256.txt"
 	UNKNOWN = "unknown"
 )
 
@@ -76,25 +77,28 @@ func GetLatestVersion(url string) string {
 
 	latestVersion := func(content string, line int) bool {
 		if content != "" && line == 1 {
+			reg, _ := regexp.Compile(`\d(\.\d){2}`)
+			version = reg.FindString(content)
+			/*
+				args1 := strings.Split(content, "  ")
+				if len(args1) < 2 {
+					P(ERROR, "URL %v format error, please change registry. See '%v'.\n", url, "gnvm help config")
+					return true
+				}
 
-			args1 := strings.Split(content, "  ")
-			if len(args1) < 2 {
-				P(ERROR, "URL %v format error, please change registry. See '%v'.\n", url, "gnvm help config")
-				return true
-			}
+				args2 := strings.Split(args1[1], "-")
+				if len(args2) < 2 {
+					P(ERROR, "URL %v format error, please change registry. See '%v'.\n", url, "gnvm help config")
+					return true
+				}
 
-			args2 := strings.Split(args1[1], "-")
-			if len(args2) < 2 {
-				P(ERROR, "URL %v format error, please change registry. See '%v'.\n", url, "gnvm help config")
-				return true
-			}
+				if len(args2[1]) < 2 {
+					P(ERROR, "URL %v format error, please change registry. See '%v'.\n", url, "gnvm help config")
+					return true
+				}
 
-			if len(args2[1]) < 2 {
-				P(ERROR, "URL %v format error, please change registry. See '%v'.\n", url, "gnvm help config")
-				return true
-			}
-
-			version = args2[1][1:]
+				version = args2[1][1:]
+			*/
 		}
 
 		return false
@@ -110,20 +114,29 @@ func GetLatestVersion(url string) string {
 
 func VerifyNodeVersion(version string) bool {
 	result := true
+	reg, _ := regexp.Compile(`^(0|[^0]\d?)(\.\d+){2}$`)
 	if version == UNKNOWN {
 		return true
+	} else if format := reg.MatchString(version); !format {
+		result = false
 	}
-	arr := strings.Split(version, ".")
-	if len(arr) != 3 {
-		return false
-	}
-	for _, v := range arr {
-		_, err := strconv.ParseInt(v, 10, 0)
-		if err != nil {
-			result = false
-			break
+
+	/*
+		if version == UNKNOWN {
+			return true
 		}
-	}
+		arr := strings.Split(version, ".")
+		if len(arr) != 3 {
+			return false
+		}
+		for _, v := range arr {
+			_, err := strconv.ParseInt(v, 10, 0)
+			if err != nil {
+				result = false
+				break
+			}
+		}
+	*/
 	return result
 }
 
