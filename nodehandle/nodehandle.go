@@ -399,7 +399,7 @@ func LS(isPrint bool) ([]string, error) {
 	return lsArr, err
 }
 
-func LsRemote() {
+func LsRemote(limit int) {
 
 	// set url
 	url := config.GetConfig(config.REGISTRY) + config.NODELIST

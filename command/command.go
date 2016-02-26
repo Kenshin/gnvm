@@ -15,6 +15,8 @@ import (
 var (
 	global bool
 	remote bool
+	detail bool
+	limit  int
 )
 
 // defind root cmd
@@ -221,22 +223,23 @@ gnvm update latest --global`,
 var lsCmd = &cobra.Command{
 	Use:   "ls",
 	Short: "List show all <local> <remote> node.exe version",
-	Long: `List show all <local> <remote> node.exe version e.g.
-gnvm ls
-gnvm ls --remote`,
+	Long: `List show all <local> <remote> node.exe version e.g.:
+gnvm ls                  :Print local node.js folder list.
+gnvm ls -r -d --limit=xx :Print remote node.js maximum number of rows is xx.( limit=0, print max rows. )
+gnvm ls -r               :--remote abbreviation
+gnvm ls -r -d -l 20      :--detail --limit=20 abbreviation
+`,
 	Run: func(cmd *cobra.Command, args []string) {
-
-		// check args
-		if len(args) > 0 {
+		switch {
+		case len(args) > 0:
 			P(WARING, "gnvm ls no parameter, please check your input. See '%v'.\n", "gnvm help ls")
-		}
-
-		if remote == true {
-			nodehandle.LsRemote()
-		} else {
-			// check local ls
 			nodehandle.LS(true)
-
+		case remote && detail:
+			nodehandle.LsRemote(limit)
+		case remote && !detail:
+			nodehandle.LsRemote(-1)
+		case !remote && detail:
+			P(ERROR, "flag %v depends on %v flag, e.g. '%v', See '%v'.", "-d", "-r", "gnvm ls -r -d", "gnvm help ls", "\n")
 		}
 	},
 }
@@ -338,6 +341,8 @@ func init() {
 	installCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version.")
 	updateCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version.")
 	lsCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote all node.js version list.")
+	lsCmd.PersistentFlags().BoolVarP(&detail, "detail", "d", false, "get remote all node.js version details list.")
+	lsCmd.PersistentFlags().IntVarP(&limit, "limit", "l", 0, "get remote all node.js version details list by limit count.")
 	nodeVersionCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote node.js latest version.")
 	versionCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote gnvm latest version.")
 
