@@ -77,6 +77,9 @@ func filter(files []interface{}) string {
 }
 
 func format(value string, max int) string {
+	if len(value) > max {
+		max = len(value)
+	}
 	newValue := strings.Repeat(" ", max-len(value))
 	return value + newValue
 }
