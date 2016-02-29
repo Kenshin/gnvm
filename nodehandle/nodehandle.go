@@ -444,6 +444,7 @@ func LsRemote(limit int) {
 	for idx, element := range arr {
 		if value, ok := element.(map[string]interface{}); ok {
 			nd := nl.New(idx, value)
+			nl.IndexBy(nd.Node.Version)
 			//nl.Print(nd)
 			if limit == -1 {
 				P(DEFAULT, nd.Node.Version, "\n")
@@ -452,7 +453,7 @@ func LsRemote(limit int) {
 	}
 
 	if limit != -1 {
-		nl.Detail()
+		nl.Detail(limit)
 	}
 
 	/*

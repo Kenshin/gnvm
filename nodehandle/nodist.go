@@ -95,7 +95,6 @@ func (nl NL) New(idx int, value map[string]interface{}) NodeList {
 	}
 	exe := filter(value["files"].([]interface{}))
 	nl[ver] = NodeList{idx, date, Node{ver, exe}, NPM{npm}}
-	sorts = append(sorts, ver)
 	return nl[ver]
 }
 
@@ -104,11 +103,20 @@ func (nl *NL) Print(nodeist NodeList) {
 	fmt.Println(msg)
 }
 
-func (nl NL) Detail() {
+func (nl NL) IndexBy(key string) {
+	sorts = append(sorts, key)
+}
+
+func (nl NL) Detail(limit int) {
 	fmt.Println("No.   date         node ver    exec      npm ver  ")
 	fmt.Println("--------------------------------------------------")
-
-	for _, v := range sorts {
+	if limit == 0 {
+		limit = len(sorts)
+	}
+	for idx, v := range sorts {
+		if idx >= limit {
+			break
+		}
 		value := nl[v]
 		id := format(strconv.Itoa(value.ID), 6)
 		date := format(value.Date, 13)
@@ -117,4 +125,5 @@ func (nl NL) Detail() {
 		npm := format(value.NPM.Version, 9)
 		fmt.Println(id + date + ver + exe + npm)
 	}
+	fmt.Println("--------------------------------------------------")
 }
