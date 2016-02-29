@@ -5,8 +5,8 @@ import (
 	. "github.com/Kenshin/cprint"
 	"regexp"
 	"runtime"
-	"sort"
 	"strconv"
+	"strings"
 )
 
 type Node struct {
@@ -76,27 +76,9 @@ func filter(files []interface{}) string {
 	return exec
 }
 
-func format(value string, max int, suffix string) string {
-	newValue := ""
-	sum := ""
-	for idx := 0; idx < max-len(value); idx++ {
-		newValue = newValue + suffix
-	}
-	if suffix == " " {
-		sum = value + newValue
-	} else {
-		sum = newValue + value
-	}
-	return sum
-}
-
-func sortbyDate(nl NL) []string {
-	sorted_keys := make([]string, 0)
-	for k, _ := range nl {
-		sorted_keys = append(sorted_keys, k)
-	}
-	sort.Strings(sorted_keys)
-	return sorted_keys
+func format(value string, max int) string {
+	newValue := strings.Repeat(" ", max-len(value))
+	return value + newValue
 }
 
 func (nl NL) New(idx int, value map[string]interface{}) NodeList {
@@ -107,9 +89,8 @@ func (nl NL) New(idx int, value map[string]interface{}) NodeList {
 		npm = "[x]"
 	}
 	exe := filter(value["files"].([]interface{}))
-	id := format(strconv.Itoa(idx), 3, "0")
-	nl[id] = NodeList{idx, date, Node{ver, exe}, NPM{npm}}
-	return nl[id]
+	nl[ver] = NodeList{idx, date, Node{ver, exe}, NPM{npm}}
+	return nl[ver]
 }
 
 func (nl *NL) Print(nodeist NodeList) {
@@ -120,16 +101,12 @@ func (nl *NL) Print(nodeist NodeList) {
 func (nl NL) Detail() {
 	fmt.Println("No.   date         node ver    exec      npm ver  ")
 	fmt.Println("--------------------------------------------------")
-	sorts := sortbyDate(nl)
-	for _, k := range sorts {
-		value := nl[k]
-		id := format(strconv.Itoa(value.ID), 6, " ")
-		date := format(value.Date, 13, " ")
-		ver := format(value.Node.Version, 12, " ")
-		exe := format(value.Node.Exec, 10, " ")
-		npm := format(value.NPM.Version, 9, " ")
-		fmt.Println(id+date+ver+exe+npm, " ")
+	for _, value := range nl {
+		id := format(strconv.Itoa(value.ID), 6)
+		date := format(value.Date, 13)
+		ver := format(value.Node.Version, 12)
+		exe := format(value.Node.Exec, 10)
+		npm := format(value.NPM.Version, 9)
+		fmt.Println(id + date + ver + exe + npm)
 	}
-	fmt.Println("--------------------------------------------------")
-	P(NOTICE, "node verson total :%v", strconv.Itoa(len(nl)))
 }
