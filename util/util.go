@@ -11,7 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
-	"strconv"
+	//"strconv"
 	"strings"
 )
 
@@ -38,6 +38,7 @@ func init() {
 	GlobalNodePath = getGlobalNodePath()
 }
 
+/*
 func ConverFloat(str string) (float64, error) {
 	args := strings.Split(str, ".")
 	var newStr string
@@ -51,6 +52,7 @@ func ConverFloat(str string) (float64, error) {
 	version, err := strconv.ParseFloat(newStr, 64)
 	return version, err
 }
+*/
 
 func GetNodeVersion(path string) (string, error) {
 	var newout string

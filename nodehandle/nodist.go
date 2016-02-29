@@ -29,7 +29,7 @@ type NL map[string]NodeList
 
 var sorts []string
 
-func parseFloat(version string) float64 {
+func ParseFloat(version string) float64 {
 	reg, _ := regexp.Compile(`\.(\d){0,2}`)
 	ver := ""
 	arr := reg.FindAllString(version, -1)
@@ -49,7 +49,7 @@ func parseFloat(version string) float64 {
 }
 
 func GetNodePath(version string) string {
-	ver := parseFloat(version)
+	ver := ParseFloat(version)
 	path := "/"
 	switch {
 	case ver <= 0.0500:
@@ -71,7 +71,7 @@ func GetNodePath(version string) string {
 }
 
 func filter(version string) string {
-	ver := parseFloat(version)
+	ver := ParseFloat(version)
 	exec := ""
 	switch {
 	case ver <= 0.0500:
