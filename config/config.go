@@ -113,20 +113,17 @@ func readConfig() {
 func SetConfig(key string, value interface{}) string {
 
 	if key == "registry" {
-
 		if !strings.HasPrefix(value.(string), "http://") {
 			P(WARING, "%v need %v", value.(string), "http://", "\n")
 			value = "http://" + value.(string)
 		}
-
-		reg, _ := regexp.Compile(`^https?:\/\/(w{3}\.)?(\w+\.)+([a-zA-Z]{2,})(:\d{1,4})?\/?($)?`)
-
-		switch {
-		case !reg.MatchString(value.(string)):
-			P(ERROR, "registry value %v must url valid.\n", value.(string))
-			return ""
-		case !strings.HasSuffix(value.(string), "/"):
+		if !strings.HasSuffix(value.(string), "/") {
 			value = value.(string) + "/"
+		}
+		reg, _ := regexp.Compile(`^https?:\/\/(w{3}\.)?([-a-zA-Z0-9.])+(\.[a-zA-Z]+)(:\d{1,4})?(\/)+`)
+		if !reg.MatchString(value.(string)) {
+			P(ERROR, "%v value %v must valid url.\n", "registry", value.(string))
+			return ""
 		}
 	}
 
@@ -150,7 +147,7 @@ func SetConfig(key string, value interface{}) string {
 func GetConfig(key string) string {
 	value, err := config.GetString(key)
 	if err != nil {
-		P(ERROR, "get config Error: %v\n", err.Error())
+		//P(ERROR, "get config Error: %v\n", err.Error())
 		value = UNKNOWN
 	}
 	return value
