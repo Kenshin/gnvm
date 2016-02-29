@@ -186,9 +186,10 @@ func NodeVersion(args []string, remote bool) {
 			if latest == config.UNKNOWN {
 				config.SetConfig(config.LATEST_VERSION, remoteVersion)
 				P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, remoteVersion)
+				return
 			}
-			v1, _ := util.ConverFloat(latest)
-			v2, _ := util.ConverFloat(remoteVersion)
+			v1 := ParseFloat(latest)
+			v2 := ParseFloat(remoteVersion)
 			if v1 < v2 {
 				cp := CP{Red, false, None, false, ">"}
 				P(WARING, "remote latest version %v %v local latest version %v, suggest to upgrade, usage 'gnvm update latest' or 'gnvm update latest -g'.\n", remoteVersion, cp, latest)
@@ -399,7 +400,7 @@ func LS(isPrint bool) ([]string, error) {
 	return lsArr, err
 }
 
-func LsRemote() {
+func LsRemote(limit int) {
 
 	// set url
 	url := config.GetConfig(config.REGISTRY) + config.NODELIST
@@ -440,11 +441,20 @@ func LsRemote() {
 	if err != nil {
 		P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
 	}
-	for _, element := range arr {
+	nl := make(NL)
+	for idx, element := range arr {
 		if value, ok := element.(map[string]interface{}); ok {
-			ver, _ := value["version"].(string)
-			P(DEFAULT, ver, "\n")
+			nd := nl.New(idx, value)
+			nl.IndexBy(nd.Node.Version)
+			//nl.Print(nd)
+			if limit == -1 {
+				P(DEFAULT, nd.Node.Version, "\n")
+			}
 		}
+	}
+
+	if limit != -1 {
+		nl.Detail(limit)
 	}
 
 	/*
@@ -642,8 +652,8 @@ func Update(global bool) {
 	}
 	P(NOTICE, "remote %v latest version is %v.\n", config.GetConfig("registry"), remoteVersion)
 
-	local, _ := util.ConverFloat(localVersion)
-	remote, _ := util.ConverFloat(remoteVersion)
+	local := ParseFloat(localVersion)
+	remote := ParseFloat(remoteVersion)
 
 	var args []string
 	args = append(args, remoteVersion)
