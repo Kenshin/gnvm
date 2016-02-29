@@ -118,7 +118,7 @@ func (nl NL) Detail(limit int) {
 			break
 		}
 		value := nl[v]
-		id := format(strconv.Itoa(value.ID), 6)
+		id := format(strconv.Itoa(value.ID+1), 6)
 		date := format(value.Date, 13)
 		ver := format(value.Node.Version, 12)
 		exe := format(value.Node.Exec, 10)
