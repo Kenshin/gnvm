@@ -108,12 +108,16 @@ func (nl NL) IndexBy(key string) {
 }
 
 func (nl NL) Detail(limit int) {
-	fmt.Println("No.   date         node ver    exec      npm ver  ")
-	fmt.Println("--------------------------------------------------")
-	if limit == 0 {
+	table := `+--------------------------------------------------+
+| No.   date         node ver    exec      npm ver |
++--------------------------------------------------+`
+	if limit == 0 || limit > len(sorts) {
 		limit = len(sorts)
 	}
 	for idx, v := range sorts {
+		if idx == 0 {
+			fmt.Println(table)
+		}
 		if idx >= limit {
 			break
 		}
@@ -123,7 +127,9 @@ func (nl NL) Detail(limit int) {
 		ver := format(value.Node.Version, 12)
 		exe := format(value.Node.Exec, 10)
 		npm := format(value.NPM.Version, 9)
-		fmt.Println(id + date + ver + exe + npm)
+		fmt.Println("  " + id + date + ver + exe + npm)
+		if idx == limit-1 {
+			fmt.Println(table)
+		}
 	}
-	fmt.Println("--------------------------------------------------")
 }
