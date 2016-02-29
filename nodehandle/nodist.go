@@ -27,6 +27,8 @@ type NodeList struct {
 
 type NL map[string]NodeList
 
+var sorts []string
+
 func GetNodePath(version string) string {
 	reg1, _ := regexp.Compile(`^0\.`)
 	// version format include: 0.xx.xx and ^0.xx.xx
@@ -93,6 +95,7 @@ func (nl NL) New(idx int, value map[string]interface{}) NodeList {
 	}
 	exe := filter(value["files"].([]interface{}))
 	nl[ver] = NodeList{idx, date, Node{ver, exe}, NPM{npm}}
+	sorts = append(sorts, ver)
 	return nl[ver]
 }
 
@@ -104,7 +107,9 @@ func (nl *NL) Print(nodeist NodeList) {
 func (nl NL) Detail() {
 	fmt.Println("No.   date         node ver    exec      npm ver  ")
 	fmt.Println("--------------------------------------------------")
-	for _, value := range nl {
+
+	for _, v := range sorts {
+		value := nl[v]
 		id := format(strconv.Itoa(value.ID), 6)
 		date := format(value.Date, 13)
 		ver := format(value.Node.Version, 12)
