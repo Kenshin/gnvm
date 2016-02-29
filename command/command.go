@@ -294,7 +294,7 @@ gnvm config registry <custom> :custom  is valid url
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
-
+			config.List()
 		} else if len(args) == 1 {
 			args[0] = util.EqualAbs("INIT", args[0])
 			if args[0] == "INIT" {

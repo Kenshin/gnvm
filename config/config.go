@@ -6,6 +6,8 @@ import (
 	"github.com/tsuru/config"
 
 	// go
+	"bufio"
+	"io"
 	"os"
 	"regexp"
 	"strings"
@@ -182,4 +184,25 @@ func ReSetConfig() {
 			P(NOTICE, "%v init success, new value is %v\n", LATEST_VERSION, newValue)
 		}
 	*/
+}
+
+func List() {
+	readConfig()
+	P(NOTICE, "config file path: %v \n", configPath)
+	f, err := os.Open(configPath)
+	if err != nil {
+		P(ERROR, "read config file fail, please use '%v'. \nError: %v\n", "gnvm config INIT", err.Error())
+		return
+	}
+	buf := bufio.NewReader(f)
+	for {
+		line, _, err := buf.ReadLine()
+		if err == io.EOF {
+			break
+		}
+		arr := strings.SplitN(string(line), ":", 2)
+		if len(arr) == 2 {
+			P(DEFAULT, "gnvm config %v is %v\n", strings.TrimSpace(arr[0]), strings.TrimSpace(arr[1]))
+		}
+	}
 }
