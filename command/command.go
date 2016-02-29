@@ -282,13 +282,15 @@ gnvm node-version global`,
 // sub cmd
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Setter and getter registry",
-	Long: `Setter and getter registry e.g.
-gnvm config registry
-gnvm config registry http://npm.taobao.org/mirrors/node
-gnvm config registry DEFAULT
-gnvm config registry TAOBAO
-gnvm config INIT`,
+	Short: "Setter and getter .gnvmrc file.",
+	Long: `Setter and getter .gnvmrc file.
+gnvm config                   :Print all propertys from .gnvmrc.
+gnvm config INIT              :Initialization .gnvmrc file.
+gnvm config registry          :Set registry props, e.g:
+gnvm config registry DEFAULT  :DEFAULT is built-in variable, is http://nodejs.org/dist/
+gnvm config registry TAOBAO   :TAOBAO  is built-in variable, is http://npm.taobao.org/mirrors/node
+gnvm config registry <custom> :custom  is valid url
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
 
