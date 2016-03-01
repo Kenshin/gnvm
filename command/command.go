@@ -290,7 +290,8 @@ gnvm config <props>           :Get .gnvmrc file props.
 gnvm config registry xxx      :Set registry props, e.g:
 gnvm config registry DEFAULT  :DEFAULT is built-in variable, is http://nodejs.org/dist/
 gnvm config registry TAOBAO   :TAOBAO  is built-in variable, is http://npm.taobao.org/mirrors/node
-gnvm config registry <custom> :custom  is valid url
+gnvm config registry <custom> :Custom  is valid url
+gnvm config registry test     :Validation .gnvmfile property
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
@@ -311,6 +312,7 @@ gnvm config registry <custom> :custom  is valid url
 			args[0] = util.EqualAbs("registry", args[0])
 			args[1] = util.EqualAbs("DEFAULT", args[1])
 			args[1] = util.EqualAbs("TAOBAO", args[1])
+			args[1] = util.EqualAbs("test", args[1])
 			if args[0] != "registry" {
 				P(ERROR, "%v only support '%v' set. See '%v'.\n", "gnvm config", "registry", "gnvm help config")
 				return
@@ -324,6 +326,8 @@ gnvm config registry <custom> :custom  is valid url
 				if newValue := config.SetConfig(args[0], config.TAOBAO); newValue != "" {
 					P(DEFAULT, "Set success, %v new value is %v\n", args[0], newValue)
 				}
+			case "test":
+				config.Verify()
 			default:
 				if newValue := config.SetConfig(args[0], args[1]); newValue != "" {
 					P(DEFAULT, "Set success, %v new value is %v\n", args[0], newValue)

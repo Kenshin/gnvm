@@ -8,9 +8,11 @@ import (
 	// go
 	"bufio"
 	"io"
+	"net/http"
 	"os"
 	"regexp"
 	"strings"
+	"time"
 
 	// local
 	"gnvm/util"
@@ -203,5 +205,40 @@ func List() {
 		if len(arr) == 2 {
 			P(DEFAULT, "gnvm config %v is %v\n", strings.TrimSpace(arr[0]), strings.TrimSpace(arr[1]))
 		}
+	}
+}
+
+func Verify() {
+	registry := GetConfig(REGISTRY)
+	verifyURL(registry)
+	verifyIndex(registry)
+}
+
+func verifyURL(registry string) {
+	P(NOTICE, "gnvm config registry: %v validation bgein.\n", registry)
+	if resp, err := http.Get(registry); err == nil {
+		if resp.StatusCode == 200 {
+			time.Sleep(time.Second * 2)
+			P(NOTICE, "gnvm config registry: %v validation %v.\n", registry, "success")
+		} else {
+			P(WARING, "gnvm config registry validation %v. registry value is %v", "fail", registry)
+		}
+	} else {
+		Error(ERROR, "gnvm config registry validation fail. please check. \nError: ", err)
+	}
+}
+
+func verifyIndex(url string) {
+	url = url + NODELIST
+	P(NOTICE, "gnvm config registry: %v validation bgein.\n", url)
+	if resp, err := http.Get(url); err == nil {
+		if resp.StatusCode == 200 {
+			time.Sleep(time.Second * 2)
+			P(NOTICE, "gnvm config registry: %v validation %v.\n", url, "success")
+		} else {
+			P(WARING, "gnvm config registry validation %v. registry value is %v", "fail", url)
+		}
+	} else {
+		Error(ERROR, "gnvm config registry validation fail. please check. \nError: ", err)
 	}
 }
