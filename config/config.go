@@ -7,6 +7,7 @@ import (
 
 	// go
 	"bufio"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -209,36 +210,80 @@ func List() {
 }
 
 func Verify() {
+	code := make(chan int)
+	fail := make(chan bool)
+	finish := false
 	registry := GetConfig(REGISTRY)
-	verifyURL(registry)
-	verifyIndex(registry)
-}
-
-func verifyURL(registry string) {
-	P(NOTICE, "gnvm config registry: %v validation bgein.\n", registry)
-	if resp, err := http.Get(registry); err == nil {
-		if resp.StatusCode == 200 {
-			time.Sleep(time.Second * 2)
-			P(NOTICE, "gnvm config registry: %v validation %v.\n", registry, "success")
-		} else {
-			P(WARING, "gnvm config registry validation %v. registry value is %v", "fail", registry)
+	wait := func() {
+		wait := ""
+		for {
+			time.Sleep(time.Millisecond * 500)
+			if finish {
+				break
+			}
+			wait += "."
+			fmt.Printf(wait)
 		}
-	} else {
-		Error(ERROR, "gnvm config registry validation fail. please check. \nError: ", err)
+	}
+
+	go verifyURL(registry, code, fail)
+	go wait()
+
+	for {
+		select {
+		case <-time.After(time.Second * 10):
+			P(DEFAULT, "%v \n", " fail.")
+			cp1 := CP{Red, false, None, false, "vaild fial"}
+			cp2 := CP{Red, false, None, false, "time out"}
+			P(ERROR, "gnvm config registry %v %v, Error: %v.", registry, cp1, cp2)
+			return
+		case value, ok := <-code:
+			if ok && value == 1 {
+				finish = true
+				P(DEFAULT, "%v \n", " ok.")
+				go verifyIndex(registry, code, fail)
+				finish = false
+				go wait()
+			} else if !ok {
+				P(DEFAULT, "%v \n", " ok.")
+				return
+			}
+		case <-fail:
+			P(DEFAULT, "%v \n", " fail.")
+			finish = true
+			return
+		}
 	}
 }
 
-func verifyIndex(url string) {
-	url = url + NODELIST
-	P(NOTICE, "gnvm config registry: %v validation bgein.\n", url)
-	if resp, err := http.Get(url); err == nil {
+func verifyURL(registry string, code chan int, fail chan bool) {
+	P(NOTICE, "gnvm config registry: %v valid ", registry)
+	if resp, err := http.Get(registry); err == nil {
+		time.Sleep(time.Second * 2)
 		if resp.StatusCode == 200 {
-			time.Sleep(time.Second * 2)
-			P(NOTICE, "gnvm config registry: %v validation %v.\n", url, "success")
+			code <- 1
 		} else {
-			P(WARING, "gnvm config registry validation %v. registry value is %v", "fail", url)
+			close(fail)
 		}
 	} else {
-		Error(ERROR, "gnvm config registry validation fail. please check. \nError: ", err)
+		time.Sleep(time.Second * 2)
+		close(fail)
+		Error(ERROR, "\nError: ", err)
+	}
+}
+
+func verifyIndex(url string, code chan int, fail chan bool) {
+	url = url + NODELIST
+	P(NOTICE, "gnvm config registry: %v valid ", url)
+	if resp, err := http.Get(url); err == nil {
+		time.Sleep(time.Second * 2)
+		if resp.StatusCode == 200 {
+			close(code)
+		} else {
+			close(fail)
+		}
+	} else {
+		close(fail)
+		Error(ERROR, "\nError: ", err)
 	}
 }
