@@ -227,7 +227,7 @@ func Verify() {
 		}
 	}
 
-	go verifyURL(registry, code, fail)
+	go verifyURL("url", registry, code, fail)
 	go wait()
 
 	for {
@@ -242,7 +242,7 @@ func Verify() {
 			if ok && value == 200 {
 				finish = true
 				P(DEFAULT, "%v.\n", " ok")
-				go verifyIndex(registry+NODELIST, code, fail)
+				go verifyURL("json", registry+NODELIST, code, fail)
 				finish = false
 				go wait()
 			} else if !ok {
@@ -264,12 +264,16 @@ func Verify() {
 	}
 }
 
-func verifyURL(url string, code chan int, fail chan interface{}) {
+func verifyURL(status string, url string, code chan int, fail chan interface{}) {
 	P(NOTICE, "gnvm config registry: %v valid ", url)
 	time.Sleep(time.Second * 2)
 	if resp, err := http.Get(url); err == nil {
 		if resp.StatusCode == 200 {
-			code <- resp.StatusCode
+			if status == "url" {
+				code <- resp.StatusCode
+			} else {
+				close(code)
+			}
 		} else {
 			fail <- resp.StatusCode
 		}
@@ -278,6 +282,7 @@ func verifyURL(url string, code chan int, fail chan interface{}) {
 	}
 }
 
+/*
 func verifyIndex(url string, code chan int, fail chan interface{}) {
 	P(NOTICE, "gnvm config registry: %v valid ", url)
 	time.Sleep(time.Second * 2)
@@ -290,9 +295,5 @@ func verifyIndex(url string, code chan int, fail chan interface{}) {
 	} else {
 		fail <- err
 	}
-}
-
-/*
-func verifyLogic(url string, code chan int, fail chan interface{}) {
 }
 */
