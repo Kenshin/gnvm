@@ -281,19 +281,3 @@ func verifyURL(status string, url string, code chan int, fail chan interface{}) 
 		fail <- err
 	}
 }
-
-/*
-func verifyIndex(url string, code chan int, fail chan interface{}) {
-	P(NOTICE, "gnvm config registry: %v valid ", url)
-	time.Sleep(time.Second * 2)
-	if resp, err := http.Get(url); err == nil {
-		if resp.StatusCode == 200 {
-			close(code)
-		} else {
-			fail <- resp.StatusCode
-		}
-	} else {
-		fail <- err
-	}
-}
-*/
