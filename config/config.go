@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -251,7 +252,7 @@ func Verify() {
 		case value, _ := <-fail:
 			cp := CP{Red, false, None, false, " fail"}
 			if v, ok := value.(int); ok {
-				P(DEFAULT, "%v, respone code: %v.\n", cp, string(v))
+				P(DEFAULT, "%v, respone code: %v.\n", cp, strconv.Itoa(v))
 			} else {
 				P(DEFAULT, "%v.\n", cp)
 				Error(ERROR, "", value)
