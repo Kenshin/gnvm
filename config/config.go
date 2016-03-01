@@ -6,9 +6,15 @@ import (
 	"github.com/tsuru/config"
 
 	// go
+	"bufio"
+	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
+	"time"
 
 	// local
 	"gnvm/util"
@@ -113,20 +119,17 @@ func readConfig() {
 func SetConfig(key string, value interface{}) string {
 
 	if key == "registry" {
-
 		if !strings.HasPrefix(value.(string), "http://") {
 			P(WARING, "%v need %v", value.(string), "http://", "\n")
 			value = "http://" + value.(string)
 		}
-
-		reg, _ := regexp.Compile(`^https?:\/\/(w{3}\.)?(\w+\.)+([a-zA-Z]{2,})(:\d{1,4})?\/?($)?`)
-
-		switch {
-		case !reg.MatchString(value.(string)):
-			P(ERROR, "registry value %v must url valid.\n", value.(string))
-			return ""
-		case !strings.HasSuffix(value.(string), "/"):
+		if !strings.HasSuffix(value.(string), "/") {
 			value = value.(string) + "/"
+		}
+		reg, _ := regexp.Compile(`^https?:\/\/(w{3}\.)?([-a-zA-Z0-9.])+(\.[a-zA-Z]+)(:\d{1,4})?(\/)+`)
+		if !reg.MatchString(value.(string)) {
+			P(ERROR, "%v value %v must valid url.\n", "registry", value.(string))
+			return ""
 		}
 	}
 
@@ -150,7 +153,7 @@ func SetConfig(key string, value interface{}) string {
 func GetConfig(key string) string {
 	value, err := config.GetString(key)
 	if err != nil {
-		P(ERROR, "get config Error: %v\n", err.Error())
+		//P(ERROR, "get config Error: %v\n", err.Error())
 		value = UNKNOWN
 	}
 	return value
@@ -185,4 +188,96 @@ func ReSetConfig() {
 			P(NOTICE, "%v init success, new value is %v\n", LATEST_VERSION, newValue)
 		}
 	*/
+}
+
+func List() {
+	P(NOTICE, "config file path: %v \n", configPath)
+	f, err := os.Open(configPath)
+	if err != nil {
+		P(ERROR, "read config file fail, please use '%v'. \nError: %v\n", "gnvm config INIT", err.Error())
+		return
+	}
+	buf := bufio.NewReader(f)
+	for {
+		line, _, err := buf.ReadLine()
+		if err == io.EOF {
+			break
+		}
+		arr := strings.SplitN(string(line), ":", 2)
+		if len(arr) == 2 {
+			P(DEFAULT, "gnvm config %v is %v\n", strings.TrimSpace(arr[0]), strings.TrimSpace(arr[1]))
+		}
+	}
+}
+
+func Verify() {
+	code := make(chan int)
+	fail := make(chan interface{})
+	finish := false
+	registry := GetConfig(REGISTRY)
+	wait := func() {
+		wait := ""
+		for {
+			time.Sleep(time.Millisecond * 500)
+			if finish {
+				break
+			}
+			wait += "."
+			fmt.Printf(wait)
+		}
+	}
+
+	go verifyURL("url", registry, code, fail)
+	go wait()
+
+	for {
+		select {
+		case <-time.After(time.Second * 10):
+			cp1 := CP{Red, false, None, false, "fail"}
+			cp2 := CP{Red, false, None, false, "time out"}
+			P(DEFAULT, "%v. \n", cp1)
+			P(ERROR, "gnvm config registry %v vaild %v, Error: %v.", registry, cp1, cp2)
+			return
+		case value, ok := <-code:
+			if ok && value == 200 {
+				finish = true
+				P(DEFAULT, "%v.\n", " ok")
+				go verifyURL("json", registry+NODELIST, code, fail)
+				finish = false
+				go wait()
+			} else if !ok {
+				P(DEFAULT, "%v.\n", " ok")
+				return
+			}
+		case value, _ := <-fail:
+			cp := CP{Red, false, None, false, " fail"}
+			if v, ok := value.(int); ok {
+				P(DEFAULT, "%v, response code: %v.\n", cp, strconv.Itoa(v))
+			} else {
+				P(DEFAULT, "%v.\n", cp)
+				Error(ERROR, "", value)
+			}
+			close(fail)
+			finish = true
+			return
+		}
+	}
+}
+
+func verifyURL(status string, url string, code chan int, fail chan interface{}) {
+	P(NOTICE, "gnvm config registry: %v valid ", url)
+	time.Sleep(time.Second * 2)
+	if resp, err := http.Get(url); err == nil {
+		if resp.StatusCode == 200 {
+			if status == "url" {
+				code <- resp.StatusCode
+			} else {
+				close(code)
+			}
+		} else {
+			fail <- resp.StatusCode
+		}
+	} else {
+		fail <- err
+	}
 }

@@ -282,49 +282,56 @@ gnvm node-version global`,
 // sub cmd
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Setter and getter registry",
-	Long: `Setter and getter registry e.g.
-gnvm config registry
-gnvm config registry http://npm.taobao.org/mirrors/node
-gnvm config registry DEFAULT
-gnvm config registry TAOBAO
-gnvm config INIT`,
+	Short: "Setter and getter .gnvmrc file.",
+	Long: `Setter and getter .gnvmrc file.
+gnvm config                   :Print all propertys from .gnvmrc.
+gnvm config INIT              :Initialization .gnvmrc file.
+gnvm config <props>           :Get .gnvmrc file props.
+gnvm config registry xxx      :Set registry props, e.g:
+gnvm config registry DEFAULT  :DEFAULT is built-in variable, is http://nodejs.org/dist/
+gnvm config registry TAOBAO   :TAOBAO  is built-in variable, is http://npm.taobao.org/mirrors/node
+gnvm config registry <custom> :Custom  is valid url
+gnvm config registry test     :Validation .gnvmfile registry property
+`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) == 1 {
-
-			args[0] = util.EqualAbs("registry", args[0])
-			args[0] = util.EqualAbs("noderoot", args[0])
+		if len(args) == 0 {
+			config.List()
+		} else if len(args) == 1 {
 			args[0] = util.EqualAbs("INIT", args[0])
-
 			if args[0] == "INIT" {
 				config.ReSetConfig()
-				return
+			} else {
+				value := config.GetConfig(args[0])
+				if value == config.UNKNOWN {
+					P(ERROR, "%v not a valid keyword. See '%v'.\n", args[0], "gnvm help config")
+				} else {
+					P(DEFAULT, "gnvm config %v is %v\n", args[0], value)
+				}
 			}
-
-			P(DEFAULT, "gnvm config %v is %v\n", args[0], config.GetConfig(args[0]))
-
 		} else if len(args) == 2 {
 			args[0] = util.EqualAbs("registry", args[0])
-			args[0] = util.EqualAbs("noderoot", args[0])
 			args[1] = util.EqualAbs("DEFAULT", args[1])
 			args[1] = util.EqualAbs("TAOBAO", args[1])
-			switch {
-			case args[0] == "registry" && args[1] == "DEFAULT":
+			args[1] = util.EqualAbs("test", args[1])
+			if args[0] != "registry" {
+				P(ERROR, "%v only support '%v' set. See '%v'.\n", "gnvm config", "registry", "gnvm help config")
+				return
+			}
+			switch args[1] {
+			case "DEFAULT":
 				if newValue := config.SetConfig(args[0], config.REGISTRY_VAL); newValue != "" {
 					P(DEFAULT, "Set success, %v new value is %v\n", args[0], newValue)
 				}
-			case args[0] == "registry" && args[1] == "TAOBAO":
+			case "TAOBAO":
 				if newValue := config.SetConfig(args[0], config.TAOBAO); newValue != "" {
 					P(DEFAULT, "Set success, %v new value is %v\n", args[0], newValue)
 				}
-			case args[0] == "registry" && args[1] != "DEFAULT" && args[1] != "TAOBAO":
+			case "test":
+				config.Verify()
+			default:
 				if newValue := config.SetConfig(args[0], args[1]); newValue != "" {
 					P(DEFAULT, "Set success, %v new value is %v\n", args[0], newValue)
 				}
-			case args[0] == "noderoot":
-				P(ERROR, "%v read-only, temporarily does not support set way. See '%v'.\n", args[0], "gnvm help config")
-			default:
-				P(ERROR, "config parameter only include %v, please check your input. See '%v'.\n", "registry", "gnvm help config")
 			}
 		} else if len(args) > 2 {
 			P(ERROR, "config parameter maximum is 2, please check your input. See '%v'.\n", "gnvm help config")
