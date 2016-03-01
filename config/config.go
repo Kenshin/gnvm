@@ -187,7 +187,6 @@ func ReSetConfig() {
 }
 
 func List() {
-	readConfig()
 	P(NOTICE, "config file path: %v \n", configPath)
 	f, err := os.Open(configPath)
 	if err != nil {
