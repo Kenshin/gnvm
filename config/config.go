@@ -258,25 +258,23 @@ func Verify() {
 
 func verifyURL(registry string, code chan int, fail chan bool) {
 	P(NOTICE, "gnvm config registry: %v valid ", registry)
+	time.Sleep(time.Second * 2)
 	if resp, err := http.Get(registry); err == nil {
-		time.Sleep(time.Second * 2)
 		if resp.StatusCode == 200 {
 			code <- 1
 		} else {
 			close(fail)
 		}
 	} else {
-		time.Sleep(time.Second * 2)
 		close(fail)
 		Error(ERROR, "\nError: ", err)
 	}
 }
 
 func verifyIndex(url string, code chan int, fail chan bool) {
-	url = url + NODELIST
-	P(NOTICE, "gnvm config registry: %v valid ", url)
-	if resp, err := http.Get(url); err == nil {
-		time.Sleep(time.Second * 2)
+	P(NOTICE, "gnvm config registry: %v valid ", url+NODELIST)
+	time.Sleep(time.Second * 2)
+	if resp, err := http.Get(url + NODELIST); err == nil {
 		if resp.StatusCode == 200 {
 			close(code)
 		} else {
