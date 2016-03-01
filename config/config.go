@@ -233,10 +233,10 @@ func Verify() {
 	for {
 		select {
 		case <-time.After(time.Second * 10):
-			P(DEFAULT, "%v. \n", " fail")
-			cp1 := CP{Red, false, None, false, "vaild fail"}
+			cp1 := CP{Red, false, None, false, "fail"}
 			cp2 := CP{Red, false, None, false, "time out"}
-			P(ERROR, "gnvm config registry %v %v, Error: %v.", registry, cp1, cp2)
+			P(DEFAULT, "%v. \n", cp1)
+			P(ERROR, "gnvm config registry %v vaild %v, Error: %v.", registry, cp1, cp2)
 			return
 		case value, ok := <-code:
 			if ok && value == 200 {
