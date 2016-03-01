@@ -211,7 +211,7 @@ func List() {
 
 func Verify() {
 	code := make(chan int)
-	fail := make(chan bool)
+	fail := make(chan interface{})
 	finish := false
 	registry := GetConfig(REGISTRY)
 	wait := func() {
@@ -232,56 +232,61 @@ func Verify() {
 	for {
 		select {
 		case <-time.After(time.Second * 10):
-			P(DEFAULT, "%v \n", " fail.")
-			cp1 := CP{Red, false, None, false, "vaild fial"}
+			P(DEFAULT, "%v. \n", " fail")
+			cp1 := CP{Red, false, None, false, "vaild fail"}
 			cp2 := CP{Red, false, None, false, "time out"}
 			P(ERROR, "gnvm config registry %v %v, Error: %v.", registry, cp1, cp2)
 			return
 		case value, ok := <-code:
-			if ok && value == 1 {
+			if ok && value == 200 {
 				finish = true
-				P(DEFAULT, "%v \n", " ok.")
+				P(DEFAULT, "%v.\n", " ok")
 				go verifyIndex(registry, code, fail)
 				finish = false
 				go wait()
 			} else if !ok {
-				P(DEFAULT, "%v \n", " ok.")
+				P(DEFAULT, "%v.\n", " ok")
 				return
 			}
-		case <-fail:
-			P(DEFAULT, "%v \n", " fail.")
+		case value, _ := <-fail:
+			cp := CP{Red, false, None, false, " fail"}
+			if v, ok := value.(int); ok {
+				P(DEFAULT, "%v, respone code: %v.\n", cp, string(v))
+			} else {
+				P(DEFAULT, "%v.\n", cp)
+				Error(ERROR, "", value)
+			}
+			close(fail)
 			finish = true
 			return
 		}
 	}
 }
 
-func verifyURL(registry string, code chan int, fail chan bool) {
+func verifyURL(registry string, code chan int, fail chan interface{}) {
 	P(NOTICE, "gnvm config registry: %v valid ", registry)
 	time.Sleep(time.Second * 2)
 	if resp, err := http.Get(registry); err == nil {
 		if resp.StatusCode == 200 {
-			code <- 1
+			code <- resp.StatusCode
 		} else {
-			close(fail)
+			fail <- resp.StatusCode
 		}
 	} else {
-		close(fail)
-		Error(ERROR, "\nError: ", err)
+		fail <- err
 	}
 }
 
-func verifyIndex(url string, code chan int, fail chan bool) {
+func verifyIndex(url string, code chan int, fail chan interface{}) {
 	P(NOTICE, "gnvm config registry: %v valid ", url+NODELIST)
 	time.Sleep(time.Second * 2)
 	if resp, err := http.Get(url + NODELIST); err == nil {
 		if resp.StatusCode == 200 {
 			close(code)
 		} else {
-			close(fail)
+			fail <- resp.StatusCode
 		}
 	} else {
-		close(fail)
-		Error(ERROR, "\nError: ", err)
+		fail <- err
 	}
 }
