@@ -291,7 +291,7 @@ gnvm config registry xxx      :Set registry props, e.g:
 gnvm config registry DEFAULT  :DEFAULT is built-in variable, is http://nodejs.org/dist/
 gnvm config registry TAOBAO   :TAOBAO  is built-in variable, is http://npm.taobao.org/mirrors/node
 gnvm config registry <custom> :Custom  is valid url
-gnvm config registry test     :Validation .gnvmfile property
+gnvm config registry test     :Validation .gnvmfile registry property
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
