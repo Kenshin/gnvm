@@ -195,6 +195,36 @@ gnvm use latest`,
 }
 
 // sub cmd
+var sessionCmd = &cobra.Command{
+	Use:   "session",
+	Short: "Use any version of the local already exists version by current session",
+	Long: `
+Use any version of the local already exists by current session, e.g.
+gnvm session init         :Create session.cmd
+gnvm session remove       :Remove session.cmd
+
+When session.cmd Create success, usge commands:
+session help              :Show session cli command help.
+session run 0.10.24       :Set 0.10.24 is session node.exe verison.
+session exit              :Quit sesion node.exe, restore global node.exe version.
+session version           :Show version.
+`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) == 1 {
+			args[0] = util.EqualAbs("init", args[0])
+			args[0] = util.EqualAbs("remove", args[0])
+			if args[0] != "init" && args[0] != "remove" {
+				P(ERROR, "%v only support %v or %v parameter. See '%v'.\n", "gnvm session", "init", "remove", "gnvm help session")
+			} else {
+				nodehandle.Run(args[0])
+			}
+		} else {
+			P(ERROR, "gnvm session parameter maximum is 1, please check your input. See '%v'.\n", "gnvm help session")
+		}
+	},
+}
+
+// sub cmd
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update latest node.exe",
@@ -346,6 +376,7 @@ func init() {
 	gnvmCmd.AddCommand(installCmd)
 	gnvmCmd.AddCommand(uninstallCmd)
 	gnvmCmd.AddCommand(useCmd)
+	gnvmCmd.AddCommand(sessionCmd)
 	gnvmCmd.AddCommand(updateCmd)
 	gnvmCmd.AddCommand(lsCmd)
 	gnvmCmd.AddCommand(nodeVersionCmd)
