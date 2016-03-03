@@ -51,6 +51,10 @@ goto quit
 :: run : Set session node.exe
 ::===========================================================
 :run
+
+:: if on the %NODE_HOME% directory, goto gnvm_session directory.
+if  %~dp0 == %NODE_HOME%\ call :security
+
 if "%2" == "" (
     @echo on
     @echo Parameter can't be empty.
@@ -73,11 +77,35 @@ set path=%GNVM_SESSION_NODE_HOME%;%path%
 goto quit
 
 ::===========================================================
+:: security : Quit/Remvoe session node.exe version
+::===========================================================
+:security
+
+:: Add %NODE_HOME% to path
+set path=%NODE_HOME%;%path%
+
+:: Add %GNVM_SESSION_HOME% to path
+set GNVM_SESSION_HOME=%NODE_HOME%\gnvm_session
+set path=%GNVM_SESSION_HOME%;%path%
+
+:: Save current path
+set ORI_GNVM_SESSION_PATH=%~dp0
+
+md gnvm_session
+cd %GNVM_SESSION_HOME%
+goto quit
+
+::===========================================================
 :: exit : Quit/Remvoe session node.exe version
 ::===========================================================
 :exit
 
+if defined ORI_GNVM_SESSION_PATH (
+    cd %ORI_GNVM_SESSION_PATH%
+)
+
 @echo off
+set ORI_GNVM_SESSION_PATH=
 set GNVM_SESSION_NODE_HOME=
 set path=%NODE_HOME%;%path%
 
