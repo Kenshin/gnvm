@@ -93,6 +93,7 @@ set path=%GNVM_SESSION_HOME%;%path%
 :: Save current path
 set ORI_GNVM_SESSION_PATH=%~dp0
 
+:: Create and goto gnvm_session directory
 md gnvm_session
 attrib +h gnvm_session
 cd %GNVM_SESSION_HOME%
