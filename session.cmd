@@ -100,7 +100,7 @@ cd %GNVM_SESSION_HOME%
 goto quit
 
 ::===========================================================
-:: exit : Quit/Remvoe session node.exe version
+:: exit : Quit/Remove session node.exe version
 ::===========================================================
 :exit
 
