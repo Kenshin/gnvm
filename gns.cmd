@@ -4,7 +4,8 @@
 :: Initialize
 ::===========================================================
 if not defined NODE_HOME (
-    set "NODE_HOME=%~dp0"
+    set NODE_HOME=%~dp0
+    set path=%NODE_HOME%;%path%
 )
 
 ::===========================================================
@@ -61,7 +62,7 @@ if "%2" == "" (
 )
 
 :: if on the %NODE_HOME% directory, goto gnvm_session directory.
-if  %cd% == %NODE_HOME% call :security
+if %cd% == %NODE_HOME% call :security
 
 @echo off
 set GNVM_SESSION_NODE_HOME=%NODE_HOME%\%2\
@@ -90,10 +91,8 @@ set path=%NODE_HOME%;%path%
 set GNVM_SESSION_HOME=%NODE_HOME%\gnvm_session
 set path=%GNVM_SESSION_HOME%;%path%
 
-:: Save current path
-set ORI_GNVM_SESSION_PATH=%~dp0
-
 :: Create and goto gnvm_session directory
+rd /q /s gnvm_session
 md gnvm_session
 attrib +h gnvm_session
 cd %GNVM_SESSION_HOME%
@@ -103,16 +102,19 @@ goto exit
 :: clear : Quit/Remove session node.exe version
 ::===========================================================
 :clear
-
-if defined ORI_GNVM_SESSION_PATH (
-    cd %ORI_GNVM_SESSION_PATH%
-    rd /q /s gnvm_session
+if %cd% == %NODE_HOME%\gnvm_session (
+    cd..
 )
 
 @echo off
-set ORI_GNVM_SESSION_PATH=
+
+:: Remove GNVM_SESSION_NODE_HOME
 set GNVM_SESSION_NODE_HOME=
 set path=%NODE_HOME%;%path%
+
+:: Remove GNVM_SESSION_HOME
+set GNVM_SESSION_HOME=
+set path=%GNVM_SESSION_HOME%;%path%
 
 @echo on
 @echo Session clear complete.
