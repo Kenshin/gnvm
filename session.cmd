@@ -39,10 +39,10 @@ echo   session version       Show version.
 goto quit
 
 ::===========================================================
-:: version : Show session.bat version( same as gnvm.exe version)
+:: version : Show session.bat version
 ::===========================================================
 :version
-echo Current version 0.2.0.
+echo Current version 0.0.1.
 echo Copyright (C) 2014-2016 Kenshin Wang kenshin@ksria.com
 echo See https://github.com/kenshin/gnvm for more information.
 goto quit
@@ -70,11 +70,11 @@ set path=%GNVM_SESSION_NODE_HOME%;%path%
 @echo on
 @echo Startup session node.exe version %2.
 @echo Important:
-@echo - if node.exe work on session version, 'gnvm install -g', 'gnvm update -g' 'gnvm use x.xx.xx' can't be use.
-@echo - if quit/remove session, you must use 'session exit'.
-@echo - if on "%NODE_HOME%" directory, unable to 'run %2'.
-@echo - if on "%NODE_HOME%" directory, auto goto "%NODE_HOME%"\gnvm_session directory.
-@echo - if on "%NODE_HOME%\gnvm_session" directory, use 'session exit' auto previous directory.
+@echo - if node.exe work on session version, "gnvm install -g", "gnvm update -g" "gnvm use x.xx.xx" can't be use.
+@echo - if quit/remove session, you must use "session exit".
+@echo - if on "%NODE_HOME%" directory, unable to "run %2".
+@echo - if on "%NODE_HOME%" directory, auto goto "%NODE_HOME%\gnvm_session" directory.
+@echo - if on "%NODE_HOME%\gnvm_session" directory, use "session exit" auto previous directory.
 @echo off
 goto quit
 
@@ -116,7 +116,6 @@ set path=%NODE_HOME%;%path%
 
 @echo on
 @echo Session clear complete.
-@echo Exit session successful.
 @echo off
 goto quit
 
