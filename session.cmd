@@ -36,7 +36,7 @@ echo   session help          Show session cli command help.
 echo   session run 0.10.24   Set 0.10.24 is session node.exe verison.
 echo   session clear         Quit sesion node.exe, restore global node.exe version.
 echo   session version       Show version.
-goto quit
+goto exit
 
 ::===========================================================
 :: version : Show session.bat version
@@ -45,7 +45,7 @@ goto quit
 echo Current version 0.0.1.
 echo Copyright (C) 2014-2016 Kenshin Wang kenshin@ksria.com
 echo See https://github.com/kenshin/gnvm for more information.
-goto quit
+goto exit
 
 ::===========================================================
 :: run : Set session node.exe
@@ -57,7 +57,7 @@ if "%2" == "" (
     @echo Parameter can't be empty.
     @echo Example: "session run 5.7.0"
     @echo off
-    goto quit
+    goto exit
 )
 
 :: if on the %NODE_HOME% directory, goto gnvm_session directory.
@@ -76,7 +76,7 @@ set path=%GNVM_SESSION_NODE_HOME%;%path%
 @echo - if on "%NODE_HOME%" directory, auto goto "%NODE_HOME%\gnvm_session" directory.
 @echo - if on "%NODE_HOME%\gnvm_session" directory, use "session clear" auto previous directory.
 @echo off
-goto quit
+goto exit
 
 ::===========================================================
 :: security : Security directory.
@@ -97,7 +97,7 @@ set ORI_GNVM_SESSION_PATH=%~dp0
 md gnvm_session
 attrib +h gnvm_session
 cd %GNVM_SESSION_HOME%
-goto quit
+goto exit
 
 ::===========================================================
 :: clear : Quit/Remove session node.exe version
@@ -117,10 +117,10 @@ set path=%NODE_HOME%;%path%
 @echo on
 @echo Session clear complete.
 @echo off
-goto quit
+goto exit
 
 ::===========================================================
-:: quit : Quit batch script.
+:: exit : Quit batch script.
 ::===========================================================
-:quit
+:exit
 exit /b 0
