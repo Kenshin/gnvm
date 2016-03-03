@@ -73,11 +73,13 @@ set path=%GNVM_SESSION_NODE_HOME%;%path%
 @echo - if node.exe work on session version, 'gnvm install -g', 'gnvm update -g' 'gnvm use x.xx.xx' can't be use.
 @echo - if quit/remove session, you must use 'session exit'.
 @echo - if on "%NODE_HOME%" directory, unable to 'run %2'.
+@echo - if on "%NODE_HOME%" directory, auto goto "%NODE_HOME%"\gnvm_session directory.
+@echo - if on "%NODE_HOME%\gnvm_session" directory, use 'session exit' auto previous directory.
 @echo off
 goto quit
 
 ::===========================================================
-:: security : Quit/Remvoe session node.exe version
+:: security : Security directory.
 ::===========================================================
 :security
 
@@ -92,6 +94,7 @@ set path=%GNVM_SESSION_HOME%;%path%
 set ORI_GNVM_SESSION_PATH=%~dp0
 
 md gnvm_session
+attrib +h gnvm_session
 cd %GNVM_SESSION_HOME%
 goto quit
 
@@ -102,6 +105,10 @@ goto quit
 
 if defined ORI_GNVM_SESSION_PATH (
     cd %ORI_GNVM_SESSION_PATH%
+    rd /q /s gnvm_session
+    @echo on
+    @echo Quit gnvm_session directory.
+    @echo off
 )
 
 @echo off
@@ -110,6 +117,7 @@ set GNVM_SESSION_NODE_HOME=
 set path=%NODE_HOME%;%path%
 
 @echo on
+@echo Session clear complete.
 @echo Exit session successful.
 @echo off
 goto quit
