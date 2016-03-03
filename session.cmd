@@ -53,7 +53,7 @@ goto quit
 :run
 
 :: if on the %NODE_HOME% directory, goto gnvm_session directory.
-if  %~dp0 == %NODE_HOME%\ call :security
+if  %cd% == %NODE_HOME% call :security
 
 if "%2" == "" (
     @echo on
