@@ -52,9 +52,6 @@ goto quit
 ::===========================================================
 :run
 
-:: if on the %NODE_HOME% directory, goto gnvm_session directory.
-if  %cd% == %NODE_HOME% call :security
-
 if "%2" == "" (
     @echo on
     @echo Parameter can't be empty.
@@ -62,6 +59,9 @@ if "%2" == "" (
     @echo off
     goto quit
 )
+
+:: if on the %NODE_HOME% directory, goto gnvm_session directory.
+if  %cd% == %NODE_HOME% call :security
 
 @echo off
 set GNVM_SESSION_NODE_HOME=%NODE_HOME%\%2\
@@ -107,9 +107,6 @@ goto quit
 if defined ORI_GNVM_SESSION_PATH (
     cd %ORI_GNVM_SESSION_PATH%
     rd /q /s gnvm_session
-    @echo on
-    @echo Quit gnvm_session directory.
-    @echo off
 )
 
 @echo off
