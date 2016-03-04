@@ -71,6 +71,12 @@ if "%2" == "" (
     goto exit
 )
 
+if not exist "%NODE_HOME%\%2" (
+    echo Waring: "%NODE_HOME%\%2\" directory not exist.
+    echo Notice: You can usage "gnvm ls" check local exist Node.JS version.
+    goto exit
+)
+
 :: if on the %NODE_HOME% directory, goto gnvm_session directory.
 if "%cd%" == "%NODE_HOME%" call :security
 

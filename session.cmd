@@ -1,3 +1,4 @@
+
 @echo off
 
 ::===========================================================
@@ -58,6 +59,12 @@ goto exit
 if "%2" == "" (
     echo Parameter can't be empty.
     echo Example: "gns run 5.7.0"
+    goto exit
+)
+
+if not exist "%NODE_HOME%\%2" (
+    echo Waring: "%NODE_HOME%\%2\" directory not exist.
+    echo Notice: You can usage "gnvm ls" check local exist Node.JS version.
     goto exit
 )
 
