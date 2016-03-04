@@ -21,31 +21,31 @@ if "%1" == "version" goto version
 :: help : Show help message
 ::===========================================================
 :help
-@echo;
-@echo GNVM - Session node.exe manage
-@echo;
-@echo Usage:
-@echo   gns [command]
-@echo;
-@echo Commands:
-@echo   run               Set session node.exe version.
-@echo   clear             Quit session node.exe version.
-@echo   version           Show version.
-@echo;
-@echo Example:
-@echo   gns help          Show gns cli command help.
-@echo   gns run 0.10.24   Set 0.10.24 is session node.exe verison.
-@echo   gns clear         Quit sesion node.exe, restore global node.exe version.
-@echo   gns version       Show version.
+echo;
+echo GNVM - Session node.exe manage
+echo;
+echo Usage:
+echo   gns [command]
+echo;
+echo Commands:
+echo   run               Set session node.exe version.
+echo   clear             Quit session node.exe version.
+echo   version           Show version.
+echo;
+echo Example:
+echo   gns help          Show gns cli command help.
+echo   gns run 0.10.24   Set 0.10.24 is session node.exe verison.
+echo   gns clear         Quit sesion node.exe, restore global node.exe version.
+echo   gns version       Show version.
 goto exit
 
 ::===========================================================
 :: version : Show gns.bat version
 ::===========================================================
 :version
-@echo Current version 0.0.1.
-@echo Copyright (C) 2014-2016 Kenshin Wang kenshin@ksria.com
-@echo See https://github.com/kenshin/gnvm for more information.
+echo Current version 0.0.1.
+echo Copyright (C) 2014-2016 Kenshin Wang kenshin@ksria.com
+echo See https://github.com/kenshin/gnvm for more information.
 goto exit
 
 ::===========================================================
@@ -54,8 +54,8 @@ goto exit
 :run
 
 if "%2" == "" (
-    @echo Parameter can't be empty.
-    @echo Example: "gns run 5.7.0"
+    echo Parameter can't be empty.
+    echo Example: "gns run 5.7.0"
     goto exit
 )
 
@@ -65,13 +65,13 @@ if "%cd%" == "%NODE_HOME%" call :security
 set GNVM_SESSION_NODE_HOME=%NODE_HOME%\%2\
 set path=%GNVM_SESSION_NODE_HOME%;%path%
 
-@echo Startup session node.exe version %2.
-@echo Important:
-@echo - if node.exe work on session version, "gnvm install -g", "gnvm update -g" "gnvm use x.xx.xx" can't be use.
-@echo - if quit/remove session, you must use "gns clear".
-@echo - if on "%NODE_HOME%" directory, unable to "run %2".
-@echo - if on "%NODE_HOME%" directory, auto goto "%NODE_HOME%\gnvm_session" directory.
-@echo - if on "%NODE_HOME%\gnvm_session" directory, use "gns clear" auto previous directory.
+echo Startup session node.exe version %2.
+echo Important:
+echo - if node.exe work on session version, "gnvm install -g", "gnvm update -g" "gnvm use x.xx.xx" can't be use.
+echo - if quit/remove session, you must use "gns clear".
+echo - if on "%NODE_HOME%" directory, unable to "run %2".
+echo - if on "%NODE_HOME%" directory, auto goto "%NODE_HOME%\gnvm_session" directory.
+echo - if on "%NODE_HOME%\gnvm_session" directory, use "gns clear" auto previous directory.
 goto exit
 
 ::===========================================================
@@ -109,7 +109,7 @@ set path=%NODE_HOME%;%path%
 set GNVM_SESSION_HOME=
 set path=%GNVM_SESSION_HOME%;%path%
 
-@echo Session clear complete.
+echo Session clear complete.
 goto exit
 
 ::===========================================================
