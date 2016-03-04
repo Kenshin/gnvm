@@ -172,8 +172,7 @@ func create() {
 }
 
 func remove() {
-	sessionEnv := os.Getenv("GNVM_SESSION_NODE_HOME")
-	if sessionEnv != "" {
+	if util.IsSessionEnv() {
 		P(WARING, "current is %v, if you remove %v , you need '%v'.\n", "session environment", GNS_HOME, "gns clear")
 		return
 	}

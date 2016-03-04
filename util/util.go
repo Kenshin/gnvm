@@ -150,6 +150,14 @@ func EqualAbs(key, value string) string {
 	return value
 }
 
+func IsSessionEnv() bool {
+	if env := os.Getenv("GNVM_SESSION_NODE_HOME"); env != "" {
+		return true
+	} else {
+		return false
+	}
+}
+
 func getGlobalNodePath() string {
 	var path string
 	file, err := exec.LookPath(NODE)
