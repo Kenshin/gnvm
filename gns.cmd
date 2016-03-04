@@ -4,8 +4,10 @@
 :: Initialize
 ::===========================================================
 if not defined NODE_HOME (
-    set "NODE_HOME=%~dp0"
-    set "path=%NODE_HOME%;%path%"
+    set "NODE_HOME=%cd%"
+    set "path=%cd%;%path%"
+    echo Waring: NODE_HOME is't not defined.
+    echo NODE_HOME create success, it's value is %cd%
 )
 
 ::===========================================================
