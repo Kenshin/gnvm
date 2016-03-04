@@ -73,7 +73,7 @@ if "%2" == "" (
 
 if not exist "%NODE_HOME%\%2" (
     echo Waring: "%NODE_HOME%\%2\" directory not exist.
-    echo Notice: You can usage "gnvm ls" check local exist Node.JS version.
+    echo Notice: you can usage "gnvm ls" check local exist Node.JS version.
     goto exit
 )
 
