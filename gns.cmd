@@ -4,8 +4,8 @@
 :: Initialize
 ::===========================================================
 if not defined NODE_HOME (
-    set NODE_HOME=%~dp0
-    set path=%NODE_HOME%;%path%
+    set "NODE_HOME=%~dp0"
+    set "path=%NODE_HOME%;%path%"
 )
 
 ::===========================================================
@@ -62,7 +62,7 @@ if "%2" == "" (
 )
 
 :: if on the %NODE_HOME% directory, goto gnvm_session directory.
-if %cd% == %NODE_HOME% call :security
+if "%cd%" == "%NODE_HOME%" call :security
 
 @echo off
 set GNVM_SESSION_NODE_HOME=%NODE_HOME%\%2\
@@ -102,7 +102,7 @@ goto exit
 :: clear : Quit/Remove session node.exe version
 ::===========================================================
 :clear
-if %cd% == %NODE_HOME%\gnvm_session (
+if "%cd%" == "%NODE_HOME%\gnvm_session" (
     cd..
 )
 
