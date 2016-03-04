@@ -69,7 +69,7 @@ set path=%GNVM_SESSION_NODE_HOME%;%path%
 
 echo Startup session node.exe version %2.
 echo Important:
-echo - if node.exe work on session version, "gnvm use" "gnvm install -g", "gnvm uninstall" "gnvm update -g" can't be use.
+echo - if node.exe work on session version, "gnvm use", "gnvm install -g", "gnvm uninstall", "gnvm update -g" can't be use.
 echo - if quit/remove session, you must use "gns clear".
 echo - if on "%NODE_HOME%" directory, unable to "run %2".
 echo - if on "%NODE_HOME%" directory, auto goto "%NODE_HOME%\gnvm_session" directory.
