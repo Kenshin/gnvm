@@ -34,7 +34,7 @@ if "%1" == "version" goto version
 ::===========================================================
 :help
 echo;
-echo GNVM - Session node.exe manage
+echo GNS - Node.JS Session manager by GNVM
 echo;
 echo Usage:
 echo   gns [command]
