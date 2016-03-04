@@ -148,40 +148,40 @@ func Run(param string) {
 		}
 	}()
 
-	if param == "create" {
-		create()
+	if param == "start" {
+		start()
 	} else {
-		remove()
+		close()
 	}
 }
 
-func create() {
+func start() {
 	file, err := os.Create(GNS_HOME)
 	defer file.Close()
 	if err != nil {
 		if err := os.Remove(GNS_HOME); err != nil {
-			msg := fmt.Sprintf("'gnvm session create' an error has occurred. please check. \nError: ")
+			msg := fmt.Sprintf("'gnvm session start' an error has occurred. please check. \nError: ")
 			Error(ERROR, msg, err)
 			return
 		}
 	}
 	if _, err := file.WriteString(batFileContent); err == nil {
-		P(NOTICE, "gns.bat create success, path is %v.\n", GNS_HOME)
+		P(NOTICE, "sesson environment %v, path is %v.\n", "start success", GNS_HOME)
 		P(NOTICE, "please use '%v'. See '%v' or '%v'.\n", "gns run x.xx.xx", "gnvm help session", "gns help")
 	}
 }
 
-func remove() {
+func close() {
 	if _, ok := util.IsSessionEnv(); ok {
 		P(WARING, "current is %v, if you %v session environment, you need '%v' first.\n", "session environment", "remove", "gns clear")
 		return
 	}
 
 	if err := os.Remove(GNS_HOME); err != nil {
-		msg := fmt.Sprintf("'gnvm session create' an error has occurred. please check. \nError: ")
+		msg := fmt.Sprintf("'gnvm session close' an error has occurred. please check. \nError: ")
 		Error(ERROR, msg, err)
 		return
 	} else {
-		P(NOTICE, "gns.bat remove success.\n")
+		P(NOTICE, "sesson environment %v.\n", "close success")
 	}
 }
