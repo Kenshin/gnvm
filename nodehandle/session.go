@@ -130,7 +130,7 @@ goto exit
 :exit
 exit /b 0
 `
-var GNS_HOME = util.GlobalNodePath + DIVIDE + "gns.bat"
+var GNS_HOME = util.GlobalNodePath + DIVIDE + "gns.cmd"
 
 func init() {
 	// verify GNVM_SESSION_NODE_HOME exist.
