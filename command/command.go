@@ -276,14 +276,15 @@ var lsCmd = &cobra.Command{
 	Short: "List show all <local> <remote> node.exe version",
 	Long: `List show all <local> <remote> node.exe version e.g.:
 gnvm ls                  :Print local node.js folder list.
+gnvm ls -r               :--remote simple node.js list.
 gnvm ls -r -d --limit=xx :Print remote node.js maximum number of rows is xx.( limit=0, print max rows. )
-gnvm ls -r               :--remote abbreviation
 gnvm ls -r -d -l 20      :--detail --limit=20 abbreviation
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		switch {
 		case len(args) > 0:
 			P(WARING, "gnvm ls no parameter, please check your input. See '%v'.\n", "gnvm help ls")
+		case len(args) == 0:
 			nodehandle.LS(true)
 		case remote && detail:
 			if limit < 0 {
