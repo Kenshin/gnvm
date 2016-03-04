@@ -200,20 +200,20 @@ var sessionCmd = &cobra.Command{
 	Short: "Use any version of the local already exists version by current session",
 	Long: `
 Use any version of the local already exists by current session, e.g.
-gnvm session init         :Create session.cmd
-gnvm session remove       :Remove session.cmd
+gnvm session create       :Create gns.cmd
+gnvm session remove       :Remove gns.cmd
 
 When session.cmd Create success, usge commands:
-session help              :Show session cli command help.
-session run 0.10.24       :Set 0.10.24 is session node.exe verison.
-session exit              :Quit sesion node.exe, restore global node.exe version.
-session version           :Show version.
+gns help                  :Show session cli command help.
+gns run 0.10.24           :Set 0.10.24 is session node.exe verison.
+gns clear                 :Quit sesion node.exe, restore global node.exe version.
+gns version               :Show version.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
-			args[0] = util.EqualAbs("init", args[0])
+			args[0] = util.EqualAbs("create", args[0])
 			args[0] = util.EqualAbs("remove", args[0])
-			if args[0] != "init" && args[0] != "remove" {
+			if args[0] != "create" && args[0] != "remove" {
 				P(ERROR, "%v only support %v or %v parameter. See '%v'.\n", "gnvm session", "init", "remove", "gnvm help session")
 			} else {
 				nodehandle.Run(args[0])
