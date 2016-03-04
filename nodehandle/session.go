@@ -172,8 +172,8 @@ func create() {
 }
 
 func remove() {
-	if util.IsSessionEnv() {
-		P(WARING, "current is %v, if you remove %v , you need '%v'.\n", "session environment", GNS_HOME, "gns clear")
+	if _, ok := util.IsSessionEnv(); ok {
+		P(WARING, "current is %v, if you %v session environment, you need '%v' frist.\n", "remove", "session environment", "gns clear")
 		return
 	}
 
