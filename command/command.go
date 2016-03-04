@@ -62,6 +62,13 @@ gnvm install npm`,
 			P(ERROR, "'%v' need parameter, please check your input. See '%v'.\n", "gnvm install", "gnvm help install")
 		} else {
 
+			if global {
+				if _, ok := util.IsSessionEnv(); ok {
+					P(WARING, "current is %v, if you usge %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+					return
+				}
+			}
+
 			if global && len(args) > 1 {
 				P(WARING, "when use --global must be only one parameter, e.g. '%v'. See 'gnvm install help'.\n", "gnvm install x.xx.xx --global")
 			}
@@ -113,6 +120,10 @@ gnvm uninstall npm
 gnvm uninstall 0.10.26 0.11.2 latest
 gnvm uninstall ALL`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if _, ok := util.IsSessionEnv(); ok {
+			P(WARING, "current is %v, if you usage %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+			return
+		}
 		if len(args) == 0 {
 			P(ERROR, "'%v' need parameter, please check your input. See '%v'.\n", "gnvm uninstall", "gnvm help uninstall")
 			return
@@ -175,6 +186,10 @@ var useCmd = &cobra.Command{
 gnvm use x.xx.xx
 gnvm use latest`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if _, ok := util.IsSessionEnv(); ok {
+			P(WARING, "current is %v, if you usage %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+			return
+		}
 		if len(args) == 1 {
 
 			args[0] = util.EqualAbs("latest", args[0])
@@ -203,7 +218,7 @@ Use any version of the local already exists by current session, e.g.
 gnvm session create       :Create gns.cmd
 gnvm session remove       :Remove gns.cmd
 
-When session.cmd Create success, usge commands:
+When session.cmd Create success, usage commands:
 gns help                  :Show session cli command help.
 gns run 0.10.24           :Set 0.10.24 is session node.exe verison.
 gns clear                 :Quit sesion node.exe, restore global node.exe version.
@@ -233,6 +248,12 @@ gnvm update latest
 gnvm update latest --global`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
+			if global {
+				if _, ok := util.IsSessionEnv(); ok {
+					P(WARING, "current is %v, if you usge %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+					return
+				}
+			}
 			args[0] = util.EqualAbs("latest", args[0])
 			args[0] = util.EqualAbs("gnvm", args[0])
 			switch args[0] {
