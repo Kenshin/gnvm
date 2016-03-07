@@ -281,24 +281,26 @@ gnvm ls -r -d --limit=xx :Print remote node.js maximum number of rows is xx.( li
 gnvm ls -r -d -l 20      :--detail --limit=20 abbreviation
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		switch {
-		case len(args) > 0:
+		if len(args) > 0 {
 			P(WARING, "gnvm ls no parameter, please check your input. See '%v'.\n", "gnvm help ls")
-		case len(args) == 0:
-			nodehandle.LS(true)
-		case remote && detail:
-			if limit < 0 {
-				P(WARING, "%v must be positive integer, please check your input. See '%v'.\n", "--limit", "gnvm help ls")
-			} else {
-				nodehandle.LsRemote(limit)
+		} else {
+			switch {
+			case !remote && !detail:
+				nodehandle.LS(true)
+			case remote && !detail:
+				if limit != 0 {
+					P(WARING, "%v no support parameter:'%v', please check your input. See '%v'.\n", "gnvm ls -r", "--limit", "gnvm help ls")
+				}
+				nodehandle.LsRemote(-1)
+			case remote && detail:
+				if limit < 0 {
+					P(WARING, "%v must be positive integer, please check your input. See '%v'.\n", "--limit", "gnvm help ls")
+				} else {
+					nodehandle.LsRemote(limit)
+				}
+			case !remote && detail:
+				P(ERROR, "flag %v depends on %v flag, e.g. '%v', See '%v'.", "-d", "-r", "gnvm ls -r -d", "gnvm help ls", "\n")
 			}
-		case remote && !detail:
-			if limit != 0 {
-				P(WARING, "%v no support parameter:'%v', please check your input. See '%v'.\n", "gnvm ls -r", "--limit", "gnvm help ls")
-			}
-			nodehandle.LsRemote(-1)
-		case !remote && detail:
-			P(ERROR, "flag %v depends on %v flag, e.g. '%v', See '%v'.", "-d", "-r", "gnvm ls -r -d", "gnvm help ls", "\n")
 		}
 	},
 }
