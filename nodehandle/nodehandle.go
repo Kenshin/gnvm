@@ -4,10 +4,11 @@ import (
 
 	// lib
 	. "github.com/Kenshin/cprint"
-	"github.com/Kenshin/curl"
+	//"github.com/Kenshin/curl"
 	"github.com/bitly/go-simplejson"
 	"github.com/pierrre/archivefile/zip"
 
+	"curl"
 	// go
 	//"log"
 	"fmt"
@@ -484,8 +485,11 @@ func LsRemote(limit int) {
  */
 func Install(args []string, global bool) int {
 
-	var localVersion string
-	var code int
+	localVersion := ""
+	code := 0
+	isLatest := false
+	dl := new(curl.Download)
+	ts := new(curl.Task)
 
 	// try catch
 	defer func() {
@@ -500,7 +504,6 @@ func Install(args []string, global bool) int {
 	}()
 
 	for _, v := range args {
-		isLatest := false
 		if v == config.LATEST {
 
 			localVersion = config.GetConfig(config.LATEST_VERSION)
@@ -519,18 +522,37 @@ func Install(args []string, global bool) int {
 
 		// downlaod
 		code = download(v)
-		if code == 0 || code == 2 {
+		if code == 0 {
+			dl.AddTask(ts.New(config.GetConfig(config.REGISTRY)+GetNodePath(v)+NODE, NODE, rootPath+v))
+		}
+	}
 
-			if v != localVersion && isLatest {
-				config.SetConfig(config.LATEST_VERSION, v)
-				P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, v)
-			}
-
-			if global && len(args) == 1 {
-				if ok := Use(v); ok {
-					config.SetConfig(config.GLOBAL_VERSION, v)
+	if len(*dl) > 0 {
+		if newDL, errs := curl.New(*dl); len(errs) == 0 {
+			for _, tasks := range newDL {
+				v := strings.Replace(tasks.Dst, rootPath, "", -1)
+				if v != localVersion && isLatest {
+					config.SetConfig(config.LATEST_VERSION, v)
+					P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, v)
+				}
+				if global && len(args) == 1 {
+					if ok := Use(v); ok {
+						config.SetConfig(config.GLOBAL_VERSION, v)
+					}
 				}
 			}
+		} else {
+			s := ""
+			for _, v := range errs {
+				/*
+					if err := os.RemoveAll(rootPath + version); err != nil {
+						P(ERROR, "remove %v fail, Error: %v\n", version, err.Error())
+						return 1
+					}
+				*/
+				s += v.Error()
+			}
+			P(WARING, s)
 		}
 	}
 
@@ -847,26 +869,6 @@ func download(version string) int {
 		}
 	}
 
-	// get current os arch
-	/*amd64 := "/"
-	if runtime.GOARCH == "amd64" {
-		amd64 = "/x64/"
-	}
-	// set url
-	url := config.GetConfig(config.REGISTRY) + "v" + version + amd64 + NODE*/
-	url := config.GetConfig(config.REGISTRY) + GetNodePath(version) + NODE
-
-	// download
-	if code := curl.New(url, version, rootPath+version+DIVIDE+NODE); code != 0 {
-		if code == -1 {
-			if err := os.RemoveAll(rootPath + version); err != nil {
-				P(ERROR, "remove %v fail, Error: %v\n", version, err.Error())
-				return 1
-			}
-		}
-		return code
-	}
-
 	return 0
 }
 
@@ -877,13 +879,14 @@ func download(version string) int {
  */
 func downloadNpm(version string) int {
 
-	// set url
-	url := config.GetConfig(config.REGISTRY) + "npm/" + version
-
-	// download
-	if code := curl.New(url, version, os.TempDir()+DIVIDE+version); code != 0 {
-		return code
-	}
+	/*
+		// set url
+		url := config.GetConfig(config.REGISTRY) + "npm/" + version
+		// download
+		if code := curl.New(url, version, os.TempDir()+DIVIDE+version); code != 0 {
+			return code
+		}
+	*/
 
 	return 0
 }
