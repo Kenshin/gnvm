@@ -11,7 +11,6 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
-	//"strconv"
 	"strings"
 )
 
@@ -116,29 +115,13 @@ func GetLatestVersion(url string) string {
 
 func VerifyNodeVersion(version string) bool {
 	result := true
-	reg, _ := regexp.Compile(`^(0|[^0]\d?)(\.\d+){2}$`)
+	version = strings.TrimSpace(version)
+	reg, _ := regexp.Compile(`^([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}$`)
 	if version == UNKNOWN {
 		return true
 	} else if format := reg.MatchString(version); !format {
 		result = false
 	}
-
-	/*
-		if version == UNKNOWN {
-			return true
-		}
-		arr := strings.Split(version, ".")
-		if len(arr) != 3 {
-			return false
-		}
-		for _, v := range arr {
-			_, err := strconv.ParseInt(v, 10, 0)
-			if err != nil {
-				result = false
-				break
-			}
-		}
-	*/
 	return result
 }
 
@@ -150,8 +133,26 @@ func EqualAbs(key, value string) string {
 	return value
 }
 
+func IsSessionEnv() (string, bool) {
+	env := os.Getenv("GNVM_SESSION_NODE_HOME")
+	if env != "" {
+		return env, true
+	} else {
+		return env, false
+	}
+}
+
 func getGlobalNodePath() string {
 	var path string
+
+	if env, ok := IsSessionEnv(); ok {
+		if reg, err := regexp.Compile(`\\([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}\\$`); err == nil {
+			ver := reg.FindString(env)
+			path = strings.Replace(env, ver, "", -1)
+		}
+		return path
+	}
+
 	file, err := exec.LookPath(NODE)
 	if err != nil {
 		if file, err := exec.LookPath(GNVM); err != nil {

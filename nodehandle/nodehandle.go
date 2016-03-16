@@ -500,7 +500,7 @@ func Install(args []string, global bool) int {
 	}()
 
 	for _, v := range args {
-
+		isLatest := false
 		if v == config.LATEST {
 
 			localVersion = config.GetConfig(config.LATEST_VERSION)
@@ -512,7 +512,7 @@ func Install(args []string, global bool) int {
 				break
 			}
 
-			// set v
+			isLatest = true
 			v = version
 			P(NOTICE, "remote latest version is %v.\n", version)
 		}
@@ -521,7 +521,7 @@ func Install(args []string, global bool) int {
 		code = download(v)
 		if code == 0 || code == 2 {
 
-			if v != localVersion && v == "latest" {
+			if v != localVersion && isLatest {
 				config.SetConfig(config.LATEST_VERSION, v)
 				P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, v)
 			}

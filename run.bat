@@ -1,30 +1,64 @@
 ::===========================================================
-:: GNVM  : Node.js version manager by GO
-:: HOST  : https://github.com/kenshin/gnvm
-:: Author: Kenshin<kenshin@ksria.com>
+:: GNVM   : Node.js version manager by GO
+:: HOST   : https://github.com/kenshin/gnvm
+:: Author : Kenshin<kenshin@ksria.com>
+:: Version: 0.0.2
 ::===========================================================
 
-@ECHO off
+@echo off
 
-IF "%1" == "icon" GOTO icon
-IF "%1" == "install" GOTO install
-IF "%1" == "test" GOTO test
+::===========================================================
+:: Initialize
+::===========================================================
+if "%1" == "icon"    goto icon
+if "%1" == "test"    goto test
+if "%1" == "install" (
+    if "%2" == ""    goto install
+    if "%2" == "x86" (
+        set GOARCH=386
+        call :build %2
+    )
+    if "%2" == "x64" (
+        set GOARCH=amd64
+        call :build %2
+    )
+)
 
+::===========================================================
+:: icon : Set icon.
+::===========================================================
 :icon
-@ECHO run rsrc.exe build syso
+@echo run rsrc.exe build syso
 rsrc -ico gnvm.ico -o gnvm.syso
-IF "%1" == "icon" GOTO exit
+goto quit
 
+::===========================================================
+:: install : Install current os runtime
+::===========================================================
 :install
-@ECHO run go install
+@echo run go install
 go install -ldflags "-w -s"
-GOTO exit
-IF "%1" == "install" GOTO exit
+goto quit
 
+::===========================================================
+:: build : Cross compile, support x86 and x64 on Windows
+::===========================================================
+:build
+@echo run go build %1
+go build -ldflags "-w -s"
+goto quit
+
+::===========================================================
+:: test : Test gnvm
+::===========================================================
 :test
-@ECHO go test
+@echo go test
 go test
-GOTO exit
+goto quit
 
-:exit
-@ECHO create complete.
+::===========================================================
+:: quit : Quit batch script.
+::===========================================================
+:quit
+@echo gnvm.exe compile success.
+exit /b 0

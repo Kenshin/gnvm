@@ -62,6 +62,13 @@ gnvm install npm`,
 			P(ERROR, "'%v' need parameter, please check your input. See '%v'.\n", "gnvm install", "gnvm help install")
 		} else {
 
+			if global {
+				if _, ok := util.IsSessionEnv(); ok {
+					P(WARING, "current is %v, if you usge %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+					return
+				}
+			}
+
 			if global && len(args) > 1 {
 				P(WARING, "when use --global must be only one parameter, e.g. '%v'. See 'gnvm install help'.\n", "gnvm install x.xx.xx --global")
 			}
@@ -113,6 +120,10 @@ gnvm uninstall npm
 gnvm uninstall 0.10.26 0.11.2 latest
 gnvm uninstall ALL`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if _, ok := util.IsSessionEnv(); ok {
+			P(WARING, "current is %v, if you usage %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+			return
+		}
 		if len(args) == 0 {
 			P(ERROR, "'%v' need parameter, please check your input. See '%v'.\n", "gnvm uninstall", "gnvm help uninstall")
 			return
@@ -175,6 +186,10 @@ var useCmd = &cobra.Command{
 gnvm use x.xx.xx
 gnvm use latest`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if _, ok := util.IsSessionEnv(); ok {
+			P(WARING, "current is %v, if you usage %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+			return
+		}
 		if len(args) == 1 {
 
 			args[0] = util.EqualAbs("latest", args[0])
@@ -195,6 +210,36 @@ gnvm use latest`,
 }
 
 // sub cmd
+var sessionCmd = &cobra.Command{
+	Use:   "session",
+	Short: "Use any version of the local already exists version by current session",
+	Long: `
+Use any version of the local already exists by current session, e.g.
+gnvm session start        :Create gns.cmd
+gnvm session close        :Remove gns.cmd
+
+When session environment Start success, usage commands:
+gns help                  :Show session cli command help.
+gns run 0.10.24           :Set 0.10.24 is session node.exe verison.
+gns clear                 :Quit sesion node.exe, restore global node.exe version.
+gns version               :Show version.
+`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) == 1 {
+			args[0] = util.EqualAbs("start", args[0])
+			args[0] = util.EqualAbs("close", args[0])
+			if args[0] != "start" && args[0] != "close" {
+				P(ERROR, "%v only support %v or %v parameter. See '%v'.\n", "gnvm session", "start", "close", "gnvm help session")
+			} else {
+				nodehandle.Run(args[0])
+			}
+		} else {
+			P(ERROR, "gnvm session parameter maximum is 1, please check your input. See '%v'.\n", "gnvm help session")
+		}
+	},
+}
+
+// sub cmd
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update latest node.exe",
@@ -203,6 +248,12 @@ gnvm update latest
 gnvm update latest --global`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
+			if global {
+				if _, ok := util.IsSessionEnv(); ok {
+					P(WARING, "current is %v, if you usge %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+					return
+				}
+			}
 			args[0] = util.EqualAbs("latest", args[0])
 			args[0] = util.EqualAbs("gnvm", args[0])
 			switch args[0] {
@@ -225,28 +276,31 @@ var lsCmd = &cobra.Command{
 	Short: "List show all <local> <remote> node.exe version",
 	Long: `List show all <local> <remote> node.exe version e.g.:
 gnvm ls                  :Print local node.js folder list.
+gnvm ls -r               :--remote simple node.js list.
 gnvm ls -r -d --limit=xx :Print remote node.js maximum number of rows is xx.( limit=0, print max rows. )
-gnvm ls -r               :--remote abbreviation
 gnvm ls -r -d -l 20      :--detail --limit=20 abbreviation
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		switch {
-		case len(args) > 0:
+		if len(args) > 0 {
 			P(WARING, "gnvm ls no parameter, please check your input. See '%v'.\n", "gnvm help ls")
-			nodehandle.LS(true)
-		case remote && detail:
-			if limit < 0 {
-				P(WARING, "%v must be positive integer, please check your input. See '%v'.\n", "--limit", "gnvm help ls")
-			} else {
-				nodehandle.LsRemote(limit)
+		} else {
+			switch {
+			case !remote && !detail:
+				nodehandle.LS(true)
+			case remote && !detail:
+				if limit != 0 {
+					P(WARING, "%v no support parameter:'%v', please check your input. See '%v'.\n", "gnvm ls -r", "--limit", "gnvm help ls")
+				}
+				nodehandle.LsRemote(-1)
+			case remote && detail:
+				if limit < 0 {
+					P(WARING, "%v must be positive integer, please check your input. See '%v'.\n", "--limit", "gnvm help ls")
+				} else {
+					nodehandle.LsRemote(limit)
+				}
+			case !remote && detail:
+				P(ERROR, "flag %v depends on %v flag, e.g. '%v', See '%v'.", "-d", "-r", "gnvm ls -r -d", "gnvm help ls", "\n")
 			}
-		case remote && !detail:
-			if limit != 0 {
-				P(WARING, "%v no support parameter:'%v', please check your input. See '%v'.\n", "gnvm ls -r", "--limit", "gnvm help ls")
-			}
-			nodehandle.LsRemote(-1)
-		case !remote && detail:
-			P(ERROR, "flag %v depends on %v flag, e.g. '%v', See '%v'.", "-d", "-r", "gnvm ls -r -d", "gnvm help ls", "\n")
 		}
 	},
 }
@@ -346,6 +400,7 @@ func init() {
 	gnvmCmd.AddCommand(installCmd)
 	gnvmCmd.AddCommand(uninstallCmd)
 	gnvmCmd.AddCommand(useCmd)
+	gnvmCmd.AddCommand(sessionCmd)
 	gnvmCmd.AddCommand(updateCmd)
 	gnvmCmd.AddCommand(lsCmd)
 	gnvmCmd.AddCommand(nodeVersionCmd)
