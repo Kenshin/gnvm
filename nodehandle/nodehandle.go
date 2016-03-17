@@ -375,17 +375,26 @@ func LS(isPrint bool) ([]string, error) {
 					desc = " -- global"
 				}
 
+				ver, arch := divideVersion(version)
+				if arch != runtime.GOARCH {
+					if arch == "386" {
+						desc = " -- x86"
+					} else {
+						desc = " -- x64"
+					}
+				}
+
 				// set true
 				existVersion = true
 
 				// set lsArr
-				lsArr = append(lsArr, version)
+				lsArr = append(lsArr, ver)
 
 				if isPrint {
 					if desc == "" {
-						P(DEFAULT, "v"+version+desc, "\n")
+						P(DEFAULT, "v"+ver+desc, "\n")
 					} else {
-						P(DEFAULT, "%v", "v"+version+desc, "\n")
+						P(DEFAULT, "%v", "v"+ver+desc, "\n")
 					}
 
 				}
@@ -522,7 +531,7 @@ func Install(args []string, global bool) int {
 		}
 
 		if code = downloadVerify(ver); code == 0 {
-			dl.AddTask(ts.New(config.GetConfig(config.REGISTRY)+GetNodePath(ver, arch)+NODE, ver, NODE, rootPath+ver))
+			dl.AddTask(ts.New(config.GetConfig(config.REGISTRY)+GetNodePath(ver, arch)+NODE, ver, NODE, rootPath+archVersion(ver, arch)))
 		}
 	}
 
@@ -899,9 +908,22 @@ func divideVersion(s string) (ver, arch string) {
 		case "x64":
 			arch = "amd64"
 		default:
-			P(WARING, "only support %v and %v parameter.\n", "x86", "x64")
+			P(WARING, "%v format error, only support %v and %v parameter.\n", ver, "x86", "x64")
 			arch = runtime.GOARCH
 		}
 	}
 	return
+}
+
+func archVersion(ver, arch string) string {
+	if arch == runtime.GOARCH {
+		return ver
+	} else {
+		if arch == "386" {
+			arch = "x86"
+		} else {
+			arch = "x64"
+		}
+		return ver + "-" + arch
+	}
 }
