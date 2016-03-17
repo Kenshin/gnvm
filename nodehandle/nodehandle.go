@@ -504,7 +504,8 @@ func Install(args []string, global bool) int {
 	}()
 
 	for _, v := range args {
-		if v == config.LATEST {
+		ver, arch := divideVersion(v)
+		if ver == config.LATEST {
 
 			localVersion = config.GetConfig(config.LATEST_VERSION)
 			P(NOTICE, "local  latest version is %v.\n", localVersion)
@@ -516,12 +517,12 @@ func Install(args []string, global bool) int {
 			}
 
 			isLatest = true
-			v = version
+			ver = version
 			P(NOTICE, "remote latest version is %v.\n", version)
 		}
 
-		if code = downloadVerify(v); code == 0 {
-			dl.AddTask(ts.New(config.GetConfig(config.REGISTRY)+GetNodePath(v)+NODE, v, NODE, rootPath+v))
+		if code = downloadVerify(ver); code == 0 {
+			dl.AddTask(ts.New(config.GetConfig(config.REGISTRY)+GetNodePath(ver, arch)+NODE, ver, NODE, rootPath+ver))
 		}
 	}
 
@@ -883,4 +884,24 @@ func getLatestVersionByRemote() string {
 
 	return version
 
+}
+
+func divideVersion(s string) (ver, arch string) {
+	arr := strings.Split(s, "-")
+	if len(arr) == 1 {
+		ver = arr[0]
+		arch = runtime.GOARCH
+	} else {
+		ver = arr[0]
+		switch arr[1] {
+		case "x86":
+			arch = "386"
+		case "x64":
+			arch = "amd64"
+		default:
+			P(WARING, "only support %v and %v parameter.\n", "x86", "x64")
+			arch = runtime.GOARCH
+		}
+	}
+	return
 }

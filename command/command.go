@@ -51,10 +51,12 @@ var installCmd = &cobra.Command{
 	Use:   "install",
 	Short: "Install any node.exe version",
 	Long: `Install any node.exe version e.g.
-gnvm install latest
-gnvm install x.xx.xx y.yy.yy
-gnvm install x.xx.xx --global
-gnvm install npm`,
+gnvm install latest                  :Download 'latest' version from .gnvmrc registry.
+gnvm install x.xx.xx y.yy.yy         :Multi version download.
+gnvm install x.xx.xx-x86 latest-x64  :Assign arch version.
+gnvm install x.xx.xx --global        :Download and auto invoke 'gnvm use x.xx.xx'.
+gnvm install npm
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var newArgs []string
 
