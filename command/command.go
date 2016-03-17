@@ -55,7 +55,7 @@ gnvm install latest                  :Download 'latest' version from .gnvmrc reg
 gnvm install x.xx.xx y.yy.yy         :Multi version download.
 gnvm install x.xx.xx-x86 latest-x64  :Assign arch version.
 gnvm install x.xx.xx --global        :Download and auto invoke 'gnvm use x.xx.xx'.
-gnvm install npm
+gnvm install npm                     :Download npm from .gnvmrc registry.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		var newArgs []string
