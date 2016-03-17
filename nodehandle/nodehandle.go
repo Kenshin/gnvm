@@ -520,13 +520,12 @@ func Install(args []string, global bool) int {
 			P(NOTICE, "remote latest version is %v.\n", version)
 		}
 
-		// downlaod
-		code = download(v)
-		if code == 0 {
+		if code = downloadVerify(v); code == 0 {
 			dl.AddTask(ts.New(config.GetConfig(config.REGISTRY)+GetNodePath(v)+NODE, NODE, rootPath+v))
 		}
 	}
 
+	// downlaod
 	if len(*dl) > 0 {
 		if newDL, errs := curl.New(*dl); len(errs) == 0 {
 			for _, tasks := range newDL {
@@ -544,12 +543,6 @@ func Install(args []string, global bool) int {
 		} else {
 			s := ""
 			for _, v := range errs {
-				/*
-					if err := os.RemoveAll(rootPath + version); err != nil {
-						P(ERROR, "remove %v fail, Error: %v\n", version, err.Error())
-						return 1
-					}
-				*/
 				s += v.Error()
 			}
 			P(WARING, s)
@@ -844,11 +837,9 @@ func copy(src, dest string) error {
  * 0: success
  * 1: remove folder error
  * 2: folder exist
- * 3: create folder error
  *
  */
-func download(version string) int {
-
+func downloadVerify(version string) int {
 	// rootPath/version/node.exe is exist
 	if _, err := util.GetNodeVersion(rootPath + version + DIVIDE); err == nil {
 		P(WARING, "%v folder exist.\n", version)
@@ -858,17 +849,7 @@ func download(version string) int {
 			P(ERROR, "remove %v fail, Error: %v\n", version, err.Error())
 			return 1
 		}
-		//P(DEFAULT, "Remove empty [%v] folder success.\n", version)
 	}
-
-	// rootPath/version is exist
-	if isDirExist(rootPath+version) != true {
-		if err := os.Mkdir(rootPath+version, 0777); err != nil {
-			P(ERROR, "create %v fail, Error: %v\n", version, err.Error())
-			return 3
-		}
-	}
-
 	return 0
 }
 
