@@ -521,7 +521,7 @@ func Install(args []string, global bool) int {
 		}
 
 		if code = downloadVerify(v); code == 0 {
-			dl.AddTask(ts.New(config.GetConfig(config.REGISTRY)+GetNodePath(v)+NODE, NODE, rootPath+v))
+			dl.AddTask(ts.New(config.GetConfig(config.REGISTRY)+GetNodePath(v)+NODE, v, NODE, rootPath+v))
 		}
 	}
 
