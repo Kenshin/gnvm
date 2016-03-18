@@ -530,7 +530,7 @@ func Install(args []string, global bool) int {
 			P(NOTICE, "remote latest version is %v.\n", version)
 		}
 
-		if code = downloadVerify(ver); code == 0 {
+		if code = downloadVerify(v); code == 0 {
 			dl.AddTask(ts.New(config.GetConfig(config.REGISTRY)+GetNodePath(ver, arch)+NODE, ver, NODE, rootPath+archVersion(ver, arch)))
 		}
 	}
