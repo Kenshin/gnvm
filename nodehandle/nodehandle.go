@@ -537,26 +537,31 @@ func Install(args []string, global bool) int {
 
 	// downlaod
 	if len(*dl) > 0 {
-		if newDL, errs := curl.New(*dl); len(errs) == 0 {
-			for _, tasks := range newDL {
-				v := strings.Replace(tasks.Dst, rootPath, "", -1)
-				if v != localVersion && isLatest {
-					config.SetConfig(config.LATEST_VERSION, v)
-					P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, v)
-				}
-				if global && len(args) == 1 {
-					if ok := Use(v); ok {
-						config.SetConfig(config.GLOBAL_VERSION, v)
-					}
+		curl.Options.Header = false
+		curl.Options.Footer = false
+		arr := (*dl).GetValues("Title")
+		P(DEFAULT, "Start download [%v].\n", strings.Join(arr, ", "))
+		newDL, errs := curl.New(*dl)
+		for _, task := range newDL {
+			v := strings.Replace(task.Dst, rootPath, "", -1)
+			if v != localVersion && isLatest {
+				config.SetConfig(config.LATEST_VERSION, v)
+				P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, v)
+			}
+			if global && len(args) == 1 {
+				if ok := Use(v); ok {
+					config.SetConfig(config.GLOBAL_VERSION, v)
 				}
 			}
-		} else {
+		}
+		if len(errs) > 0 {
 			s := ""
 			for _, v := range errs {
 				s += v.Error()
 			}
 			P(WARING, s)
 		}
+		P(DEFAULT, "End download.")
 	}
 
 	return code
