@@ -28,6 +28,7 @@ import (
 const (
 	DIVIDE        = "\\"
 	NODE          = "node.exe"
+	IOJS          = "iojs.exe"
 	TIMEFORMART   = "02-Jan-2006 15:04"
 	GNVMHOST      = "http://k-zone.cn/gnvm/version.txt"
 	PROCESSTAKEUP = "The process cannot access the file because it is being used by another process."
@@ -384,7 +385,7 @@ func LS(isPrint bool) ([]string, error) {
 					desc = " -- global"
 				}
 
-				ver, arch := divideVersion(version)
+				ver, _, arch := util.ParseArgs(version)
 				if arch != runtime.GOARCH {
 					if arch == "386" {
 						desc = " -- x86"
@@ -522,9 +523,25 @@ func Install(args []string, global bool) int {
 	}()
 
 	for _, v := range args {
-		ver, arch := divideVersion(v)
-		if ver == config.LATEST {
+		ver, io, arch := util.ParseArgs(v)
 
+		v = util.EqualAbs("latest", v)
+		v = util.EqualAbs("npm", v)
+
+		// check npm
+		if ver == "npm" {
+			P(WARING, "use format error, the correct format is '%v'. See '%v'.\n", "gnvm install npm", "gnvm help install")
+			continue
+		}
+
+		// check version format
+		if ok := util.VerifyNodeVersion(ver); !ok {
+			P(ERROR, "%v format error, the correct format is %v or %v. \n", v, "0.xx.xx", "^0.xx.xx")
+			continue
+		}
+
+		// check latest and get remote latest
+		if ver == config.LATEST {
 			localVersion = config.GetConfig(config.LATEST_VERSION)
 			P(NOTICE, "local  latest version is %v.\n", localVersion)
 
@@ -537,11 +554,53 @@ func Install(args []string, global bool) int {
 			isLatest = true
 			ver = version
 			P(NOTICE, "remote latest version is %v.\n", version)
+		} else {
+			isLatest = false
 		}
 
-		if code = downloadVerify(v); code == 0 {
-			dl.AddTask(ts.New(config.GetConfig(config.REGISTRY)+GetNodePath(ver, arch)+NODE, ver, NODE, rootPath+archVersion(ver, arch)))
+		// check ver folder/node.exe is exist
+		if _, err := util.GetNodeVersion(rootPath + ver + DIVIDE); err == nil {
+			P(WARING, "%v folder exist.\n", ver)
+			continue
 		}
+
+		exec := NODE
+		// get and set url( include iojs)
+		url := config.GetConfig(config.REGISTRY)
+		if io {
+			if url == config.TAOBAO {
+				url = strings.Replace(url, "/node", "/iojs", -1)
+			} else if url == config.REGISTRY_VAL {
+				url = strings.Replace(url, "nodejs.org", "iojs.org", -1)
+			}
+			exec = IOJS
+		}
+
+		// add task
+		dl.AddTask(ts.New(url+GetNodePath(ver, arch)+exec, ver, NODE, rootPath+archVersion(ver, arch)))
+
+		/*
+			ver, _, arch := util.ParseArgs(v)
+			if ver == config.LATEST {
+
+				localVersion = config.GetConfig(config.LATEST_VERSION)
+				P(NOTICE, "local  latest version is %v.\n", localVersion)
+
+				version := getLatestVersionByRemote()
+				if version == "" {
+					P(ERROR, "get latest version error, please check. See '%v'.\n", "gnvm config help")
+					break
+				}
+
+				isLatest = true
+				ver = version
+				P(NOTICE, "remote latest version is %v.\n", version)
+			}
+
+			if code = downloadVerify(v); code == 0 {
+				dl.AddTask(ts.New(config.GetConfig(config.REGISTRY)+GetNodePath(ver, arch)+NODE, ver, NODE, rootPath+archVersion(ver, arch)))
+			}
+		*/
 	}
 
 	// downlaod
@@ -907,26 +966,6 @@ func getLatestVersionByRemote() string {
 
 	return version
 
-}
-
-func divideVersion(s string) (ver, arch string) {
-	arr := strings.Split(s, "-")
-	if len(arr) == 1 {
-		ver = arr[0]
-		arch = runtime.GOARCH
-	} else {
-		ver = arr[0]
-		switch arr[1] {
-		case "x86":
-			arch = "386"
-		case "x64":
-			arch = "amd64"
-		default:
-			P(WARING, "%v format error, only support %v and %v parameter.\n", ver, "x86", "x64")
-			arch = runtime.GOARCH
-		}
-	}
-	return
 }
 
 func archVersion(ver, arch string) string {

@@ -55,11 +55,11 @@ func GetNodePath(version, arch string) string {
 		P(ERROR, "downlaod node.exe version: %v, not %v. See '%v'.\n", version, "node.exe", "gnvm help install")
 	case ver >= 0.0501 && ver <= 0.0612:
 		P(WARING, "downlaod node.exe version: %v, not %v node.exe.\n", version, "x64")
-	case ver > 0.0612 && ver < 4:
+	case ver > 0.0612 && ver < 1:
 		if arch == "amd64" {
 			path = "/x64/"
 		}
-	case ver >= 4:
+	case ver >= 1:
 		if arch == "amd64" {
 			path = "/win-x64/"
 		} else {

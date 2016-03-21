@@ -8,10 +8,12 @@ import (
 
 	// go
 	"encoding/hex"
+	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"regexp"
+	"runtime"
 	"strings"
 )
 
@@ -21,6 +23,7 @@ const (
 	DIVIDE  = "\\"
 	SHASUMS = "SHASUMS256.txt"
 	UNKNOWN = "unknown"
+	LATEST  = "latest"
 )
 
 var GlobalNodePath string
@@ -119,7 +122,7 @@ func VerifyNodeVersion(version string) bool {
 	version = strings.Split(version, "-")[0]
 	version = strings.TrimSpace(version)
 	reg, _ := regexp.Compile(`^([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}$`)
-	if version == UNKNOWN {
+	if version == UNKNOWN || version == LATEST {
 		return true
 	} else if format := reg.MatchString(version); !format {
 		result = false
@@ -180,6 +183,64 @@ func getCurrentPath() string {
 		panic("get current path Error: " + err.Error())
 	}
 	return path
+}
+
+/*
+ parse arguments return version, io and arch
+ s support format: <version>-<io>-<arch>, e.g.
+ 	- x.xx.xx
+ 	- x.xx.xx-io
+ 	- x.xx.xx-x86|x64
+ 	- x.xx.xx-io-x86|x64
+*/
+func ParseArgs(s string) (ver string, io bool, arch string) {
+	s = strings.ToLower(s)
+	arr := strings.Split(s, "-")
+	ver = arr[0]
+
+	if ver == LATEST && len(arr) > 1 {
+		P(WARING, "%v parameter not support suffix.\n", s)
+		io = false
+		arch = runtime.GOARCH
+		return
+	}
+
+	switch len(arr) {
+	case 1:
+		io = false
+	case 2:
+		if arr[1] == "io" {
+			io = true
+		} else if ok, _ := regexp.MatchString(`^x?(86|64)$`, arr[1]); ok {
+			io = false
+			arch = arr[1]
+		}
+	case 3:
+		if arr[1] != "io" {
+			s := fmt.Sprintf("%v format error, second parameter must be '%v'.\n", arr[1], "io")
+			panic(s)
+		} else {
+			io = true
+		}
+		if ok, _ := regexp.MatchString(`^x?(86|64)$`, arr[2]); !ok {
+			s := fmt.Sprintf("%v format error, third parameter must be '%v' or '%v'.\n", arr[1], "x86", "x64")
+			panic(s)
+		} else {
+			arch = arr[2]
+		}
+	}
+
+	// correction arch
+	switch arch {
+	case "x86":
+		arch = "386"
+	case "x64":
+		arch = "amd64"
+	default:
+		//P(WARING, "%v format error, only support %v and %v parameter.\n", ver, "x86", "x64")
+		arch = runtime.GOARCH
+	}
+	return
 }
 
 func Arch(path string) (string, error) {

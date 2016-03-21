@@ -53,12 +53,14 @@ var installCmd = &cobra.Command{
 	Long: `Install any node.exe version e.g.
 gnvm install latest                  :Download 'latest' version from .gnvmrc registry.
 gnvm install x.xx.xx y.yy.yy         :Multi version download.
-gnvm install x.xx.xx-x86 latest-x64  :Assign arch version.
+gnvm install x.xx.xx-x86             :Assign arch version.
+gnvm install x.xx.xx-io              :Assign io.js version.
+gnvm install x.xx.xx-io-x86          :Assign io.js arch version.
 gnvm install x.xx.xx --global        :Download and auto invoke 'gnvm use x.xx.xx'.
 gnvm install npm                     :Download npm from .gnvmrc registry.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		var newArgs []string
+		//var newArgs []string
 
 		if len(args) == 0 {
 			P(ERROR, "'%v' need parameter, please check your input. See '%v'.\n", "gnvm install", "gnvm help install")
@@ -82,31 +84,36 @@ gnvm install npm                     :Download npm from .gnvmrc registry.
 				}
 			}
 
-			for _, v := range args {
+			/*
+				for _, v := range args {
+					ver, io, arch := util.ParseArgs(v)
+					fmt.Printf("ver = %v, io = %v, arch = %v\n", ver, io, arch)
 
-				v = util.EqualAbs("latest", v)
-				v = util.EqualAbs("npm", v)
+					v = util.EqualAbs("latest", v)
+					v = util.EqualAbs("npm", v)
 
-				// check npm
-				if v == "npm" {
-					P(WARING, "use format error, the correct format is '%v'. See '%v'.\n", "gnvm install npm", "gnvm help install")
-					continue
+					// check npm
+					if ver == "npm" {
+						P(WARING, "use format error, the correct format is '%v'. See '%v'.\n", "gnvm install npm", "gnvm help install")
+						continue
+					}
+
+					// check latest
+					if ver == config.LATEST {
+						newArgs = append(newArgs, v)
+						continue
+					}
+
+					// check version format
+					if ok := util.VerifyNodeVersion(ver); ok != true {
+						P(ERROR, "%v format error, the correct format is %v or %v. \n", v, "0.xx.xx", "^0.xx.xx")
+					} else {
+						newArgs = append(newArgs, v)
+					}
 				}
-
-				// check latest
-				if v == config.LATEST {
-					newArgs = append(newArgs, v)
-					continue
-				}
-
-				// check version format
-				if ok := util.VerifyNodeVersion(v); ok != true {
-					P(ERROR, "%v format error, the correct format is %v or %v. \n", v, "0.xx.xx", "^0.xx.xx")
-				} else {
-					newArgs = append(newArgs, v)
-				}
-			}
-			nodehandle.Install(newArgs, global)
+				fmt.Println(newArgs)
+			*/
+			nodehandle.Install(args, global)
 		}
 	},
 }

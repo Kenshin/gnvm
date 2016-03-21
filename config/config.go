@@ -34,7 +34,7 @@ const (
 	REGISTRY     = "registry"
 	REGISTRY_KEY = "registry: "
 	REGISTRY_VAL = "http://nodejs.org/dist/"
-	TAOBAO       = "http://npm.taobao.org/mirrors/node"
+	TAOBAO       = "http://npm.taobao.org/mirrors/node/"
 
 	NODEROOT     = "noderoot"
 	NODEROOT_KEY = "noderoot: "
