@@ -7,6 +7,7 @@ import (
 	"github.com/Kenshin/curl"
 
 	// go
+	"encoding/hex"
 	"io"
 	"os"
 	"os/exec"
@@ -179,4 +180,35 @@ func getCurrentPath() string {
 		panic("get current path Error: " + err.Error())
 	}
 	return path
+}
+
+func Arch(path string) (string, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+	bit32, _ := hex.DecodeString("504500004C")
+	bit64, _ := hex.DecodeString("504500006486")
+	byte := make([]byte, 5)
+	j := 0
+	for {
+		j++
+		byte = byte[:cap(byte)]
+		n, err := f.Read(byte)
+		if err == io.EOF {
+			return "x64", nil
+		}
+		byte = byte[:n]
+		if string(byte[:]) == string(bit32[:]) {
+			return "x86", nil
+		}
+		if string(byte[:]) == string(bit64[1:]) || string(byte[:]) == string(bit64[:len(bit32)]) {
+			return "x64", nil
+		}
+		if j == 60 {
+			return "x64", nil
+		}
+	}
+	return "x64", nil
 }
