@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -95,6 +96,12 @@ func createConfig() {
 		globalversion = GLOBAL_VERSION_VAL
 	} else {
 		globalversion = version
+		// add suffix
+		if runtime.GOARCH == "amd64" {
+			if bit, err := util.Arch(util.GlobalNodePath + "\\node.exe"); err == nil && bit == "x86" {
+				globalversion += "-" + bit
+			}
+		}
 	}
 
 	//write init config
@@ -172,6 +179,12 @@ func ReSetConfig() {
 		globalversion = GLOBAL_VERSION_VAL
 	} else {
 		globalversion = version
+		// add suffix
+		if runtime.GOARCH == "amd64" {
+			if bit, err := util.Arch(util.GlobalNodePath + "\\node.exe"); err == nil && bit == "x86" {
+				globalversion += "-" + bit
+			}
+		}
 	}
 	if newValue := SetConfig(GLOBAL_VERSION, globalversion); newValue != "" {
 		P(NOTICE, "%v init success, new value is %v\n", GLOBAL_VERSION, newValue)
