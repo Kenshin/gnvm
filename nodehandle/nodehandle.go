@@ -50,13 +50,15 @@ func TransLatestVersion(latest string, isPrint bool) string {
 }
 
 /**
- * rootNode is rootPath + "/node.exe", e.g. <root>/node.exe
+ * rootPath    : node.exe global path,  e.g. x:\xxx\xx\xx\
+ * rootNode    : rootPath + "node.exe", e.g. x:\xxx\xx\xx\node.exe
  *
- * usePath  is use node version path,  e.g. <root>/x.xx.xx
- * useNode  is usePath + "/node.exe",  e.g. <root>/x.xx.xx/node.exe
+ * rootVersion : <node version>+<arch>, e.g. x.xx.xx-x86 ( only rumtime.GOARCH == "amd64", suffix include: 'x86' and 'x64' )
+ * rootFolder  : <rootPath>/rootVersion
  *
- * rootVersion is <root>/node.exe version
- * rootFolder  is <root>/rootVersion
+ * usePath     : use node version path, e.g. <rootPath>\x.xx.xx\
+ * useNode     : usePath + "node.exe",  e.g. <rootPath>\x.xx.xx\node.exe
+ *
  */
 func Use(folder string) bool {
 
@@ -93,6 +95,12 @@ func Use(folder string) bool {
 		rootNodeExist = false
 	}
 
+	// add suffix
+	bit, _ := util.Arch(rootNode)
+	if runtime.GOARCH == "amd64" && bit == "x86" {
+		rootVersion += "-" + bit
+	}
+
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
 		P(WARING, "%v folder is not exist from %v, use '%v' get local node.exe list. See '%v'.\n", folder, rootPath, "gnvm ls", "gnvm help ls")
@@ -119,7 +127,7 @@ func Use(folder string) bool {
 	}
 
 	if rootNodeExist {
-		// copy rootNode to <root>/rootVersion
+		// copy rootNode to <root>/rootVersion( backup )
 		if err := copy(rootNode, rootFolder); err != nil {
 			P(ERROR, "copy %v to %v folder Error: %v.\n", rootNode, rootFolder, err.Error())
 			return false
@@ -133,7 +141,7 @@ func Use(folder string) bool {
 
 	}
 
-	// copy useNode to rootPath
+	// copy useNode to rootPath( new )
 	if err := copy(useNode, rootPath); err != nil {
 		P(ERROR, "copy %v to %v folder Error: %v.\n", useNode, rootPath, err.Error())
 		return false
