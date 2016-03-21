@@ -4,7 +4,6 @@ import (
 	"fmt"
 	. "github.com/Kenshin/cprint"
 	"regexp"
-	"runtime"
 	"strconv"
 	"strings"
 )
@@ -48,7 +47,7 @@ func ParseFloat(version string) float64 {
 	return float64
 }
 
-func GetNodePath(version string) string {
+func GetNodePath(version, arch string) string {
 	ver := ParseFloat(version)
 	path := "/"
 	switch {
@@ -57,11 +56,11 @@ func GetNodePath(version string) string {
 	case ver >= 0.0501 && ver <= 0.0612:
 		P(WARING, "downlaod node.exe version: %v, not %v node.exe.\n", version, "x64")
 	case ver > 0.0612 && ver < 4:
-		if runtime.GOARCH == "amd64" {
+		if arch == "amd64" {
 			path = "/x64/"
 		}
 	case ver >= 4:
-		if runtime.GOARCH == "amd64" {
+		if arch == "amd64" {
 			path = "/win-x64/"
 		} else {
 			path = "/win-x86/"
