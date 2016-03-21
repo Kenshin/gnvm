@@ -88,6 +88,12 @@ func Use(folder string) bool {
 	usePath := rootPath + folder + DIVIDE
 	useNode := usePath + NODE
 
+	// <root>/folder is exist
+	if isDirExist(usePath) != true {
+		P(WARING, "%v folder is not exist from %v, use '%v' get local node.exe list. See '%v'.\n", folder, rootPath, "gnvm ls", "gnvm help ls")
+		return false
+	}
+
 	// get <root>/node.exe version
 	rootVersion, err := util.GetNodeVersion(rootPath)
 	if err != nil {
@@ -96,15 +102,10 @@ func Use(folder string) bool {
 	}
 
 	// add suffix
-	bit, _ := util.Arch(rootNode)
-	if runtime.GOARCH == "amd64" && bit == "x86" {
-		rootVersion += "-" + bit
-	}
-
-	// <root>/folder is exist
-	if isDirExist(usePath) != true {
-		P(WARING, "%v folder is not exist from %v, use '%v' get local node.exe list. See '%v'.\n", folder, rootPath, "gnvm ls", "gnvm help ls")
-		return false
+	if runtime.GOARCH == "amd64" {
+		if bit, err := util.Arch(rootNode); err == nil && bit == "x86" {
+			rootVersion += "-" + bit
+		}
 	}
 
 	// check folder is rootVersion
