@@ -26,9 +26,9 @@ import (
 )
 
 const (
+	//IOJS          = "iojs.exe"
 	DIVIDE        = "\\"
 	NODE          = "node.exe"
-	IOJS          = "iojs.exe"
 	TIMEFORMART   = "02-Jan-2006 15:04"
 	GNVMHOST      = "http://k-zone.cn/gnvm/version.txt"
 	PROCESSTAKEUP = "The process cannot access the file because it is being used by another process."
@@ -480,16 +480,18 @@ func Install(args []string, global bool) int {
 			continue
 		}
 
-		exec := NODE
+		//exec := NODE
 		// get and set url( include iojs)
 		url := config.GetConfig(config.REGISTRY)
 		if io {
 			url = config.GetIOURL(url)
-			exec = IOJS
+			//exec = IOJS
 		}
 
 		// add task
-		dl.AddTask(ts.New(url+GetRemoteNodePath(ver, arch)+exec, ver, NODE, folder))
+		if url, err := util.GetRemoteNodePath(url, ver, arch); err == nil {
+			dl.AddTask(ts.New(url, ver, NODE, folder))
+		}
 	}
 
 	// downlaod
