@@ -385,7 +385,7 @@ func LS(isPrint bool) ([]string, error) {
 					desc = " -- global"
 				}
 
-				ver, _, _, suffix := util.ParseArgs(version)
+				ver, _, _, suffix := util.ParseNodeVer(version)
 				if suffix == "x86" {
 					desc = " -- x86"
 				} else if suffix == "x64" {
@@ -521,7 +521,7 @@ func Install(args []string, global bool) int {
 	}()
 
 	for _, v := range args {
-		ver, io, arch, suffix := util.ParseArgs(v)
+		ver, io, arch, suffix := util.ParseNodeVer(v)
 
 		v = util.EqualAbs("latest", v)
 		v = util.EqualAbs("npm", v)

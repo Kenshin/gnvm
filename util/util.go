@@ -201,7 +201,7 @@ func getCurrentPath() string {
 	- suffix : "x86" and "x64"  and ""
 
 */
-func ParseArgs(s string) (ver string, io bool, arch, suffix string) {
+func ParseNodeVer(s string) (ver string, io bool, arch, suffix string) {
 	s = strings.ToLower(s)
 	arr := strings.Split(s, "-")
 	ver = arr[0]
