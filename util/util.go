@@ -98,6 +98,9 @@ func FormatNodeVer(version string) float64 {
 	return float64
 }
 
+/*
+ Conver latest to x.xx.xx( include unknown)
+*/
 func FormatLatVer(latest *string, value string, print bool) {
 	if *latest == LATEST {
 		*latest = value
