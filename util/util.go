@@ -41,7 +41,10 @@ func init() {
 	GlobalNodePath = getGlobalNodePath()
 }
 
-func GetNodeVersion(path string) (string, error) {
+/*
+  Get node.exe version, usage exec.Command()
+*/
+func GetNodeVer(path string) (string, error) {
 	var newout string
 	out, err := exec.Command(path+"node", "--version").Output()
 	if err == nil {

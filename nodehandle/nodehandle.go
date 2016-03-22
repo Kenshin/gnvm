@@ -96,7 +96,7 @@ func Use(folder string) bool {
 	}
 
 	// get <root>/node.exe version
-	rootVersion, err := util.GetNodeVersion(rootPath)
+	rootVersion, err := util.GetNodeVer(rootPath)
 	if err != nil {
 		P(WARING, "not found global node.exe version.\n")
 		rootNodeExist = false
@@ -488,7 +488,7 @@ func Install(args []string, global bool) int {
 		if suffix != "" {
 			folder += "-" + suffix
 		}
-		if _, err := util.GetNodeVersion(folder + DIVIDE); err == nil {
+		if _, err := util.GetNodeVer(folder + DIVIDE); err == nil {
 			P(WARING, "%v folder exist.\n", ver)
 			continue
 		}
