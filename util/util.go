@@ -44,9 +44,7 @@ func init() {
 func GetNodeVersion(path string) (string, error) {
 	var newout string
 	out, err := exec.Command(path+"node", "--version").Output()
-	//string(out[:]) bytes to string
 	if err == nil {
-		// replace \r\n
 		newout = strings.Replace(string(string(out[:])[1:]), "\r\n", "", -1)
 	}
 	return newout, err
