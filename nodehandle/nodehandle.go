@@ -317,7 +317,7 @@ func LS(isPrint bool) ([]string, error) {
 					desc = " -- global"
 				}
 
-				ver, _, _, suffix := util.ParseNodeVer(version)
+				ver, _, _, suffix, _ := util.ParseNodeVer(version)
 				if suffix == "x86" {
 					desc = " -- x86"
 				} else if suffix == "x64" {
@@ -433,7 +433,20 @@ func Install(args []string, global bool) int {
 	}()
 
 	for _, v := range args {
-		ver, io, arch, suffix := util.ParseNodeVer(v)
+		ver, io, arch, suffix, err := util.ParseNodeVer(v)
+		if err != nil {
+			switch err.Error() {
+			case "1":
+				P(ERROR, "%v not node.exe download.\n", v)
+			case "2":
+				P(ERROR, "%v format error, must be '%v' or '%v'.\n", v, "x86", "x64")
+			case "3":
+				P(ERROR, "%v format error, parameter must be '%v' or '%v'.\n", v, "x.xx.xx", "x.xx.xx-x86|x64")
+			case "4":
+				P(ERROR, "%v format error, the correct format is %v or %v. \n", v, "0.xx.xx", "^0.xx.xx")
+			}
+			continue
+		}
 
 		v = util.EqualAbs("latest", v)
 		v = util.EqualAbs("npm", v)
@@ -445,10 +458,10 @@ func Install(args []string, global bool) int {
 		}
 
 		// check version format
-		if ok := util.VerifyNodeVer(ver); !ok {
-			P(ERROR, "%v format error, the correct format is %v or %v. \n", v, "0.xx.xx", "^0.xx.xx")
-			continue
-		}
+		//if ok := util.VerifyNodeVer(ver); !ok {
+		//	P(ERROR, "%v format error, the correct format is %v or %v. \n", v, "0.xx.xx", "^0.xx.xx")
+		//	continue
+		//}
 
 		// check latest and get remote latest
 		if ver == config.LATEST {

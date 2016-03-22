@@ -9,7 +9,7 @@ import (
 	// go
 	"encoding/hex"
 	"errors"
-	"fmt"
+	//"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -129,56 +129,90 @@ func GetNodeVerLev(ver float64) (level int) {
  s support format: <version>-<io>-<arch>, e.g.
 
  	- x.xx.xx
- 	- x.xx.xx-io
  	- x.xx.xx-x86|x64
- 	- x.xx.xx-io-x86|x64
 
    Return:
 	- ver    : x.xx.xx
-	- io     : true  and false
+	- iojs   : true  and false
 	- arch   : "386" and "amd64"
 	- suffix : "x86" and "x64"  and ""
+	- err    : includ, "1" "2", "3", "4"
 
 */
-func ParseNodeVer(s string) (ver string, io bool, arch, suffix string) {
-	s = strings.ToLower(s)
-	arr := strings.Split(s, "-")
+func ParseNodeVer(s string) (ver string, iojs bool, arch, suffix string, err error) {
+	arr := strings.Split(strings.ToLower(s), "-")
+
+	// get ver
 	ver = arr[0]
 
-	if ver == LATEST && len(arr) > 1 {
-		P(WARING, "%v parameter not support suffix.\n", s)
-		io = false
+	// verify latest
+	if ver == LATEST {
+		if len(arr) > 1 {
+			P(WARING, "%v parameter not support suffix.\n", s)
+		}
+		iojs = false
 		arch = runtime.GOARCH
 		suffix = ""
 		return
 	}
 
-	switch len(arr) {
-	case 1:
-		io = false
-	case 2:
-		if arr[1] == "io" {
-			io = true
-		} else if ok, _ := regexp.MatchString(`^x?(86|64)$`, arr[1]); ok {
-			io = false
-			arch = arr[1]
-		}
-	case 3:
-		if arr[1] != "io" {
-			s := fmt.Sprintf("%v format error, second parameter must be '%v'.\n", arr[1], "io")
-			panic(s)
-		} else {
-			io = true
-		}
-		if ok, _ := regexp.MatchString(`^x?(86|64)$`, arr[2]); !ok {
-			s := fmt.Sprintf("%v format error, third parameter must be '%v' or '%v'.\n", arr[1], "x86", "x64")
-			panic(s)
-		} else {
-			arch = arr[2]
-		}
+	// verify ver
+	if !VerifyNodeVer(ver) {
+		err = errors.New("4")
+		return
 	}
 
-	// correction arch
+	switch GetNodeVerLev(FormatNodeVer(ver)) {
+	case 0:
+		// no exec
+		err = errors.New("1")
+		return
+	case 3:
+		// get iojs
+		iojs = true
+	}
+
+	// get arch
+	if len(arr) == 2 {
+		if ok, _ := regexp.MatchString(`^x?(86|64)$`, arr[1]); ok {
+			arch = arr[1]
+		} else {
+			err = errors.New("2")
+			return
+		}
+	} else if len(arr) > 2 {
+		err = errors.New("3")
+		return
+	}
+
+	/*
+		switch len(arr) {
+		case 1:
+			io = false
+		case 2:
+			if arr[1] == "io" {
+				io = true
+			} else if ok, _ := regexp.MatchString(`^x?(86|64)$`, arr[1]); ok {
+				io = false
+				arch = arr[1]
+			}
+		case 3:
+			if arr[1] != "io" {
+				s := fmt.Sprintf("%v format error, second parameter must be '%v'.\n", arr[1], "io")
+				panic(s)
+			} else {
+				io = true
+			}
+			if ok, _ := regexp.MatchString(`^x?(86|64)$`, arr[2]); !ok {
+				s := fmt.Sprintf("%v format error, third parameter must be '%v' or '%v'.\n", arr[1], "x86", "x64")
+				panic(s)
+			} else {
+				arch = arr[2]
+			}
+		}
+	*/
+
+	// get arch
 	switch arch {
 	case "x86":
 		arch = "386"
@@ -189,7 +223,7 @@ func ParseNodeVer(s string) (ver string, io bool, arch, suffix string) {
 		arch = runtime.GOARCH
 	}
 
-	// correction suffix
+	// get suffix
 	if arch == runtime.GOARCH {
 		suffix = ""
 	} else {
