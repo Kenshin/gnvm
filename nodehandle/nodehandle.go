@@ -5,10 +5,10 @@ import (
 	// lib
 	. "github.com/Kenshin/cprint"
 	//"github.com/Kenshin/curl"
+	"curl"
 	"github.com/bitly/go-simplejson"
 	"github.com/pierrre/archivefile/zip"
 
-	"curl"
 	// go
 	//"log"
 	"fmt"
@@ -201,8 +201,8 @@ func NodeVersion(args []string, remote bool) {
 				P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, remoteVersion)
 				return
 			}
-			v1 := ParseFloat(latest)
-			v2 := ParseFloat(remoteVersion)
+			v1 := util.FormatNodeVer(latest)
+			v2 := util.FormatNodeVer(remoteVersion)
 			if v1 < v2 {
 				cp := CP{Red, false, None, false, ">"}
 				P(WARING, "remote latest version %v %v local latest version %v, suggest to upgrade, usage 'gnvm update latest' or 'gnvm update latest -g'.\n", remoteVersion, cp, latest)
@@ -639,8 +639,8 @@ func Update(global bool) {
 	}
 	P(NOTICE, "remote %v latest version is %v.\n", config.GetConfig("registry"), remoteVersion)
 
-	local := ParseFloat(localVersion)
-	remote := ParseFloat(remoteVersion)
+	local := util.FormatNodeVer(localVersion)
+	remote := util.FormatNodeVer(remoteVersion)
 
 	var args []string
 	args = append(args, remoteVersion)

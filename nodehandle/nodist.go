@@ -1,11 +1,17 @@
 package nodehandle
 
 import (
-	"fmt"
+
+	// lib
 	. "github.com/Kenshin/cprint"
-	"regexp"
+
+	// go
+	"fmt"
 	"strconv"
 	"strings"
+
+	// local
+	"gnvm/util"
 )
 
 type Node struct {
@@ -28,27 +34,8 @@ type NL map[string]NodeList
 
 var sorts []string
 
-func ParseFloat(version string) float64 {
-	reg, _ := regexp.Compile(`\.(\d){0,2}`)
-	ver := ""
-	arr := reg.FindAllString(version, -1)
-	for _, v := range arr {
-		v = v[1:]
-		if len(v) == 1 {
-			ver += "0" + v
-		} else if len(v) == 2 {
-			ver += v
-		}
-	}
-	reg, _ = regexp.Compile(`^(\d){1,2}\.`)
-	prefix := reg.FindString(version)
-	ver = prefix + ver
-	float64, _ := strconv.ParseFloat(ver, 64)
-	return float64
-}
-
 func GetNodePath(version, arch string) string {
-	ver := ParseFloat(version)
+	ver := util.FormatNodeVer(version)
 	path := "/"
 	switch {
 	case ver <= 0.0500:
@@ -70,7 +57,7 @@ func GetNodePath(version, arch string) string {
 }
 
 func filter(version string) string {
-	ver := ParseFloat(version)
+	ver := util.FormatNodeVer(version)
 	exec := ""
 	switch {
 	case ver <= 0.0500:

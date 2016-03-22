@@ -14,6 +14,7 @@ import (
 	"os/exec"
 	"regexp"
 	"runtime"
+	"strconv"
 	"strings"
 )
 
@@ -112,6 +113,29 @@ func EqualAbs(key, value string) string {
 		value = key
 	}
 	return value
+}
+
+/*
+  Format node version
+  x.xx.xx conver to float64
+*/
+func FormatNodeVer(version string) float64 {
+	reg, _ := regexp.Compile(`\.(\d){0,2}`)
+	ver := ""
+	arr := reg.FindAllString(version, -1)
+	for _, v := range arr {
+		v = v[1:]
+		if len(v) == 1 {
+			ver += "0" + v
+		} else if len(v) == 2 {
+			ver += v
+		}
+	}
+	reg, _ = regexp.Compile(`^(\d){1,2}\.`)
+	prefix := reg.FindString(version)
+	ver = prefix + ver
+	float64, _ := strconv.ParseFloat(ver, 64)
+	return float64
 }
 
 /*
