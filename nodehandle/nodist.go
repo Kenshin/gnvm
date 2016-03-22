@@ -1,10 +1,6 @@
 package nodehandle
 
 import (
-
-	// lib
-	//. "github.com/Kenshin/cprint"
-
 	// go
 	"fmt"
 	"strconv"
@@ -35,32 +31,6 @@ type (
 )
 
 var sorts []string
-
-/*
- Return node.exe real path
-*/
-/*
-func GetRemoteNodePath(version, arch string) string {
-	path := "/"
-	switch util.GetNodeVerLev(util.FormatNodeVer(version)) {
-	case 0:
-		P(ERROR, "downlaod node.exe version: %v, not %v. See '%v'.\n", version, "node.exe", "gnvm help install")
-	case 1:
-		P(WARING, "downlaod node.exe version: %v, not %v node.exe.\n", version, "x64")
-	case 2:
-		if arch == "amd64" {
-			path = "/x64/"
-		}
-	default:
-		if arch == "amd64" {
-			path = "/win-x64/"
-		} else {
-			path = "/win-x86/"
-		}
-	}
-	return "v" + version + path
-}
-*/
 
 func (nl NL) New(idx int, value map[string]interface{}) NodeList {
 	ver, _ := value["version"].(string)
