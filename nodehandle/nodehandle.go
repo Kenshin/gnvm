@@ -391,13 +391,6 @@ func LS(isPrint bool) ([]string, error) {
 				} else if suffix == "x64" {
 					desc = " -- x64"
 				}
-				/*if arch != runtime.GOARCH {
-					if arch == "386" {
-						desc = " -- x86"
-					} else {
-						desc = " -- x64"
-					}
-				}*/
 
 				// set true
 				existVersion = true
@@ -587,29 +580,6 @@ func Install(args []string, global bool) int {
 
 		// add task
 		dl.AddTask(ts.New(url+GetNodePath(ver, arch)+exec, ver, NODE, folder))
-
-		/*
-			ver, _, arch := util.ParseArgs(v)
-			if ver == config.LATEST {
-
-				localVersion = config.GetConfig(config.LATEST_VERSION)
-				P(NOTICE, "local  latest version is %v.\n", localVersion)
-
-				version := getLatestVersionByRemote()
-				if version == "" {
-					P(ERROR, "get latest version error, please check. See '%v'.\n", "gnvm config help")
-					break
-				}
-
-				isLatest = true
-				ver = version
-				P(NOTICE, "remote latest version is %v.\n", version)
-			}
-
-			if code = downloadVerify(v); code == 0 {
-				dl.AddTask(ts.New(config.GetConfig(config.REGISTRY)+GetNodePath(ver, arch)+NODE, ver, NODE, rootPath+archVersion(ver, arch)))
-			}
-		*/
 	}
 
 	// downlaod
@@ -927,29 +897,6 @@ func copy(src, dest string) error {
 /*
  * return code
  * 0: success
- * 1: remove folder error
- * 2: folder exist
- *
- */
-/*
-func downloadVerify(version string) int {
-	// rootPath/version/node.exe is exist
-	if _, err := util.GetNodeVersion(rootPath + version + DIVIDE); err == nil {
-		P(WARING, "%v folder exist.\n", version)
-		return 2
-	} else {
-		if err := os.RemoveAll(rootPath + version); err != nil {
-			P(ERROR, "remove %v fail, Error: %v\n", version, err.Error())
-			return 1
-		}
-	}
-	return 0
-}
-*/
-
-/*
- * return code
- * 0: success
  *
  */
 func downloadNpm(version string) int {
@@ -978,18 +925,3 @@ func getLatestVersionByRemote() string {
 	return version
 
 }
-
-/*
-func archVersion(ver, arch string) string {
-	if arch == runtime.GOARCH {
-		return ver
-	} else {
-		if arch == "386" {
-			arch = "x86"
-		} else {
-			arch = "x64"
-		}
-		return ver + "-" + arch
-	}
-}
-*/
