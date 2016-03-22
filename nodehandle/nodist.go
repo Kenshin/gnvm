@@ -58,18 +58,16 @@ func GetRemoteNodePath(version, arch string) string {
 	return "v" + version + path
 }
 
-func filter(version string) string {
-	ver := util.FormatNodeVer(version)
-	exec := ""
-	switch {
-	case ver <= 0.0500:
+func filter(version string) (exec string) {
+	switch util.GetNodeVerLev(util.FormatNodeVer(version)) {
+	case 0:
 		exec = "[x]"
-	case ver >= 0.0501 && ver <= 0.0612:
+	case 1:
 		exec = "x86"
-	case ver > 0.0612:
+	default:
 		exec = "x86 x64"
 	}
-	return exec
+	return
 }
 
 func format(value string, max int) string {
