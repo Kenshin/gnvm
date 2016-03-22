@@ -98,6 +98,25 @@ func FormatNodeVer(version string) float64 {
 }
 
 /*
+  Get node version level( 0 ~ 4 )
+*/
+func NodeVerLev(ver float64) (level int) {
+	switch {
+	case ver <= 0.0500:
+		level = 0
+	case ver >= 0.0501 && ver <= 0.0612:
+		level = 1
+	case ver > 0.0612 && ver < 1:
+		level = 2
+	case ver >= 1 && ver <= 0.331:
+		level = 3
+	case ver > 0.331:
+		level = 4
+	}
+	return
+}
+
+/*
  parse arguments return version, io, suffix and arch
  s support format: <version>-<io>-<arch>, e.g.
 
