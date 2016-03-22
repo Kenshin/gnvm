@@ -306,59 +306,6 @@ func LS(isPrint bool) ([]string, error) {
 	existVersion := false
 	files, err := ioutil.ReadDir(rootPath)
 
-	/*
-		err := filepath.Walk(rootPath, func(dir string, f os.FileInfo, err error) error {
-
-			// check nil
-			if f == nil {
-				return err
-			}
-
-			// check dir
-			if f.IsDir() == false {
-				return nil
-			}
-
-			// set version
-			version := f.Name()
-
-			// check node version
-			if ok := util.VerifyNodeVersion(version); ok {
-
-				// <root>/x.xx.xx/node.exe is exist
-				if isDirExist(rootPath + version + DIVIDE + NODE) {
-					desc := ""
-					switch {
-					case version == config.GetConfig(config.GLOBAL_VERSION) && version == config.GetConfig(config.LATEST_VERSION):
-						desc = " -- global, latest"
-					case version == config.GetConfig(config.LATEST_VERSION):
-						desc = " -- latest"
-					case version == config.GetConfig(config.GLOBAL_VERSION):
-						desc = " -- global"
-					}
-
-					// set true
-					existVersion = true
-
-					// set lsArr
-					lsArr = append(lsArr, version)
-
-					if isPrint {
-						if desc == "" {
-							P(DEFAULT, "v"+version+desc, "\n")
-						} else {
-							P(DEFAULT, "%v", "v"+version+desc, "\n")
-						}
-
-					}
-				}
-			}
-
-			// return
-			return nil
-		})
-	*/
-
 	// show error
 	if err != nil {
 		P(ERROR, "'%v' Error: %v.\n", "gnvm ls", err.Error())
