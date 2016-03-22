@@ -100,7 +100,7 @@ func FormatNodeVer(version string) float64 {
 /*
   Get node version level( 0 ~ 4 )
 */
-func NodeVerLev(ver float64) (level int) {
+func GetNodeVerLev(ver float64) (level int) {
 	switch {
 	case ver <= 0.0500:
 		level = 0
