@@ -3,12 +3,11 @@ package nodehandle
 import (
 
 	// lib
+	"curl"
 	. "github.com/Kenshin/cprint"
-	//"github.com/Kenshin/curl"
 	"github.com/bitly/go-simplejson"
 	"github.com/pierrre/archivefile/zip"
 
-	"curl"
 	// go
 	//"log"
 	"fmt"
@@ -34,9 +33,11 @@ const (
 )
 
 var rootPath string
+var latURL string
 
 func init() {
 	rootPath = util.GlobalNodePath + DIVIDE
+	latURL = config.GetConfig("registry") + "latest/" + util.SHASUMS
 }
 
 func TransLatestVersion(latest string, isPrint bool) string {
@@ -95,7 +96,7 @@ func Use(folder string) bool {
 	}
 
 	// get <root>/node.exe version
-	rootVersion, err := util.GetNodeVersion(rootPath)
+	rootVersion, err := util.GetNodeVer(rootPath)
 	if err != nil {
 		P(WARING, "not found global node.exe version.\n")
 		rootNodeExist = false
@@ -185,42 +186,27 @@ func NodeVersion(args []string, remote bool) {
 		case args[0] == "latest" && !remote:
 			P(DEFAULT, "Node.exe latest version is %v.\n", latest)
 		case args[0] == "latest" && remote:
-			remoteVersion := getLatestVersionByRemote()
+			remoteVersion := util.GetLatVer(latURL)
 			if remoteVersion == "" {
 				P(ERROR, "get remote %v latest version error, please check. See '%v'.\n", config.GetConfig("registry")+config.LATEST+"/"+config.NODELIST, "gnvm help config")
 				P(DEFAULT, "Node.exe latest version is %v.\n", latest)
 				return
 			}
-			P(DEFAULT, "Node.exe remote %v version is %v.\n", config.GetConfig("registry"), remoteVersion)
-			P(DEFAULT, "Node.exe local latest version is %v.\n", latest)
+			P(DEFAULT, "Node.exe remote %v %v is %v.\n", config.GetConfig("registry"), "latest version", remoteVersion)
+			P(DEFAULT, "Node.exe local  latest version is %v.\n", latest)
 			if latest == config.UNKNOWN {
 				config.SetConfig(config.LATEST_VERSION, remoteVersion)
 				P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, remoteVersion)
 				return
 			}
-			v1 := ParseFloat(latest)
-			v2 := ParseFloat(remoteVersion)
+			v1 := util.FormatNodeVer(latest)
+			v2 := util.FormatNodeVer(remoteVersion)
 			if v1 < v2 {
 				cp := CP{Red, false, None, false, ">"}
 				P(WARING, "remote latest version %v %v local latest version %v, suggest to upgrade, usage 'gnvm update latest' or 'gnvm update latest -g'.\n", remoteVersion, cp, latest)
 			}
 		}
 	}
-
-	/*
-		isPrint := false
-		switch {
-		case len(args) == 0 && (global == config.UNKNOWN || latest == config.UNKNOWN):
-			isPrint = true
-		case len(args) > 0 && args[0] == "latest" && latest == config.UNKNOWN:
-			isPrint = true
-		case len(args) > 0 && args[0] == "global" && global == config.UNKNOWN:
-			isPrint = true
-		}
-		if isPrint {
-			P(WARING, "when version is %v, please use '%v'. See '%v'.\n", config.UNKNOWN, "gnvm config INIT", "gnvm help config")
-		}
-	*/
 }
 
 func Uninstall(folder string) {
@@ -305,59 +291,6 @@ func LS(isPrint bool) ([]string, error) {
 	existVersion := false
 	files, err := ioutil.ReadDir(rootPath)
 
-	/*
-		err := filepath.Walk(rootPath, func(dir string, f os.FileInfo, err error) error {
-
-			// check nil
-			if f == nil {
-				return err
-			}
-
-			// check dir
-			if f.IsDir() == false {
-				return nil
-			}
-
-			// set version
-			version := f.Name()
-
-			// check node version
-			if ok := util.VerifyNodeVersion(version); ok {
-
-				// <root>/x.xx.xx/node.exe is exist
-				if isDirExist(rootPath + version + DIVIDE + NODE) {
-					desc := ""
-					switch {
-					case version == config.GetConfig(config.GLOBAL_VERSION) && version == config.GetConfig(config.LATEST_VERSION):
-						desc = " -- global, latest"
-					case version == config.GetConfig(config.LATEST_VERSION):
-						desc = " -- latest"
-					case version == config.GetConfig(config.GLOBAL_VERSION):
-						desc = " -- global"
-					}
-
-					// set true
-					existVersion = true
-
-					// set lsArr
-					lsArr = append(lsArr, version)
-
-					if isPrint {
-						if desc == "" {
-							P(DEFAULT, "v"+version+desc, "\n")
-						} else {
-							P(DEFAULT, "%v", "v"+version+desc, "\n")
-						}
-
-					}
-				}
-			}
-
-			// return
-			return nil
-		})
-	*/
-
 	// show error
 	if err != nil {
 		P(ERROR, "'%v' Error: %v.\n", "gnvm ls", err.Error())
@@ -370,7 +303,7 @@ func LS(isPrint bool) ([]string, error) {
 		version := file.Name()
 
 		// check node version
-		if ok := util.VerifyNodeVersion(version); ok {
+		if ok := util.VerifyNodeVer(version); ok {
 
 			// <root>/x.xx.xx/node.exe is exist
 			if isDirExist(rootPath + version + DIVIDE + NODE) {
@@ -384,13 +317,11 @@ func LS(isPrint bool) ([]string, error) {
 					desc = " -- global"
 				}
 
-				ver, arch := divideVersion(version)
-				if arch != runtime.GOARCH {
-					if arch == "386" {
-						desc = " -- x86"
-					} else {
-						desc = " -- x64"
-					}
+				ver, _, _, suffix, _ := util.ParseNodeVer(version)
+				if suffix == "x86" {
+					desc = " -- x86"
+				} else if suffix == "x64" {
+					desc = " -- x64"
 				}
 
 				// set true
@@ -419,10 +350,14 @@ func LS(isPrint bool) ([]string, error) {
 	return lsArr, err
 }
 
-func LsRemote(limit int) {
+func LsRemote(limit int, io bool) {
 
 	// set url
-	url := config.GetConfig(config.REGISTRY) + config.NODELIST
+	url := config.GetConfig(config.REGISTRY)
+	if io {
+		url = config.GetIOURL(url)
+	}
+	url += config.NODELIST
 
 	// try catch
 	defer func() {
@@ -432,9 +367,6 @@ func LsRemote(limit int) {
 			os.Exit(0)
 		}
 	}()
-
-	// set exist version
-	//isExistVersion := false
 
 	// print
 	P(DEFAULT, "Read all node.exe version list from %v, please wait.\n", url)
@@ -475,27 +407,6 @@ func LsRemote(limit int) {
 	if limit != -1 {
 		nl.Detail(limit)
 	}
-
-	/*
-		writeVersion := func(content string, line int) bool {
-			// replace '\n'
-			content = strings.Replace(content, "\n", "", -1)
-
-			// split 'vx.xx.xx  1.1.0-alpha-2'
-			args := strings.Split(content, " ")
-
-			if ok := util.VerifyNodeVersion(args[0][1:]); ok {
-				isExistVersion = true
-				P(DEFAULT, args[0], "\n")
-			}
-			return false
-		}
-
-		if err := curl.ReadLine(res.Body, writeVersion); err != nil && err != io.EOF {
-			P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
-		}
-	*/
-
 }
 
 /*
@@ -522,13 +433,36 @@ func Install(args []string, global bool) int {
 	}()
 
 	for _, v := range args {
-		ver, arch := divideVersion(v)
-		if ver == config.LATEST {
+		ver, io, arch, suffix, err := util.ParseNodeVer(v)
+		if err != nil {
+			switch err.Error() {
+			case "1":
+				P(ERROR, "%v not node.exe download.\n", v)
+			case "2":
+				P(ERROR, "%v format error, must be '%v' or '%v'.\n", v, "x86", "x64")
+			case "3":
+				P(ERROR, "%v format error, parameter must be '%v' or '%v'.\n", v, "x.xx.xx", "x.xx.xx-x86|x64")
+			case "4":
+				P(ERROR, "%v format error, the correct format is %v or %v. \n", v, "0.xx.xx", "^0.xx.xx")
+			}
+			continue
+		}
 
+		v = util.EqualAbs("latest", v)
+		v = util.EqualAbs("npm", v)
+
+		// check npm
+		if ver == "npm" {
+			P(WARING, "use format error, the correct format is '%v'. See '%v'.\n", "gnvm install npm", "gnvm help install")
+			continue
+		}
+
+		// check latest and get remote latest
+		if ver == config.LATEST {
 			localVersion = config.GetConfig(config.LATEST_VERSION)
 			P(NOTICE, "local  latest version is %v.\n", localVersion)
 
-			version := getLatestVersionByRemote()
+			version := util.GetLatVer(latURL)
 			if version == "" {
 				P(ERROR, "get latest version error, please check. See '%v'.\n", "gnvm config help")
 				break
@@ -537,10 +471,29 @@ func Install(args []string, global bool) int {
 			isLatest = true
 			ver = version
 			P(NOTICE, "remote latest version is %v.\n", version)
+		} else {
+			isLatest = false
 		}
 
-		if code = downloadVerify(v); code == 0 {
-			dl.AddTask(ts.New(config.GetConfig(config.REGISTRY)+GetNodePath(ver, arch)+NODE, ver, NODE, rootPath+archVersion(ver, arch)))
+		// get folder
+		folder := rootPath + ver
+		if suffix != "" {
+			folder += "-" + suffix
+		}
+		if _, err := util.GetNodeVer(folder + DIVIDE); err == nil {
+			P(WARING, "%v folder exist.\n", ver)
+			continue
+		}
+
+		// get and set url( include iojs)
+		url := config.GetConfig(config.REGISTRY)
+		if io {
+			url = config.GetIOURL(url)
+		}
+
+		// add task
+		if url, err := util.GetRemoteNodePath(url, ver, arch); err == nil {
+			dl.AddTask(ts.New(url, ver, NODE, folder))
 		}
 	}
 
@@ -684,15 +637,15 @@ func Update(global bool) {
 	localVersion := config.GetConfig(config.LATEST_VERSION)
 	P(NOTICE, "local latest version is %v.\n", localVersion)
 
-	remoteVersion := getLatestVersionByRemote()
+	remoteVersion := util.GetLatVer(latURL)
 	if remoteVersion == "" {
 		P(ERROR, "get latest version error, please check. See '%v'.\n", "gnvm help config")
 		return
 	}
 	P(NOTICE, "remote %v latest version is %v.\n", config.GetConfig("registry"), remoteVersion)
 
-	local := ParseFloat(localVersion)
-	remote := ParseFloat(remoteVersion)
+	local := util.FormatNodeVer(localVersion)
+	remote := util.FormatNodeVer(remoteVersion)
 
 	var args []string
 	args = append(args, remoteVersion)
@@ -859,27 +812,6 @@ func copy(src, dest string) error {
 /*
  * return code
  * 0: success
- * 1: remove folder error
- * 2: folder exist
- *
- */
-func downloadVerify(version string) int {
-	// rootPath/version/node.exe is exist
-	if _, err := util.GetNodeVersion(rootPath + version + DIVIDE); err == nil {
-		P(WARING, "%v folder exist.\n", version)
-		return 2
-	} else {
-		if err := os.RemoveAll(rootPath + version); err != nil {
-			P(ERROR, "remove %v fail, Error: %v\n", version, err.Error())
-			return 1
-		}
-	}
-	return 0
-}
-
-/*
- * return code
- * 0: success
  *
  */
 func downloadNpm(version string) int {
@@ -894,50 +826,4 @@ func downloadNpm(version string) int {
 	*/
 
 	return 0
-}
-
-func getLatestVersionByRemote() string {
-
-	var version string
-
-	// set url
-	url := config.GetConfig("registry") + "latest/" + util.SHASUMS
-
-	version = util.GetLatestVersion(url)
-
-	return version
-
-}
-
-func divideVersion(s string) (ver, arch string) {
-	arr := strings.Split(s, "-")
-	if len(arr) == 1 {
-		ver = arr[0]
-		arch = runtime.GOARCH
-	} else {
-		ver = arr[0]
-		switch arr[1] {
-		case "x86":
-			arch = "386"
-		case "x64":
-			arch = "amd64"
-		default:
-			P(WARING, "%v format error, only support %v and %v parameter.\n", ver, "x86", "x64")
-			arch = runtime.GOARCH
-		}
-	}
-	return
-}
-
-func archVersion(ver, arch string) string {
-	if arch == runtime.GOARCH {
-		return ver
-	} else {
-		if arch == "386" {
-			arch = "x86"
-		} else {
-			arch = "x64"
-		}
-		return ver + "-" + arch
-	}
 }

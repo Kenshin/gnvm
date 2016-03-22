@@ -1,95 +1,36 @@
 package nodehandle
 
 import (
+	// go
 	"fmt"
-	. "github.com/Kenshin/cprint"
-	"regexp"
 	"strconv"
 	"strings"
+
+	// local
+	"gnvm/util"
 )
 
-type Node struct {
-	Version string
-	Exec    string
-}
+type (
+	Node struct {
+		Version string
+		Exec    string
+	}
 
-type NPM struct {
-	Version string
-}
+	NPM struct {
+		Version string
+	}
 
-type NodeList struct {
-	ID   int
-	Date string
-	Node
-	NPM
-}
+	NodeList struct {
+		ID   int
+		Date string
+		Node
+		NPM
+	}
 
-type NL map[string]NodeList
+	NL map[string]NodeList
+)
 
 var sorts []string
-
-func ParseFloat(version string) float64 {
-	reg, _ := regexp.Compile(`\.(\d){0,2}`)
-	ver := ""
-	arr := reg.FindAllString(version, -1)
-	for _, v := range arr {
-		v = v[1:]
-		if len(v) == 1 {
-			ver += "0" + v
-		} else if len(v) == 2 {
-			ver += v
-		}
-	}
-	reg, _ = regexp.Compile(`^(\d){1,2}\.`)
-	prefix := reg.FindString(version)
-	ver = prefix + ver
-	float64, _ := strconv.ParseFloat(ver, 64)
-	return float64
-}
-
-func GetNodePath(version, arch string) string {
-	ver := ParseFloat(version)
-	path := "/"
-	switch {
-	case ver <= 0.0500:
-		P(ERROR, "downlaod node.exe version: %v, not %v. See '%v'.\n", version, "node.exe", "gnvm help install")
-	case ver >= 0.0501 && ver <= 0.0612:
-		P(WARING, "downlaod node.exe version: %v, not %v node.exe.\n", version, "x64")
-	case ver > 0.0612 && ver < 4:
-		if arch == "amd64" {
-			path = "/x64/"
-		}
-	case ver >= 4:
-		if arch == "amd64" {
-			path = "/win-x64/"
-		} else {
-			path = "/win-x86/"
-		}
-	}
-	return "v" + version + path
-}
-
-func filter(version string) string {
-	ver := ParseFloat(version)
-	exec := ""
-	switch {
-	case ver <= 0.0500:
-		exec = "[x]"
-	case ver >= 0.0501 && ver <= 0.0612:
-		exec = "x86"
-	case ver > 0.0612:
-		exec = "x86 x64"
-	}
-	return exec
-}
-
-func format(value string, max int) string {
-	if len(value) > max {
-		max = len(value)
-	}
-	newValue := strings.Repeat(" ", max-len(value))
-	return value + newValue
-}
 
 func (nl NL) New(idx int, value map[string]interface{}) NodeList {
 	ver, _ := value["version"].(string)
@@ -137,4 +78,24 @@ func (nl NL) Detail(limit int) {
 			fmt.Println("+--------------------------------------------------+")
 		}
 	}
+}
+
+func filter(version string) (exec string) {
+	switch util.GetNodeVerLev(util.FormatNodeVer(version)) {
+	case 0:
+		exec = "[x]"
+	case 1:
+		exec = "x86"
+	default:
+		exec = "x86 x64"
+	}
+	return
+}
+
+func format(value string, max int) string {
+	if len(value) > max {
+		max = len(value)
+	}
+	newValue := strings.Repeat(" ", max-len(value))
+	return value + newValue
 }

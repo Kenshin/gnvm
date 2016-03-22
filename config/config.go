@@ -34,7 +34,7 @@ const (
 	REGISTRY     = "registry"
 	REGISTRY_KEY = "registry: "
 	REGISTRY_VAL = "http://nodejs.org/dist/"
-	TAOBAO       = "http://npm.taobao.org/mirrors/node"
+	TAOBAO       = "http://npm.taobao.org/mirrors/node/"
 
 	NODEROOT     = "noderoot"
 	NODEROOT_KEY = "noderoot: "
@@ -90,7 +90,7 @@ func createConfig() {
 	}
 
 	// get <root>/node.exe version
-	version, err := util.GetNodeVersion(util.GlobalNodePath + "\\")
+	version, err := util.GetNodeVer(util.GlobalNodePath + "\\")
 	if err != nil {
 		P(WARING, "not found global node.exe version, please use '%v'. See '%v'.\n", "gnvm install x.xx.xx -g", "gnvm help install")
 		globalversion = GLOBAL_VERSION_VAL
@@ -173,7 +173,7 @@ func ReSetConfig() {
 	if newValue := SetConfig(NODEROOT, util.GlobalNodePath); newValue != "" {
 		P(NOTICE, "%v      init success, new value is %v\n", NODEROOT, newValue)
 	}
-	version, err := util.GetNodeVersion(util.GlobalNodePath + "\\")
+	version, err := util.GetNodeVer(util.GlobalNodePath + "\\")
 	if err != nil {
 		P(WARING, "not found global node.exe version, please use '%v'. See '%v'.\n", "gnvm install x.xx.xx -g", "gnvm help install")
 		globalversion = GLOBAL_VERSION_VAL
@@ -192,7 +192,7 @@ func ReSetConfig() {
 	/*
 		url := REGISTRY_VAL + "latest/" + util.SHASUMS
 		P(NOTICE, "get node.exe latest version from %v, please wait.", url, "\n")
-		if latest := util.GetLatestVersion(url); latest != "" {
+		if latest := util.GetLatVer(url); latest != "" {
 			latsetversion = latest
 		} else {
 			latsetversion = LATEST_VERSION_VAL
@@ -221,6 +221,15 @@ func List() {
 			P(DEFAULT, "gnvm config %v is %v\n", strings.TrimSpace(arr[0]), strings.TrimSpace(arr[1]))
 		}
 	}
+}
+
+func GetIOURL(url string) string {
+	if url == TAOBAO {
+		url = strings.Replace(url, "/node", "/iojs", -1)
+	} else if url == REGISTRY_VAL {
+		url = strings.Replace(url, "nodejs.org", "iojs.org", -1)
+	}
+	return url
 }
 
 func Verify() {
