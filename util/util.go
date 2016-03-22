@@ -8,6 +8,7 @@ import (
 
 	// go
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -21,6 +22,7 @@ import (
 const (
 	NODE    = "node.exe"
 	GNVM    = "gnvm.exe"
+	IOJS    = "iojs.exe"
 	DIVIDE  = "\\"
 	SHASUMS = "SHASUMS256.txt"
 	UNKNOWN = "unknown"
@@ -229,6 +231,43 @@ func GetLatVer(url string) string {
 	}
 
 	return version
+}
+
+/*
+ Return node.exe real url, e.g.
+ 	- http://npm.taobao.org/mirrors/node/v5.9.0/win-x64/node.exe
+ 	- http://npm.taobao.org/mirrors/iojs/v1.0.0/win-x86/iojs.exe
+*/
+func GetRemoteNodePath(url, version, arch string) (string, error) {
+	folder := "/"
+	exec := NODE
+	level := GetNodeVerLev(FormatNodeVer(version))
+
+	switch level {
+	case 0:
+		s := fmt.Sprintf("downlaod node.exe version: %v, not %v. See '%v'.\n", version, "node.exe", "gnvm help install")
+		P(ERROR, s)
+		return "", errors.New(s)
+	case 1:
+		P(WARING, "downlaod node.exe version: %v, not %v node.exe.\n", version, "x64")
+	case 2:
+		if arch == "amd64" {
+			folder = "/x64/"
+		}
+	default:
+		if arch == "amd64" {
+			folder = "/win-x64/"
+		} else {
+			folder = "/win-x86/"
+		}
+	}
+
+	// when level == 3, exec is "iojs.exe"
+	if level == 3 {
+		exec = IOJS
+	}
+
+	return url + "v" + version + folder + exec, nil
 }
 
 /*
