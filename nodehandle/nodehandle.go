@@ -422,7 +422,6 @@ func LsRemote(limit int, io bool) {
 
 	// set url
 	url := config.GetConfig(config.REGISTRY)
-
 	if io {
 		url = config.GetIOURL(url)
 	}
@@ -551,11 +550,7 @@ func Install(args []string, global bool) int {
 		// get and set url( include iojs)
 		url := config.GetConfig(config.REGISTRY)
 		if io {
-			if url == config.TAOBAO {
-				url = strings.Replace(url, "/node", "/iojs", -1)
-			} else if url == config.REGISTRY_VAL {
-				url = strings.Replace(url, "nodejs.org", "iojs.org", -1)
-			}
+			url = config.GetIOURL(url)
 			exec = IOJS
 		}
 
