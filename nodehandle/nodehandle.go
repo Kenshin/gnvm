@@ -489,7 +489,7 @@ func Install(args []string, global bool) int {
 		}
 
 		// add task
-		dl.AddTask(ts.New(url+GetNodePath(ver, arch)+exec, ver, NODE, folder))
+		dl.AddTask(ts.New(url+GetRemoteNodePath(ver, arch)+exec, ver, NODE, folder))
 	}
 
 	// downlaod

@@ -37,7 +37,7 @@ var sorts []string
 /*
  Return node.exe real path
 */
-func GetNodePath(version, arch string) string {
+func GetRemoteNodePath(version, arch string) string {
 	path := "/"
 	switch util.GetNodeVerLev(util.FormatNodeVer(version)) {
 	case 0:
