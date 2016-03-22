@@ -9,7 +9,6 @@ import (
 	// go
 	"encoding/hex"
 	"errors"
-	//"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -185,33 +184,6 @@ func ParseNodeVer(s string) (ver string, iojs bool, arch, suffix string, err err
 		return
 	}
 
-	/*
-		switch len(arr) {
-		case 1:
-			io = false
-		case 2:
-			if arr[1] == "io" {
-				io = true
-			} else if ok, _ := regexp.MatchString(`^x?(86|64)$`, arr[1]); ok {
-				io = false
-				arch = arr[1]
-			}
-		case 3:
-			if arr[1] != "io" {
-				s := fmt.Sprintf("%v format error, second parameter must be '%v'.\n", arr[1], "io")
-				panic(s)
-			} else {
-				io = true
-			}
-			if ok, _ := regexp.MatchString(`^x?(86|64)$`, arr[2]); !ok {
-				s := fmt.Sprintf("%v format error, third parameter must be '%v' or '%v'.\n", arr[1], "x86", "x64")
-				panic(s)
-			} else {
-				arch = arr[2]
-			}
-		}
-	*/
-
 	// get arch
 	switch arch {
 	case "x86":
@@ -219,7 +191,6 @@ func ParseNodeVer(s string) (ver string, iojs bool, arch, suffix string, err err
 	case "x64":
 		arch = "amd64"
 	default:
-		//P(WARING, "%v format error, only support %v and %v parameter.\n", ver, "x86", "x64")
 		arch = runtime.GOARCH
 	}
 

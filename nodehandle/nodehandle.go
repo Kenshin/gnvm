@@ -457,12 +457,6 @@ func Install(args []string, global bool) int {
 			continue
 		}
 
-		// check version format
-		//if ok := util.VerifyNodeVer(ver); !ok {
-		//	P(ERROR, "%v format error, the correct format is %v or %v. \n", v, "0.xx.xx", "^0.xx.xx")
-		//	continue
-		//}
-
 		// check latest and get remote latest
 		if ver == config.LATEST {
 			localVersion = config.GetConfig(config.LATEST_VERSION)
