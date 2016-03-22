@@ -41,22 +41,6 @@ func init() {
 	GlobalNodePath = getGlobalNodePath()
 }
 
-/*
-func ConverFloat(str string) (float64, error) {
-	args := strings.Split(str, ".")
-	var newStr string
-	for k, v := range args {
-		if k == 0 {
-			newStr = string(v) + "."
-		} else {
-			newStr = newStr + string(v)
-		}
-	}
-	version, err := strconv.ParseFloat(newStr, 64)
-	return version, err
-}
-*/
-
 func GetNodeVersion(path string) (string, error) {
 	var newout string
 	out, err := exec.Command(path+"node", "--version").Output()
@@ -84,30 +68,8 @@ func GetLatestVersion(url string) string {
 		if content != "" && line == 1 {
 			reg, _ := regexp.Compile(`\d(\.\d){2}`)
 			version = reg.FindString(content)
-			/*
-				args1 := strings.Split(content, "  ")
-				if len(args1) < 2 {
-					P(ERROR, "URL %v format error, please change registry. See '%v'.\n", url, "gnvm help config")
-					return true
-				}
-
-				args2 := strings.Split(args1[1], "-")
-				if len(args2) < 2 {
-					P(ERROR, "URL %v format error, please change registry. See '%v'.\n", url, "gnvm help config")
-					return true
-				}
-
-				if len(args2[1]) < 2 {
-					P(ERROR, "URL %v format error, please change registry. See '%v'.\n", url, "gnvm help config")
-					return true
-				}
-
-				version = args2[1][1:]
-			*/
 		}
-
 		return false
-
 	}
 
 	if err := curl.ReadLine(res.Body, latestVersion); err != nil && err != io.EOF {
