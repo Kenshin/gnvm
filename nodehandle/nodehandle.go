@@ -3,9 +3,8 @@ package nodehandle
 import (
 
 	// lib
-	. "github.com/Kenshin/cprint"
-	//"github.com/Kenshin/curl"
 	"curl"
+	. "github.com/Kenshin/cprint"
 	"github.com/bitly/go-simplejson"
 	"github.com/pierrre/archivefile/zip"
 
@@ -26,7 +25,6 @@ import (
 )
 
 const (
-	//IOJS          = "iojs.exe"
 	DIVIDE        = "\\"
 	NODE          = "node.exe"
 	TIMEFORMART   = "02-Jan-2006 15:04"
@@ -480,12 +478,10 @@ func Install(args []string, global bool) int {
 			continue
 		}
 
-		//exec := NODE
 		// get and set url( include iojs)
 		url := config.GetConfig(config.REGISTRY)
 		if io {
 			url = config.GetIOURL(url)
-			//exec = IOJS
 		}
 
 		// add task
