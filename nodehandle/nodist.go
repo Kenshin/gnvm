@@ -3,7 +3,7 @@ package nodehandle
 import (
 
 	// lib
-	. "github.com/Kenshin/cprint"
+	//. "github.com/Kenshin/cprint"
 
 	// go
 	"fmt"
@@ -39,6 +39,7 @@ var sorts []string
 /*
  Return node.exe real path
 */
+/*
 func GetRemoteNodePath(version, arch string) string {
 	path := "/"
 	switch util.GetNodeVerLev(util.FormatNodeVer(version)) {
@@ -59,6 +60,7 @@ func GetRemoteNodePath(version, arch string) string {
 	}
 	return "v" + version + path
 }
+*/
 
 func (nl NL) New(idx int, value map[string]interface{}) NodeList {
 	ver, _ := value["version"].(string)
