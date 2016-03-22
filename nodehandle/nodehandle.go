@@ -385,14 +385,19 @@ func LS(isPrint bool) ([]string, error) {
 					desc = " -- global"
 				}
 
-				ver, _, arch := util.ParseArgs(version)
-				if arch != runtime.GOARCH {
+				ver, _, _, suffix := util.ParseArgs(version)
+				if suffix == "x86" {
+					desc = " -- x86"
+				} else if suffix == "x64" {
+					desc = " -- x64"
+				}
+				/*if arch != runtime.GOARCH {
 					if arch == "386" {
 						desc = " -- x86"
 					} else {
 						desc = " -- x64"
 					}
-				}
+				}*/
 
 				// set true
 				existVersion = true
@@ -523,7 +528,7 @@ func Install(args []string, global bool) int {
 	}()
 
 	for _, v := range args {
-		ver, io, arch := util.ParseArgs(v)
+		ver, io, arch, suffix := util.ParseArgs(v)
 
 		v = util.EqualAbs("latest", v)
 		v = util.EqualAbs("npm", v)
@@ -558,8 +563,12 @@ func Install(args []string, global bool) int {
 			isLatest = false
 		}
 
-		// check ver folder/node.exe is exist
-		if _, err := util.GetNodeVersion(rootPath + ver + DIVIDE); err == nil {
+		// get folder
+		folder := rootPath + ver
+		if suffix != "" {
+			folder += "-" + suffix
+		}
+		if _, err := util.GetNodeVersion(folder + DIVIDE); err == nil {
 			P(WARING, "%v folder exist.\n", ver)
 			continue
 		}
@@ -577,7 +586,7 @@ func Install(args []string, global bool) int {
 		}
 
 		// add task
-		dl.AddTask(ts.New(url+GetNodePath(ver, arch)+exec, ver, NODE, rootPath+archVersion(ver, arch)))
+		dl.AddTask(ts.New(url+GetNodePath(ver, arch)+exec, ver, NODE, folder))
 
 		/*
 			ver, _, arch := util.ParseArgs(v)
@@ -922,6 +931,7 @@ func copy(src, dest string) error {
  * 2: folder exist
  *
  */
+/*
 func downloadVerify(version string) int {
 	// rootPath/version/node.exe is exist
 	if _, err := util.GetNodeVersion(rootPath + version + DIVIDE); err == nil {
@@ -935,6 +945,7 @@ func downloadVerify(version string) int {
 	}
 	return 0
 }
+*/
 
 /*
  * return code
@@ -968,6 +979,7 @@ func getLatestVersionByRemote() string {
 
 }
 
+/*
 func archVersion(ver, arch string) string {
 	if arch == runtime.GOARCH {
 		return ver
@@ -980,3 +992,4 @@ func archVersion(ver, arch string) string {
 		return ver + "-" + arch
 	}
 }
+*/

@@ -186,14 +186,22 @@ func getCurrentPath() string {
 }
 
 /*
- parse arguments return version, io and arch
+ parse arguments return version, io, suffix and arch
  s support format: <version>-<io>-<arch>, e.g.
+
  	- x.xx.xx
  	- x.xx.xx-io
  	- x.xx.xx-x86|x64
  	- x.xx.xx-io-x86|x64
+
+   Return:
+	- ver    : x.xx.xx
+	- io     : true  and false
+	- arch   : "386" and "amd64"
+	- suffix : "x86" and "x64"  and ""
+
 */
-func ParseArgs(s string) (ver string, io bool, arch string) {
+func ParseArgs(s string) (ver string, io bool, arch, suffix string) {
 	s = strings.ToLower(s)
 	arr := strings.Split(s, "-")
 	ver = arr[0]
@@ -202,6 +210,7 @@ func ParseArgs(s string) (ver string, io bool, arch string) {
 		P(WARING, "%v parameter not support suffix.\n", s)
 		io = false
 		arch = runtime.GOARCH
+		suffix = ""
 		return
 	}
 
@@ -240,6 +249,18 @@ func ParseArgs(s string) (ver string, io bool, arch string) {
 		//P(WARING, "%v format error, only support %v and %v parameter.\n", ver, "x86", "x64")
 		arch = runtime.GOARCH
 	}
+
+	// correction suffix
+	if arch == runtime.GOARCH {
+		suffix = ""
+	} else {
+		if arch == "386" {
+			suffix = "x86"
+		} else {
+			suffix = "x64"
+		}
+	}
+
 	return
 }
 
