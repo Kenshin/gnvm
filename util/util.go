@@ -245,9 +245,8 @@ func GetRemoteNodePath(url, version, arch string) (string, error) {
 
 	switch level {
 	case 0:
-		s := fmt.Sprintf("downlaod node.exe version: %v, not %v. See '%v'.\n", version, "node.exe", "gnvm help install")
-		P(ERROR, s)
-		return "", errors.New(s)
+		P(ERROR, "downlaod node.exe version: %v, not %v. See '%v'.\n", version, "node.exe", "gnvm help install")
+		return "", errors.New("Not support version " + version + "download.")
 	case 1:
 		P(WARING, "downlaod node.exe version: %v, not %v node.exe.\n", version, "x64")
 	case 2:
