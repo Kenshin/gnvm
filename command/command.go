@@ -16,6 +16,7 @@ var (
 	global bool
 	remote bool
 	detail bool
+	io     bool
 	limit  int
 )
 
@@ -255,9 +256,10 @@ var lsCmd = &cobra.Command{
 	Short: "List show all <local> <remote> node.exe version",
 	Long: `List show all <local> <remote> node.exe version e.g.:
 gnvm ls                  :Print local node.js folder list.
-gnvm ls -r               :--remote simple node.js list.
-gnvm ls -r -d --limit=xx :Print remote node.js maximum number of rows is xx.( limit=0, print max rows. )
-gnvm ls -r -d -l 20      :--detail --limit=20 abbreviation
+gnvm ls -r               :Print remote node.js versions.
+gnvm ls -r -d            :Print remote node.js details versions.
+gnvm ls -r -d -i         :Print remote io.js versions.
+gnvm ls -r -d --limit=xx :Print remote node.js maximum number of rows is xx.( default, print max rows. )
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 0 {
@@ -270,12 +272,12 @@ gnvm ls -r -d -l 20      :--detail --limit=20 abbreviation
 				if limit != 0 {
 					P(WARING, "%v no support parameter:'%v', please check your input. See '%v'.\n", "gnvm ls -r", "--limit", "gnvm help ls")
 				}
-				nodehandle.LsRemote(-1)
+				nodehandle.LsRemote(-1, io)
 			case remote && detail:
 				if limit < 0 {
 					P(WARING, "%v must be positive integer, please check your input. See '%v'.\n", "--limit", "gnvm help ls")
 				} else {
-					nodehandle.LsRemote(limit)
+					nodehandle.LsRemote(limit, io)
 				}
 			case !remote && detail:
 				P(ERROR, "flag %v depends on %v flag, e.g. '%v', See '%v'.", "-d", "-r", "gnvm ls -r -d", "gnvm help ls", "\n")
@@ -391,6 +393,7 @@ func init() {
 	lsCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote all node.js version list.")
 	lsCmd.PersistentFlags().BoolVarP(&detail, "detail", "d", false, "get remote all node.js version details list.")
 	lsCmd.PersistentFlags().IntVarP(&limit, "limit", "l", 0, "get remote all node.js version details list by limit count.")
+	lsCmd.PersistentFlags().BoolVarP(&io, "io", "i", false, "get remote all io.js version details list.")
 	nodeVersionCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote node.js latest version.")
 	versionCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote gnvm latest version.")
 

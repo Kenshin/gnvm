@@ -418,10 +418,15 @@ func LS(isPrint bool) ([]string, error) {
 	return lsArr, err
 }
 
-func LsRemote(limit int) {
+func LsRemote(limit int, io bool) {
 
 	// set url
-	url := config.GetConfig(config.REGISTRY) + config.NODELIST
+	url := config.GetConfig(config.REGISTRY)
+
+	if io {
+		url = config.GetIOURL(url)
+	}
+	url += config.NODELIST
 
 	// try catch
 	defer func() {
@@ -431,9 +436,6 @@ func LsRemote(limit int) {
 			os.Exit(0)
 		}
 	}()
-
-	// set exist version
-	//isExistVersion := false
 
 	// print
 	P(DEFAULT, "Read all node.exe version list from %v, please wait.\n", url)
@@ -474,27 +476,6 @@ func LsRemote(limit int) {
 	if limit != -1 {
 		nl.Detail(limit)
 	}
-
-	/*
-		writeVersion := func(content string, line int) bool {
-			// replace '\n'
-			content = strings.Replace(content, "\n", "", -1)
-
-			// split 'vx.xx.xx  1.1.0-alpha-2'
-			args := strings.Split(content, " ")
-
-			if ok := util.VerifyNodeVersion(args[0][1:]); ok {
-				isExistVersion = true
-				P(DEFAULT, args[0], "\n")
-			}
-			return false
-		}
-
-		if err := curl.ReadLine(res.Body, writeVersion); err != nil && err != io.EOF {
-			P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
-		}
-	*/
-
 }
 
 /*

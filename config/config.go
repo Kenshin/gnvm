@@ -223,6 +223,15 @@ func List() {
 	}
 }
 
+func GetIOURL(url string) string {
+	if url == TAOBAO {
+		url = strings.Replace(url, "/node", "/iojs", -1)
+	} else if url == REGISTRY_VAL {
+		url = strings.Replace(url, "nodejs.org", "iojs.org", -1)
+	}
+	return url
+}
+
 func Verify() {
 	code := make(chan int)
 	fail := make(chan interface{})
