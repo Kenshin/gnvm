@@ -14,23 +14,25 @@ import (
 	"gnvm/util"
 )
 
-type Node struct {
-	Version string
-	Exec    string
-}
+type (
+	Node struct {
+		Version string
+		Exec    string
+	}
 
-type NPM struct {
-	Version string
-}
+	NPM struct {
+		Version string
+	}
 
-type NodeList struct {
-	ID   int
-	Date string
-	Node
-	NPM
-}
+	NodeList struct {
+		ID   int
+		Date string
+		Node
+		NPM
+	}
 
-type NL map[string]NodeList
+	NL map[string]NodeList
+)
 
 var sorts []string
 
@@ -56,26 +58,6 @@ func GetRemoteNodePath(version, arch string) string {
 		}
 	}
 	return "v" + version + path
-}
-
-func filter(version string) (exec string) {
-	switch util.GetNodeVerLev(util.FormatNodeVer(version)) {
-	case 0:
-		exec = "[x]"
-	case 1:
-		exec = "x86"
-	default:
-		exec = "x86 x64"
-	}
-	return
-}
-
-func format(value string, max int) string {
-	if len(value) > max {
-		max = len(value)
-	}
-	newValue := strings.Repeat(" ", max-len(value))
-	return value + newValue
 }
 
 func (nl NL) New(idx int, value map[string]interface{}) NodeList {
@@ -124,4 +106,24 @@ func (nl NL) Detail(limit int) {
 			fmt.Println("+--------------------------------------------------+")
 		}
 	}
+}
+
+func filter(version string) (exec string) {
+	switch util.GetNodeVerLev(util.FormatNodeVer(version)) {
+	case 0:
+		exec = "[x]"
+	case 1:
+		exec = "x86"
+	default:
+		exec = "x86 x64"
+	}
+	return
+}
+
+func format(value string, max int) string {
+	if len(value) > max {
+		max = len(value)
+	}
+	newValue := strings.Repeat(" ", max-len(value))
+	return value + newValue
 }
