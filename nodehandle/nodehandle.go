@@ -837,14 +837,8 @@ func downloadNpm(version string) int {
 }
 
 func getLatestVersionByRemote() string {
-
 	var version string
-
-	// set url
 	url := config.GetConfig("registry") + "latest/" + util.SHASUMS
-
 	version = util.GetLatestVersion(url)
-
 	return version
-
 }
