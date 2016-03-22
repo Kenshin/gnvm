@@ -104,13 +104,13 @@ func GetNodeVerLev(ver float64) (level int) {
 	switch {
 	case ver <= 0.0500:
 		level = 0
-	case ver >= 0.0501 && ver <= 0.0612:
+	case ver > 0.0500 && ver <= 0.0612:
 		level = 1
 	case ver > 0.0612 && ver < 1:
 		level = 2
-	case ver >= 1 && ver <= 0.331:
+	case ver >= 1 && ver <= 3.0301:
 		level = 3
-	case ver > 0.331:
+	case ver > 3.0301:
 		level = 4
 	}
 	return
