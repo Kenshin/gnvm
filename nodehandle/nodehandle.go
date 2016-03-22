@@ -35,9 +35,11 @@ const (
 )
 
 var rootPath string
+var latURL string
 
 func init() {
 	rootPath = util.GlobalNodePath + DIVIDE
+	latURL = config.GetConfig("registry") + "latest/" + util.SHASUMS
 }
 
 func TransLatestVersion(latest string, isPrint bool) string {
@@ -186,14 +188,14 @@ func NodeVersion(args []string, remote bool) {
 		case args[0] == "latest" && !remote:
 			P(DEFAULT, "Node.exe latest version is %v.\n", latest)
 		case args[0] == "latest" && remote:
-			remoteVersion := getLatestVersionByRemote()
+			remoteVersion := util.GetLatVer(latURL)
 			if remoteVersion == "" {
 				P(ERROR, "get remote %v latest version error, please check. See '%v'.\n", config.GetConfig("registry")+config.LATEST+"/"+config.NODELIST, "gnvm help config")
 				P(DEFAULT, "Node.exe latest version is %v.\n", latest)
 				return
 			}
-			P(DEFAULT, "Node.exe remote %v version is %v.\n", config.GetConfig("registry"), remoteVersion)
-			P(DEFAULT, "Node.exe local latest version is %v.\n", latest)
+			P(DEFAULT, "Node.exe remote %v %v is %v.\n", config.GetConfig("registry"), "latest version", remoteVersion)
+			P(DEFAULT, "Node.exe local  latest version is %v.\n", latest)
 			if latest == config.UNKNOWN {
 				config.SetConfig(config.LATEST_VERSION, remoteVersion)
 				P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, remoteVersion)
@@ -470,7 +472,7 @@ func Install(args []string, global bool) int {
 			localVersion = config.GetConfig(config.LATEST_VERSION)
 			P(NOTICE, "local  latest version is %v.\n", localVersion)
 
-			version := getLatestVersionByRemote()
+			version := util.GetLatVer(latURL)
 			if version == "" {
 				P(ERROR, "get latest version error, please check. See '%v'.\n", "gnvm config help")
 				break
@@ -645,7 +647,7 @@ func Update(global bool) {
 	localVersion := config.GetConfig(config.LATEST_VERSION)
 	P(NOTICE, "local latest version is %v.\n", localVersion)
 
-	remoteVersion := getLatestVersionByRemote()
+	remoteVersion := util.GetLatVer(latURL)
 	if remoteVersion == "" {
 		P(ERROR, "get latest version error, please check. See '%v'.\n", "gnvm help config")
 		return
@@ -836,9 +838,11 @@ func downloadNpm(version string) int {
 	return 0
 }
 
+/*
 func getLatestVersionByRemote() string {
 	var version string
 	url := config.GetConfig("registry") + "latest/" + util.SHASUMS
 	version = util.GetLatVer(url)
 	return version
 }
+*/
