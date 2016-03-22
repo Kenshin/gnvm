@@ -55,25 +55,6 @@ func GetRemoteNodePath(version, arch string) string {
 			path = "/win-x86/"
 		}
 	}
-
-	/*
-		switch {
-		case ver <= 0.0500:
-			P(ERROR, "downlaod node.exe version: %v, not %v. See '%v'.\n", version, "node.exe", "gnvm help install")
-		case ver >= 0.0501 && ver <= 0.0612:
-			P(WARING, "downlaod node.exe version: %v, not %v node.exe.\n", version, "x64")
-		case ver > 0.0612 && ver < 1:
-			if arch == "amd64" {
-				path = "/x64/"
-			}
-		case ver >= 1:
-			if arch == "amd64" {
-				path = "/win-x64/"
-			} else {
-				path = "/win-x86/"
-			}
-		}
-	*/
 	return "v" + version + path
 }
 
