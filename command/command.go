@@ -149,7 +149,7 @@ gnvm uninstall ALL`,
 			v = nodehandle.TransLatestVersion(v, true)
 
 			// check version format
-			if ok := util.VerifyNodeVersion(v); ok != true {
+			if ok := util.VerifyNodeVer(v); ok != true {
 				P(ERROR, "%v format error, the correct format is %v.\n", v, "x.xx.xx")
 			} else {
 				nodehandle.Uninstall(v)
@@ -174,7 +174,7 @@ gnvm use latest`,
 
 			args[0] = util.EqualAbs("latest", args[0])
 
-			if args[0] != "latest" && util.VerifyNodeVersion(args[0]) != true {
+			if args[0] != "latest" && util.VerifyNodeVer(args[0]) != true {
 				P(ERROR, "use parameter support '%v' or '%v', e.g. %v, please check your input. See '%v'.\n", "latest", "x.xx.xx", "0.10.28", "gnvm help use")
 				return
 			}

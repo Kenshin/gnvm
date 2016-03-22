@@ -50,6 +50,9 @@ func GetNodeVersion(path string) (string, error) {
 	return newout, err
 }
 
+/*
+ Get remote latest version from url
+*/
 func GetLatestVersion(url string) string {
 
 	var version string
@@ -77,7 +80,11 @@ func GetLatestVersion(url string) string {
 	return version
 }
 
-func VerifyNodeVersion(version string) bool {
+/*
+  Verify node version format.
+  Node version format must be http://semver.org/
+*/
+func VerifyNodeVer(version string) bool {
 	result := true
 	version = strings.Split(version, "-")[0]
 	version = strings.TrimSpace(version)

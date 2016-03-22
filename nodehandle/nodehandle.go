@@ -318,7 +318,7 @@ func LS(isPrint bool) ([]string, error) {
 		version := file.Name()
 
 		// check node version
-		if ok := util.VerifyNodeVersion(version); ok {
+		if ok := util.VerifyNodeVer(version); ok {
 
 			// <root>/x.xx.xx/node.exe is exist
 			if isDirExist(rootPath + version + DIVIDE + NODE) {
@@ -460,7 +460,7 @@ func Install(args []string, global bool) int {
 		}
 
 		// check version format
-		if ok := util.VerifyNodeVersion(ver); !ok {
+		if ok := util.VerifyNodeVer(ver); !ok {
 			P(ERROR, "%v format error, the correct format is %v or %v. \n", v, "0.xx.xx", "^0.xx.xx")
 			continue
 		}
