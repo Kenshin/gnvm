@@ -58,36 +58,6 @@ func GetNodeVer(path string) (string, error) {
 }
 
 /*
- Get remote latest version from url
-*/
-func GetLatVer(url string) string {
-
-	var version string
-
-	// curl
-	code, res, _ := curl.Get(url)
-	if code != 0 {
-		return ""
-	}
-	// close
-	defer res.Body.Close()
-
-	latestVersion := func(content string, line int) bool {
-		if content != "" && line == 1 {
-			reg, _ := regexp.Compile(`\d(\.\d){2}`)
-			version = reg.FindString(content)
-		}
-		return false
-	}
-
-	if err := curl.ReadLine(res.Body, latestVersion); err != nil && err != io.EOF {
-		P(ERROR, "%v Error: %v\n", "gnvm update latest", err)
-	}
-
-	return version
-}
-
-/*
   Verify node version format.
   Node version format must be http://semver.org/
 */
@@ -102,17 +72,6 @@ func VerifyNodeVer(version string) bool {
 		result = false
 	}
 	return result
-}
-
-/*
-  Ignore key case and return lowercase value
-*/
-func EqualAbs(key, value string) string {
-	if strings.EqualFold(value, key) && value != key {
-		P(WARING, "current value is %v, please use %v.\n", value, key)
-		value = key
-	}
-	return value
 }
 
 /*
@@ -136,18 +95,6 @@ func FormatNodeVer(version string) float64 {
 	ver = prefix + ver
 	float64, _ := strconv.ParseFloat(ver, 64)
 	return float64
-}
-
-/*
-  Return session environment variable
-*/
-func IsSessionEnv() (string, bool) {
-	env := os.Getenv("GNVM_SESSION_NODE_HOME")
-	if env != "" {
-		return env, true
-	} else {
-		return env, false
-	}
 }
 
 /*
@@ -227,6 +174,59 @@ func ParseNodeVer(s string) (ver string, io bool, arch, suffix string) {
 	}
 
 	return
+}
+
+/*
+ Get remote latest version from url
+*/
+func GetLatVer(url string) string {
+
+	var version string
+
+	// curl
+	code, res, _ := curl.Get(url)
+	if code != 0 {
+		return ""
+	}
+	// close
+	defer res.Body.Close()
+
+	latestVersion := func(content string, line int) bool {
+		if content != "" && line == 1 {
+			reg, _ := regexp.Compile(`\d(\.\d){2}`)
+			version = reg.FindString(content)
+		}
+		return false
+	}
+
+	if err := curl.ReadLine(res.Body, latestVersion); err != nil && err != io.EOF {
+		P(ERROR, "%v Error: %v\n", "gnvm update latest", err)
+	}
+
+	return version
+}
+
+/*
+  Ignore key case and return lowercase value
+*/
+func EqualAbs(key, value string) string {
+	if strings.EqualFold(value, key) && value != key {
+		P(WARING, "current value is %v, please use %v.\n", value, key)
+		value = key
+	}
+	return value
+}
+
+/*
+  Return session environment variable
+*/
+func IsSessionEnv() (string, bool) {
+	env := os.Getenv("GNVM_SESSION_NODE_HOME")
+	if env != "" {
+		return env, true
+	} else {
+		return env, false
+	}
 }
 
 /*
