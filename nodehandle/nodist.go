@@ -34,25 +34,46 @@ type NL map[string]NodeList
 
 var sorts []string
 
+/*
+ Return node.exe real path
+*/
 func GetNodePath(version, arch string) string {
-	ver := util.FormatNodeVer(version)
 	path := "/"
-	switch {
-	case ver <= 0.0500:
+	switch util.GetNodeVerLev(util.FormatNodeVer(version)) {
+	case 0:
 		P(ERROR, "downlaod node.exe version: %v, not %v. See '%v'.\n", version, "node.exe", "gnvm help install")
-	case ver >= 0.0501 && ver <= 0.0612:
+	case 1:
 		P(WARING, "downlaod node.exe version: %v, not %v node.exe.\n", version, "x64")
-	case ver > 0.0612 && ver < 1:
+	case 2:
 		if arch == "amd64" {
 			path = "/x64/"
 		}
-	case ver >= 1:
+	default:
 		if arch == "amd64" {
 			path = "/win-x64/"
 		} else {
 			path = "/win-x86/"
 		}
 	}
+
+	/*
+		switch {
+		case ver <= 0.0500:
+			P(ERROR, "downlaod node.exe version: %v, not %v. See '%v'.\n", version, "node.exe", "gnvm help install")
+		case ver >= 0.0501 && ver <= 0.0612:
+			P(WARING, "downlaod node.exe version: %v, not %v node.exe.\n", version, "x64")
+		case ver > 0.0612 && ver < 1:
+			if arch == "amd64" {
+				path = "/x64/"
+			}
+		case ver >= 1:
+			if arch == "amd64" {
+				path = "/win-x64/"
+			} else {
+				path = "/win-x86/"
+			}
+		}
+	*/
 	return "v" + version + path
 }
 
