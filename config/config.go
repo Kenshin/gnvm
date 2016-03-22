@@ -192,7 +192,7 @@ func ReSetConfig() {
 	/*
 		url := REGISTRY_VAL + "latest/" + util.SHASUMS
 		P(NOTICE, "get node.exe latest version from %v, please wait.", url, "\n")
-		if latest := util.GetLatestVersion(url); latest != "" {
+		if latest := util.GetLatVer(url); latest != "" {
 			latsetversion = latest
 		} else {
 			latsetversion = LATEST_VERSION_VAL

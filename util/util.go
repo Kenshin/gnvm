@@ -56,7 +56,7 @@ func GetNodeVer(path string) (string, error) {
 /*
  Get remote latest version from url
 */
-func GetLatestVersion(url string) string {
+func GetLatVer(url string) string {
 
 	var version string
 
