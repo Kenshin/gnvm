@@ -99,6 +99,12 @@ func FormatNodeVer(version string) float64 {
 
 /*
   Get node version level( 0 ~ 4 )
+  Return
+	- 0: no exec
+	- 1: only x86 exec
+	- 2: x86 and x64 exec, folder is "x64/" and <root>
+	- 3: io.js exec, folder is "win-x64/" and "win-x86/"
+	- 4: x86 and x64 exec, folder is "win-x64/" and "win-x86/"
 */
 func GetNodeVerLev(ver float64) (level int) {
 	switch {
