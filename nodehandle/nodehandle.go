@@ -209,21 +209,6 @@ func NodeVersion(args []string, remote bool) {
 			}
 		}
 	}
-
-	/*
-		isPrint := false
-		switch {
-		case len(args) == 0 && (global == config.UNKNOWN || latest == config.UNKNOWN):
-			isPrint = true
-		case len(args) > 0 && args[0] == "latest" && latest == config.UNKNOWN:
-			isPrint = true
-		case len(args) > 0 && args[0] == "global" && global == config.UNKNOWN:
-			isPrint = true
-		}
-		if isPrint {
-			P(WARING, "when version is %v, please use '%v'. See '%v'.\n", config.UNKNOWN, "gnvm config INIT", "gnvm help config")
-		}
-	*/
 }
 
 func Uninstall(folder string) {
@@ -837,12 +822,3 @@ func downloadNpm(version string) int {
 
 	return 0
 }
-
-/*
-func getLatestVersionByRemote() string {
-	var version string
-	url := config.GetConfig("registry") + "latest/" + util.SHASUMS
-	version = util.GetLatVer(url)
-	return version
-}
-*/
