@@ -26,6 +26,9 @@ const (
 	LATEST  = "latest"
 )
 
+/*
+  Golbal node.exe path
+*/
 var GlobalNodePath string
 
 func init() {
@@ -100,6 +103,9 @@ func VerifyNodeVer(version string) bool {
 	return result
 }
 
+/*
+  Ignore key case and return lowercase value
+*/
 func EqualAbs(key, value string) string {
 	if strings.EqualFold(value, key) && value != key {
 		P(WARING, "current value is %v, please use %v.\n", value, key)
@@ -108,6 +114,9 @@ func EqualAbs(key, value string) string {
 	return value
 }
 
+/*
+  Return session environment variable
+*/
 func IsSessionEnv() (string, bool) {
 	env := os.Getenv("GNVM_SESSION_NODE_HOME")
 	if env != "" {
@@ -234,6 +243,9 @@ func ParseNodeVer(s string) (ver string, io bool, arch, suffix string) {
 	return
 }
 
+/*
+ Return binary arch
+*/
 func Arch(path string) (string, error) {
 	f, err := os.Open(path)
 	if err != nil {
