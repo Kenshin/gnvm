@@ -126,44 +126,6 @@ func IsSessionEnv() (string, bool) {
 	}
 }
 
-func getGlobalNodePath() string {
-	var path string
-
-	if env, ok := IsSessionEnv(); ok {
-		if reg, err := regexp.Compile(`\\([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}\\$`); err == nil {
-			ver := reg.FindString(env)
-			path = strings.Replace(env, ver, "", -1)
-		}
-		return path
-	}
-
-	file, err := exec.LookPath(NODE)
-	if err != nil {
-		if file, err := exec.LookPath(GNVM); err != nil {
-			path = getCurrentPath()
-		} else {
-			path = strings.Replace(file, DIVIDE+GNVM, "", -1)
-		}
-	} else {
-		path = strings.Replace(file, DIVIDE+NODE, "", -1)
-	}
-
-	// gnvm.exe and node.exe the same path
-	if path == "." {
-		path = getCurrentPath()
-	}
-
-	return path
-}
-
-func getCurrentPath() string {
-	path, err := os.Getwd()
-	if err != nil {
-		panic("get current path Error: " + err.Error())
-	}
-	return path
-}
-
 /*
  parse arguments return version, io, suffix and arch
  s support format: <version>-<io>-<arch>, e.g.
@@ -275,4 +237,42 @@ func Arch(path string) (string, error) {
 		}
 	}
 	return "x64", nil
+}
+
+func getGlobalNodePath() string {
+	var path string
+
+	if env, ok := IsSessionEnv(); ok {
+		if reg, err := regexp.Compile(`\\([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}\\$`); err == nil {
+			ver := reg.FindString(env)
+			path = strings.Replace(env, ver, "", -1)
+		}
+		return path
+	}
+
+	file, err := exec.LookPath(NODE)
+	if err != nil {
+		if file, err := exec.LookPath(GNVM); err != nil {
+			path = getCurrentPath()
+		} else {
+			path = strings.Replace(file, DIVIDE+GNVM, "", -1)
+		}
+	} else {
+		path = strings.Replace(file, DIVIDE+NODE, "", -1)
+	}
+
+	// gnvm.exe and node.exe the same path
+	if path == "." {
+		path = getCurrentPath()
+	}
+
+	return path
+}
+
+func getCurrentPath() string {
+	path, err := os.Getwd()
+	if err != nil {
+		panic("get current path Error: " + err.Error())
+	}
+	return path
 }
