@@ -375,6 +375,25 @@ gnvm config registry test     :Validation .gnvmfile registry property
 	},
 }
 
+// sub cmd
+var regCmd = &cobra.Command{
+	Use:   "reg",
+	Short: "Add config property 'noderoot' to Environment variable 'NODE_HOME'.",
+	Long: `Add config property 'noderoot' to Environment variable 'NODE_HOME' e.g.
+gnvm reg noderoot   :Registry config noderoot to NODE_HOME
+`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) > 1 {
+			P(WARING, "use parameter maximum is 1, only support %v, please check your input. See '%v'.\n", "noderoot", "gnvm help reg")
+		} else if len(args) == 0 {
+			P(WARING, "use parameter non't empty, only support %v, please check your input. See '%v'.\n", "noderoot", "gnvm help reg")
+			args = append(args, "noderoot")
+		}
+		noderoot := util.EqualAbs("noderoot", args[0])
+		nodehandle.Reg(noderoot)
+	},
+}
+
 func init() {
 
 	// add sub cmd to root
@@ -387,6 +406,7 @@ func init() {
 	gnvmCmd.AddCommand(lsCmd)
 	gnvmCmd.AddCommand(nodeVersionCmd)
 	gnvmCmd.AddCommand(configCmd)
+	gnvmCmd.AddCommand(regCmd)
 
 	// flag
 	installCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version.")
