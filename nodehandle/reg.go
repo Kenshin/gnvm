@@ -6,18 +6,16 @@ import (
 	. "github.com/Kenshin/cprint"
 
 	// go
-	"bytes"
 	"fmt"
-	"io"
 	"os"
-	"os/exec"
 	"strings"
 
 	// local
 	"gnvm/config"
+	"gnvm/util"
 )
 
-const NODE_HOME = "NODE_HOME2"
+const NODE_HOME, PATH = "NODE_HOME2", "path"
 
 var nodehome, noderoot string
 
@@ -48,20 +46,53 @@ func Reg(s string) {
 	prompt = strings.ToLower(prompt)
 
 	if prompt == "y" {
-		if err := regAdd(NODE_HOME, noderoot); err == nil {
-			if path, err := regQuery("path"); err == nil {
+		if _, err := regAdd(NODE_HOME, noderoot); err == nil {
+			if arr, err := regQuery(PATH); err == nil && len(arr) == 1 {
+				regval := arr[0]
+
 				prompt = "n"
-				P(NOTICE, "if add environment variable %v to %v [Y/n]? ", NODE_HOME, "path")
+				P(NOTICE, "if add environment variable %v to %v [Y/n]? ", NODE_HOME, PATH)
 				fmt.Scanf("%s\n", &prompt)
+
 				prompt = strings.ToLower(prompt)
 				if prompt == "y" {
-					regAdd("path", noderoot+";"+path)
+					if _, err := regAdd(PATH, noderoot+";"+regval.Value); err != nil {
+						fmt.Println("adfasdfadfasfd")
+					}
 				}
 			}
 		}
 	}
+	/*
+		if prompt == "y" {
+			if err := regAdd(NODE_HOME, noderoot); err == nil {
+				if path, err := regQuery("path"); err == nil {
+					prompt = "n"
+					P(NOTICE, "if add environment variable %v to %v [Y/n]? ", NODE_HOME, "path")
+					fmt.Scanf("%s\n", &prompt)
+					prompt = strings.ToLower(prompt)
+					if prompt == "y" {
+						regAdd("path", noderoot+";"+path)
+					}
+				}
+			}
+		}
+	*/
 }
 
+func regAdd(key, value string) ([]util.Reg, error) {
+	reg := util.Regedit{util.Actions[util.Add], util.Fields[util.HKCU] + "\\Environment", key, util.Types[util.SZ], value}
+	regcmd := reg.Add()
+	return regcmd.Exec()
+}
+
+func regQuery(key string) ([]util.Reg, error) {
+	reg := util.Regedit{Action: util.Actions[util.Query], Field: util.Fields[util.HKCU] + "\\Environment", Key: key}
+	regcmd := reg.Search()
+	return regcmd.Exec()
+}
+
+/*
 func regAdd(key, value string) (err error) {
 	regPath := "HKEY_CURRENT_USER\\Environment"
 	cmd := exec.Command("cmd", "/c", "reg", "add", regPath, "/v", key, "/t", "REG_SZ", "/d", value)
@@ -96,3 +127,4 @@ func regQuery(value string) (string, error) {
 	}
 	return "", nil
 }
+*/
