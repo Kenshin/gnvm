@@ -48,20 +48,27 @@ func Reg(s string) {
 	if prompt == "y" {
 		if _, err := regAdd(NODE_HOME, noderoot); err == nil {
 			if arr, err := regQuery(PATH); err == nil && len(arr) == 1 {
-				regval := arr[0]
-
 				prompt = "n"
 				P(NOTICE, "if add environment variable %v to %v [Y/n]? ", NODE_HOME, PATH)
 				fmt.Scanf("%s\n", &prompt)
 
 				prompt = strings.ToLower(prompt)
 				if prompt == "y" {
+					regval := arr[0]
 					if _, err := regAdd(PATH, noderoot+";"+regval.Value); err != nil {
-						fmt.Println("adfasdfadfasfd")
+						P(ERROR, "set environment variable %v failed. Error: %v", PATH, err.Error())
 					}
+				} else {
+					P(NOTICE, "oeration has been cancelled.")
 				}
+			} else if err != nil {
+				P(ERROR, "serch environment variable %v failed. Error: %v", PATH, err.Error())
 			}
+		} else {
+			P(ERROR, "add environment variable %v failed. Error: %v", NODE_HOME, err.Error())
 		}
+	} else {
+		P(NOTICE, "operation has been cancelled.")
 	}
 }
 
