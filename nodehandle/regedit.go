@@ -76,8 +76,9 @@ func regAdd(key, value string) (err error) {
 
 func regQuery(value string) string {
 	regPath := "HKEY_CURRENT_USER\\Environment"
-	if out, err := exec.Command("cmd", "/c", "reg", "query", regPath, "/v", value).Output(); err != nil {
-		P(ERROR, "get path failed. Error: %s\n", err.Error())
+	cmd := exec.Command("cmd", "/c", "reg", "query", regPath, "/v", value)
+	if out, err := cmd.Output(); err != nil {
+		P(ERROR, "set failed. Error: %s\n", err.Error())
 	} else {
 		buff := bytes.NewBuffer(out)
 		line := 1
