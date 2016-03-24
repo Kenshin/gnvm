@@ -42,15 +42,21 @@ func Reg(s string) {
 	}
 
 	P(NOTICE, "current config %v is %v\n", "noderoot", noderoot)
-	P(NOTICE, "if set environment variable %v new value is %v [Y/n]? ", NODE_HOME, noderoot)
+	P(NOTICE, "set environment variable %v new value is %v [Y/n]? ", NODE_HOME, noderoot)
 
-	fmt.Scanf("%s", &prompt)
+	fmt.Scanf("%s\n", &prompt)
 	prompt = strings.ToLower(prompt)
 
 	if prompt == "y" {
 		if err := regAdd(NODE_HOME, noderoot); err == nil {
 			if path := regQuery("path"); path != "" {
-				regAdd("path", noderoot+";"+path)
+				prompt = "n"
+				P(NOTICE, "if add environment variable %v to %v [Y/n]? ", NODE_HOME, "path")
+				fmt.Scanf("%s\n", &prompt)
+				prompt = strings.ToLower(prompt)
+				if prompt == "y" {
+					regAdd("path", noderoot+";"+path)
+				}
 			}
 		}
 	}
