@@ -49,7 +49,7 @@ func Reg(s string) {
 
 	if prompt == "y" {
 		if err := regAdd(NODE_HOME, noderoot); err == nil {
-			if path := regQuery("path"); path != "" {
+			if path, err := regQuery("path"); err == nil {
 				prompt = "n"
 				P(NOTICE, "if add environment variable %v to %v [Y/n]? ", NODE_HOME, "path")
 				fmt.Scanf("%s\n", &prompt)
@@ -69,33 +69,30 @@ func regAdd(key, value string) (err error) {
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 	if err := cmd.Run(); err != nil {
-		P(ERROR, "set failed. Error: %s\n", err.Error())
+		P(ERROR, "set failed. Error: %v\n", err.Error())
 	}
 	return err
 }
 
-func regQuery(value string) string {
+func regQuery(value string) (string, error) {
 	regPath := "HKEY_CURRENT_USER\\Environment"
-	cmd := exec.Command("cmd", "/c", "reg", "query", regPath, "/v", value)
+	cmd := exec.Command("cmd", "/c", "reg", "query", regPath, "/s")
 	if out, err := cmd.Output(); err != nil {
-		P(ERROR, "set failed. Error: %s\n", err.Error())
+		P(ERROR, "set failed. Error: %v\n", err.Error())
+		return "", err
 	} else {
 		buff := bytes.NewBuffer(out)
-		line := 1
 		for {
 			content, err := buff.ReadString('\n')
 			content = strings.TrimSpace(content)
 			if err != nil || err == io.EOF {
 				break
 			}
-			if line == 3 {
-				content = strings.Replace(content, "REG_SZ", "", -1)
-				content = strings.Replace(content, value, "", -1)
-				content = strings.TrimSpace(content)
-				return content
+			if strings.Index(content, value) != -1 {
+				arr := strings.Split(content, " ")
+				return arr[len(arr)-1], nil
 			}
-			line++
 		}
 	}
-	return ""
+	return "", nil
 }
