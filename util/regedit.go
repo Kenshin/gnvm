@@ -42,18 +42,16 @@ type (
 	Regedit struct {
 		Action string
 		Field  string
-		Key    string
-		Type   string
-		Value  string
-	}
-	RegCmd struct {
-		cmd *exec.Cmd
-		reg *Regedit
+		Reg
 	}
 	Reg struct {
 		Key   string
 		Type  string
 		Value string
+	}
+	RegCmd struct {
+		cmd *exec.Cmd
+		reg *Regedit
 	}
 )
 
@@ -86,12 +84,14 @@ var (
 	}
 )
 
-func (this Regedit) Add() RegCmd {
-	return RegCmd{exec.Command("cmd", "/c", "reg", this.Action, this.Field, "/v", this.Key, "/t", this.Type, "/d", this.Value), &this}
+func (this *Regedit) Add(reg Reg) RegCmd {
+	(*this).Reg = reg
+	return RegCmd{exec.Command("cmd", "/c", "reg", this.Action, this.Field, "/v", this.Key, "/t", this.Type, "/d", this.Value), this}
 }
 
-func (this Regedit) Search() RegCmd {
-	return RegCmd{exec.Command("cmd", "/c", "reg", this.Action, this.Field, "/s"), &this}
+func (this *Regedit) Search(reg Reg) RegCmd {
+	(*this).Reg = reg
+	return RegCmd{exec.Command("cmd", "/c", "reg", this.Action, this.Field, "/s"), this}
 }
 
 func (this RegCmd) Exec() ([]Reg, error) {
