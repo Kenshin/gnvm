@@ -63,21 +63,6 @@ func Reg(s string) {
 			}
 		}
 	}
-	/*
-		if prompt == "y" {
-			if err := regAdd(NODE_HOME, noderoot); err == nil {
-				if path, err := regQuery("path"); err == nil {
-					prompt = "n"
-					P(NOTICE, "if add environment variable %v to %v [Y/n]? ", NODE_HOME, "path")
-					fmt.Scanf("%s\n", &prompt)
-					prompt = strings.ToLower(prompt)
-					if prompt == "y" {
-						regAdd("path", noderoot+";"+path)
-					}
-				}
-			}
-		}
-	*/
 }
 
 func regAdd(key, value string) ([]util.Reg, error) {
@@ -91,40 +76,3 @@ func regQuery(key string) ([]util.Reg, error) {
 	regcmd := reg.Search()
 	return regcmd.Exec()
 }
-
-/*
-func regAdd(key, value string) (err error) {
-	regPath := "HKEY_CURRENT_USER\\Environment"
-	cmd := exec.Command("cmd", "/c", "reg", "add", regPath, "/v", key, "/t", "REG_SZ", "/d", value)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd.Stdin = os.Stdin
-	if err := cmd.Run(); err != nil {
-		P(ERROR, "set failed. Error: %v\n", err.Error())
-	}
-	return err
-}
-
-func regQuery(value string) (string, error) {
-	regPath := "HKEY_CURRENT_USER\\Environment"
-	cmd := exec.Command("cmd", "/c", "reg", "query", regPath, "/s")
-	if out, err := cmd.Output(); err != nil {
-		P(ERROR, "set failed. Error: %v\n", err.Error())
-		return "", err
-	} else {
-		buff := bytes.NewBuffer(out)
-		for {
-			content, err := buff.ReadString('\n')
-			content = strings.TrimSpace(content)
-			if err != nil || err == io.EOF {
-				break
-			}
-			if strings.Index(content, value) != -1 {
-				arr := strings.Fields(content)
-				return arr[len(arr)-1], nil
-			}
-		}
-	}
-	return "", nil
-}
-*/
