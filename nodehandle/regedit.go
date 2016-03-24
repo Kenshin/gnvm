@@ -48,14 +48,15 @@ func Reg(s string) {
 	prompt = strings.ToLower(prompt)
 
 	if prompt == "y" {
-		regAdd(NODE_HOME, noderoot)
-		if path = regQuery("path"); path != "" {
-			regAdd("path", noderoot+";"+path)
+		if err := regAdd(NODE_HOME, noderoot); err == nil {
+			if path := regQuery("path"); path != "" {
+				regAdd("path", noderoot+";"+path)
+			}
 		}
 	}
 }
 
-func regAdd(key, value string) {
+func regAdd(key, value string) (err error) {
 	regPath := "HKEY_CURRENT_USER\\Environment"
 	cmd := exec.Command("cmd", "/c", "reg", "add", regPath, "/v", key, "/t", "REG_SZ", "/d", value)
 	cmd.Stdout = os.Stdout
@@ -64,6 +65,7 @@ func regAdd(key, value string) {
 	if err := cmd.Run(); err != nil {
 		P(ERROR, "set failed. Error: %s\n", err.Error())
 	}
+	return err
 }
 
 func regQuery(value string) string {
@@ -83,7 +85,6 @@ func regQuery(value string) string {
 				content = strings.Replace(content, "REG_SZ", "", -1)
 				content = strings.Replace(content, value, "", -1)
 				content = strings.TrimSpace(content)
-				fmt.Println(content)
 				return content
 			}
 			line++
