@@ -89,7 +89,7 @@ func regQuery(value string) (string, error) {
 				break
 			}
 			if strings.Index(content, value) != -1 {
-				arr := strings.Split(content, " ")
+				arr := strings.Fields(content)
 				return arr[len(arr)-1], nil
 			}
 		}
