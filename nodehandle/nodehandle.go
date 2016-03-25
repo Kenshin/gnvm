@@ -747,6 +747,67 @@ func Version(remote bool) {
 
 }
 
+func Query(s string) {
+
+	regex, err := util.FormatWildcard(s)
+	if err != nil {
+		P(ERROR, "[%v] %v", s, err.Error())
+		return
+	}
+	fmt.Println(regex)
+
+	// set url
+	url := config.GetConfig(config.REGISTRY)
+	//if io {
+	//	url = config.GetIOURL(url)
+	//}
+	url += config.NODELIST
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			msg := fmt.Sprintf("'gnvm search' an error has occurred. please check %v. \nError: ", url)
+			Error(ERROR, msg, err)
+			os.Exit(0)
+		}
+	}()
+
+	// print
+	//P(DEFAULT, "Read all node.exe version list from %v, please wait.\n", url)
+
+	// get
+	code, res, _ := curl.Get(url)
+	if code != 0 {
+		return
+	}
+	// close
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		P(ERROR, "%v Error: %v\n", "gnvm search", err)
+	}
+
+	json, err := simplejson.NewJson(body)
+	if err != nil {
+		P(ERROR, "%v Error: %v\n", "gnvm search", err)
+	}
+	arr, err := json.Array()
+	if err != nil {
+		P(ERROR, "%v Error: %v\n", "gnvm search", err)
+	}
+	nl := make(NL)
+	for idx, element := range arr {
+		if value, ok := element.(map[string]interface{}); ok {
+			nd := nl.New(idx, value)
+			nl.IndexBy(nd.Node.Version)
+			if ok := regex.MatchString(nd.Node.Version[1:]); ok {
+				fmt.Println(nd.Node.Version)
+			}
+		}
+	}
+}
+
 func isDirExist(path string) bool {
 	_, err := os.Stat(path)
 	if err != nil {
