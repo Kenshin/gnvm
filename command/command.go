@@ -395,6 +395,25 @@ gnvm reg noderoot   :Registry config noderoot to NODE_HOME and add to Path.
 	},
 }
 
+// sub cmd
+var searchCmd = &cobra.Command{
+	Use:   "search",
+	Short: "Search node.exe versions usage wildcard mode or regexp mode.",
+	Long: `Search node.exe versions usage wildcard mode or regexp mode. e.g. :
+gnvm search *.*.*          :Search all node.exe versions, consistent with gnvm ls -r -d
+gnvm search 0.*.*          :Search 0.0.0  ~ 0.99.99 range node.exe version number.
+gnvm search 0.10.*         :Search 0.10.0 ~ 0.10.99 range node.exe version number.
+gnvm search \<regexp>\     :Search <regexp> node.exe version number.
+`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) != 1 {
+			P(ERROR, "gnvm search parameter maximum is 1, please check your input. See '%v'.\n", "gnvm help search")
+		} else {
+			nodehandle.Query(args[0])
+		}
+	},
+}
+
 func init() {
 
 	// add sub cmd to root
@@ -408,6 +427,7 @@ func init() {
 	gnvmCmd.AddCommand(nodeVersionCmd)
 	gnvmCmd.AddCommand(configCmd)
 	gnvmCmd.AddCommand(regCmd)
+	gnvmCmd.AddCommand(searchCmd)
 
 	// flag
 	installCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version.")
