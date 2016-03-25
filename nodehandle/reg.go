@@ -73,13 +73,13 @@ func Reg(s string) {
 }
 
 func regAdd(key, value string) ([]util.Reg, error) {
-	reg := util.Regedit{Action: util.Actions[util.Add], Field: util.Fields[util.HKCU] + "\\Environment"}
+	reg := util.New(util.Add, util.HKCU, "\\Environment")
 	regcmd := reg.Add(util.Reg{key, util.Types[util.SZ], value})
 	return regcmd.Exec()
 }
 
 func regQuery(key string) ([]util.Reg, error) {
-	reg := util.Regedit{Action: util.Actions[util.Query], Field: util.Fields[util.HKCU] + "\\Environment"}
+	reg := util.New(util.Query, util.HKCU, "\\Environment")
 	regcmd := reg.Search(util.Reg{Key: key})
 	return regcmd.Exec()
 }
