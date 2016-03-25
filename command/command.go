@@ -379,8 +379,9 @@ gnvm config registry test     :Validation .gnvmfile registry property
 var regCmd = &cobra.Command{
 	Use:   "reg",
 	Short: "Add config property 'noderoot' to Environment variable 'NODE_HOME'.",
-	Long: `Add config property 'noderoot' to Environment variable 'NODE_HOME' e.g.
-gnvm reg noderoot   :Registry config noderoot to NODE_HOME
+	Long: `This is the experimental function, need Administrator permission, please note!
+Add config property 'noderoot' to Environment variable 'NODE_HOME' e.g. :
+gnvm reg noderoot   :Registry config noderoot to NODE_HOME and add to Path.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 1 {

@@ -35,10 +35,10 @@ func Reg(s string) {
 		return
 	}
 
+	P(WARING, "tis is the %v, need %v permission, please note!\n", "experimental function", "Administrator")
 	if nodehome != "" {
 		P(NOTICE, "current environment variable %v is %v\n", NODE_HOME, nodehome)
 	}
-
 	P(NOTICE, "current config %v is %v\n", "noderoot", noderoot)
 	P(NOTICE, "set environment variable %v new value is %v [Y/n]? ", NODE_HOME, noderoot)
 
