@@ -15,7 +15,7 @@ import (
 	"gnvm/config"
 )
 
-const NODE_HOME, PATH = "NODE_HOME2", "Path"
+const NODE_HOME, PATH = "NODE_HOME", "Path"
 
 var nodehome, noderoot string
 
