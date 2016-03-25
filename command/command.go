@@ -146,7 +146,7 @@ gnvm uninstall ALL`,
 			}
 
 			// get true version
-			v = nodehandle.TransLatestVersion(v, true)
+			util.FormatLatVer(&v, config.GetConfig(config.LATEST_VERSION), true)
 
 			// check version format
 			if ok := util.VerifyNodeVer(v); ok != true {
@@ -171,17 +171,18 @@ gnvm use latest`,
 			return
 		}
 		if len(args) == 1 {
+			version := args[0]
+			version = util.EqualAbs("latest", version)
 
-			args[0] = util.EqualAbs("latest", args[0])
-
-			if args[0] != "latest" && util.VerifyNodeVer(args[0]) != true {
+			if version != "latest" && util.VerifyNodeVer(version) != true {
 				P(ERROR, "use parameter support '%v' or '%v', e.g. %v, please check your input. See '%v'.\n", "latest", "x.xx.xx", "0.10.28", "gnvm help use")
 				return
 			}
 
 			// set use
-			if ok := nodehandle.Use(args[0]); ok == true {
-				config.SetConfig(config.GLOBAL_VERSION, nodehandle.TransLatestVersion(args[0], false))
+			if ok := nodehandle.Use(version); ok == true {
+				util.FormatLatVer(&version, config.GetConfig(config.LATEST_VERSION), false)
+				config.SetConfig(config.GLOBAL_VERSION, version)
 			}
 		} else {
 			P(ERROR, "use parameter maximum is 1, please check your input. See '%v'.\n", "gnvm help use")
@@ -374,6 +375,26 @@ gnvm config registry test     :Validation .gnvmfile registry property
 	},
 }
 
+// sub cmd
+var regCmd = &cobra.Command{
+	Use:   "reg",
+	Short: "Add config property 'noderoot' to Environment variable 'NODE_HOME'.",
+	Long: `This is the experimental function, need Administrator permission, please note!
+Add config property 'noderoot' to Environment variable 'NODE_HOME' e.g. :
+gnvm reg noderoot   :Registry config noderoot to NODE_HOME and add to Path.
+`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) > 1 {
+			P(WARING, "use parameter maximum is 1, only support %v, please check your input. See '%v'.\n", "noderoot", "gnvm help reg")
+		} else if len(args) == 0 {
+			P(WARING, "use parameter non't empty, only support %v, please check your input. See '%v'.\n", "noderoot", "gnvm help reg")
+			args = append(args, "noderoot")
+		}
+		noderoot := util.EqualAbs("noderoot", args[0])
+		nodehandle.Reg(noderoot)
+	},
+}
+
 func init() {
 
 	// add sub cmd to root
@@ -386,6 +407,7 @@ func init() {
 	gnvmCmd.AddCommand(lsCmd)
 	gnvmCmd.AddCommand(nodeVersionCmd)
 	gnvmCmd.AddCommand(configCmd)
+	gnvmCmd.AddCommand(regCmd)
 
 	// flag
 	installCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version.")

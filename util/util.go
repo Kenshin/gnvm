@@ -99,6 +99,18 @@ func FormatNodeVer(version string) float64 {
 }
 
 /*
+ Conver latest to x.xx.xx( include unknown)
+*/
+func FormatLatVer(latest *string, value string, print bool) {
+	if *latest == LATEST {
+		*latest = value
+	}
+	if print {
+		P(NOTICE, "current latest version is %v.\n", *latest)
+	}
+}
+
+/*
   Get node version level( 0 ~ 4 )
   Return
 	- 0: no exec

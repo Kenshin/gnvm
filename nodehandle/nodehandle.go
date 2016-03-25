@@ -40,16 +40,6 @@ func init() {
 	latURL = config.GetConfig("registry") + "latest/" + util.SHASUMS
 }
 
-func TransLatestVersion(latest string, isPrint bool) string {
-	if latest == config.LATEST {
-		latest = config.GetConfig(config.LATEST_VERSION)
-		if isPrint {
-			P(NOTICE, "current latest version is %v.\n", latest)
-		}
-	}
-	return latest
-}
-
 /**
  * rootPath    : node.exe global path,  e.g. x:\xxx\xx\xx\
  * rootNode    : rootPath + "node.exe", e.g. x:\xxx\xx\xx\node.exe
@@ -75,7 +65,7 @@ func Use(folder string) bool {
 	rootNodeExist := true
 
 	// get true folder, e.g. folder is latest return x.xx.xx
-	folder = TransLatestVersion(folder, true)
+	util.FormatLatVer(&folder, config.GetConfig(config.LATEST_VERSION), true)
 
 	if folder == config.UNKNOWN {
 		P(ERROR, "node.exe latest version not exist, use %v. See '%v'.\n", "gnvm node-version latest -r", "gnvm help node-version")
