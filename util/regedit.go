@@ -84,6 +84,10 @@ var (
 	}
 )
 
+func New(action, filed int, path string) *Regedit {
+	return &Regedit{Action: Actions[action], Field: Fields[filed] + path}
+}
+
 func (this *Regedit) Add(reg Reg) RegCmd {
 	(*this).Reg = reg
 	return RegCmd{exec.Command("cmd", "/c", "reg", this.Action, this.Field, "/v", this.Key, "/t", this.Type, "/d", this.Value), this}
