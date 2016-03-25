@@ -4,6 +4,7 @@ import (
 
 	// lib
 	. "github.com/Kenshin/cprint"
+	"github.com/Kenshin/regedit"
 
 	// go
 	"fmt"
@@ -12,7 +13,6 @@ import (
 
 	// local
 	"gnvm/config"
-	regedit "gnvm/util"
 )
 
 const NODE_HOME, PATH = "NODE_HOME2", "path"
@@ -47,15 +47,18 @@ func Reg(s string) {
 
 	if prompt == "y" {
 		if _, err := regAdd(NODE_HOME, noderoot); err == nil {
-			if arr, err := regQuery(PATH); err == nil && len(arr) == 1 {
+			if arr, err := regQuery(PATH); err == nil {
 				prompt = "n"
 				P(NOTICE, "if add environment variable %v to %v [Y/n]? ", NODE_HOME, PATH)
 				fmt.Scanf("%s\n", &prompt)
 
 				prompt = strings.ToLower(prompt)
 				if prompt == "y" {
-					regval := arr[0]
-					if _, err := regAdd(PATH, noderoot+";"+regval.Value); err != nil {
+					regval := ""
+					if len(arr) > 0 {
+						regval = ";" + arr[0].Value
+					}
+					if _, err := regAdd(PATH, noderoot+regval); err != nil {
 						P(ERROR, "set environment variable %v failed. Error: %v", PATH, err.Error())
 					}
 				} else {
