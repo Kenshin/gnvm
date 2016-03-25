@@ -12,7 +12,7 @@ import (
 
 	// local
 	"gnvm/config"
-	"gnvm/util"
+	regedit "gnvm/util"
 )
 
 const NODE_HOME, PATH = "NODE_HOME2", "path"
@@ -72,14 +72,14 @@ func Reg(s string) {
 	}
 }
 
-func regAdd(key, value string) ([]util.Reg, error) {
-	reg := util.New(util.Add, util.HKCU, "\\Environment")
-	regcmd := reg.Add(util.Reg{key, util.Types[util.SZ], value})
+func regAdd(key, value string) ([]regedit.Reg, error) {
+	reg := regedit.New(regedit.Add, regedit.HKCU, "\\Environment")
+	regcmd := reg.Add(regedit.Reg{key, regedit.Types[regedit.SZ], value})
 	return regcmd.Exec()
 }
 
-func regQuery(key string) ([]util.Reg, error) {
-	reg := util.New(util.Query, util.HKCU, "\\Environment")
-	regcmd := reg.Search(util.Reg{Key: key})
+func regQuery(key string) ([]regedit.Reg, error) {
+	reg := regedit.New(regedit.Query, regedit.HKCU, "\\Environment")
+	regcmd := reg.Search(regedit.Reg{Key: key})
 	return regcmd.Exec()
 }
