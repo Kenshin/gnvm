@@ -15,7 +15,7 @@ import (
 	"gnvm/config"
 )
 
-const NODE_HOME, PATH = "NODE_HOME2", "path"
+const NODE_HOME, PATH = "NODE_HOME2", "Path"
 
 var nodehome, noderoot string
 
@@ -46,10 +46,10 @@ func Reg(s string) {
 	prompt = strings.ToLower(prompt)
 
 	if prompt == "y" {
-		if _, err := regAdd(NODE_HOME, noderoot); err == nil {
-			if arr, err := regQuery(PATH); err == nil {
+		if add(NODE_HOME, noderoot) == nil {
+			if arr, err := search(PATH); err == nil {
 				prompt = "n"
-				P(NOTICE, "if add environment variable %v to %v [Y/n]? ", NODE_HOME, PATH)
+				P(NOTICE, "add environment variable %v to %v [Y/n]? ", NODE_HOME, PATH)
 				fmt.Scanf("%s\n", &prompt)
 
 				prompt = strings.ToLower(prompt)
@@ -58,31 +58,31 @@ func Reg(s string) {
 					if len(arr) > 0 {
 						regval = ";" + arr[0].Value
 					}
-					if _, err := regAdd(PATH, noderoot+regval); err != nil {
-						P(ERROR, "set environment variable %v failed. Error: %v", PATH, err.Error())
-					}
+					add(PATH, noderoot+regval)
 				} else {
-					P(NOTICE, "oeration has been cancelled.")
+					P(NOTICE, "operation has been cancelled.")
 				}
-			} else if err != nil {
-				P(ERROR, "serch environment variable %v failed. Error: %v", PATH, err.Error())
 			}
-		} else {
-			P(ERROR, "add environment variable %v failed. Error: %v", NODE_HOME, err.Error())
 		}
 	} else {
 		P(NOTICE, "operation has been cancelled.")
 	}
 }
 
-func regAdd(key, value string) ([]regedit.Reg, error) {
+func add(key, value string) (err error) {
 	reg := regedit.New(regedit.Add, regedit.HKCU, "\\Environment")
 	regcmd := reg.Add(regedit.Reg{key, regedit.Types[regedit.SZ], value})
-	return regcmd.Exec()
+	if _, err = regcmd.Exec(); err != nil {
+		P(ERROR, "add environment variable %v failed. Error: %v", NODE_HOME, err.Error())
+	}
+	return err
 }
 
-func regQuery(key string) ([]regedit.Reg, error) {
+func search(key string) (regs []regedit.Reg, err error) {
 	reg := regedit.New(regedit.Query, regedit.HKCU, "\\Environment")
 	regcmd := reg.Search(regedit.Reg{Key: key})
-	return regcmd.Exec()
+	if regs, err = regcmd.Exec(); err != nil {
+		P(ERROR, "search environment variable %v failed. Error: %v", PATH, err.Error())
+	}
+	return regs, err
 }
