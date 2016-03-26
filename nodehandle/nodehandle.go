@@ -17,6 +17,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -757,9 +758,11 @@ func Query(s string) {
 
 	// set url
 	url := config.GetConfig(config.REGISTRY)
-	//if io {
-	//	url = config.GetIOURL(url)
-	//}
+	if arr := strings.Split(s, "."); len(arr) == 3 {
+		if ver, _ := strconv.Atoi(arr[0]); ver >= 1 && ver <= 3 {
+			url = config.GetIOURL(url)
+		}
+	}
 	url += config.NODELIST
 
 	// try catch
