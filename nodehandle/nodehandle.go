@@ -4,6 +4,7 @@ import (
 
 	// lib
 	"curl"
+
 	. "github.com/Kenshin/cprint"
 	"github.com/bitly/go-simplejson"
 	"github.com/pierrre/archivefile/zip"
@@ -748,13 +749,12 @@ func Version(remote bool) {
 }
 
 func Query(s string) {
-
-	regex, err := util.FormatWildcard(s)
+	latURL = "http://npm.taobao.org/mirrors/node/latest/SHASUMS256.txt"
+	regex, err := util.FormatWildcard(s, latURL)
 	if err != nil {
 		P(ERROR, "[%v] %v", s, err.Error())
 		return
 	}
-	fmt.Println(regex)
 
 	// set url
 	url := config.GetConfig(config.REGISTRY)
@@ -773,7 +773,7 @@ func Query(s string) {
 	}()
 
 	// print
-	//P(DEFAULT, "Read all node.exe version list from %v, please wait.\n", url)
+	P(DEFAULT, "Search node.exe version rules [%v] from %v, please wait.\n", s, url)
 
 	// get
 	code, res, _ := curl.Get(url)
@@ -797,15 +797,16 @@ func Query(s string) {
 		P(ERROR, "%v Error: %v\n", "gnvm search", err)
 	}
 	nl := make(NL)
-	for idx, element := range arr {
+	idx := 0
+	for _, element := range arr {
 		if value, ok := element.(map[string]interface{}); ok {
-			nd := nl.New(idx, value)
-			nl.IndexBy(nd.Node.Version)
-			if ok := regex.MatchString(nd.Node.Version[1:]); ok {
-				fmt.Println(nd.Node.Version)
+			if nd, ok := nl.Filter(idx, value, regex); ok {
+				nl.IndexBy(nd.Node.Version)
+				idx++
 			}
 		}
 	}
+	nl.Detail(0)
 }
 
 func isDirExist(path string) bool {
