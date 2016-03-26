@@ -9,7 +9,6 @@ import (
 	// go
 	"encoding/hex"
 	"errors"
-	"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -102,36 +101,36 @@ func FormatNodeVer(version string) float64 {
 /*
   Format wildcard node version
   Do not allow the *.1.* model
-	- `*.*.*`
-	- `1.*.*`
-	- `0.10.*`
+	- `*.*.*` - wildcard( include x|X )
+	- `1.*.*` - wildcard
+	- `0.10.*`- wildcard
+	- `5.9.0` - {num}.{num}.{num}
+	- `\<regexp>\` - regexp
 
   Return:
 	- regexp
+	- error
 */
 func FormatWildcard(version string) (*regexp.Regexp, error) {
 	version = strings.ToLower(version)
 	version = strings.Replace(version, "x", "*", -1)
 
-	// *.*.* x.x.x X.x.x *.X.x ^(\*|[xX]{1})(\.(\*|[xX]{1})){2}$
-	// *.*.*
+	// *.*.* x.x.x X.x.x *.X.x
 	reg1 := `^(\*)(\.(\*)){2}$`
 	// {num}.*.*
 	reg2 := `^(0{1}|[1-9]\d?)(\.\*{1}){2}$`
 	// {num}.{num}.*
 	reg3 := `^(0{1}\.|[1-9]\d?\.){2}\*$`
 
-	fmt.Println(version)
-
-	if ok, _ := regexp.MatchString(reg1, version); ok {
-		fmt.Println("11111")
+	if strings.HasPrefix(version, "/") && strings.HasSuffix(version, "/") {
+		return regexp.Compile(version)
+	} else if ok := VerifyNodeVer(version); ok {
+		return regexp.Compile(version)
+	} else if ok, _ := regexp.MatchString(reg1, version); ok {
 		return regexp.Compile(`^([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}$`)
 	} else if ok, _ := regexp.MatchString(reg2, version); ok {
-		fmt.Println("22222")
-		return regexp.Compile(`^(0{1}|[1-9]\d?)\.`)
+		return regexp.Compile(`^` + strings.Replace(version, ".*", "", -1) + `(\.([0]|[1-9]\d?)){2}$`)
 	} else if ok, _ := regexp.MatchString(reg3, version); ok {
-		fmt.Println("33333")
-		//ss := `^` + `0.10.` + `([0]|[1-9]\d?)$`
 		return regexp.Compile(`^` + strings.Replace(version, "*", "", -1) + `([0]|[1-9]\d?)$`)
 	} else {
 		return nil, errors.New("parameter format error.")
