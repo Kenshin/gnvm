@@ -751,7 +751,7 @@ func Version(remote bool) {
 func Query(s string) {
 	regex, err := util.FormatWildcard(s, latURL)
 	if err != nil {
-		P(ERROR, "[%v] %v", s, err.Error())
+		P(ERROR, "[%v] %v\n", s, err.Error())
 		return
 	}
 
