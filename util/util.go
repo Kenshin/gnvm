@@ -101,17 +101,18 @@ func FormatNodeVer(version string) float64 {
 /*
   Format wildcard node version
   Do not allow the *.1.* model
-	- `*.*.*` - wildcard( include x|X )
-	- `1.*.*` - wildcard
-	- `0.10.*`- wildcard
-	- `5.9.0` - {num}.{num}.{num}
+	- `*.*.*`      - wildcard( include x|X )
+	- `1.*.*`      - wildcard
+	- `0.10.*`     - wildcard
+	- `5.9.0`      - {num}.{num}.{num}
 	- `\<regexp>\` - regexp
+	- latest       - trans to true version
 
   Return:
 	- regexp
 	- error
 */
-func FormatWildcard(version string) (*regexp.Regexp, error) {
+func FormatWildcard(version, url string) (*regexp.Regexp, error) {
 	version = strings.ToLower(version)
 	version = strings.Replace(version, "x", "*", -1)
 
@@ -122,7 +123,10 @@ func FormatWildcard(version string) (*regexp.Regexp, error) {
 	// {num}.{num}.*
 	reg3 := `^(0{1}\.|[1-9]\d?\.){2}\*$`
 
-	if strings.HasPrefix(version, "/") && strings.HasSuffix(version, "/") {
+	if version == LATEST {
+		version = GetLatVer(url)
+		return regexp.Compile(version)
+	} else if strings.HasPrefix(version, "/") && strings.HasSuffix(version, "/") {
 		return regexp.Compile(version)
 	} else if ok := VerifyNodeVer(version); ok {
 		return regexp.Compile(version)
