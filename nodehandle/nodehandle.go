@@ -805,7 +805,11 @@ func Query(s string) {
 			}
 		}
 	}
-	nl.Detail(0)
+	if len(nl) > 0 {
+		nl.Detail(0)
+	} else {
+		P(WARING, "not search any node.exe version details, use rules [%v] from %v.\n", s, url)
+	}
 }
 
 func isDirExist(path string) bool {
