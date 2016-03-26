@@ -127,7 +127,7 @@ func FormatWildcard(version, url string) (*regexp.Regexp, error) {
 		version = GetLatVer(url)
 		return regexp.Compile(version)
 	} else if strings.HasPrefix(version, "/") && strings.HasSuffix(version, "/") {
-		return regexp.Compile(version)
+		return regexp.Compile(version[1 : len(version)-1])
 	} else if ok := VerifyNodeVer(version); ok {
 		return regexp.Compile(version)
 	} else if ok, _ := regexp.MatchString(reg1, version); ok {
