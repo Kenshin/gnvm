@@ -749,7 +749,6 @@ func Version(remote bool) {
 }
 
 func Query(s string) {
-	latURL = "http://npm.taobao.org/mirrors/node/latest/SHASUMS256.txt"
 	regex, err := util.FormatWildcard(s, latURL)
 	if err != nil {
 		P(ERROR, "[%v] %v", s, err.Error())
