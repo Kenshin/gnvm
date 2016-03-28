@@ -1,19 +1,17 @@
 package nodehandle
 
 import (
+
 	// lib
-	//"github.com/Kenshin/curl"
-
-	"curl"
-	"strconv"
-
 	"github.com/bitly/go-simplejson"
+	//"github.com/Kenshin/curl"
+	"curl"
 
 	// go
-
 	"fmt"
 	"io/ioutil"
 	"regexp"
+	"strconv"
 	"strings"
 
 	// local
