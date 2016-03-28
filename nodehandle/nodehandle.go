@@ -4,9 +4,9 @@ import (
 
 	// lib
 	"curl"
+	"strconv"
 
 	. "github.com/Kenshin/cprint"
-	"github.com/bitly/go-simplejson"
 	"github.com/pierrre/archivefile/zip"
 
 	// go
@@ -17,7 +17,6 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
-	"strconv"
 	"strings"
 	"time"
 
@@ -343,7 +342,6 @@ func LS(isPrint bool) ([]string, error) {
 }
 
 func LsRemote(limit int, io bool) {
-
 	// set url
 	url := config.GetConfig(config.REGISTRY)
 	if io {
@@ -363,38 +361,50 @@ func LsRemote(limit int, io bool) {
 	// print
 	P(DEFAULT, "Read all node.exe version list from %v, please wait.\n", url)
 
-	// get
-	code, res, _ := curl.Get(url)
-	if code != 0 {
+	// generate nl
+	nl, err, code := New(url, nil)
+	if err != nil {
+		if code == -1 {
+			P(ERROR, "'%v' get url %v error, Error: %v\n", "gnvm search", url, err)
+		} else {
+			P(ERROR, "%v an error has occurred. please check. Error: %v\n", "gnvm search", err)
+		}
 		return
 	}
-	// close
-	defer res.Body.Close()
+	/*
+		// get
+		code, res, _ := curl.Get(url)
+		if code != 0 {
+			return
+		}
+		// close
+		defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
-	}
+		body, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
+		}
 
-	json, err := simplejson.NewJson(body)
-	if err != nil {
-		P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
-	}
-	arr, err := json.Array()
-	if err != nil {
-		P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
-	}
-	nl := make(NL)
-	for idx, element := range arr {
-		if value, ok := element.(map[string]interface{}); ok {
-			nd := nl.New(idx, value)
-			nl.IndexBy(nd.Node.Version)
-			//nl.Print(nd)
-			if limit == -1 {
-				P(DEFAULT, nd.Node.Version, "\n")
+		json, err := simplejson.NewJson(body)
+		if err != nil {
+			P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
+		}
+		arr, err := json.Array()
+		if err != nil {
+			P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
+		}
+		nl := make(NL)
+		for idx, element := range arr {
+			if value, ok := element.(map[string]interface{}); ok {
+				nd := nl.New(idx, value)
+				nl.IndexBy(nd.Node.Version)
+				//nl.Print(nd)
+				if limit == -1 {
+					P(DEFAULT, nd.Node.Version, "\n")
+				}
 			}
 		}
-	}
+	*/
 
 	if limit != -1 {
 		nl.Detail(limit)
@@ -777,38 +787,51 @@ func Query(s string) {
 	// print
 	P(DEFAULT, "Search node.exe version rules [%v] from %v, please wait.\n", s, url)
 
-	// get
-	code, res, _ := curl.Get(url)
-	if code != 0 {
+	// generate nl
+	nl, err, code := New(url, regex)
+	if err != nil {
+		if code == -1 {
+			P(ERROR, "'%v' get url %v error, Error: %v\n", "gnvm search", url, err)
+		} else {
+			P(ERROR, "%v an error has occurred. please check. Error: %v\n", "gnvm search", err)
+		}
 		return
 	}
-	// close
-	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		P(ERROR, "%v Error: %v\n", "gnvm search", err)
-	}
+	/*
+		// get
+		code, res, _ := curl.Get(url)
+		if code != 0 {
+			return
+		}
+		// close
+		defer res.Body.Close()
 
-	json, err := simplejson.NewJson(body)
-	if err != nil {
-		P(ERROR, "%v Error: %v\n", "gnvm search", err)
-	}
-	arr, err := json.Array()
-	if err != nil {
-		P(ERROR, "%v Error: %v\n", "gnvm search", err)
-	}
-	nl := make(NL)
-	idx := 0
-	for _, element := range arr {
-		if value, ok := element.(map[string]interface{}); ok {
-			if nd, ok := nl.Filter(idx, value, regex); ok {
-				nl.IndexBy(nd.Node.Version)
-				idx++
+		body, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			P(ERROR, "%v Error: %v\n", "gnvm search", err)
+		}
+
+		json, err := simplejson.NewJson(body)
+		if err != nil {
+			P(ERROR, "%v Error: %v\n", "gnvm search", err)
+		}
+		arr, err := json.Array()
+		if err != nil {
+			P(ERROR, "%v Error: %v\n", "gnvm search", err)
+		}
+		nl := make(NL)
+		idx := 0
+		for _, element := range arr {
+			if value, ok := element.(map[string]interface{}); ok {
+				if nd, ok := nl.Filter(idx, value, regex); ok {
+					nl.IndexBy(nd.Node.Version)
+					idx++
+				}
 			}
 		}
-	}
-	if len(nl) > 0 {
+	*/
+	if len(*nl) > 0 {
 		nl.Detail(0)
 	} else {
 		P(WARING, "not search any node.exe version details, use rules [%v] from %v.\n", s, url)
