@@ -25,6 +25,7 @@ const (
 	SHASUMS = "SHASUMS256.txt"
 	UNKNOWN = "unknown"
 	LATEST  = "latest"
+	NPM     = "npm"
 )
 
 var DIVIDE = string(os.PathSeparator)
@@ -191,7 +192,7 @@ func GetNodeVerLev(ver float64) (level int) {
 	- iojs   : true  and false
 	- arch   : "386" and "amd64"
 	- suffix : "x86" and "x64"  and ""
-	- err    : includ, "1" "2", "3", "4"
+	- err    : includ, "1" "2", "3", "4", "5"
 
 */
 func ParseNodeVer(s string) (ver string, iojs bool, arch, suffix string, err error) {
@@ -199,6 +200,12 @@ func ParseNodeVer(s string) (ver string, iojs bool, arch, suffix string, err err
 
 	// get ver
 	ver = arr[0]
+
+	// verify npm
+	if ver == NPM {
+		err = errors.New("5")
+		return
+	}
 
 	// verify latest
 	if ver == LATEST {
