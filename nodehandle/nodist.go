@@ -1,8 +1,14 @@
 package nodehandle
 
 import (
+
+	// lib
+	"github.com/Kenshin/curl"
+	"github.com/bitly/go-simplejson"
+
 	// go
 	"fmt"
+	"io/ioutil"
 	"regexp"
 	"strconv"
 	"strings"
@@ -21,56 +27,89 @@ type (
 		Version string
 	}
 
-	NodeList struct {
+	NodeDetail struct {
 		ID   int
 		Date string
 		Node
 		NPM
 	}
 
-	NL map[string]NodeList
+	Nodeist map[string]NodeDetail
 )
 
 var sorts []string
 
-func (nl NL) New(idx int, value map[string]interface{}) NodeList {
-	ver, _ := value["version"].(string)
-	date, _ := value["date"].(string)
-	npm, _ := value["npm"].(string)
-	if npm == "" {
-		npm = "[x]"
-	}
-	exe := filter(ver[1:])
-	nl[ver] = NodeList{idx, date, Node{ver, exe}, NPM{npm}}
-	return nl[ver]
-}
+/*
+ Create nl( map[string]NodeDetail )
 
-func (this NL) Filter(idx int, value map[string]interface{}, regx *regexp.Regexp) (NodeList, bool) {
-	isfilter := false
-	ver, _ := value["version"].(string)
-	if ok := regx.MatchString(ver[1:]); ok {
-		date, _ := value["date"].(string)
-		npm, _ := value["npm"].(string)
-		if npm == "" {
-			npm = "[x]"
+ Param:
+    - url:    index.json url, e.g. http://npm.taobao.org/mirrors/node/index.json
+    - filter: regexp when regexp == nil, filter all NodeDetail
+
+ Return:
+    - nl:     nodedetail collection
+    - error:  error
+    - code:   error flag
+
+      Code:
+        - -1: get url error
+        - -2: read res.body error
+        - -3: create json error
+        - -4: parse json error
+*/
+func New(url string, filter *regexp.Regexp) (*Nodeist, error, int) {
+	code, res, err := curl.Get(url)
+	if err != nil {
+		return nil, err, code
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err, -2
+	}
+
+	json, err := simplejson.NewJson(body)
+	if err != nil {
+		return nil, err, -3
+	}
+	arr, err := json.Array()
+	if err != nil {
+		return nil, err, -4
+	}
+
+	nl, idx := make(Nodeist, 0), 0
+	sorts = make([]string, 0)
+	for _, element := range arr {
+		if value, ok := element.(map[string]interface{}); ok {
+			ver, _ := value["version"].(string)
+			if filter != nil {
+				if ok := filter.MatchString(ver[1:]); !ok {
+					continue
+				}
+			}
+			date, _ := value["date"].(string)
+			npm, _ := value["npm"].(string)
+			if npm == "" {
+				npm = "[x]"
+			}
+			exe := parse(ver[1:])
+			sorts = append(sorts, ver)
+			nl[ver] = NodeDetail{idx, date, Node{ver, exe}, NPM{npm}}
+			idx++
 		}
-		exe := filter(ver[1:])
-		this[ver] = NodeList{idx, date, Node{ver, exe}, NPM{npm}}
-		isfilter = true
 	}
-	return this[ver], isfilter
+	return &nl, nil, 0
 }
 
-func (nl *NL) Print(nodeist NodeList) {
-	msg := fmt.Sprintf("id: %v date: %v node version: %v os support: %v npm version: %v", nodeist.ID, nodeist.Date, nodeist.Node.Version, nodeist.Node.Exec, nodeist.NPM.Version)
-	fmt.Println(msg)
-}
+/*
+ Print NodeDetail collection
 
-func (nl NL) IndexBy(key string) {
-	sorts = append(sorts, key)
-}
+ Param:
+    - limit: print lines, when limit == 0, print all nodedetail
 
-func (nl NL) Detail(limit int) {
+*/
+func (this *Nodeist) Detail(limit int) {
 	table := `+--------------------------------------------------+
 | No.   date         node ver    exec      npm ver |
 +--------------------------------------------------+`
@@ -84,7 +123,7 @@ func (nl NL) Detail(limit int) {
 		if idx >= limit {
 			break
 		}
-		value := nl[v]
+		value := (*this)[v]
 		id := format(strconv.Itoa(value.ID+1), 6)
 		date := format(value.Date, 13)
 		ver := format(value.Node.Version[1:], 12)
@@ -97,7 +136,7 @@ func (nl NL) Detail(limit int) {
 	}
 }
 
-func filter(version string) (exec string) {
+func parse(version string) (exec string) {
 	switch util.GetNodeVerLev(util.FormatNodeVer(version)) {
 	case 0:
 		exec = "[x]"

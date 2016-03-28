@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"gnvm/nodehandle"
 	"testing"
 )
 
 func TestCurl(t *testing.T) {
 	testSearch()
+	//testNodist()
 }
 
 func testSearch() {
@@ -20,4 +22,13 @@ func testSearch() {
 	nodehandle.Query("1.1.x")
 	nodehandle.Query("3.x.x")
 	nodehandle.Query("3.3.x")
+}
+
+func testNodist() {
+	if nl, err, code := nodehandle.New("http://npm.taobao.org/mirrors/iojs/index.json", nil); err != nil {
+		fmt.Println(err)
+		fmt.Println(code)
+	} else {
+		nl.Detail(0)
+	}
 }

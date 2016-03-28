@@ -22,11 +22,12 @@ const (
 	NODE    = "node.exe"
 	GNVM    = "gnvm.exe"
 	IOJS    = "iojs.exe"
-	DIVIDE  = "\\"
 	SHASUMS = "SHASUMS256.txt"
 	UNKNOWN = "unknown"
 	LATEST  = "latest"
 )
+
+var DIVIDE = string(os.PathSeparator)
 
 /*
   Golbal node.exe path

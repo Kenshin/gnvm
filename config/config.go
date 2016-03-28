@@ -64,7 +64,7 @@ func init() {
 	}()
 
 	// set config path
-	configPath = util.GlobalNodePath + "\\" + CONFIG
+	configPath = util.GlobalNodePath + util.DIVIDE + CONFIG
 
 	// config file is exist
 	file, err := os.Open(configPath)
@@ -90,7 +90,7 @@ func createConfig() {
 	}
 
 	// get <root>/node.exe version
-	version, err := util.GetNodeVer(util.GlobalNodePath + "\\")
+	version, err := util.GetNodeVer(util.GlobalNodePath + util.DIVIDE)
 	if err != nil {
 		P(WARING, "not found global node.exe version, please use '%v'. See '%v'.\n", "gnvm install x.xx.xx -g", "gnvm help install")
 		globalversion = GLOBAL_VERSION_VAL
@@ -98,7 +98,7 @@ func createConfig() {
 		globalversion = version
 		// add suffix
 		if runtime.GOARCH == "amd64" {
-			if bit, err := util.Arch(util.GlobalNodePath + "\\node.exe"); err == nil && bit == "x86" {
+			if bit, err := util.Arch(util.GlobalNodePath + util.DIVIDE + util.NODE); err == nil && bit == "x86" {
 				globalversion += "-" + bit
 			}
 		}
@@ -173,7 +173,7 @@ func ReSetConfig() {
 	if newValue := SetConfig(NODEROOT, util.GlobalNodePath); newValue != "" {
 		P(NOTICE, "%v      init success, new value is %v\n", NODEROOT, newValue)
 	}
-	version, err := util.GetNodeVer(util.GlobalNodePath + "\\")
+	version, err := util.GetNodeVer(util.GlobalNodePath + util.DIVIDE)
 	if err != nil {
 		P(WARING, "not found global node.exe version, please use '%v'. See '%v'.\n", "gnvm install x.xx.xx -g", "gnvm help install")
 		globalversion = GLOBAL_VERSION_VAL
@@ -181,7 +181,7 @@ func ReSetConfig() {
 		globalversion = version
 		// add suffix
 		if runtime.GOARCH == "amd64" {
-			if bit, err := util.Arch(util.GlobalNodePath + "\\node.exe"); err == nil && bit == "x86" {
+			if bit, err := util.Arch(util.GlobalNodePath + util.DIVIDE + util.NODE); err == nil && bit == "x86" {
 				globalversion += "-" + bit
 			}
 		}
