@@ -4,8 +4,6 @@ import (
 
 	// lib
 	"curl"
-	"strconv"
-
 	. "github.com/Kenshin/cprint"
 	"github.com/pierrre/archivefile/zip"
 
@@ -17,6 +15,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -26,8 +25,6 @@ import (
 )
 
 const (
-	DIVIDE        = "\\"
-	NODE          = "node.exe"
 	TIMEFORMART   = "02-Jan-2006 15:04"
 	GNVMHOST      = "http://k-zone.cn/gnvm/version.txt"
 	PROCESSTAKEUP = "The process cannot access the file because it is being used by another process."
@@ -37,8 +34,8 @@ var rootPath string
 var latURL string
 
 func init() {
-	rootPath = util.GlobalNodePath + DIVIDE
-	latURL = config.GetConfig("registry") + "latest/" + util.SHASUMS
+	rootPath = util.GlobalNodePath + util.DIVIDE
+	latURL = config.GetConfig("registry") + config.LATEST + "/" + util.SHASUMS
 }
 
 /**
@@ -74,11 +71,11 @@ func Use(folder string) bool {
 	}
 
 	// set rootNode
-	rootNode := rootPath + NODE
+	rootNode := rootPath + util.NODE
 
 	// set usePath and useNode
-	usePath := rootPath + folder + DIVIDE
-	useNode := usePath + NODE
+	usePath := rootPath + folder + util.DIVIDE
+	useNode := usePath + util.NODE
 
 	// <root>/folder is exist
 	if isDirExist(usePath) != true {
@@ -246,7 +243,7 @@ func UninstallNpm() {
 
 	removeFlag := true
 
-	if !isDirExist(rootPath+"npm.cmd") && !isDirExist(rootPath+"node_modules"+DIVIDE+"npm") {
+	if !isDirExist(rootPath+"npm.cmd") && !isDirExist(rootPath+"node_modules"+util.DIVIDE+"npm") {
 		P(WARING, "%v not exist %v.\n", rootPath, "npm.cmd")
 		return
 	}
@@ -258,7 +255,7 @@ func UninstallNpm() {
 	}
 
 	// remove node_modules/npm
-	if err := os.RemoveAll(rootPath + "node_modules" + DIVIDE + "npm"); err != nil {
+	if err := os.RemoveAll(rootPath + "node_modules" + util.DIVIDE + "npm"); err != nil {
 		removeFlag = false
 		P(ERROR, "remove %v folder fail from %v, Error: %v.\n", "npm", rootPath+"node_modules", err.Error())
 	}
@@ -297,7 +294,7 @@ func LS(isPrint bool) ([]string, error) {
 		if ok := util.VerifyNodeVer(version); ok {
 
 			// <root>/x.xx.xx/node.exe is exist
-			if isDirExist(rootPath + version + DIVIDE + NODE) {
+			if isDirExist(rootPath + version + util.DIVIDE + util.NODE) {
 				desc := ""
 				switch {
 				case version == config.GetConfig(config.GLOBAL_VERSION) && version == config.GetConfig(config.LATEST_VERSION):
@@ -448,7 +445,7 @@ func Install(args []string, global bool) int {
 		if suffix != "" {
 			folder += "-" + suffix
 		}
-		if _, err := util.GetNodeVer(folder + DIVIDE); err == nil {
+		if _, err := util.GetNodeVer(folder + util.DIVIDE); err == nil {
 			P(WARING, "%v folder exist.\n", ver)
 			continue
 		}
@@ -461,7 +458,7 @@ func Install(args []string, global bool) int {
 
 		// add task
 		if url, err := util.GetRemoteNodePath(url, ver, arch); err == nil {
-			dl.AddTask(ts.New(url, ver, NODE, folder))
+			dl.AddTask(ts.New(url, ver, util.NODE, folder))
 		}
 	}
 
@@ -571,7 +568,7 @@ func InstallNpm() {
 	P(NOTICE, "the latest version is %v from %v.\n", maxVersion, config.GetConfig(config.REGISTRY))
 
 	// download zip
-	zipPath := os.TempDir() + DIVIDE + maxVersion
+	zipPath := os.TempDir() + util.DIVIDE + maxVersion
 	if code := downloadNpm(maxVersion); code == 0 {
 
 		P(DEFAULT, "Start unarchive file %v.\n", maxVersion)
@@ -795,22 +792,22 @@ func copy(src, dest string) error {
 		return errInfor
 	}
 
-	dstFile, errDst := os.OpenFile(dest+DIVIDE+NODE, os.O_CREATE|os.O_TRUNC|os.O_RDWR, srcInfo.Mode().Perm())
+	dstFile, errDst := os.OpenFile(dest+util.DIVIDE+util.NODE, os.O_CREATE|os.O_TRUNC|os.O_RDWR, srcInfo.Mode().Perm())
 	if errDst != nil {
 
 		if errDst.(*os.PathError).Err.Error() != PROCESSTAKEUP {
 			return errDst
 		}
 
-		P(WARING, "write %v fail, Error: %v\n", dest+DIVIDE+NODE, PROCESSTAKEUP)
+		P(WARING, "write %v fail, Error: %v\n", dest+util.DIVIDE+util.NODE, PROCESSTAKEUP)
 
-		if _, err := exec.Command("taskkill.exe", "/f", "/im", NODE).Output(); err != nil && strings.Index(err.Error(), "exit status") == -1 {
+		if _, err := exec.Command("taskkill.exe", "/f", "/im", util.NODE).Output(); err != nil && strings.Index(err.Error(), "exit status") == -1 {
 			return err
 		}
 
-		P(NOTICE, "%v process kill ok.\n", dest+DIVIDE+NODE)
+		P(NOTICE, "%v process kill ok.\n", dest+util.DIVIDE+util.NODE)
 
-		dstFile, errDst = os.OpenFile(dest+DIVIDE+NODE, os.O_WRONLY|os.O_CREATE, 0644)
+		dstFile, errDst = os.OpenFile(dest+util.DIVIDE+util.NODE, os.O_WRONLY|os.O_CREATE, 0644)
 		if errDst != nil {
 			return errDst
 		}

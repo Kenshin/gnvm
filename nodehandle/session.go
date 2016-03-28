@@ -1,10 +1,15 @@
 package nodehandle
 
 import (
-	"fmt"
+	// lib
 	. "github.com/Kenshin/cprint"
-	"gnvm/util"
+
+	// go
+	"fmt"
 	"os"
+
+	// local
+	"gnvm/util"
 )
 
 var batFileContent = `
@@ -136,7 +141,7 @@ goto exit
 :exit
 exit /b 0
 `
-var GNS_HOME = util.GlobalNodePath + DIVIDE + "gns.cmd"
+var GNS_HOME = util.GlobalNodePath + util.DIVIDE + "gns.cmd"
 
 func init() {
 	// verify GNVM_SESSION_NODE_HOME exist.
