@@ -3,9 +3,8 @@ package nodehandle
 import (
 
 	// lib
+	"github.com/Kenshin/curl"
 	"github.com/bitly/go-simplejson"
-	//"github.com/Kenshin/curl"
-	"curl"
 
 	// go
 	"fmt"

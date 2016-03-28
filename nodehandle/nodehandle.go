@@ -3,8 +3,8 @@ package nodehandle
 import (
 
 	// lib
-	"curl"
 	. "github.com/Kenshin/cprint"
+	"github.com/Kenshin/curl"
 	"github.com/pierrre/archivefile/zip"
 
 	// go

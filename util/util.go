@@ -4,8 +4,7 @@ import (
 
 	// lib
 	. "github.com/Kenshin/cprint"
-	//"github.com/Kenshin/curl"
-	"curl"
+	"github.com/Kenshin/curl"
 
 	// go
 	"encoding/hex"
