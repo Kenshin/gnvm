@@ -1,10 +1,7 @@
 package nodehandle
 
 import (
-
 	/*
-		// lib
-		. "github.com/Kenshin/cprint"
 		"github.com/Kenshin/curl"
 		"github.com/pierrre/archivefile/zip"
 
@@ -17,20 +14,29 @@ import (
 		"os/exec"
 		"runtime"
 		"strconv"
-		"strings"
 		"time"
-
-		// local
-		"gnvm/config"
-		"gnvm/util"
 	*/
+
+	// lib
+	. "github.com/Kenshin/cprint"
 
 	// go
 	"fmt"
+	"strings"
+
+	// local
+	"gnvm/util"
 )
 
 func InstallNPM(version string) {
-	fmt.Println("Install = " + version)
+	version = strings.ToLower(version)
+	switch version {
+	case util.LATEST:
+	case util.GLOBAL:
+	default:
+		P(ERROR, "'%v' param only support [%v] [%v] [%v], please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "x.xx.xx", "gnvm help npm")
+		return
+	}
 }
 
 func UninstallNPM() {

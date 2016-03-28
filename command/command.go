@@ -413,6 +413,8 @@ gnvm npm global           :Install local node.exe  matching npm.
 		if len(args) != 1 {
 			P(ERROR, "%v parameter maximum is 1, only support [%v] [%v] [%v] keyword, please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "x.xx.xx", "gnvm help npm")
 		} else {
+			util.EqualAbs("global", args[0])
+			util.EqualAbs("latest", args[0])
 			nodehandle.InstallNPM(args[0])
 		}
 	},

@@ -25,6 +25,7 @@ const (
 	SHASUMS = "SHASUMS256.txt"
 	UNKNOWN = "unknown"
 	LATEST  = "latest"
+	GLOBAL  = "global"
 	NPM     = "npm"
 )
 
