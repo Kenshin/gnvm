@@ -371,40 +371,6 @@ func LsRemote(limit int, io bool) {
 		}
 		return
 	}
-	/*
-		// get
-		code, res, _ := curl.Get(url)
-		if code != 0 {
-			return
-		}
-		// close
-		defer res.Body.Close()
-
-		body, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
-		}
-
-		json, err := simplejson.NewJson(body)
-		if err != nil {
-			P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
-		}
-		arr, err := json.Array()
-		if err != nil {
-			P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
-		}
-		nl := make(NL)
-		for idx, element := range arr {
-			if value, ok := element.(map[string]interface{}); ok {
-				nd := nl.New(idx, value)
-				nl.IndexBy(nd.Node.Version)
-				//nl.Print(nd)
-				if limit == -1 {
-					P(DEFAULT, nd.Node.Version, "\n")
-				}
-			}
-		}
-	*/
 
 	if limit != -1 {
 		nl.Detail(limit)
@@ -798,39 +764,6 @@ func Query(s string) {
 		return
 	}
 
-	/*
-		// get
-		code, res, _ := curl.Get(url)
-		if code != 0 {
-			return
-		}
-		// close
-		defer res.Body.Close()
-
-		body, err := ioutil.ReadAll(res.Body)
-		if err != nil {
-			P(ERROR, "%v Error: %v\n", "gnvm search", err)
-		}
-
-		json, err := simplejson.NewJson(body)
-		if err != nil {
-			P(ERROR, "%v Error: %v\n", "gnvm search", err)
-		}
-		arr, err := json.Array()
-		if err != nil {
-			P(ERROR, "%v Error: %v\n", "gnvm search", err)
-		}
-		nl := make(NL)
-		idx := 0
-		for _, element := range arr {
-			if value, ok := element.(map[string]interface{}); ok {
-				if nd, ok := nl.Filter(idx, value, regex); ok {
-					nl.IndexBy(nd.Node.Version)
-					idx++
-				}
-			}
-		}
-	*/
 	if len(*nl) > 0 {
 		nl.Detail(0)
 	} else {
