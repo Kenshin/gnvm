@@ -2,16 +2,12 @@ package nodehandle
 
 import (
 	/*
-		"github.com/Kenshin/curl"
 		"github.com/pierrre/archivefile/zip"
 
 		// go
 		//"log"
 		"fmt"
 		"io"
-		"io/ioutil"
-		"os"
-		"os/exec"
 		"runtime"
 		"strconv"
 		"time"
@@ -19,19 +15,62 @@ import (
 
 	// lib
 	. "github.com/Kenshin/cprint"
+	"github.com/Kenshin/curl"
+	"github.com/bitly/go-simplejson"
 
 	// go
 	"fmt"
+	"io/ioutil"
+	"os"
+	"os/exec"
 	"strings"
 
 	// local
+	"gnvm/config"
 	"gnvm/util"
 )
 
+const (
+	LATNPMURL  = "https://raw.githubusercontent.com/npm/npm/master/package.json"
+	NPMTAOBAO  = "http://npm.taobao.org/mirrors/npm/"
+	NPMDEFAULT = "https://github.com/npm/npm/releases/"
+	ZIP        = ".zip"
+)
+
 func InstallNPM(version string) {
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			P(ERROR, "%v an error has occurred, Error is %v \n", "gnvm npm", err)
+			os.Exit(0)
+		}
+	}()
+
 	version = strings.ToLower(version)
+	prompt := "n"
 	switch version {
 	case util.LATEST:
+		remote, local := getLatNPMVer(), getGlobalNPMVer()
+		v1, v2 := util.FormatNodeVer(remote), util.FormatNodeVer(local)
+		cp := CP{Red, false, None, false, "="}
+		switch {
+		case v1 > v2:
+			cp.Value = ">"
+			P(WARING, "npm remote latest version %v %v local latest version %v.\n", remote, cp, local)
+			P(NOTICE, "is update local npm version [Y/n]? ")
+			fmt.Scanf("%s\n", &prompt)
+			prompt = strings.ToLower(prompt)
+			if prompt == "y" {
+				downloadNpm(remote)
+			} else {
+				P(NOTICE, "you need use '%v' update local version. \n", "npm install -g npm")
+			}
+		case v1 < v2:
+			cp.Value = "<"
+			P(WARING, "npm remote latest version %v %v local latest version %v.\n", remote, cp, local)
+		case v1 == v2:
+			P(WARING, "npm remote latest version %v %v local latest version %v.\n", remote, cp, local)
+		}
 	case util.GLOBAL:
 	default:
 		P(ERROR, "'%v' param only support [%v] [%v] [%v], please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "x.xx.xx", "gnvm help npm")
@@ -41,6 +80,57 @@ func InstallNPM(version string) {
 
 func UninstallNPM() {
 	fmt.Println("UnInstall")
+}
+
+/*
+ Get Latest NPM version
+*/
+func getLatNPMVer() string {
+	_, res, err := curl.Get(LATNPMURL)
+	if err != nil {
+		panic(err)
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	json, err := simplejson.NewJson(body)
+	if err != nil {
+		panic(err)
+	}
+	ver, _ := json.Get("version").String()
+	return ver
+}
+
+/*
+ Get global( local ) NPM version
+*/
+func getGlobalNPMVer() string {
+	out, err := exec.Command(rootPath+util.NPM, "-v").Output()
+	if err != nil {
+		P(WARING, "current path %v not exist npm.\n", rootPath)
+		return util.UNKNOWN
+	}
+	return strings.TrimSpace(string(out[:]))
+}
+
+/*
+ Download and unzip npm.zip
+*/
+func downloadNpm(version string) {
+	version = "v" + version + ZIP
+	url := NPMTAOBAO + version
+	if config.GetConfig(config.REGISTRY) != config.TAOBAO {
+		url = NPMDEFAULT + version
+	}
+	if _, errs := curl.New(url); len(errs) > 0 {
+		err := errs[0]
+		P(ERROR, "%v an error has occurred, Error is %v \n", "gnvm npm latest", err)
+		return
+	}
 }
 
 /*
