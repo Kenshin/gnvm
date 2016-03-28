@@ -99,6 +99,49 @@ func FormatNodeVer(version string) float64 {
 }
 
 /*
+  Format wildcard node version
+  Do not allow the *.1.* model
+	- `*.*.*`      - wildcard( include x|X )
+	- `1.*.*`      - wildcard
+	- `0.10.*`     - wildcard
+	- `5.9.0`      - {num}.{num}.{num}
+	- `\<regexp>\` - regexp
+	- latest       - trans to true version
+
+  Return:
+	- regexp
+	- error
+*/
+func FormatWildcard(version, url string) (*regexp.Regexp, error) {
+	version = strings.ToLower(version)
+	version = strings.Replace(version, "x", "*", -1)
+
+	// *.*.* x.x.x X.x.x *.X.x
+	reg1 := `^(\*)(\.(\*)){2}$`
+	// {num}.*.*
+	reg2 := `^(0{1}|[1-9]\d?)(\.\*{1}){2}$`
+	// {num}.{num}.*
+	reg3 := `^(0{1}\.|[1-9]\d?\.){2}\*$`
+
+	if version == LATEST {
+		version = GetLatVer(url)
+		return regexp.Compile(version)
+	} else if strings.HasPrefix(version, "/") && strings.HasSuffix(version, "/") {
+		return regexp.Compile(version[1 : len(version)-1])
+	} else if ok := VerifyNodeVer(version); ok {
+		return regexp.Compile(version)
+	} else if ok, _ := regexp.MatchString(reg1, version); ok {
+		return regexp.Compile(`^([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}$`)
+	} else if ok, _ := regexp.MatchString(reg2, version); ok {
+		return regexp.Compile(`^` + strings.Replace(version, ".*", "", -1) + `(\.([0]|[1-9]\d?)){2}$`)
+	} else if ok, _ := regexp.MatchString(reg3, version); ok {
+		return regexp.Compile(`^` + strings.Replace(version, "*", "", -1) + `([0]|[1-9]\d?)$`)
+	} else {
+		return nil, errors.New("parameter format error.")
+	}
+}
+
+/*
  Conver latest to x.xx.xx( include unknown)
 */
 func FormatLatVer(latest *string, value string, print bool) {

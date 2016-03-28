@@ -4,6 +4,7 @@ import (
 
 	// lib
 	"curl"
+
 	. "github.com/Kenshin/cprint"
 	"github.com/bitly/go-simplejson"
 	"github.com/pierrre/archivefile/zip"
@@ -16,6 +17,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -745,6 +747,72 @@ func Version(remote bool) {
 		P(ERROR, "gnvm version --remote Error: %v\n", err)
 	}
 
+}
+
+func Query(s string) {
+	regex, err := util.FormatWildcard(s, latURL)
+	if err != nil {
+		P(ERROR, "[%v] %v\n", s, err.Error())
+		return
+	}
+
+	// set url
+	url := config.GetConfig(config.REGISTRY)
+	if arr := strings.Split(s, "."); len(arr) == 3 {
+		if ver, _ := strconv.Atoi(arr[0]); ver >= 1 && ver <= 3 {
+			url = config.GetIOURL(url)
+		}
+	}
+	url += config.NODELIST
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			msg := fmt.Sprintf("'gnvm search' an error has occurred. please check %v. \nError: ", url)
+			Error(ERROR, msg, err)
+			os.Exit(0)
+		}
+	}()
+
+	// print
+	P(DEFAULT, "Search node.exe version rules [%v] from %v, please wait.\n", s, url)
+
+	// get
+	code, res, _ := curl.Get(url)
+	if code != 0 {
+		return
+	}
+	// close
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		P(ERROR, "%v Error: %v\n", "gnvm search", err)
+	}
+
+	json, err := simplejson.NewJson(body)
+	if err != nil {
+		P(ERROR, "%v Error: %v\n", "gnvm search", err)
+	}
+	arr, err := json.Array()
+	if err != nil {
+		P(ERROR, "%v Error: %v\n", "gnvm search", err)
+	}
+	nl := make(NL)
+	idx := 0
+	for _, element := range arr {
+		if value, ok := element.(map[string]interface{}); ok {
+			if nd, ok := nl.Filter(idx, value, regex); ok {
+				nl.IndexBy(nd.Node.Version)
+				idx++
+			}
+		}
+	}
+	if len(nl) > 0 {
+		nl.Detail(0)
+	} else {
+		P(WARING, "not search any node.exe version details, use rules [%v] from %v.\n", s, url)
+	}
 }
 
 func isDirExist(path string) bool {

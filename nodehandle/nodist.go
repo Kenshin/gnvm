@@ -3,6 +3,7 @@ package nodehandle
 import (
 	// go
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -42,6 +43,22 @@ func (nl NL) New(idx int, value map[string]interface{}) NodeList {
 	exe := filter(ver[1:])
 	nl[ver] = NodeList{idx, date, Node{ver, exe}, NPM{npm}}
 	return nl[ver]
+}
+
+func (this NL) Filter(idx int, value map[string]interface{}, regx *regexp.Regexp) (NodeList, bool) {
+	isfilter := false
+	ver, _ := value["version"].(string)
+	if ok := regx.MatchString(ver[1:]); ok {
+		date, _ := value["date"].(string)
+		npm, _ := value["npm"].(string)
+		if npm == "" {
+			npm = "[x]"
+		}
+		exe := filter(ver[1:])
+		this[ver] = NodeList{idx, date, Node{ver, exe}, NPM{npm}}
+		isfilter = true
+	}
+	return this[ver], isfilter
 }
 
 func (nl *NL) Print(nodeist NodeList) {
