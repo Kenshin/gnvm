@@ -23,23 +23,31 @@ import (
 )
 
 const (
-	LATNPMURL   = "https://raw.githubusercontent.com/npm/npm/master/package.json"
-	NPMTAOBAO   = "http://npm.taobao.org/mirrors/npm/"
-	NPMDEFAULT  = "https://github.com/npm/npm/releases/"
-	ZIP         = ".zip"
-	NODEMODULES = "node_modules"
-	NPMBIN      = "bin"
-	NPMCOMMAND1 = "npm"
-	NPMCOMMAND2 = "npm.cmd"
+	LATNPMURL  = "https://raw.githubusercontent.com/npm/npm/master/package.json"
+	NPMTAOBAO  = "http://npm.taobao.org/mirrors/npm/"
+	NPMDEFAULT = "https://github.com/npm/npm/releases/"
+	ZIP        = ".zip"
 )
 
+/*
+- root:     config.GetConfig(config.NODEROOT)
+- zipname:  v3.8.5.zip
+- zippath:  /<root>/v3.8.5.zip
+- modules:  /<root>/node_modules
+- npmpath:  /<root>/node_modules/npm
+- npmbin:   /<root>/node_modules/npm/bin
+- command1: npm
+- command2: npm.cmd
+*/
 type NPMDownload struct {
-	root    string
-	zipname string
-	zippath string
-	modules string
-	npmpath string
-	npmbin  string
+	root     string
+	zipname  string
+	zippath  string
+	modules  string
+	npmpath  string
+	npmbin   string
+	command1 string
+	command2 string
 }
 
 var npm = new(NPMDownload)
@@ -49,11 +57,13 @@ var npm = new(NPMDownload)
 */
 func (this *NPMDownload) New(zip string) {
 	(*this).root = config.GetConfig(config.NODEROOT)
-	(*this).modules = (*this).root + util.DIVIDE + NODEMODULES
+	(*this).modules = (*this).root + util.DIVIDE + "node_modules"
 	(*this).zipname = zip
 	(*this).zippath = (*this).root + util.DIVIDE + (*this).zipname
 	(*this).npmpath = (*this).modules + util.DIVIDE + util.NPM
-	(*this).npmbin = (*this).npmpath + util.DIVIDE + NPMBIN
+	(*this).npmbin = (*this).npmpath + util.DIVIDE + "bin"
+	(*this).command1 = "npm"
+	(*this).command2 = "npm.cmd"
 }
 
 /*
@@ -97,7 +107,7 @@ func (this *NPMDownload) Clean(path string) error {
  Remove <root>/node_modules/npm, <root>/npm, <root>/npm.cmd
 */
 func (this *NPMDownload) CleanAll() {
-	paths := [3]string{this.npmpath, this.root + util.DIVIDE + NPMCOMMAND1, this.root + util.DIVIDE + NPMCOMMAND2}
+	paths := [3]string{this.npmpath, this.root + util.DIVIDE + this.command1, this.root + util.DIVIDE + this.command2}
 	for _, v := range paths {
 		this.Clean(v)
 	}
@@ -228,12 +238,12 @@ func MkNPM(zip string) {
 			P(ERROR, "unzip fail, Error: %v", err.Error())
 			return
 		} else {
-			// copy <root>\node_modules\npm\bin npm and npm.cmd to <root>\
-			if err := copyFile(npm.npmbin, npm.root, NPMCOMMAND1); err != nil {
+			// copy <root>\node_modules\npm\bin\ npm and npm.cmd to <root>\
+			if err := copyFile(npm.npmbin, npm.root, npm.command1); err != nil {
 				P(ERROR, "copy %v to %v faild, Error: %v \n", npm.npmbin, npm.root)
 				return
 			}
-			if err := copyFile(npm.npmbin, npm.root, NPMCOMMAND2); err != nil {
+			if err := copyFile(npm.npmbin, npm.root, npm.command2); err != nil {
 				P(ERROR, "copy %v to %v faild, Error: %v \n", npm.npmbin, npm.root)
 				return
 			}
