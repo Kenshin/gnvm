@@ -132,7 +132,11 @@ func downloadNpm(version string) {
 }
 
 /*
- Create node_modules folder
+ Create npm folder
+
+ Param:
+    - path: npm root path
+    - zip: download zip file name
 */
 func MkNPM(path, zip string) {
 	//dest := config.GetConfig(config.NODEROOT) + util.DIVIDE + NODEMODULES
