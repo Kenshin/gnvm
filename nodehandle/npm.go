@@ -219,8 +219,8 @@ func unzip(path, dest string) (string, error) {
 		return "-1", err
 	}
 	defer unzip.Close()
-	idx, root := 0, ""
-	for _, file := range unzip.File {
+
+	extractAndWriteFile := func(file *zip.File, idx int, root string) (string, error) {
 		rc, err := file.Open()
 		if err != nil {
 			return "-2", err
@@ -242,9 +242,15 @@ func unzip(path, dest string) (string, error) {
 				return "-4", err
 			}
 		}
+		return root, nil
+	}
+
+	idx, root, err := 0, "", nil
+	for _, file := range unzip.File {
+		root, err = extractAndWriteFile(file, idx, root)
 		idx++
 	}
-	return root, nil
+	return root, err
 }
 
 /*
