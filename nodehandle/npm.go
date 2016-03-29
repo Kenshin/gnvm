@@ -33,6 +33,59 @@ const (
 	NPMCOMMAND2 = "npm.cmd"
 )
 
+type NPMDownload struct {
+	root    string
+	zipname string
+	zippath string
+	modules string
+	npmpath string
+	npmbin  string
+}
+
+var npm = new(NPMDownload)
+
+/*
+ Crete NPMDownload
+*/
+func (this *NPMDownload) New(zip string) {
+	(*this).root = config.GetConfig(config.NODEROOT)
+	(*this).modules = (*this).root + util.DIVIDE + NODEMODULES
+	(*this).zipname = zip
+	(*this).zippath = (*this).root + util.DIVIDE + (*this).zipname
+	(*this).npmpath = (*this).modules + util.DIVIDE + util.NPM
+	(*this).npmbin = (*this).npmpath + util.DIVIDE + NPMBIN
+}
+
+/*
+ Custom Print
+*/
+func (this *NPMDownload) String() string {
+	return fmt.Sprintf("root   = %v \nzipname= %v\nzippath= %v\nmodules= %v\nnpmpath= %v\nnpmbin = %v\n", this.root, this.zipname, this.zippath, this.modules, this.npmpath, this.npmbin)
+}
+
+/*
+ Remove file
+*/
+func (this *NPMDownload) Clean(path string) error {
+	if isDirExist(path) {
+		if err := os.RemoveAll(path); err != nil {
+			P(ERROR, "remove %v folder Error: %v.\n", path, err.Error())
+			return err
+		}
+	}
+	return nil
+}
+
+/*
+ Remove <root>/node_modules/npm <root>/npm <root>/npm.cmd
+*/
+func (this *NPMDownload) CleanAll() {
+	paths := [3]string{this.npmpath, this.root + util.DIVIDE + NPMCOMMAND1, this.root + util.DIVIDE + NPMCOMMAND2}
+	for _, v := range paths {
+		this.Clean(v)
+	}
+}
+
 func InstallNPM(version string) {
 	// try catch
 	defer func() {
@@ -140,57 +193,43 @@ func downloadNpm(version string) {
     - zip: download zip file name
 */
 func MkNPM(zip string) {
-	path := config.GetConfig(config.NODEROOT)
-	dest := path + util.DIVIDE + NODEMODULES
-	zip = path + util.DIVIDE + zip
-	npm := dest + util.DIVIDE + util.NPM
-	npmbin := npm + util.DIVIDE + NPMBIN
-
-	fmt.Println(path)
-	fmt.Println(dest)
-	fmt.Println(zip)
+	npm.New(zip)
 	fmt.Println(npm)
-	fmt.Println(npmbin)
 
 	// verify node_modules exist
-	if !isDirExist(dest) {
-		if err := os.Mkdir(dest, 0755); err != nil {
-			P(ERROR, "create %v foler error, Error: %v\n", dest, err.Error())
+	if !isDirExist(npm.modules) {
+		if err := os.Mkdir(npm.modules, 0755); err != nil {
+			P(ERROR, "create %v foler error, Error: %v\n", npm.modules, err.Error())
 			return
 		} else {
-			P(NOTICE, "%v folder create success.\n", dest)
+			P(NOTICE, "%v folder create success.\n", npm.modules)
 		}
 	}
 
-	// verify node_modules/npm exist
-	if isDirExist(npm) {
-		if err := os.RemoveAll(npm); err != nil {
-			P(ERROR, "remove %v folder Error: %v.\n", npm, err.Error())
-			return
-		}
-	}
+	// clean all npm files
+	npm.CleanAll()
 
 	// unzip
-	if code, err := unzip(zip, dest); err != nil {
+	if code, err := unzip(npm.zippath, npm.modules); err != nil {
 		fmt.Println(code)
 		fmt.Println(err)
 	} else {
-		if err := os.Rename(dest+util.DIVIDE+code, dest+util.DIVIDE+util.NPM); err != nil {
+		if err := os.Rename(npm.modules+util.DIVIDE+code, npm.modules+util.DIVIDE+util.NPM); err != nil {
 			P(ERROR, "unzip fail, Error: %v", err.Error())
 			return
 		} else {
 			// copy <root>\node_modules\npm\bin npm and npm.cmd to <root>\
-			if err := copyFile(npmbin, path, NPMCOMMAND1); err != nil {
-				P(ERROR, "copy %v to %v faild, Error: %v \n", npmbin, path)
+			if err := copyFile(npm.npmbin, npm.root, NPMCOMMAND1); err != nil {
+				P(ERROR, "copy %v to %v faild, Error: %v \n", npm.npmbin, npm.root)
 				return
 			}
-			if err := copyFile(npmbin, path, NPMCOMMAND2); err != nil {
-				P(ERROR, "copy %v to %v faild, Error: %v \n", npmbin, path)
+			if err := copyFile(npm.npmbin, npm.root, NPMCOMMAND2); err != nil {
+				P(ERROR, "copy %v to %v faild, Error: %v \n", npm.npmbin, npm.root)
 				return
 			}
 			// remove download zip file
-			if err := os.RemoveAll(zip); err != nil {
-				P(ERROR, "remove %v folder Error: %v.\n", npm, err.Error())
+			if err := os.RemoveAll(npm.zipname); err != nil {
+				P(ERROR, "remove %v folder Error: %v.\n", npm.zipname, err.Error())
 				return
 			}
 			P(NOTICE, "unzip complete.\n")
