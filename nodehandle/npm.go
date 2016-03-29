@@ -77,7 +77,11 @@ func (this *NPMDownload) CreateModules() {
 }
 
 /*
- Remove file
+ Remove file, inlcude:
+    - <root>/node_modules/npm
+    - <root>/npm
+    - <root>/npm.cmd
+    - <root>/<npm.zip>
 */
 func (this *NPMDownload) Clean(path string) error {
 	if isDirExist(path) {
@@ -90,7 +94,7 @@ func (this *NPMDownload) Clean(path string) error {
 }
 
 /*
- Remove <root>/node_modules/npm <root>/npm <root>/npm.cmd
+ Remove <root>/node_modules/npm, <root>/npm, <root>/npm.cmd
 */
 func (this *NPMDownload) CleanAll() {
 	paths := [3]string{this.npmpath, this.root + util.DIVIDE + NPMCOMMAND1, this.root + util.DIVIDE + NPMCOMMAND2}
@@ -233,11 +237,10 @@ func MkNPM(zip string) {
 				P(ERROR, "copy %v to %v faild, Error: %v \n", npm.npmbin, npm.root)
 				return
 			}
+
 			// remove download zip file
-			if err := os.RemoveAll(npm.zipname); err != nil {
-				P(ERROR, "remove %v folder Error: %v.\n", npm.zipname, err.Error())
-				return
-			}
+			npm.Clean(npm.zippath)
+
 			P(NOTICE, "unzip complete.\n")
 		}
 	}
