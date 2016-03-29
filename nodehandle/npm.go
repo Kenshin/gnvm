@@ -64,6 +64,19 @@ func (this *NPMDownload) String() string {
 }
 
 /*
+ Create node_modules folder
+*/
+func (this *NPMDownload) CreateModules() {
+	if !isDirExist(this.modules) {
+		if err := os.Mkdir(this.modules, 0755); err != nil {
+			P(ERROR, "create %v foler error, Error: %v\n", this.modules, err.Error())
+		} else {
+			P(NOTICE, "%v folder create success.\n", this.modules)
+		}
+	}
+}
+
+/*
  Remove file
 */
 func (this *NPMDownload) Clean(path string) error {
@@ -197,14 +210,7 @@ func MkNPM(zip string) {
 	fmt.Println(npm)
 
 	// verify node_modules exist
-	if !isDirExist(npm.modules) {
-		if err := os.Mkdir(npm.modules, 0755); err != nil {
-			P(ERROR, "create %v foler error, Error: %v\n", npm.modules, err.Error())
-			return
-		} else {
-			P(NOTICE, "%v folder create success.\n", npm.modules)
-		}
-	}
+	npm.CreateModules()
 
 	// clean all npm files
 	npm.CleanAll()
