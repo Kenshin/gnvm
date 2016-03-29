@@ -87,6 +87,18 @@ func (this *NPMDownload) CreateModules() {
 }
 
 /*
+ Copy <root>\node_modules\npm\bin\ npm and npm.cmd to <root>\
+*/
+func (this *NPMDownload) Exec() {
+	files := [2]string{this.command1, this.command2}
+	for _, v := range files {
+		if err := copyFile(this.npmbin, this.root, v); err != nil {
+			P(ERROR, "copy %v to %v faild, Error: %v \n", this.npmbin, this.root)
+		}
+	}
+}
+
+/*
  Remove file, inlcude:
     - <root>/node_modules/npm
     - <root>/npm
@@ -238,15 +250,8 @@ func MkNPM(zip string) {
 			P(ERROR, "unzip fail, Error: %v", err.Error())
 			return
 		} else {
-			// copy <root>\node_modules\npm\bin\ npm and npm.cmd to <root>\
-			if err := copyFile(npm.npmbin, npm.root, npm.command1); err != nil {
-				P(ERROR, "copy %v to %v faild, Error: %v \n", npm.npmbin, npm.root)
-				return
-			}
-			if err := copyFile(npm.npmbin, npm.root, npm.command2); err != nil {
-				P(ERROR, "copy %v to %v faild, Error: %v \n", npm.npmbin, npm.root)
-				return
-			}
+			// exec
+			npm.Exec()
 
 			// remove download zip file
 			npm.Clean(npm.zippath)
