@@ -127,7 +127,8 @@ func downloadNpm(version string) {
 		P(ERROR, "%v an error has occurred, Error is %v \n", "gnvm npm latest", err)
 		return
 	} else {
-		fmt.Println(dl)
+		ts := dl[0]
+		MkNPM(ts.Name)
 	}
 }
 
@@ -138,12 +139,18 @@ func downloadNpm(version string) {
     - path: npm root path
     - zip: download zip file name
 */
-func MkNPM(path, zip string) {
-	//dest := config.GetConfig(config.NODEROOT) + util.DIVIDE + NODEMODULES
+func MkNPM(zip string) {
+	path := config.GetConfig(config.NODEROOT)
 	dest := path + util.DIVIDE + NODEMODULES
 	zip = path + util.DIVIDE + zip
 	npm := dest + util.DIVIDE + util.NPM
 	npmbin := npm + util.DIVIDE + NPMBIN
+
+	fmt.Println(path)
+	fmt.Println(dest)
+	fmt.Println(zip)
+	fmt.Println(npm)
+	fmt.Println(npmbin)
 
 	// verify node_modules exist
 	if !isDirExist(dest) {
@@ -168,7 +175,7 @@ func MkNPM(path, zip string) {
 		fmt.Println(code)
 		fmt.Println(err)
 	} else {
-		if err := os.Rename(dest+util.DIVIDE+"npm-3.8.5", dest+util.DIVIDE+util.NPM); err != nil {
+		if err := os.Rename(dest+util.DIVIDE+code, dest+util.DIVIDE+util.NPM); err != nil {
 			P(ERROR, "unzip fail, Error: %v", err.Error())
 			return
 		} else {
