@@ -35,7 +35,6 @@ func testNodist() {
 }
 
 func testUnzip() {
-	path := `C:\Users\Kenshin\Documents\DevTools\aaa`
 	name := `v3.8.5.zip`
-	nodehandle.MkNPM(path, name)
+	nodehandle.MkNPM(name)
 }
