@@ -35,6 +35,12 @@ func testNodist() {
 }
 
 func testUnzip() {
+	/*
+		npm := new(nodehandle.NPMDownload)
+		npm.New(name)
+		fmt.Println(npm)
+		npm.CreateModules()
+	*/
 	name := `v3.8.5.zip`
 	nodehandle.MkNPM(name)
 }
