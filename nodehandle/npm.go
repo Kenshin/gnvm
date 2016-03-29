@@ -23,10 +23,14 @@ import (
 )
 
 const (
-	LATNPMURL  = "https://raw.githubusercontent.com/npm/npm/master/package.json"
-	NPMTAOBAO  = "http://npm.taobao.org/mirrors/npm/"
-	NPMDEFAULT = "https://github.com/npm/npm/releases/"
-	ZIP        = ".zip"
+	LATNPMURL   = "https://raw.githubusercontent.com/npm/npm/master/package.json"
+	NPMTAOBAO   = "http://npm.taobao.org/mirrors/npm/"
+	NPMDEFAULT  = "https://github.com/npm/npm/releases/"
+	ZIP         = ".zip"
+	NODEMODULES = "node_modules"
+	NPMBIN      = "bin"
+	NPMCOMMAND1 = "npm"
+	NPMCOMMAND2 = "npm.cmd"
 )
 
 func InstallNPM(version string) {
@@ -128,6 +132,62 @@ func downloadNpm(version string) {
 }
 
 /*
+ Create node_modules folder
+*/
+func MkNPM(path, zip string) {
+	//dest := config.GetConfig(config.NODEROOT) + util.DIVIDE + NODEMODULES
+	dest := path + util.DIVIDE + NODEMODULES
+	zip = path + util.DIVIDE + zip
+	npm := dest + util.DIVIDE + util.NPM
+	npmbin := npm + util.DIVIDE + NPMBIN
+
+	// verify node_modules exist
+	if !isDirExist(dest) {
+		if err := os.Mkdir(dest, 0755); err != nil {
+			P(ERROR, "create %v foler error, Error: %v\n", dest, err.Error())
+			return
+		} else {
+			P(NOTICE, "%v folder create success.\n", dest)
+		}
+	}
+
+	// verify node_modules/npm exist
+	if isDirExist(npm) {
+		if err := os.RemoveAll(npm); err != nil {
+			P(ERROR, "remove %v folder Error: %v.\n", npm, err.Error())
+			return
+		}
+	}
+
+	// unzip
+	if code, err := unzip(zip, dest); err != nil {
+		fmt.Println(code)
+		fmt.Println(err)
+	} else {
+		if err := os.Rename(dest+util.DIVIDE+"npm-3.8.5", dest+util.DIVIDE+util.NPM); err != nil {
+			P(ERROR, "unzip fail, Error: %v", err.Error())
+			return
+		} else {
+			// copy <root>\node_modules\npm\bin npm and npm.cmd to <root>\
+			if err := copyFile(npmbin, path, NPMCOMMAND1); err != nil {
+				P(ERROR, "copy %v to %v faild, Error: %v \n", npmbin, path)
+				return
+			}
+			if err := copyFile(npmbin, path, NPMCOMMAND2); err != nil {
+				P(ERROR, "copy %v to %v faild, Error: %v \n", npmbin, path)
+				return
+			}
+			// remove download zip file
+			if err := os.RemoveAll(zip); err != nil {
+				P(ERROR, "remove %v folder Error: %v.\n", npm, err.Error())
+				return
+			}
+			P(NOTICE, "unzip complete.\n")
+		}
+	}
+}
+
+/*
   Unzip file
 
   Param:
@@ -142,33 +202,66 @@ func downloadNpm(version string) {
         - -3: write file error
         - -4: copy  file error
 */
-func Unzip(path, dest string) (int, error) {
+func unzip(path, dest string) (string, error) {
 	unzip, err := zip.OpenReader(path)
 	if err != nil {
-		return -1, err
+		return "-1", err
 	}
 	defer unzip.Close()
+	idx, root := 0, ""
 	for _, file := range unzip.File {
 		rc, err := file.Open()
 		if err != nil {
-			return -2, err
+			return "-2", err
 		}
 		defer rc.Close()
+		if idx == 0 {
+			root = file.Name
+		}
 		path = filepath.Join(dest, file.Name)
 		if file.FileInfo().IsDir() {
 			os.MkdirAll(path, file.Mode())
 		} else {
 			f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
 			if err != nil {
-				return -3, err
+				return "-3", err
 			}
 			defer f.Close()
 			if _, err := io.Copy(f, rc); err != nil {
-				return -4, err
+				return "-4", err
 			}
 		}
+		idx++
 	}
-	return 0, nil
+	return root, nil
+}
+
+/*
+ Copy file from src to dest
+*/
+func copyFile(src, dst, name string) (err error) {
+	src = src + util.DIVIDE + name
+	dst = dst + util.DIVIDE + name
+	in, err := os.Open(src)
+	if err != nil {
+		return
+	}
+	defer in.Close()
+	out, err := os.Create(dst)
+	if err != nil {
+		return
+	}
+	defer func() {
+		cerr := out.Close()
+		if err == nil {
+			err = cerr
+		}
+	}()
+	if _, err = io.Copy(out, in); err != nil {
+		return
+	}
+	err = out.Sync()
+	return
 }
 
 /*
