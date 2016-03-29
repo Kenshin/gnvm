@@ -7,8 +7,9 @@ import (
 )
 
 func TestCurl(t *testing.T) {
-	testSearch()
+	//testSearch()
 	//testNodist()
+	testUnzip()
 }
 
 func testSearch() {
@@ -30,5 +31,15 @@ func testNodist() {
 		fmt.Println(code)
 	} else {
 		nl.Detail(0)
+	}
+}
+
+func testUnzip() {
+	path := `C:\Users\Kenshin\Documents\DevTools\aaa\`
+	name := `npm-3.8.5.zip`
+	dest := `npm-3.8.5`
+	if code, err := nodehandle.Unzip(path+name, path+dest); err != nil {
+		fmt.Println(code)
+		fmt.Println(err)
 	}
 }
