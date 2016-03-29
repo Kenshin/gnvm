@@ -1,17 +1,6 @@
 package nodehandle
 
 import (
-	/*
-		"github.com/pierrre/archivefile/zip"
-
-		// go
-		//"log"
-		"fmt"
-		"io"
-		"runtime"
-		"strconv"
-		"time"
-	*/
 
 	// lib
 	. "github.com/Kenshin/cprint"
@@ -19,10 +8,13 @@ import (
 	"github.com/bitly/go-simplejson"
 
 	// go
+	"archive/zip"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	// local
@@ -126,11 +118,57 @@ func downloadNpm(version string) {
 	if config.GetConfig(config.REGISTRY) != config.TAOBAO {
 		url = NPMDEFAULT + version
 	}
-	if _, errs := curl.New(url); len(errs) > 0 {
+	if dl, errs := curl.New(url); len(errs) > 0 {
 		err := errs[0]
 		P(ERROR, "%v an error has occurred, Error is %v \n", "gnvm npm latest", err)
 		return
+	} else {
+		fmt.Println(dl)
 	}
+}
+
+/*
+  Unzip file
+
+  Param:
+    - path: zip file path
+    - dest: unzip dest folder
+
+  Return:
+    - error
+    - code
+        - -1: open  zip file error
+        - -2: open  file error
+        - -3: write file error
+        - -4: copy  file error
+*/
+func Unzip(path, dest string) (int, error) {
+	unzip, err := zip.OpenReader(path)
+	if err != nil {
+		return -1, err
+	}
+	defer unzip.Close()
+	for _, file := range unzip.File {
+		rc, err := file.Open()
+		if err != nil {
+			return -2, err
+		}
+		defer rc.Close()
+		path = filepath.Join(dest, file.Name)
+		if file.FileInfo().IsDir() {
+			os.MkdirAll(path, file.Mode())
+		} else {
+			f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
+			if err != nil {
+				return -3, err
+			}
+			defer f.Close()
+			if _, err := io.Copy(f, rc); err != nil {
+				return -4, err
+			}
+		}
+	}
+	return 0, nil
 }
 
 /*
