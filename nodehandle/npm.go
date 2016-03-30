@@ -89,6 +89,24 @@ func (this *NPMDownload) CreateModules() {
 }
 
 /*
+ Download npm zip
+
+ Param:
+    - url: download url
+
+ Return:
+    - error
+*/
+func (this *NPMDownload) Download(url, name string) error {
+	if _, errs := curl.New(url, name, name, (*this).root); len(errs) > 0 {
+		err := errs[0]
+		P(ERROR, "%v an error has occurred, url %v, Error is %v. See '%v'.\n", "gnvm npm", url, err, "gnvm help npm")
+		return err
+	}
+	return nil
+}
+
+/*
   Unzip file
 
   Return:
@@ -281,14 +299,45 @@ func downloadNpm(version string) {
 	if config.GetConfig(config.REGISTRY) != config.TAOBAO {
 		url = NPMDEFAULT + version
 	}
-	if dl, errs := curl.New(url); len(errs) > 0 {
-		err := errs[0]
-		P(ERROR, "%v an error has occurred, Error is %v \n", "gnvm npm latest", err)
+
+	// create npm
+	npm.New(version)
+
+	/*
+		if dl, errs := curl.New(url); len(errs) > 0 {
+			err := errs[0]
+			P(ERROR, "%v an error has occurred, Error is %v \n", "gnvm npm latest", err)
+			return
+		} else {
+			ts := dl[0]
+			MkNPM(ts.Name)
+		}
+	*/
+
+	// download
+	if err := npm.Download(url, version); err != nil {
 		return
-	} else {
-		ts := dl[0]
-		MkNPM(ts.Name)
 	}
+
+	// create node_modules
+	npm.CreateModules()
+
+	// clean all npm files
+	npm.CleanAll()
+
+	// unzip
+	if _, err := npm.Unzip(); err != nil {
+		P(ERROR, "unzip %v an error has occurred. \nError: ", npm.zipname, err.Error())
+		return
+	}
+
+	// exec
+	if err := npm.Exec(); err == nil {
+		npm.Clean(npm.zippath)
+		P(NOTICE, "unzip complete.\n")
+	}
+
+	fmt.Println(npm)
 }
 
 /*
@@ -298,6 +347,7 @@ func downloadNpm(version string) {
     - path: npm root path
     - zip: download zip file name
 */
+/*
 func MkNPM(zip string) {
 	npm.New(zip)
 	fmt.Println(npm)
@@ -320,6 +370,7 @@ func MkNPM(zip string) {
 		P(NOTICE, "unzip complete.\n")
 	}
 }
+*/
 
 /*
  Copy file from src to dest
