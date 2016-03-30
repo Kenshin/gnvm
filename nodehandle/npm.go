@@ -164,7 +164,7 @@ func (this *NPMDownload) Unzip() (int, error) {
  Rename <root>\node_modules\folder to <root>\node_modules\npm
  Copy <root>\node_modules\npm\bin\ npm and npm.cmd to <root>\
 */
-func (this *NPMDownload) Exec() error {
+func (this *NPMDownload) Install() error {
 	if err := os.Rename(this.modules+util.DIVIDE+this.ziproot, this.npmpath); err != nil {
 		P(ERROR, "rename fail, Error: %v\n", err.Error())
 		return err
@@ -320,8 +320,8 @@ func downloadNpm(version string) {
 		return
 	}
 
-	// exec
-	if err := npm.Exec(); err == nil {
+	// install
+	if err := npm.Install(); err == nil {
 		npm.Clean(npm.zippath)
 		P(NOTICE, "unzip complete.\n")
 	}
