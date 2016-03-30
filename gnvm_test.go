@@ -36,7 +36,7 @@ func testNodist() {
 
 func testNPManage() {
 	name := `v3.8.5.zip`
-	npm := new(nodehandle.NPMDownload)
+	npm := new(nodehandle.NPMange)
 	npm.New(name)
 	fmt.Println(npm)
 	//npm.CleanAll()
