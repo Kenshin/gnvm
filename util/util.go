@@ -339,17 +339,6 @@ func GetRemoteNodePath(url, version, arch string) (string, error) {
 }
 
 /*
-  Ignore key case and return lowercase value
-*/
-func EqualAbs(key, value string) string {
-	if strings.EqualFold(value, key) && value != key {
-		P(WARING, "current value is %v, please use %v.\n", value, key)
-		value = key
-	}
-	return value
-}
-
-/*
   Return session environment variable
 */
 func IsSessionEnv() (string, bool) {
@@ -393,6 +382,53 @@ func Arch(path string) (string, error) {
 		}
 	}
 	return "x64", nil
+}
+
+/*
+  Ignore key case and return lowercase value
+*/
+func EqualAbs(key, value string) string {
+	if strings.EqualFold(value, key) && value != key {
+		P(WARING, "current value is %v, please use %v.\n", value, key)
+		value = key
+	}
+	return value
+}
+
+/*
+ Copy file from src to dest
+
+ Param:
+ 	- src:  copy file path
+	- dst:  target file path
+	- name: copy file name
+
+ Return:
+ 	- error
+*/
+func Copy(src, dst, name string) (err error) {
+	src = src + DIVIDE + name
+	dst = dst + DIVIDE + name
+	in, err := os.Open(src)
+	if err != nil {
+		return
+	}
+	defer in.Close()
+	out, err := os.Create(dst)
+	if err != nil {
+		return
+	}
+	defer func() {
+		cerr := out.Close()
+		if err == nil {
+			err = cerr
+		}
+	}()
+	if _, err = io.Copy(out, in); err != nil {
+		return
+	}
+	err = out.Sync()
+	return
 }
 
 func getGlobalNodePath() string {
