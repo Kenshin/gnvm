@@ -40,7 +40,7 @@ const (
 - command1: npm
 - command2: npm.cmd
 */
-type NPMDownload struct {
+type NPMange struct {
 	root     string
 	zipname  string
 	ziproot  string
@@ -52,12 +52,12 @@ type NPMDownload struct {
 	command2 string
 }
 
-var npm = new(NPMDownload)
+var npm = new(NPMange)
 
 /*
- Crete NPMDownload
+ Crete NPMange
 */
-func (this *NPMDownload) New(zip string) {
+func (this *NPMange) New(zip string) {
 	(*this).root = config.GetConfig(config.NODEROOT)
 	(*this).modules = (*this).root + util.DIVIDE + "node_modules"
 	(*this).zipname = zip
@@ -71,7 +71,7 @@ func (this *NPMDownload) New(zip string) {
 /*
  Custom Print
 */
-func (this *NPMDownload) String() string {
+func (this *NPMange) String() string {
 	s := fmt.Sprintf("root     = %v\n", this.root)
 	s += fmt.Sprintf("zipname  = %v\n", this.zipname)
 	s += fmt.Sprintf("ziproot  = %v\n", this.ziproot)
@@ -87,7 +87,7 @@ func (this *NPMDownload) String() string {
 /*
  Create node_modules folder
 */
-func (this *NPMDownload) CreateModules() {
+func (this *NPMange) CreateModules() {
 	if !isDirExist(this.modules) {
 		if err := os.Mkdir(this.modules, 0755); err != nil {
 			P(ERROR, "create %v foler error, Error: %v\n", this.modules, err.Error())
@@ -106,7 +106,7 @@ func (this *NPMDownload) CreateModules() {
  Return:
     - error
 */
-func (this *NPMDownload) Download(url, name string) error {
+func (this *NPMange) Download(url, name string) error {
 	if _, errs := curl.New(url, name, name, (*this).root); len(errs) > 0 {
 		err := errs[0]
 		P(ERROR, "%v an error has occurred, url %v, Error is %v. See '%v'.\n", "gnvm npm", url, err, "gnvm help npm")
@@ -126,7 +126,7 @@ func (this *NPMDownload) Download(url, name string) error {
         - -3: write file error
         - -4: copy  file error
 */
-func (this *NPMDownload) Unzip() (int, error) {
+func (this *NPMange) Unzip() (int, error) {
 	path, dest := (*this).zippath, (*this).modules
 	unzip, err := zip.OpenReader(path)
 	if err != nil {
@@ -173,7 +173,7 @@ func (this *NPMDownload) Unzip() (int, error) {
  Rename <root>\node_modules\folder to <root>\node_modules\npm
  Copy <root>\node_modules\npm\bin\ npm and npm.cmd to <root>\
 */
-func (this *NPMDownload) Install() error {
+func (this *NPMange) Install() error {
 	if err := os.Rename(this.modules+util.DIVIDE+this.ziproot, this.npmpath); err != nil {
 		P(ERROR, "rename fail, Error: %v\n", err.Error())
 		return err
@@ -196,7 +196,7 @@ func (this *NPMDownload) Install() error {
     - <root>/npm.cmd
     - <root>/<npm.zip>
 */
-func (this *NPMDownload) Clean(path string) error {
+func (this *NPMange) Clean(path string) error {
 	if isDirExist(path) {
 		if err := os.RemoveAll(path); err != nil {
 			P(ERROR, "remove %v folder Error: %v.\n", path, err.Error())
@@ -209,7 +209,7 @@ func (this *NPMDownload) Clean(path string) error {
 /*
  Remove <root>/node_modules/npm, <root>/npm, <root>/npm.cmd
 */
-func (this *NPMDownload) CleanAll() error {
+func (this *NPMange) CleanAll() error {
 	paths := [3]string{this.npmpath, this.root + util.DIVIDE + this.command1, this.root + util.DIVIDE + this.command2}
 	for _, v := range paths {
 		if err := this.Clean(v); err != nil {
