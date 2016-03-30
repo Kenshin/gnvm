@@ -303,17 +303,6 @@ func downloadNpm(version string) {
 	// create npm
 	npm.New(version)
 
-	/*
-		if dl, errs := curl.New(url); len(errs) > 0 {
-			err := errs[0]
-			P(ERROR, "%v an error has occurred, Error is %v \n", "gnvm npm latest", err)
-			return
-		} else {
-			ts := dl[0]
-			MkNPM(ts.Name)
-		}
-	*/
-
 	// download
 	if err := npm.Download(url, version); err != nil {
 		return
@@ -339,38 +328,6 @@ func downloadNpm(version string) {
 
 	fmt.Println(npm)
 }
-
-/*
- Create npm folder
-
- Param:
-    - path: npm root path
-    - zip: download zip file name
-*/
-/*
-func MkNPM(zip string) {
-	npm.New(zip)
-	fmt.Println(npm)
-
-	// verify node_modules exist
-	npm.CreateModules()
-
-	// clean all npm files
-	npm.CleanAll()
-
-	// unzip
-	if _, err := npm.Unzip(); err != nil {
-		P(ERROR, "unzip %v an error has occurred. \nError: ", npm.zipname, err.Error())
-		return
-	}
-
-	// exec
-	if err := npm.Exec(); err == nil {
-		npm.Clean(npm.zippath)
-		P(NOTICE, "unzip complete.\n")
-	}
-}
-*/
 
 /*
  Copy file from src to dest
