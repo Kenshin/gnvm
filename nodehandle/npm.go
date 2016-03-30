@@ -126,10 +126,12 @@ func (this *NPMDownload) Clean(path string) error {
 /*
  Remove <root>/node_modules/npm, <root>/npm, <root>/npm.cmd
 */
-func (this *NPMDownload) CleanAll() {
+func (this *NPMDownload) CleanAll() error {
 	paths := [3]string{this.npmpath, this.root + util.DIVIDE + this.command1, this.root + util.DIVIDE + this.command2}
 	for _, v := range paths {
-		this.Clean(v)
+		if err := this.Clean(v); err != nil {
+			return err
+		}
 	}
 }
 
