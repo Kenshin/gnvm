@@ -252,29 +252,6 @@ func InstallNPM(version string) {
 		P(NOTICE, "operation has been cancelled.")
 	}
 
-	//v1, v2 := util.FormatNodeVer(newver), util.FormatNodeVer(local)
-
-	/*
-		cp := CP{Red, false, None, false, "="}
-		switch {
-		case v1 > v2:
-			cp.Value = ">"
-			P(WARING, "npm newver latest version %v %v local latest version %v.\n", newver, cp, local)
-			P(NOTICE, "is update local npm version [Y/n]? ")
-			fmt.Scanf("%s\n", &prompt)
-			prompt = strings.ToLower(prompt)
-			if prompt == "y" {
-				downloadNpm(newver)
-			} else {
-				P(NOTICE, "you need use '%v' update local version. \n", "npm install -g npm")
-			}
-		case v1 < v2:
-			cp.Value = "<"
-			P(WARING, "npm newver latest version %v %v local latest version %v.\n", newver, cp, local)
-		case v1 == v2:
-			P(WARING, "npm newver latest version %v %v local latest version %v.\n", newver, cp, local)
-		}
-	*/
 }
 
 func UninstallNPM() {
