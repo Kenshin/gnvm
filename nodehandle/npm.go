@@ -16,6 +16,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 
 	// local
 	"gnvm/config"
@@ -53,6 +54,7 @@ type NPMange struct {
 }
 
 var npm = new(NPMange)
+var finish = false
 
 /*
  Crete NPMange
@@ -315,7 +317,9 @@ func downloadNpm(ver string) {
 		return
 	}
 
-	P(NOTICE, "start install download %v zip file.\n", version)
+	P(NOTICE, "start install download %v zip file, please wait", version)
+
+	go wait()
 
 	// create node_modules
 	npm.CreateModules()
@@ -325,16 +329,31 @@ func downloadNpm(ver string) {
 
 	// unzip
 	if _, err := npm.Unzip(); err != nil {
+		finish = true
 		P(ERROR, "unzip %v an error has occurred. \nError: ", npm.zipname, err.Error())
 		return
 	}
 
 	// install
 	if err := npm.Install(); err != nil {
+		finish = true
 		return
 	}
 
 	npm.Clean(npm.zippath)
 
-	P(NOTICE, "new npm version %v install success.\n", ver)
+	finish = true
+	P(DEFAULT, "\nnew npm version %v install success.\n", ver)
+}
+
+func wait() {
+	wait := ""
+	for {
+		if finish {
+			break
+		}
+		time.Sleep(time.Millisecond * 500)
+		wait += "."
+		fmt.Printf(wait)
+	}
 }
