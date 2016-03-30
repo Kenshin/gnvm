@@ -107,6 +107,8 @@ func (this *NPMange) CreateModules() {
     - error
 */
 func (this *NPMange) Download(url, name string) error {
+	curl.Options.Header = false
+	curl.Options.Footer = false
 	if _, errs := curl.New(url, name, name, (*this).root); len(errs) > 0 {
 		err := errs[0]
 		P(ERROR, "%v an error has occurred, url %v, Error is %v. See '%v'.\n", "gnvm npm", url, err, "gnvm help npm")
@@ -296,8 +298,8 @@ func getGlobalNPMVer() string {
 /*
  Download and unzip npm.zip
 */
-func downloadNpm(version string) {
-	version = "v" + version + ZIP
+func downloadNpm(ver string) {
+	version := "v" + ver + ZIP
 	url := NPMTAOBAO + version
 	if config.GetConfig(config.REGISTRY) != config.TAOBAO {
 		url = NPMDEFAULT + version
@@ -306,10 +308,14 @@ func downloadNpm(version string) {
 	// create npm
 	npm.New(version)
 
+	P(NOTICE, "start download new npm version %v\n", version)
+
 	// download
 	if err := npm.Download(url, version); err != nil {
 		return
 	}
+
+	P(NOTICE, "start install download %v zip file.\n", version)
 
 	// create node_modules
 	npm.CreateModules()
@@ -324,10 +330,11 @@ func downloadNpm(version string) {
 	}
 
 	// install
-	if err := npm.Install(); err == nil {
-		npm.Clean(npm.zippath)
-		P(NOTICE, "unzip complete.\n")
+	if err := npm.Install(); err != nil {
+		return
 	}
 
-	fmt.Println(npm)
+	npm.Clean(npm.zippath)
+
+	P(NOTICE, "new npm version %v install success.\n", ver)
 }
