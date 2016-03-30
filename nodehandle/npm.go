@@ -72,7 +72,16 @@ func (this *NPMDownload) New(zip string) {
  Custom Print
 */
 func (this *NPMDownload) String() string {
-	return fmt.Sprintf("root   = %v \nzipname= %v\nzippath= %v\nmodules= %v\nnpmpath= %v\nnpmbin = %v\n", this.root, this.zipname, this.zippath, this.modules, this.npmpath, this.npmbin)
+	s := fmt.Sprintf("root     = %v\n", this.root)
+	s += fmt.Sprintf("zipname  = %v\n", this.zipname)
+	s += fmt.Sprintf("ziproot  = %v\n", this.ziproot)
+	s += fmt.Sprintf("zippath  = %v\n", this.zippath)
+	s += fmt.Sprintf("modules  = %v\n", this.modules)
+	s += fmt.Sprintf("npmpath  = %v\n", this.npmpath)
+	s += fmt.Sprintf("npmbin   = %v\n", this.npmbin)
+	s += fmt.Sprintf("command1 = %v\n", this.command1)
+	s += fmt.Sprintf("command2 = %v", this.command2)
+	return s
 }
 
 /*
