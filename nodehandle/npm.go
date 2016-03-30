@@ -229,35 +229,52 @@ func InstallNPM(version string) {
 	}()
 
 	version = strings.ToLower(version)
-	prompt := "n"
-	switch version {
-	case util.LATEST:
-		remote, local := getLatNPMVer(), getGlobalNPMVer()
-		v1, v2 := util.FormatNodeVer(remote), util.FormatNodeVer(local)
+	if version != util.LATEST && version != util.GLOBAL && !util.VerifyNodeVer(version) {
+		P(ERROR, "'%v' param only support [%v] [%v] [%v], please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "valid version", "gnvm help npm")
+		return
+	}
+
+	prompt, local, newver := "n", getGlobalNPMVer(), version
+
+	if version == util.LATEST {
+		newver = getLatNPMVer()
+	}
+	cp := CP{Red, false, None, false, newver}
+
+	P(NOTICE, "local    npm version is %v\n", local)
+	P(NOTICE, "download npm version is %v\n", cp)
+	P(NOTICE, "download %v version [Y/n]? ", cp)
+	fmt.Scanf("%s\n", &prompt)
+	prompt = strings.ToLower(prompt)
+	if prompt == "y" {
+		downloadNpm(newver)
+	} else {
+		P(NOTICE, "operation has been cancelled.")
+	}
+
+	//v1, v2 := util.FormatNodeVer(newver), util.FormatNodeVer(local)
+
+	/*
 		cp := CP{Red, false, None, false, "="}
 		switch {
 		case v1 > v2:
 			cp.Value = ">"
-			P(WARING, "npm remote latest version %v %v local latest version %v.\n", remote, cp, local)
+			P(WARING, "npm newver latest version %v %v local latest version %v.\n", newver, cp, local)
 			P(NOTICE, "is update local npm version [Y/n]? ")
 			fmt.Scanf("%s\n", &prompt)
 			prompt = strings.ToLower(prompt)
 			if prompt == "y" {
-				downloadNpm(remote)
+				downloadNpm(newver)
 			} else {
 				P(NOTICE, "you need use '%v' update local version. \n", "npm install -g npm")
 			}
 		case v1 < v2:
 			cp.Value = "<"
-			P(WARING, "npm remote latest version %v %v local latest version %v.\n", remote, cp, local)
+			P(WARING, "npm newver latest version %v %v local latest version %v.\n", newver, cp, local)
 		case v1 == v2:
-			P(WARING, "npm remote latest version %v %v local latest version %v.\n", remote, cp, local)
+			P(WARING, "npm newver latest version %v %v local latest version %v.\n", newver, cp, local)
 		}
-	case util.GLOBAL:
-	default:
-		P(ERROR, "'%v' param only support [%v] [%v] [%v], please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "x.xx.xx", "gnvm help npm")
-		return
-	}
+	*/
 }
 
 func UninstallNPM() {
