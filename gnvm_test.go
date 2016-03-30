@@ -9,7 +9,7 @@ import (
 func TestCurl(t *testing.T) {
 	//testSearch()
 	//testNodist()
-	testUnzip()
+	testNPManage()
 }
 
 func testSearch() {
@@ -34,11 +34,11 @@ func testNodist() {
 	}
 }
 
-func testUnzip() {
+func testNPManage() {
 	name := `v3.8.5.zip`
-	//npm := new(nodehandle.NPMDownload)
-	//npm.New(name)
-	//fmt.Println(npm)
+	npm := new(nodehandle.NPMDownload)
+	npm.New(name)
+	fmt.Println(npm)
 	//npm.CleanAll()
-	nodehandle.MkNPM(name)
+	//nodehandle.MkNPM(name)
 }
