@@ -32,6 +32,7 @@ const (
 /*
 - root:     config.GetConfig(config.NODEROOT)
 - zipname:  v3.8.5.zip
+- ziproot:  <v3.8.5.zip>/<root_folder>
 - zippath:  /<root>/v3.8.5.zip
 - modules:  /<root>/node_modules
 - npmpath:  /<root>/node_modules/npm
@@ -42,6 +43,7 @@ const (
 type NPMDownload struct {
 	root     string
 	zipname  string
+	ziproot  string
 	zippath  string
 	modules  string
 	npmpath  string
@@ -87,12 +89,66 @@ func (this *NPMDownload) CreateModules() {
 }
 
 /*
+  Unzip file
+
+  Return:
+    - error
+    - code
+        - -1: open  zip file error
+        - -2: open  file error
+        - -3: write file error
+        - -4: copy  file error
+*/
+func (this *NPMDownload) Unzip() (int, error) {
+	path, dest := (*this).zippath, (*this).modules
+	unzip, err := zip.OpenReader(path)
+	if err != nil {
+		return -1, err
+	}
+	defer unzip.Close()
+
+	extractAndWriteFile := func(file *zip.File, idx int) (int, error) {
+		rc, err := file.Open()
+		if err != nil {
+			return -2, err
+		}
+		defer rc.Close()
+		if idx == 0 {
+			(*this).ziproot = file.Name
+		}
+		path = filepath.Join(dest, file.Name)
+		if file.FileInfo().IsDir() {
+			os.MkdirAll(path, file.Mode())
+		} else {
+			f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
+			if err != nil {
+				return -3, err
+			}
+			defer f.Close()
+			if _, err := io.Copy(f, rc); err != nil {
+				return -4, err
+			}
+		}
+		return 0, nil
+	}
+
+	idx := 0
+	for _, file := range unzip.File {
+		if code, err := extractAndWriteFile(file, idx); err != nil {
+			return code, err
+		}
+		idx++
+	}
+	return 0, nil
+}
+
+/*
  Rename <root>\node_modules\folder to <root>\node_modules\npm
  Copy <root>\node_modules\npm\bin\ npm and npm.cmd to <root>\
 */
-func (this *NPMDownload) Exec(folder string) error {
-	if err := os.Rename(this.modules+util.DIVIDE+folder, this.npmpath); err != nil {
-		P(ERROR, "rename fail, Error: %v", err.Error())
+func (this *NPMDownload) Exec() error {
+	if err := os.Rename(this.modules+util.DIVIDE+this.ziproot, this.npmpath); err != nil {
+		P(ERROR, "rename fail, Error: %v\n", err.Error())
 		return err
 	} else {
 		files := [2]string{this.command1, this.command2}
@@ -133,6 +189,7 @@ func (this *NPMDownload) CleanAll() error {
 			return err
 		}
 	}
+	return nil
 }
 
 func InstallNPM(version string) {
@@ -252,72 +309,16 @@ func MkNPM(zip string) {
 	npm.CleanAll()
 
 	// unzip
-	if folder, err := unzip(npm.zippath, npm.modules); err != nil {
-		fmt.Println(folder)
-		fmt.Println(err)
-	} else {
-		// exec
-		if err := npm.Exec(folder); err == nil {
-			npm.Clean(npm.zippath)
-			P(NOTICE, "unzip complete.\n")
-		}
-
-	}
-}
-
-/*
-  Unzip file
-
-  Param:
-    - path: zip file path
-    - dest: unzip dest folder
-
-  Return:
-    - error
-    - code
-        - -1: open  zip file error
-        - -2: open  file error
-        - -3: write file error
-        - -4: copy  file error
-*/
-func unzip(path, dest string) (string, error) {
-	unzip, err := zip.OpenReader(path)
-	if err != nil {
-		return "-1", err
-	}
-	defer unzip.Close()
-
-	extractAndWriteFile := func(file *zip.File, idx int, root string) (string, error) {
-		rc, err := file.Open()
-		if err != nil {
-			return "-2", err
-		}
-		defer rc.Close()
-		if idx == 0 {
-			root = file.Name
-		}
-		path = filepath.Join(dest, file.Name)
-		if file.FileInfo().IsDir() {
-			os.MkdirAll(path, file.Mode())
-		} else {
-			f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
-			if err != nil {
-				return "-3", err
-			}
-			defer f.Close()
-			if _, err := io.Copy(f, rc); err != nil {
-				return "-4", err
-			}
-		}
-		return root, nil
+	if _, err := npm.Unzip(); err != nil {
+		P(ERROR, "unzip %v an error has occurred. \nError: ", npm.zipname, err.Error())
+		return
 	}
 
-	idx, root, err := 0, "", nil
-	for _, file := range unzip.File {
-		root, err = extractAndWriteFile(file, idx, root)
-		idx++
+	// exec
+	if err := npm.Exec(); err == nil {
+		npm.Clean(npm.zippath)
+		P(NOTICE, "unzip complete.\n")
 	}
-	return root, err
 }
 
 /*
