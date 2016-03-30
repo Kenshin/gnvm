@@ -38,7 +38,8 @@ func testNPManage() {
 	name := `v3.8.5.zip`
 	npm := new(nodehandle.NPMange)
 	npm.New(name)
-	fmt.Println(npm)
 	//npm.CleanAll()
-	//nodehandle.MkNPM(name)
+	//npm.Unzip()
+	//npm.Install()
+	fmt.Println(npm)
 }
