@@ -87,15 +87,23 @@ func (this *NPMDownload) CreateModules() {
 }
 
 /*
+ Rename <root>\node_modules\folder to <root>\node_modules\npm
  Copy <root>\node_modules\npm\bin\ npm and npm.cmd to <root>\
 */
-func (this *NPMDownload) Exec() {
-	files := [2]string{this.command1, this.command2}
-	for _, v := range files {
-		if err := copyFile(this.npmbin, this.root, v); err != nil {
-			P(ERROR, "copy %v to %v faild, Error: %v \n", this.npmbin, this.root)
+func (this *NPMDownload) Exec(folder string) error {
+	if err := os.Rename(this.modules+util.DIVIDE+folder, this.npmpath); err != nil {
+		P(ERROR, "rename fail, Error: %v", err.Error())
+		return err
+	} else {
+		files := [2]string{this.command1, this.command2}
+		for _, v := range files {
+			if err := copyFile(this.npmbin, this.root, v); err != nil {
+				P(ERROR, "copy %v to %v faild, Error: %v \n", this.npmbin, this.root)
+				return err
+			}
 		}
 	}
+	return nil
 }
 
 /*
@@ -242,22 +250,16 @@ func MkNPM(zip string) {
 	npm.CleanAll()
 
 	// unzip
-	if code, err := unzip(npm.zippath, npm.modules); err != nil {
-		fmt.Println(code)
+	if folder, err := unzip(npm.zippath, npm.modules); err != nil {
+		fmt.Println(folder)
 		fmt.Println(err)
 	} else {
-		if err := os.Rename(npm.modules+util.DIVIDE+code, npm.modules+util.DIVIDE+util.NPM); err != nil {
-			P(ERROR, "unzip fail, Error: %v", err.Error())
-			return
-		} else {
-			// exec
-			npm.Exec()
-
-			// remove download zip file
+		// exec
+		if err := npm.Exec(folder); err == nil {
 			npm.Clean(npm.zippath)
-
 			P(NOTICE, "unzip complete.\n")
 		}
+
 	}
 }
 
