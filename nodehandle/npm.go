@@ -141,7 +141,7 @@ func (this *NPMange) Unzip() (int, error) {
 		}
 		defer rc.Close()
 		if idx == 0 {
-			(*this).ziproot = file.Name
+			(*this).ziproot = strings.Replace(file.Name, "/", "", -1)
 		}
 		path = filepath.Join(dest, file.Name)
 		if file.FileInfo().IsDir() {
