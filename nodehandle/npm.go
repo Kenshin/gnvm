@@ -180,7 +180,7 @@ func (this *NPMange) Install() error {
 	} else {
 		files := [2]string{this.command1, this.command2}
 		for _, v := range files {
-			if err := copyFile(this.npmbin, this.root, v); err != nil {
+			if err := util.Copy(this.npmbin, this.root, v); err != nil {
 				P(ERROR, "copy %v to %v faild, Error: %v \n", this.npmbin, this.root)
 				return err
 			}
@@ -336,32 +336,4 @@ func downloadNpm(version string) {
 	}
 
 	fmt.Println(npm)
-}
-
-/*
- Copy file from src to dest
-*/
-func copyFile(src, dst, name string) (err error) {
-	src = src + util.DIVIDE + name
-	dst = dst + util.DIVIDE + name
-	in, err := os.Open(src)
-	if err != nil {
-		return
-	}
-	defer in.Close()
-	out, err := os.Create(dst)
-	if err != nil {
-		return
-	}
-	defer func() {
-		cerr := out.Close()
-		if err == nil {
-			err = cerr
-		}
-	}()
-	if _, err = io.Copy(out, in); err != nil {
-		return
-	}
-	err = out.Sync()
-	return
 }
