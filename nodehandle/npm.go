@@ -228,6 +228,9 @@ func (this *NPMange) CleanAll() error {
 	return nil
 }
 
+/*
+ Install NPM
+*/
 func InstallNPM(version string) {
 	// try catch
 	defer func() {
@@ -245,11 +248,13 @@ func InstallNPM(version string) {
 
 	prompt, local, newver := "n", getGlobalNPMVer(), version
 
-	if version == util.LATEST {
+	if version == util.GLOBAL {
+		newver = getNodeNpmVer()
+	} else if version == util.LATEST {
 		newver = getLatNPMVer()
 	}
-	cp := CP{Red, false, None, false, newver}
 
+	cp := CP{Red, false, None, false, newver}
 	P(NOTICE, "local    npm version is %v\n", local)
 	P(NOTICE, "download npm version is %v\n", cp)
 	P(NOTICE, "download %v version [Y/n]? ", cp)
@@ -260,7 +265,6 @@ func InstallNPM(version string) {
 	} else {
 		P(NOTICE, "operation has been cancelled.")
 	}
-
 }
 
 /*
@@ -270,6 +274,28 @@ func UninstallNPM() {
 	if err := npm.New().CleanAll(); err == nil {
 		P(DEFAULT, "Uninstall npm version %v.\n", "success")
 	}
+}
+
+/*
+ Get npm version by global( local ) node version
+*/
+func getNodeNpmVer() string {
+	ver, err := util.GetNodeVer(rootPath)
+	if err != nil {
+		panic(err)
+	}
+
+	url := config.GetConfig(config.REGISTRY)
+	if level := util.GetNodeVerLev(util.FormatNodeVer(ver)); level == 3 {
+		url = config.GetIOURL(url)
+	}
+	url += config.NODELIST
+
+	nd, err := FindNodeDetailByVer(url, ver)
+	if err != nil {
+		panic(err)
+	}
+	return nd.NPM.Version
 }
 
 /*
