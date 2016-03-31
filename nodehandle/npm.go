@@ -277,7 +277,7 @@ func UninstallNPM() {
 		return
 	}
 	if err := npm.New().CleanAll(); err == nil {
-		P(DEFAULT, "Uninstall npm version %v.\n", "success")
+		P(DEFAULT, "Npm uninstall %v.\n", "success")
 	}
 }
 
