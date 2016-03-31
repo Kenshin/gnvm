@@ -256,7 +256,7 @@ func InstallNPM(version string) {
 
 	cp := CP{Red, false, None, false, newver}
 	P(NOTICE, "local    npm version is %v\n", local)
-	P(NOTICE, "download npm version is %v\n", cp)
+	P(NOTICE, "remote   npm version is %v\n", cp)
 	P(NOTICE, "download %v version [Y/n]? ", cp)
 	fmt.Scanf("%s\n", &prompt)
 	prompt = strings.ToLower(prompt)
