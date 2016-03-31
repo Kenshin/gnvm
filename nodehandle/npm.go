@@ -96,7 +96,7 @@ func (this *NPMange) String() string {
  Create node_modules folder
 */
 func (this *NPMange) CreateModules() {
-	if !isDirExist(this.modules) {
+	if !util.IsDirExist(this.modules) {
 		if err := os.Mkdir(this.modules, 0755); err != nil {
 			P(ERROR, "create %v foler error, Error: %v\n", this.modules, err.Error())
 		} else {
@@ -207,7 +207,7 @@ func (this *NPMange) Install() error {
     - <root>/<npm.zip>
 */
 func (this *NPMange) Clean(path string) error {
-	if isDirExist(path) {
+	if util.IsDirExist(path) {
 		if err := os.RemoveAll(path); err != nil {
 			P(ERROR, "remove %v folder Error: %v.\n", path, err.Error())
 			return err
