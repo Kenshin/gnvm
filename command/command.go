@@ -405,9 +405,9 @@ var npmCmd = &cobra.Command{
 	Use:   "npm",
 	Short: "NPM version management",
 	Long: `Install any npm version. e.g. :
-gnvm npm x.xx.xx          :Install x.xx.xx version npm.
-gnvm npm latest           :Install latest  version npm.
-gnvm npm global           :Install local node.exe  matching npm.
+gnvm npm x.xx.xx          :Install x.xx.xx npm version.
+gnvm npm latest           :Install latest  npm version.
+gnvm npm global           :Install local node.exe matching npm version.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {

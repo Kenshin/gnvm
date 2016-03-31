@@ -375,7 +375,7 @@ func Install(args []string, global bool) int {
 			case "4":
 				P(ERROR, "%v format error, the correct format is %v or %v. \n", v, "0.xx.xx", "^0.xx.xx")
 			case "5":
-				P(WARING, "'%v' not logger support command, please usage '%v'. See '%v'.\n", "gnvm install npm", "gnvm npm x.xx.xx", "gnvm help npm")
+				P(WARING, "'%v' command is no longer supported, please usage '%v'. See '%v'.\n", "gnvm install npm", "gnvm npm x.xx.xx", "gnvm help npm")
 			}
 			continue
 		}
