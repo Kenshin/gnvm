@@ -246,7 +246,7 @@ func InstallNPM(version string) {
 		return
 	}
 
-	prompt, local, newver := "n", getGlobalNPMVer(), version
+	prompt, local, newver := "n", getLocalNPMVer(), version
 
 	if version == util.GLOBAL {
 		newver = getNodeNpmVer()
@@ -324,7 +324,7 @@ func getLatNPMVer() string {
 /*
  Get global( local ) NPM version
 */
-func getGlobalNPMVer() string {
+func getLocalNPMVer() string {
 	out, err := exec.Command(rootPath+util.NPM, "-v").Output()
 	if err != nil {
 		P(WARING, "current path %v not exist npm.\n", rootPath)
