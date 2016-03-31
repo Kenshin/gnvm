@@ -411,7 +411,7 @@ gnvm npm global           :Install local node.exe matching npm version.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
-			P(ERROR, "%v parameter maximum is 1, only support [%v] [%v] [%v] keyword, please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "x.xx.xx", "gnvm help npm")
+			P(ERROR, "%v must be one parameter and only support [%v] [%v] [%v] keyword, please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "x.xx.xx", "gnvm help npm")
 		} else {
 			if _, ok := util.IsSessionEnv(); ok {
 				P(WARING, "current is %v, if you usge %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
