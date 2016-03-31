@@ -37,9 +37,9 @@ func testNodist() {
 func testNPManage() {
 	name := `v3.8.5.zip`
 	npm := new(nodehandle.NPMange)
-	npm.New(name)
-	//npm.CleanAll()
-	//npm.Unzip()
-	//npm.Install()
+	npm.New().CleanAll()
+	npm.SetZip(name)
+	npm.Unzip()
+	npm.Install()
 	fmt.Println(npm)
 }
