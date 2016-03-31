@@ -72,7 +72,7 @@ func Use(folder string) bool {
 
 	// set usePath and useNode
 	usePath := rootPath + folder + util.DIVIDE
-	useNode := usePath + util.NODE
+	//useNode := usePath + util.NODE
 
 	// <root>/folder is exist
 	if util.IsDirExist(usePath) != true {
@@ -113,31 +113,12 @@ func Use(folder string) bool {
 		}
 	}
 
-	fmt.Printf("rootNode  = %v\n", rootNode)
-	fmt.Printf("rootFolder= %v\n", rootFolder)
-	fmt.Printf("useNode   = %v\n", useNode)
-	fmt.Printf("rootPath  = %v\n", rootPath)
-
+	// copy <root>/node.exe to <root>/x.xx.xx/node.exe( backup )
 	if rootNodeExist {
-		// copy <root>/node.exe to <root>/x.xx.xx/node.exe( backup )
 		if err := util.Copy(rootPath, rootFolder, util.NODE); err != nil {
 			P(ERROR, "copy %v to %v folder Error: %v.\n", rootPath, rootFolder, err.Error())
 			return false
 		}
-
-		/*
-			if err := copy(rootNode, rootFolder); err != nil {
-				P(ERROR, "copy %v to %v folder Error: %v.\n", rootNode, rootFolder, err.Error())
-				return false
-			}
-		*/
-
-		// delete <root>/node.exe
-		/*if err := os.Remove(rootNode); err != nil {
-			P(ERROR, "remove %v folder Error: %v.\n", rootNode, err.Error())
-			return false
-		}*/
-
 	}
 
 	// copy <root>/x.xx.xx/node.exe to <root>/node.exe( new )
@@ -145,12 +126,6 @@ func Use(folder string) bool {
 		P(ERROR, "copy %v to %v folder Error: %v.\n", usePath, rootPath, err.Error())
 		return false
 	}
-	/*
-		if err := copy(useNode, rootPath); err != nil {
-			P(ERROR, "copy %v to %v folder Error: %v.\n", useNode, rootPath, err.Error())
-			return false
-		}
-	*/
 
 	P(DEFAULT, "Set success, global node.exe version is %v.\n", folder)
 
@@ -648,47 +623,3 @@ func Query(s string) {
 		P(WARING, "not search any node.exe version details, use rules [%v] from %v.\n", s, url)
 	}
 }
-
-/*
-func copy(src, dest string) error {
-	//_, err := exec.Command("cmd", "/C", "copy", "/y", src, dest).Output()
-
-	srcFile, errSrc := os.Open(src)
-	if errSrc != nil {
-		return errSrc
-	}
-	defer srcFile.Close()
-
-	srcInfo, errInfor := srcFile.Stat()
-	if errInfor != nil {
-		return errInfor
-	}
-
-	dstFile, errDst := os.OpenFile(dest+util.DIVIDE+util.NODE, os.O_CREATE|os.O_TRUNC|os.O_RDWR, srcInfo.Mode().Perm())
-	if errDst != nil {
-
-		if errDst.(*os.PathError).Err.Error() != PROCESSTAKEUP {
-			return errDst
-		}
-
-		P(WARING, "write %v fail, Error: %v\n", dest+util.DIVIDE+util.NODE, PROCESSTAKEUP)
-
-		if _, err := exec.Command("taskkill.exe", "/f", "/im", util.NODE).Output(); err != nil && strings.Index(err.Error(), "exit status") == -1 {
-			return err
-		}
-
-		P(NOTICE, "%v process kill ok.\n", dest+util.DIVIDE+util.NODE)
-
-		dstFile, errDst = os.OpenFile(dest+util.DIVIDE+util.NODE, os.O_WRONLY|os.O_CREATE, 0644)
-		if errDst != nil {
-			return errDst
-		}
-
-	}
-	defer dstFile.Close()
-
-	_, err := io.Copy(dstFile, srcFile)
-
-	return err
-}
-*/
