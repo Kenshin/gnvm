@@ -70,9 +70,8 @@ func Use(folder string) bool {
 	// set rootNode
 	rootNode := rootPath + util.NODE
 
-	// set usePath and useNode
+	// set usePath
 	usePath := rootPath + folder + util.DIVIDE
-	//useNode := usePath + util.NODE
 
 	// <root>/folder is exist
 	if util.IsDirExist(usePath) != true {
