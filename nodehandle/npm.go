@@ -271,6 +271,9 @@ func InstallNPM(version string) {
  Uninstall
 */
 func UninstallNPM() {
+	if getLocalNPMVer() == util.UNKNOWN {
+		return
+	}
 	if err := npm.New().CleanAll(); err == nil {
 		P(DEFAULT, "Uninstall npm version %v.\n", "success")
 	}
@@ -323,6 +326,10 @@ func getLatNPMVer() string {
 
 /*
  Get global( local ) NPM version
+
+ Return:
+    - util.UNKNOWN: current not exist npmCmd
+    - version     : current npm version
 */
 func getLocalNPMVer() string {
 	out, err := exec.Command(rootPath+util.NPM, "-v").Output()
