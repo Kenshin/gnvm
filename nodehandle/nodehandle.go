@@ -12,11 +12,9 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"runtime"
 	"strconv"
 	"strings"
-	//"time"
 
 	// local
 	"gnvm/config"
@@ -115,12 +113,24 @@ func Use(folder string) bool {
 		}
 	}
 
+	fmt.Printf("rootNode  = %v\n", rootNode)
+	fmt.Printf("rootFolder= %v\n", rootFolder)
+	fmt.Printf("useNode   = %v\n", useNode)
+	fmt.Printf("rootPath  = %v\n", rootPath)
+
 	if rootNodeExist {
-		// copy rootNode to <root>/rootVersion( backup )
-		if err := copy(rootNode, rootFolder); err != nil {
-			P(ERROR, "copy %v to %v folder Error: %v.\n", rootNode, rootFolder, err.Error())
+		// copy <root>/node.exe to <root>/x.xx.xx/node.exe( backup )
+		if err := util.Copy(rootPath, rootFolder, util.NODE); err != nil {
+			P(ERROR, "copy %v to %v folder Error: %v.\n", rootPath, rootFolder, err.Error())
 			return false
 		}
+
+		/*
+			if err := copy(rootNode, rootFolder); err != nil {
+				P(ERROR, "copy %v to %v folder Error: %v.\n", rootNode, rootFolder, err.Error())
+				return false
+			}
+		*/
 
 		// delete <root>/node.exe
 		/*if err := os.Remove(rootNode); err != nil {
@@ -130,11 +140,17 @@ func Use(folder string) bool {
 
 	}
 
-	// copy useNode to rootPath( new )
-	if err := copy(useNode, rootPath); err != nil {
-		P(ERROR, "copy %v to %v folder Error: %v.\n", useNode, rootPath, err.Error())
+	// copy <root>/x.xx.xx/node.exe to <root>/node.exe( new )
+	if err := util.Copy(usePath, rootPath, util.NODE); err != nil {
+		P(ERROR, "copy %v to %v folder Error: %v.\n", usePath, rootPath, err.Error())
 		return false
 	}
+	/*
+		if err := copy(useNode, rootPath); err != nil {
+			P(ERROR, "copy %v to %v folder Error: %v.\n", useNode, rootPath, err.Error())
+			return false
+		}
+	*/
 
 	P(DEFAULT, "Set success, global node.exe version is %v.\n", folder)
 
@@ -633,6 +649,7 @@ func Query(s string) {
 	}
 }
 
+/*
 func copy(src, dest string) error {
 	//_, err := exec.Command("cmd", "/C", "copy", "/y", src, dest).Output()
 
@@ -674,3 +691,4 @@ func copy(src, dest string) error {
 
 	return err
 }
+*/
