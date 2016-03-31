@@ -59,11 +59,11 @@ func testIsDirExist() {
 	// empty
 	fmt.Println(util.IsDirExist(""))
 	// no exist
-	fmt.Println(util.IsDirExist("/Users/kenshin/Work/28-GO/01-work/src/gnvm/node_modules"))
-	fmt.Println(util.IsDirExist("/Users/kenshin/Work/28-GO/01-work/src/gnvm/node_modules/npm"))
+	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejss`))
+	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejs\node_moduless\npm`))
 	// exist
-	fmt.Println(util.IsDirExist("/Users/kenshin/Work/28-GO/01-work/src/gnvm/"))
-	fmt.Println(util.IsDirExist("/Users/kenshin/Work/28-GO/01-work/src/gnvm"))
+	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejs`))
+	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejs\node_modules`))
 	// not valid path
 	fmt.Println(util.IsDirExist("gnvm"))
 }
