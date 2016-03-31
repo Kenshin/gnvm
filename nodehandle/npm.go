@@ -9,6 +9,7 @@ import (
 
 	// go
 	"archive/zip"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -235,7 +236,8 @@ func InstallNPM(version string) {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			P(ERROR, "%v an error has occurred, Error is %v \n", "gnvm npm", err)
+			msg := fmt.Sprintf("'gnvm npm %v' an error has occurred. please check. \nError: %v", version, err)
+			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
@@ -285,7 +287,7 @@ func UninstallNPM() {
 func getNodeNpmVer() string {
 	ver, err := util.GetNodeVer(rootPath)
 	if err != nil {
-		panic(err)
+		panic(errors.New("not exist global node.exe. please usage 'gnvm install latest -g' frist."))
 	}
 
 	url := config.GetConfig(config.REGISTRY)
