@@ -259,7 +259,7 @@ func LS(isPrint bool) ([]string, error) {
 		if ok := util.VerifyNodeVer(version); ok {
 
 			// <root>/x.xx.xx/node.exe is exist
-			if isDirExist(rootPath + version + util.DIVIDE + util.NODE) {
+			if util.IsDirExist(rootPath + version) {
 				desc := ""
 				switch {
 				case version == config.GetConfig(config.GLOBAL_VERSION) && version == config.GetConfig(config.LATEST_VERSION):
@@ -630,16 +630,6 @@ func Query(s string) {
 		nl.Detail(0)
 	} else {
 		P(WARING, "not search any node.exe version details, use rules [%v] from %v.\n", s, url)
-	}
-}
-
-func isDirExist(path string) bool {
-	_, err := os.Stat(path)
-	if err != nil {
-		return os.IsExist(err)
-	} else {
-		// return file.IsDir()
-		return true
 	}
 }
 
