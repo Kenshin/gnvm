@@ -77,7 +77,7 @@ func Use(folder string) bool {
 	useNode := usePath + util.NODE
 
 	// <root>/folder is exist
-	if isDirExist(usePath) != true {
+	if util.IsDirExist(usePath) != true {
 		P(WARING, "%v folder is not exist from %v, use '%v' get local node.exe list. See '%v'.\n", folder, rootPath, "gnvm ls", "gnvm help ls")
 		return false
 	}
@@ -106,7 +106,7 @@ func Use(folder string) bool {
 	rootFolder := rootPath + rootVersion
 
 	// <root>/rootVersion is exist
-	if isDirExist(rootFolder) != true {
+	if util.IsDirExist(rootFolder) != true {
 
 		// create rootVersion folder
 		if err := os.Mkdir(rootFolder, 0777); err != nil {
@@ -216,7 +216,7 @@ func Uninstall(folder string) {
 	}
 
 	// rootPath/version is exist
-	if isDirExist(removePath) != true {
+	if util.IsDirExist(removePath) != true {
 		P(ERROR, "%v folder is not exist. See '%v'.\n", folder, "gnvm ls")
 		return
 	}
