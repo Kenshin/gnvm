@@ -9,7 +9,8 @@ import (
 func TestCurl(t *testing.T) {
 	//testSearch()
 	//testNodist()
-	testNPManage()
+	//testNPManage()
+	testGetNPMVer()
 }
 
 func testSearch() {
@@ -42,4 +43,12 @@ func testNPManage() {
 	npm.Unzip()
 	npm.Install()
 	fmt.Println(npm)
+}
+
+func testGetNPMVer() {
+	url := "http://npm.taobao.org/mirrors/node/index.json"
+	ver := "5.9.0"
+	if nd, err := nodehandle.FindNodeDetailByVer(url, ver); err == nil {
+		fmt.Println(nd)
+	}
 }
