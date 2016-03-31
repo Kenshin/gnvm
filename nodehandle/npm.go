@@ -119,7 +119,7 @@ func (this *NPMange) Download(url, name string) error {
 	curl.Options.Footer = false
 	if _, errs := curl.New(url, name, name, this.root); len(errs) > 0 {
 		err := errs[0]
-		P(ERROR, "%v an error has occurred, url %v, Error is %v. See '%v'.\n", "gnvm npm", url, err, "gnvm help npm")
+		P(ERROR, "%v an error has occurred, url %v, Error is %v. See '%v'.\n", "gnvm npm", url, err.Error(), "gnvm help npm")
 		return err
 	}
 	return nil
