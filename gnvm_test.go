@@ -7,8 +7,10 @@ import (
 )
 
 func TestCurl(t *testing.T) {
-	testSearch()
+	//testSearch()
 	//testNodist()
+	//testNPManage()
+	testGetNPMVer()
 }
 
 func testSearch() {
@@ -30,5 +32,23 @@ func testNodist() {
 		fmt.Println(code)
 	} else {
 		nl.Detail(0)
+	}
+}
+
+func testNPManage() {
+	name := `v3.8.5.zip`
+	npm := new(nodehandle.NPMange)
+	npm.New().CleanAll()
+	npm.SetZip(name)
+	npm.Unzip()
+	npm.Install()
+	fmt.Println(npm)
+}
+
+func testGetNPMVer() {
+	url := "http://npm.taobao.org/mirrors/node/index.json"
+	ver := "5.9.0"
+	if nd, err := nodehandle.FindNodeDetailByVer(url, ver); err == nil {
+		fmt.Println(nd)
 	}
 }

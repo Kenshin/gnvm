@@ -25,6 +25,8 @@ const (
 	SHASUMS = "SHASUMS256.txt"
 	UNKNOWN = "unknown"
 	LATEST  = "latest"
+	GLOBAL  = "global"
+	NPM     = "npm"
 )
 
 var DIVIDE = string(os.PathSeparator)
@@ -191,7 +193,7 @@ func GetNodeVerLev(ver float64) (level int) {
 	- iojs   : true  and false
 	- arch   : "386" and "amd64"
 	- suffix : "x86" and "x64"  and ""
-	- err    : includ, "1" "2", "3", "4"
+	- err    : includ, "1" "2", "3", "4", "5"
 
 */
 func ParseNodeVer(s string) (ver string, iojs bool, arch, suffix string, err error) {
@@ -199,6 +201,12 @@ func ParseNodeVer(s string) (ver string, iojs bool, arch, suffix string, err err
 
 	// get ver
 	ver = arr[0]
+
+	// verify npm
+	if ver == NPM {
+		err = errors.New("5")
+		return
+	}
 
 	// verify latest
 	if ver == LATEST {
@@ -331,17 +339,6 @@ func GetRemoteNodePath(url, version, arch string) (string, error) {
 }
 
 /*
-  Ignore key case and return lowercase value
-*/
-func EqualAbs(key, value string) string {
-	if strings.EqualFold(value, key) && value != key {
-		P(WARING, "current value is %v, please use %v.\n", value, key)
-		value = key
-	}
-	return value
-}
-
-/*
   Return session environment variable
 */
 func IsSessionEnv() (string, bool) {
@@ -385,6 +382,53 @@ func Arch(path string) (string, error) {
 		}
 	}
 	return "x64", nil
+}
+
+/*
+  Ignore key case and return lowercase value
+*/
+func EqualAbs(key, value string) string {
+	if strings.EqualFold(value, key) && value != key {
+		P(WARING, "current value is %v, please use %v.\n", value, key)
+		value = key
+	}
+	return value
+}
+
+/*
+ Copy file from src to dest
+
+ Param:
+ 	- src:  copy file path
+	- dst:  target file path
+	- name: copy file name
+
+ Return:
+ 	- error
+*/
+func Copy(src, dst, name string) (err error) {
+	src = src + DIVIDE + name
+	dst = dst + DIVIDE + name
+	in, err := os.Open(src)
+	if err != nil {
+		return
+	}
+	defer in.Close()
+	out, err := os.Create(dst)
+	if err != nil {
+		return
+	}
+	defer func() {
+		cerr := out.Close()
+		if err == nil {
+			err = cerr
+		}
+	}()
+	if _, err = io.Copy(out, in); err != nil {
+		return
+	}
+	err = out.Sync()
+	return
 }
 
 func getGlobalNodePath() string {

@@ -103,6 +103,33 @@ func New(url string, filter *regexp.Regexp) (*Nodeist, error, int) {
 }
 
 /*
+ Find NodeDetail by node version
+
+ Param:
+    - url: index.json url, e.g. http://npm.taobao.org/mirrors/node/index.json
+    - ver: node version. e.g. 5.9.0
+
+ Return:
+    - *NodeDetail: nodedetail struct
+    - error
+*/
+func FindNodeDetailByVer(url, ver string) (*NodeDetail, error) {
+	filter, err := util.FormatWildcard(ver, url)
+	if err != nil {
+		return nil, err
+	}
+	nl, err, _ := New(url, filter)
+	if err != nil {
+		return nil, err
+	}
+	if len(*nl) == 1 {
+		nd := (*nl)["v"+ver]
+		return &nd, nil
+	}
+	return nil, nil
+}
+
+/*
  Print NodeDetail collection
 
  Param:

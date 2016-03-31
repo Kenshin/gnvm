@@ -58,11 +58,9 @@ gnvm install x.xx.xx-x86             :Assign arch version.
 gnvm install x.xx.xx-io              :Assign io.js version.
 gnvm install x.xx.xx-io-x86          :Assign io.js arch version.
 gnvm install x.xx.xx --global        :Download and auto invoke 'gnvm use x.xx.xx'.
-gnvm install npm                     :Download npm from .gnvmrc registry.
+gnvm install npm                     :Not logger support command, please usage 'gnvm npm x.xx.xx'. See 'gnvm help npm'.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		//var newArgs []string
-
 		if len(args) == 0 {
 			P(ERROR, "'%v' need parameter, please check your input. See '%v'.\n", "gnvm install", "gnvm help install")
 		} else {
@@ -78,12 +76,6 @@ gnvm install npm                     :Download npm from .gnvmrc registry.
 				P(WARING, "when use --global must be only one parameter, e.g. '%v'. See 'gnvm install help'.\n", "gnvm install x.xx.xx --global")
 			}
 
-			if len(args) == 1 {
-				if value := util.EqualAbs("npm", args[0]); value == "npm" {
-					nodehandle.InstallNpm()
-					return
-				}
-			}
 			nodehandle.Install(args, global)
 		}
 	},
@@ -94,11 +86,12 @@ var uninstallCmd = &cobra.Command{
 	Use:   "uninstall",
 	Short: "Uninstall local node.exe version",
 	Long: `Uninstall local node.exe version e.g.
-gnvm uninstall 0.10.28
-gnvm uninstall latest
-gnvm uninstall npm
-gnvm uninstall 0.10.26 0.11.2 latest
-gnvm uninstall ALL`,
+gnvm uninstall 0.10.28                     :Uninstall 0.10.28 version.
+gnvm uninstall latest                      :Uninstall latest  version.
+gnvm uninstall npm                         :Uninstall npm.
+gnvm uninstall 0.10.26 0.11.2 latest npm   :Uninstall 0.10.26 0.11.2 latest npm.
+gnvm uninstall ALL                         :Uninstall all node.exe.
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if _, ok := util.IsSessionEnv(); ok {
 			P(WARING, "current is %v, if you usage %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
@@ -108,17 +101,8 @@ gnvm uninstall ALL`,
 			P(ERROR, "'%v' need parameter, please check your input. See '%v'.\n", "gnvm uninstall", "gnvm help uninstall")
 			return
 		} else if len(args) == 1 {
-
-			args[0] = util.EqualAbs("npm", args[0])
 			args[0] = util.EqualAbs("ALL", args[0])
-
-			if args[0] == "npm" {
-				nodehandle.UninstallNpm()
-				return
-			}
-
 			if args[0] == "ALL" {
-
 				if newArr, err := nodehandle.LS(false); err != nil {
 					P(ERROR, "remove all folder Error: %v\n", err.Error())
 					return
@@ -126,27 +110,27 @@ gnvm uninstall ALL`,
 					args = newArr
 				}
 			}
-
 		}
 
 		for _, v := range args {
 
-			v = util.EqualAbs("ALL", v)
-			v = util.EqualAbs("latest", v)
 			v = util.EqualAbs("npm", v)
-
 			if v == "npm" {
-				P(WARING, "use format error, the correct format is '%v'. See '%v'.\n", "gnvm uninstall npm", "gnvm help uninstall")
+				nodehandle.UninstallNPM()
 				continue
 			}
 
+			v = util.EqualAbs("ALL", v)
 			if v == "ALL" {
-				P(WARING, "use format error, the correct format is '%v'. See '%v'.\n", "gnvm uninstall ALL", "gnvm help uninstall")
+				P(WARING, "'%v' not supported mixed parameters, please usage '%v'. See '%v'.\n", "gnvm uninstall ALL", "gnvm uninstall ALL", "gnvm help uninstall")
 				continue
 			}
 
-			// get true version
-			util.FormatLatVer(&v, config.GetConfig(config.LATEST_VERSION), true)
+			v = util.EqualAbs("latest", v)
+			if v == util.LATEST {
+				util.FormatLatVer(&v, config.GetConfig(config.LATEST_VERSION), true)
+				continue
+			}
 
 			// check version format
 			if ok := util.VerifyNodeVer(v); ok != true {
@@ -416,6 +400,30 @@ gnvm search 0.10.10        :Search and Print 0.10.10 node.exe version detail.
 	},
 }
 
+// sub cmd
+var npmCmd = &cobra.Command{
+	Use:   "npm",
+	Short: "NPM version management",
+	Long: `Install any npm version. e.g. :
+gnvm npm x.xx.xx          :Install x.xx.xx npm version.
+gnvm npm latest           :Install latest  npm version.
+gnvm npm global           :Install local node.exe matching npm version.
+`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) != 1 {
+			P(ERROR, "%v must be one parameter and only support [%v] [%v] [%v] keyword, please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "x.xx.xx", "gnvm help npm")
+		} else {
+			if _, ok := util.IsSessionEnv(); ok {
+				P(WARING, "current is %v, if you usge %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+				return
+			}
+			util.EqualAbs("global", args[0])
+			util.EqualAbs("latest", args[0])
+			nodehandle.InstallNPM(args[0])
+		}
+	},
+}
+
 func init() {
 
 	// add sub cmd to root
@@ -430,6 +438,7 @@ func init() {
 	gnvmCmd.AddCommand(configCmd)
 	gnvmCmd.AddCommand(regCmd)
 	gnvmCmd.AddCommand(searchCmd)
+	gnvmCmd.AddCommand(npmCmd)
 
 	// flag
 	installCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version.")
