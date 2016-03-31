@@ -488,7 +488,7 @@ func Update(global bool) {
 		}
 	case local == remote:
 
-		if isDirExist(rootPath + localVersion) {
+		if util.IsDirExist(rootPath + localVersion) {
 			cp := CP{Red, false, None, false, "="}
 			P(DEFAULT, "Remote latest version %v %v latest version %v, don't need to upgrade.\n", remoteVersion, cp, localVersion)
 			if global {
@@ -496,7 +496,7 @@ func Update(global bool) {
 					config.SetConfig(config.GLOBAL_VERSION, localVersion)
 				}
 			}
-		} else if !isDirExist(rootPath + localVersion) {
+		} else {
 			P(WARING, "local not exist %v\n", localVersion)
 			if code := Install(args, global); code == 0 || code == 2 {
 				P(DEFAULT, "Download latest version %v success.\n", localVersion)
