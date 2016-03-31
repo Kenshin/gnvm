@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"gnvm/nodehandle"
+	"gnvm/util"
 	"testing"
 )
 
@@ -10,7 +11,8 @@ func TestCurl(t *testing.T) {
 	//testSearch()
 	//testNodist()
 	//testNPManage()
-	testGetNPMVer()
+	//testGetNPMVer()
+	testIsDirExist()
 }
 
 func testSearch() {
@@ -51,4 +53,17 @@ func testGetNPMVer() {
 	if nd, err := nodehandle.FindNodeDetailByVer(url, ver); err == nil {
 		fmt.Println(nd)
 	}
+}
+
+func testIsDirExist() {
+	// empty
+	fmt.Println(util.IsDirExist(""))
+	// no exist
+	fmt.Println(util.IsDirExist("/Users/kenshin/Work/28-GO/01-work/src/gnvm/node_modules"))
+	fmt.Println(util.IsDirExist("/Users/kenshin/Work/28-GO/01-work/src/gnvm/node_modules/npm"))
+	// exist
+	fmt.Println(util.IsDirExist("/Users/kenshin/Work/28-GO/01-work/src/gnvm/"))
+	fmt.Println(util.IsDirExist("/Users/kenshin/Work/28-GO/01-work/src/gnvm"))
+	// not valid path
+	fmt.Println(util.IsDirExist("gnvm"))
 }
