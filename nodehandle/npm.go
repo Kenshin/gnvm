@@ -16,7 +16,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"time"
 
 	// local
 	"gnvm/config"
@@ -54,20 +53,26 @@ type NPMange struct {
 }
 
 var npm = new(NPMange)
-var finish = false
 
 /*
- Crete NPMange
+ Create NPMange
 */
-func (this *NPMange) New(zip string) {
-	(*this).root = config.GetConfig(config.NODEROOT)
-	(*this).modules = (*this).root + util.DIVIDE + "node_modules"
-	(*this).zipname = zip
-	(*this).zippath = (*this).root + util.DIVIDE + (*this).zipname
-	(*this).npmpath = (*this).modules + util.DIVIDE + util.NPM
-	(*this).npmbin = (*this).npmpath + util.DIVIDE + "bin"
-	(*this).command1 = "npm"
-	(*this).command2 = "npm.cmd"
+func (this *NPMange) New() *NPMange {
+	this.root = config.GetConfig(config.NODEROOT)
+	this.modules = this.root + util.DIVIDE + "node_modules"
+	this.npmpath = this.modules + util.DIVIDE + util.NPM
+	this.npmbin = this.npmpath + util.DIVIDE + "bin"
+	this.command1 = "npm"
+	this.command2 = "npm.cmd"
+	return this
+}
+
+/*
+ Set zip info
+*/
+func (this *NPMange) SetZip(zip string) {
+	this.zipname = zip
+	this.zippath = this.root + util.DIVIDE + this.zipname
 }
 
 /*
@@ -111,7 +116,7 @@ func (this *NPMange) CreateModules() {
 func (this *NPMange) Download(url, name string) error {
 	curl.Options.Header = false
 	curl.Options.Footer = false
-	if _, errs := curl.New(url, name, name, (*this).root); len(errs) > 0 {
+	if _, errs := curl.New(url, name, name, this.root); len(errs) > 0 {
 		err := errs[0]
 		P(ERROR, "%v an error has occurred, url %v, Error is %v. See '%v'.\n", "gnvm npm", url, err, "gnvm help npm")
 		return err
@@ -131,7 +136,7 @@ func (this *NPMange) Download(url, name string) error {
         - -4: copy  file error
 */
 func (this *NPMange) Unzip() (int, error) {
-	path, dest := (*this).zippath, (*this).modules
+	path, dest := this.zippath, this.modules
 	unzip, err := zip.OpenReader(path)
 	if err != nil {
 		return -1, err
@@ -145,7 +150,7 @@ func (this *NPMange) Unzip() (int, error) {
 		}
 		defer rc.Close()
 		if idx == 0 {
-			(*this).ziproot = strings.Replace(file.Name, "/", "", -1)
+			this.ziproot = strings.Replace(file.Name, "/", "", -1)
 		}
 		path = filepath.Join(dest, file.Name)
 		if file.FileInfo().IsDir() {
@@ -258,8 +263,13 @@ func InstallNPM(version string) {
 
 }
 
+/*
+ Uninstall
+*/
 func UninstallNPM() {
-	fmt.Println("UnInstall")
+	if err := npm.New().CleanAll(); err == nil {
+		P(DEFAULT, "Uninstall npm version %v.\n", "success")
+	}
 }
 
 /*
@@ -308,18 +318,16 @@ func downloadNpm(ver string) {
 	}
 
 	// create npm
-	npm.New(version)
+	npm.New().SetZip(version)
 
-	P(NOTICE, "start download new npm version %v\n", version)
+	P(DEFAULT, "Start download new npm version %v\n", version)
 
 	// download
 	if err := npm.Download(url, version); err != nil {
 		return
 	}
 
-	P(NOTICE, "start install download %v zip file, please wait", version)
-
-	go wait()
+	P(DEFAULT, "Start unzip and install %v zip file, please wait.\n", version)
 
 	// create node_modules
 	npm.CreateModules()
@@ -329,31 +337,17 @@ func downloadNpm(ver string) {
 
 	// unzip
 	if _, err := npm.Unzip(); err != nil {
-		finish = true
 		P(ERROR, "unzip %v an error has occurred. \nError: ", npm.zipname, err.Error())
 		return
 	}
 
 	// install
 	if err := npm.Install(); err != nil {
-		finish = true
 		return
 	}
 
+	// remove download zip file
 	npm.Clean(npm.zippath)
 
-	finish = true
-	P(DEFAULT, "\nnew npm version %v install success.\n", ver)
-}
-
-func wait() {
-	wait := ""
-	for {
-		if finish {
-			break
-		}
-		time.Sleep(time.Millisecond * 500)
-		wait += "."
-		fmt.Printf(wait)
-	}
+	P(DEFAULT, "Set success, current npm version is %v.\n", ver)
 }
