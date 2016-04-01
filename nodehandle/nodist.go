@@ -93,7 +93,7 @@ func New(url string, filter *regexp.Regexp) (*Nodeist, error, int) {
 			if npm == "" {
 				npm = "[x]"
 			}
-			exe := parse(ver[1:])
+			exe := formatExe(ver[1:])
 			sorts = append(sorts, ver)
 			nl[ver] = NodeDetail{idx, date, Node{ver, exe}, NPM{npm}}
 			idx++
@@ -151,11 +151,11 @@ func (this *Nodeist) Detail(limit int) {
 			break
 		}
 		value := (*this)[v]
-		id := format(strconv.Itoa(value.ID+1), 6)
-		date := format(value.Date, 13)
-		ver := format(value.Node.Version[1:], 12)
-		exe := format(value.Node.Exec, 10)
-		npm := format(value.NPM.Version, 9)
+		id := leftpad(strconv.Itoa(value.ID+1), 6)
+		date := leftpad(value.Date, 13)
+		ver := leftpad(value.Node.Version[1:], 12)
+		exe := leftpad(value.Node.Exec, 10)
+		npm := leftpad(value.NPM.Version, 9)
 		fmt.Println("  " + id + date + ver + exe + npm)
 		if idx == limit-1 {
 			fmt.Println("+--------------------------------------------------+")
@@ -163,7 +163,17 @@ func (this *Nodeist) Detail(limit int) {
 	}
 }
 
-func parse(version string) (exec string) {
+/*
+ Format exe
+
+ Param:
+ 	- version: node.exe version
+
+ Return:
+ 	- exec: formatting string, e.g. '[x]'
+
+*/
+func formatExe(version string) (exec string) {
 	switch util.GetNodeVerLev(util.FormatNodeVer(version)) {
 	case 0:
 		exec = "[x]"
@@ -175,7 +185,20 @@ func parse(version string) (exec string) {
 	return
 }
 
-func format(value string, max int) string {
+/*
+  Format label, e.g.
+     aa:
+    bbb:
+
+ Param:
+ 	- value: format str
+ 	- max  : max empty
+
+ Return:
+ 	- Format label
+
+*/
+func leftpad(value string, max int) string {
 	if len(value) > max {
 		max = len(value)
 	}
