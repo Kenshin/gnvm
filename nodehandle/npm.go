@@ -254,7 +254,7 @@ func InstallNPM(version string) {
 	}()
 
 	version = strings.ToLower(version)
-	if version != util.LATEST && version != util.GLOBAL && !util.VerifyNodeVer(version) {
+	if !util.VerifyNodeVer(version) {
 		P(ERROR, "'%v' param only support [%v] [%v] or %v e.g. [%v], please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "valid version", "5.9.1", "gnvm help npm")
 		return
 	}

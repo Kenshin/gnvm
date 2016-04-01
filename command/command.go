@@ -132,7 +132,7 @@ gnvm uninstall ALL                         :Uninstall all node.exe.
 			}
 
 			// check version format
-			if ok := util.VerifyNodeVer(v); ok != true {
+			if !util.VerifyNodeVer(v) {
 				P(ERROR, "%v format error, the correct format is %v.\n", v, "x.xx.xx")
 			} else {
 				nodehandle.Uninstall(v)

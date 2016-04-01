@@ -424,7 +424,7 @@ func LS(isPrint bool) ([]string, error) {
 		version := file.Name()
 
 		// check node version
-		if ok := util.VerifyNodeVer(version); ok {
+		if util.VerifyNodeVer(version) {
 
 			// <root>/x.xx.xx/node.exe is exist
 			if util.IsDirExist(rootPath + version) {
