@@ -339,18 +339,6 @@ func GetRemoteNodePath(url, version, arch string) (string, error) {
 }
 
 /*
-  Return session environment variable
-*/
-func IsSessionEnv() (string, bool) {
-	env := os.Getenv("GNVM_SESSION_NODE_HOME")
-	if env != "" {
-		return env, true
-	} else {
-		return env, false
-	}
-}
-
-/*
  Get node.exe binary arch
 
    Param:
@@ -393,6 +381,18 @@ func Arch(path string) (string, error) {
 		}
 	}
 	return "x64", nil
+}
+
+/*
+  Return session environment variable
+*/
+func IsSessionEnv() (string, bool) {
+	env := os.Getenv("GNVM_SESSION_NODE_HOME")
+	if env != "" {
+		return env, true
+	} else {
+		return env, false
+	}
 }
 
 /*
