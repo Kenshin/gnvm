@@ -66,16 +66,15 @@ func GetNodeVer(path string) (string, error) {
   Node version format must be http://semver.org/
 */
 func VerifyNodeVer(version string) bool {
-	result := true
 	version = strings.Split(version, "-")[0]
 	version = strings.TrimSpace(version)
 	reg, _ := regexp.Compile(`^([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}$`)
 	if version == UNKNOWN || version == LATEST {
 		return true
 	} else if format := reg.MatchString(version); !format {
-		result = false
+		return false
 	}
-	return result
+	return false
 }
 
 /*
