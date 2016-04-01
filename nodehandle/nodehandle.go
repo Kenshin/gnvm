@@ -35,97 +35,148 @@ func init() {
 }
 
 /**
- * rootPath    : node.exe global path,  e.g. x:\xxx\xx\xx\
- * rootNode    : rootPath + "node.exe", e.g. x:\xxx\xx\xx\node.exe
+ * rootPath    : node.exe global path,         e.g. x:\xxx\xx\xx\
  *
- * rootVersion : <node version>+<arch>, e.g. x.xx.xx-x86 ( only rumtime.GOARCH == "amd64", suffix include: 'x86' and 'x64' )
- * rootFolder  : <rootPath>/rootVersion
+ * global      : global node.exe version num,  e.g. x.xx.xx-x86 ( only rumtime.GOARCH == "amd64", suffix include: 'x86' and 'x64' )
+ * globalPath  : global node.exe version path, e.g. x:\xxx\xx\xx\x.xx.xx-x86
  *
- * usePath     : use node version path, e.g. <rootPath>\x.xx.xx\
- * useNode     : usePath + "node.exe",  e.g. <rootPath>\x.xx.xx\node.exe
+ * newer       : newer node.exe version num,   e.g. x.xx.xx
+ * newerPath   : newer node.exe version path,  e.g. <rootPath>\x.xx.xx\
  *
  */
-func Use(folder string) bool {
+func Use(newer string) bool {
 
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm use %v' an error has occurred. please check. \nError: ", folder)
+			msg := fmt.Sprintf("'gnvm use %v' an error has occurred. please check. \nError: ", newer)
 			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
 
-	rootNodeExist := true
-
 	// get true folder, e.g. folder is latest return x.xx.xx
-	util.FormatLatVer(&folder, config.GetConfig(config.LATEST_VERSION), true)
+	util.FormatLatVer(&newer, config.GetConfig(config.LATEST_VERSION), true)
 
-	if folder == config.UNKNOWN {
-		P(ERROR, "node.exe latest version not exist, use %v. See '%v'.\n", "gnvm node-version latest -r", "gnvm help node-version")
+	// set newerPath and verify newerPath is exist?
+	newerPath := rootPath + newer
+	if _, err := util.GetNodeVer(newerPath); err != nil {
+		P(WARING, "%v folder is not exist from %v, use '%v' get local node.exe list. See '%v'.\n", newer, rootPath, "gnvm ls", "gnvm help ls")
 		return false
 	}
 
-	// set rootNode
-	rootNode := rootPath + util.NODE
-
-	// set usePath
-	usePath := rootPath + folder + util.DIVIDE
-
-	// <root>/folder is exist
-	if util.IsDirExist(usePath) != true {
-		P(WARING, "%v folder is not exist from %v, use '%v' get local node.exe list. See '%v'.\n", folder, rootPath, "gnvm ls", "gnvm help ls")
-		return false
-	}
-
-	// get <root>/node.exe version
-	rootVersion, err := util.GetNodeVer(rootPath)
+	// get <root>/node.exe version, when exist, get full version, e.g. x.xx.xx-x86
+	global, err := util.GetNodeVer(rootPath)
 	if err != nil {
 		P(WARING, "not found global node.exe version.\n")
-		rootNodeExist = false
-	}
-
-	// add suffix
-	if runtime.GOARCH == "amd64" {
-		if bit, err := util.Arch(rootNode); err == nil && bit == "x86" {
-			rootVersion += "-" + bit
+	} else {
+		if bit, err := util.Arch(rootPath + util.NODE); err == nil {
+			if bit == "x86" && runtime.GOARCH == "amd64" {
+				global += "-" + bit
+			}
 		}
 	}
 
-	// check folder is rootVersion
-	if folder == rootVersion {
-		P(WARING, "current node.exe version is %v, not re-use. See 'gnvm node-version'.\n", folder)
+	// check newer is global
+	if newer == global {
+		P(WARING, "current node.exe version is %v, not re-use. See 'gnvm node-version'.\n", newer)
 		return false
 	}
 
-	// set rootFolder
-	rootFolder := rootPath + rootVersion
+	// set globalPath
+	globalPath := rootPath + global
 
-	// <root>/rootVersion is exist
-	if util.IsDirExist(rootFolder) != true {
-
-		// create rootVersion folder
-		if err := os.Mkdir(rootFolder, 0777); err != nil {
-			P(ERROR, "create %v folder Error: %v.\n", rootVersion, err.Error())
+	// <root>/global is exist? when not exist, create global folder
+	if !util.IsDirExist(globalPath) {
+		if err := os.Mkdir(globalPath, 0777); err != nil {
+			P(ERROR, "create %v folder Error: %v.\n", global, err.Error())
 			return false
 		}
 	}
 
-	// copy <root>/node.exe to <root>/x.xx.xx/node.exe( backup )
-	if rootNodeExist {
-		if err := util.Copy(rootPath, rootFolder, util.NODE); err != nil {
-			P(ERROR, "copy %v to %v folder Error: %v.\n", rootPath, rootFolder, err.Error())
+	// backup copy <root>/node.exe to <root>/global/node.exe
+	if global != "" {
+		if err := util.Copy(rootPath, globalPath, util.NODE); err != nil {
+			P(ERROR, "copy %v to %v folder Error: %v.\n", rootPath, globalPath, err.Error())
 			return false
 		}
 	}
 
-	// copy <root>/x.xx.xx/node.exe to <root>/node.exe( new )
-	if err := util.Copy(usePath, rootPath, util.NODE); err != nil {
-		P(ERROR, "copy %v to %v folder Error: %v.\n", usePath, rootPath, err.Error())
+	// copy <root>/newer/node.exe to <root>/node.exe
+	if err := util.Copy(newerPath, rootPath, util.NODE); err != nil {
+		P(ERROR, "copy %v to %v folder Error: %v.\n", newerPath, rootPath, err.Error())
 		return false
 	}
 
-	P(DEFAULT, "Set success, global node.exe version is %v.\n", folder)
+	/*
+		rootNodeExist := true
+
+		// get true folder, e.g. folder is latest return x.xx.xx
+		util.FormatLatVer(&folder, config.GetConfig(config.LATEST_VERSION), true)
+
+		if folder == config.UNKNOWN {
+			P(ERROR, "node.exe latest version not exist, use %v. See '%v'.\n", "gnvm node-version latest -r", "gnvm help node-version")
+			return false
+		}
+
+		// set usePath
+		usePath := rootPath + folder
+
+		// <root>/folder is exist
+		if util.IsDirExist(usePath) != true {
+			P(WARING, "%v folder is not exist from %v, use '%v' get local node.exe list. See '%v'.\n", folder, rootPath, "gnvm ls", "gnvm help ls")
+			return false
+		}
+
+		// get <root>/node.exe version
+		rootVersion, err := util.GetNodeVer(rootPath)
+		if err != nil {
+			P(WARING, "not found global node.exe version.\n")
+			rootNodeExist = false
+		}
+
+		// add suffix
+		if runtime.GOARCH == "amd64" {
+			if bit, err := util.Arch(rootPath + util.NODE); err == nil && bit == "x86" {
+				rootVersion += "-" + bit
+			}
+		}
+
+		// check folder is rootVersion
+		if folder == rootVersion {
+			P(WARING, "current node.exe version is %v, not re-use. See 'gnvm node-version'.\n", folder)
+			return false
+		}
+
+		// set rootFolder
+		rootFolder := rootPath + rootVersion
+
+		// <root>/rootVersion is exist
+		if util.IsDirExist(rootFolder) != true {
+
+			// create rootVersion folder
+			if err := os.Mkdir(rootFolder, 0777); err != nil {
+				P(ERROR, "create %v folder Error: %v.\n", rootVersion, err.Error())
+				return false
+			}
+		}
+
+		// copy <root>/node.exe to <root>/x.xx.xx/node.exe( backup )
+		if rootNodeExist {
+			if err := util.Copy(rootPath, rootFolder, util.NODE); err != nil {
+				P(ERROR, "copy %v to %v folder Error: %v.\n", rootPath, rootFolder, err.Error())
+				return false
+			}
+		}
+
+		// copy <root>/x.xx.xx/node.exe to <root>/node.exe( new )
+		if err := util.Copy(usePath, rootPath, util.NODE); err != nil {
+			P(ERROR, "copy %v to %v folder Error: %v.\n", usePath, rootPath, err.Error())
+			return false
+		}
+	*/
+
+	P(DEFAULT, "Set success, global node.exe version is %v.\n", newer)
 
 	return true
 }

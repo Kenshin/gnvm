@@ -156,7 +156,6 @@ gnvm use latest`,
 		if len(args) == 1 {
 			version := args[0]
 			version = util.EqualAbs("latest", version)
-
 			if util.VerifyNodeVer(version) != true {
 				P(ERROR, "use parameter support '%v' or '%v', e.g. %v, please check your input. See '%v'.\n", "latest", "x.xx.xx", "0.10.28", "gnvm help use")
 				return
