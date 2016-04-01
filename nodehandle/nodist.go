@@ -34,7 +34,7 @@ type (
 		NPM
 	}
 
-	Nodeist map[string]NodeDetail
+	Nodist map[string]NodeDetail
 )
 
 var sorts []string
@@ -58,7 +58,7 @@ var sorts []string
         - -4: parse json error
 
 */
-func New(url string, filter *regexp.Regexp) (*Nodeist, error, int) {
+func New(url string, filter *regexp.Regexp) (*Nodist, error, int) {
 	code, res, err := curl.Get(url)
 	if err != nil {
 		return nil, err, code
@@ -79,7 +79,7 @@ func New(url string, filter *regexp.Regexp) (*Nodeist, error, int) {
 		return nil, err, -4
 	}
 
-	nl, idx := make(Nodeist, 0), 0
+	nl, idx := make(Nodist, 0), 0
 	sorts = make([]string, 0)
 	for _, element := range arr {
 		if value, ok := element.(map[string]interface{}); ok {
@@ -138,7 +138,7 @@ func FindNodeDetailByVer(url, ver string) (*NodeDetail, error) {
     - limit: print lines, when limit == 0, print all nodedetail
 
 */
-func (this *Nodeist) Detail(limit int) {
+func (this *Nodist) Detail(limit int) {
 	table := `+--------------------------------------------------+
 | No.   date         node ver    exec      npm ver |
 +--------------------------------------------------+`
