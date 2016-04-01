@@ -53,7 +53,7 @@ func init() {
   Get node.exe version, usage exec.Command()
 */
 func GetNodeVer(path string) (string, error) {
-	VaildPath(&path)
+	FormatPath(&path)
 	out, err := exec.Command(path+NODE, "--version").Output()
 	if err == nil {
 		return strings.TrimSpace(string(out[1:])), nil
@@ -406,7 +406,7 @@ func EqualAbs(key, value string) string {
 /*
  Vaild Path, e.g x:\aa\bb\cc to x:\aa\bb\cc\
 */
-func VaildPath(path *string) {
+func FormatPath(path *string) {
 	if !IsDirExist(*path) {
 		P(WARING, "%v not a vaild directory.\n", *path)
 	} else if !strings.HasSuffix(*path, DIVIDE) {
