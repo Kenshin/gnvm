@@ -423,6 +423,7 @@ func Install(args []string, global bool) int {
 
  Param:
  	- folder: version
+
 */
 func Uninstall(folder string) {
 
@@ -458,6 +459,13 @@ func Uninstall(folder string) {
 	P(DEFAULT, "Node.exe version %v uninstall success.\n", folder)
 }
 
+/*
+ Update local latest node verion
+
+ Param:
+ 	- global: when global == true, call Use func.
+
+*/
 func Update(global bool) {
 
 	// try catch
