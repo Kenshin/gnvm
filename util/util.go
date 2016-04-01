@@ -54,6 +54,9 @@ func init() {
 */
 func GetNodeVer(path string) (string, error) {
 	var newout string
+	if !strings.HasSuffix(path, DIVIDE) {
+		path += DIVIDE
+	}
 	out, err := exec.Command(path+"node", "--version").Output()
 	if err == nil {
 		newout = strings.Replace(string(string(out[:])[1:]), "\r\n", "", -1)
