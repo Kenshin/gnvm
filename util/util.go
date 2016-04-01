@@ -339,7 +339,7 @@ func GetRemoteNodePath(url, version, arch string) (string, error) {
  Get node.exe binary arch
 
    Param:
-	- path:    node.exe path
+	- path:   node.exe path
 
    Return:
 	- string: arch, inlcude: 'x86' 'x64'
@@ -347,7 +347,8 @@ func GetRemoteNodePath(url, version, arch string) (string, error) {
 
 */
 func Arch(path string) (string, error) {
-	f, err := os.Open(path)
+	FormatPath(&path)
+	f, err := os.Open(path + NODE)
 	if err != nil {
 		return "", err
 	}
