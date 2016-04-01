@@ -371,7 +371,7 @@ func Update(global bool) {
  	- s: node.exe version, inlcude: *.*.* 0.*.* 0.10.* \<regexp>\ latest 0.10.10
 
 */
-func Query(s string) {
+func Search(s string) {
 	regex, err := util.FormatWildcard(s, latURL)
 	if err != nil {
 		P(ERROR, "[%v] %v\n", s, err.Error())

@@ -395,7 +395,7 @@ gnvm search 0.10.10        :Search and Print 0.10.10 node.exe version detail.
 		if len(args) != 1 {
 			P(ERROR, "gnvm search parameter maximum is 1, please check your input. See '%v'.\n", "gnvm help search")
 		} else {
-			nodehandle.Query(args[0])
+			nodehandle.Search(args[0])
 		}
 	},
 }
