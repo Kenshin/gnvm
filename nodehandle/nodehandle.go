@@ -70,7 +70,7 @@ func Use(newer string) bool {
 	if err != nil {
 		P(WARING, "not found global node.exe version.\n")
 	} else {
-		if bit, err := util.Arch(rootPath + util.NODE); err == nil {
+		if bit, err := util.Arch(rootPath); err == nil {
 			if bit == "x86" && runtime.GOARCH == "amd64" {
 				global += "-" + bit
 			}

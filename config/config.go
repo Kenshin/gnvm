@@ -98,7 +98,7 @@ func createConfig() {
 		globalversion = version
 		// add suffix
 		if runtime.GOARCH == "amd64" {
-			if bit, err := util.Arch(util.GlobalNodePath + util.DIVIDE + util.NODE); err == nil && bit == "x86" {
+			if bit, err := util.Arch(util.GlobalNodePath); err == nil && bit == "x86" {
 				globalversion += "-" + bit
 			}
 		}
@@ -181,7 +181,7 @@ func ReSetConfig() {
 		globalversion = version
 		// add suffix
 		if runtime.GOARCH == "amd64" {
-			if bit, err := util.Arch(util.GlobalNodePath + util.DIVIDE + util.NODE); err == nil && bit == "x86" {
+			if bit, err := util.Arch(util.GlobalNodePath); err == nil && bit == "x86" {
 				globalversion += "-" + bit
 			}
 		}
