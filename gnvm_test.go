@@ -13,7 +13,8 @@ func TestCurl(t *testing.T) {
 	//testNPManage()
 	//testGetNPMVer()
 	//testIsDirExist()
-	testArch()
+	//testArch()
+	testVaildPath()
 }
 
 func testSearch() {
@@ -74,4 +75,10 @@ func testArch() {
 	fmt.Println(bit32)
 	bit64, _ := util.Arch(`C:\Users\Kenshin\Documents\DevTools\nodejs\5.1.1\node.exe`)
 	fmt.Println(bit64)
+}
+
+func testVaildPath() {
+	path := `C:\Users\Kenshin\Documents\DevTools\nodejs\5.1.1-x86\`
+	util.VaildPath(&path)
+	fmt.Println(path)
 }
