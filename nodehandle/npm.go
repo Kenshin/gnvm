@@ -109,10 +109,12 @@ func (this *NPMange) CreateModules() {
  Download npm zip
 
  Param:
-    - url: download url
+    - url:  download url
+    - name: download file name
 
  Return:
     - error
+
 */
 func (this *NPMange) Download(url, name string) error {
 	curl.Options.Header = false
@@ -135,6 +137,7 @@ func (this *NPMange) Download(url, name string) error {
         - -2: open  file error
         - -3: write file error
         - -4: copy  file error
+
 */
 func (this *NPMange) Unzip() (int, error) {
 	path, dest := this.zippath, this.modules
@@ -200,11 +203,15 @@ func (this *NPMange) Install() error {
 }
 
 /*
- Remove file, inlcude:
-    - <root>/node_modules/npm
-    - <root>/npm
-    - <root>/npm.cmd
-    - <root>/<npm.zip>
+ Remove file
+
+ Param:
+    - path: olny clude path
+        - <root>/node_modules/npm
+        - <root>/npm
+        - <root>/npm.cmd
+        - <root>/<npm.zip>
+
 */
 func (this *NPMange) Clean(path string) error {
 	if util.IsDirExist(path) {
@@ -218,6 +225,10 @@ func (this *NPMange) Clean(path string) error {
 
 /*
  Remove <root>/node_modules/npm, <root>/npm, <root>/npm.cmd
+
+ Return:
+    - error
+
 */
 func (this *NPMange) CleanAll() error {
 	paths := [3]string{this.npmpath, this.root + util.DIVIDE + this.command1, this.root + util.DIVIDE + this.command2}
@@ -270,7 +281,7 @@ func InstallNPM(version string) {
 }
 
 /*
- Uninstall
+ Uninstall NPM
 */
 func UninstallNPM() {
 	if getLocalNPMVer() == util.UNKNOWN {
@@ -283,6 +294,10 @@ func UninstallNPM() {
 
 /*
  Get npm version by global( local ) node version
+
+ Return:
+    - string: npm version
+
 */
 func getNodeNpmVer() string {
 	ver, err := util.GetNodeVer(rootPath)
@@ -305,6 +320,10 @@ func getNodeNpmVer() string {
 
 /*
  Get Latest NPM version
+
+ Return:
+    - string: latest npm version
+
 */
 func getLatNPMVer() string {
 	_, res, err := curl.Get(LATNPMURL)
@@ -332,6 +351,7 @@ func getLatNPMVer() string {
  Return:
     - util.UNKNOWN: current not exist npmCmd
     - version     : current npm version
+
 */
 func getLocalNPMVer() string {
 	out, err := exec.Command(rootPath+util.NPM, "-v").Output()
@@ -343,7 +363,11 @@ func getLocalNPMVer() string {
 }
 
 /*
- Download and unzip npm.zip
+ Download / unzip / install npm
+
+ Param:
+    - ver: npm version
+
 */
 func downloadNpm(ver string) {
 	version := "v" + ver + ZIP
