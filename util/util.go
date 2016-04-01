@@ -289,7 +289,7 @@ func GetLatVer(url string) string {
 
 	latestVersion := func(content string, line int) bool {
 		if content != "" && line == 1 {
-			reg, _ := regexp.Compile(`\d(\.\d){2}`)
+			reg, _ := regexp.Compile(`([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}`)
 			version = reg.FindString(content)
 		}
 		return false
