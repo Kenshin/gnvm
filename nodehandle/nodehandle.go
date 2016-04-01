@@ -186,40 +186,6 @@ func NodeVersion(args []string, remote bool) {
 	}
 }
 
-func Uninstall(folder string) {
-
-	// try catch
-	defer func() {
-		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm uninstall %v' an error has occurred. please check. \nError: ", folder)
-			Error(ERROR, msg, err)
-			os.Exit(0)
-		}
-	}()
-
-	// set removePath
-	removePath := rootPath + folder
-
-	if folder == config.UNKNOWN {
-		P(ERROR, "unassigned node.exe latest version. See '%v'.\n", "gnvm config INIT")
-		return
-	}
-
-	// rootPath/version is exist
-	if util.IsDirExist(removePath) != true {
-		P(ERROR, "%v folder is not exist. See '%v'.\n", folder, "gnvm ls")
-		return
-	}
-
-	// remove rootPath/version folder
-	if err := os.RemoveAll(removePath); err != nil {
-		P(ERROR, "uninstall %v fail, Error: %v.\n", folder, err.Error())
-		return
-	}
-
-	P(DEFAULT, "Node.exe version %v uninstall success.\n", folder)
-}
-
 func LS(isPrint bool) ([]string, error) {
 
 	// try catch
@@ -442,6 +408,43 @@ func Install(args []string, global bool) int {
 
 	return code
 
+}
+
+/*
+ Uninstall node and npm
+*/
+func Uninstall(folder string) {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			msg := fmt.Sprintf("'gnvm uninstall %v' an error has occurred. please check. \nError: ", folder)
+			Error(ERROR, msg, err)
+			os.Exit(0)
+		}
+	}()
+
+	// set removePath
+	removePath := rootPath + folder
+
+	if folder == config.UNKNOWN {
+		P(ERROR, "unassigned node.exe latest version. See '%v'.\n", "gnvm config INIT")
+		return
+	}
+
+	// rootPath/version is exist
+	if util.IsDirExist(removePath) != true {
+		P(ERROR, "%v folder is not exist. See '%v'.\n", folder, "gnvm ls")
+		return
+	}
+
+	// remove rootPath/version folder
+	if err := os.RemoveAll(removePath); err != nil {
+		P(ERROR, "uninstall %v fail, Error: %v.\n", folder, err.Error())
+		return
+	}
+
+	P(DEFAULT, "Node.exe version %v uninstall success.\n", folder)
 }
 
 func Update(global bool) {
