@@ -129,7 +129,6 @@ gnvm uninstall ALL                         :Uninstall all node.exe.
 			v = util.EqualAbs("latest", v)
 			if v == util.LATEST {
 				util.FormatLatVer(&v, config.GetConfig(config.LATEST_VERSION), true)
-				continue
 			}
 
 			// check version format
