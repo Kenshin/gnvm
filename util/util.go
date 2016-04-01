@@ -150,9 +150,9 @@ func FormatWildcard(version, url string) (*regexp.Regexp, error) {
 func FormatLatVer(latest *string, value string, print bool) {
 	if *latest == LATEST {
 		*latest = value
-	}
-	if print {
-		P(NOTICE, "current latest version is %v.\n", *latest)
+		if print {
+			P(NOTICE, "current latest version is %v.\n", *latest)
+		}
 	}
 }
 
