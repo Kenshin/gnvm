@@ -27,6 +27,13 @@ func init() {
 	}
 }
 
+/*
+ Regedit
+
+ Param:
+ 	- s: olny support 'noderoot'
+
+*/
 func Reg(s string) {
 	prompt := "n"
 
@@ -47,7 +54,7 @@ func Reg(s string) {
 
 	if prompt == "y" {
 		if add(NODE_HOME, noderoot) == nil {
-			if arr, err := search(PATH); err == nil {
+			if arr, err := query(PATH); err == nil {
 				prompt = "n"
 				P(NOTICE, "add environment variable %v to %v [Y/n]? ", NODE_HOME, PATH)
 				fmt.Scanf("%s\n", &prompt)
@@ -78,7 +85,7 @@ func add(key, value string) (err error) {
 	return err
 }
 
-func search(key string) (regs []regedit.Reg, err error) {
+func query(key string) (regs []regedit.Reg, err error) {
 	reg := regedit.New(regedit.Query, regedit.HKCU, "\\Environment")
 	regcmd := reg.Search(regedit.Reg{Key: key})
 	if regs, err = regcmd.Exec(); err != nil {
