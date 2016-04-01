@@ -27,8 +27,7 @@ const (
 	PROCESSTAKEUP = "The process cannot access the file because it is being used by another process."
 )
 
-var rootPath string
-var latURL string
+var rootPath, latURL string
 
 func init() {
 	rootPath = util.GlobalNodePath + util.DIVIDE
