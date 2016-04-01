@@ -182,7 +182,7 @@ func InstallNode(args []string, global bool) int {
 		if suffix != "" {
 			folder += "-" + suffix
 		}
-		if _, err := util.GetNodeVer(folder + util.DIVIDE); err == nil {
+		if _, err := util.GetNodeVer(folder); err == nil {
 			P(WARING, "%v folder exist.\n", ver)
 			continue
 		}

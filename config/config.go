@@ -90,7 +90,7 @@ func createConfig() {
 	}
 
 	// get <root>/node.exe version
-	version, err := util.GetNodeVer(util.GlobalNodePath + util.DIVIDE)
+	version, err := util.GetNodeVer(util.GlobalNodePath)
 	if err != nil {
 		P(WARING, "not found global node.exe version, please use '%v'. See '%v'.\n", "gnvm install x.xx.xx -g", "gnvm help install")
 		globalversion = GLOBAL_VERSION_VAL
@@ -173,7 +173,7 @@ func ReSetConfig() {
 	if newValue := SetConfig(NODEROOT, util.GlobalNodePath); newValue != "" {
 		P(NOTICE, "%v      init success, new value is %v\n", NODEROOT, newValue)
 	}
-	version, err := util.GetNodeVer(util.GlobalNodePath + util.DIVIDE)
+	version, err := util.GetNodeVer(util.GlobalNodePath)
 	if err != nil {
 		P(WARING, "not found global node.exe version, please use '%v'. See '%v'.\n", "gnvm install x.xx.xx -g", "gnvm help install")
 		globalversion = GLOBAL_VERSION_VAL
