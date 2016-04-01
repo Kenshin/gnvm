@@ -53,12 +53,12 @@ func init() {
   Get node.exe version, usage exec.Command()
 */
 func GetNodeVer(path string) (string, error) {
-	var newout string
-	out, err := exec.Command(path+"node", "--version").Output()
+	VaildPath(&path)
+	out, err := exec.Command(path+NODE, "--version").Output()
 	if err == nil {
-		newout = strings.Replace(string(string(out[:])[1:]), "\r\n", "", -1)
+		return strings.TrimSpace(string(out[1:])), nil
 	}
-	return newout, err
+	return "", err
 }
 
 /*
