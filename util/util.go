@@ -54,9 +54,6 @@ func init() {
 */
 func GetNodeVer(path string) (string, error) {
 	var newout string
-	if !strings.HasSuffix(path, DIVIDE) {
-		path += DIVIDE
-	}
 	out, err := exec.Command(path+"node", "--version").Output()
 	if err == nil {
 		newout = strings.Replace(string(string(out[:])[1:]), "\r\n", "", -1)
@@ -404,6 +401,17 @@ func EqualAbs(key, value string) string {
 		value = key
 	}
 	return value
+}
+
+/*
+ Vaild Path, e.g x:\aa\bb\cc to x:\aa\bb\cc\
+*/
+func VaildPath(path *string) {
+	if !IsDirExist(*path) {
+		P(WARING, "%v not a vaild directory.\n", *path)
+	} else if !strings.HasSuffix(*path, DIVIDE) {
+		*path += DIVIDE
+	}
 }
 
 /*
