@@ -368,24 +368,27 @@ func Arch(path string) (string, error) {
 	}
 	defer f.Close()
 	bit32, _ := hex.DecodeString("504500004C")
-	bit64, _ := hex.DecodeString("504500006486")
-	byte := make([]byte, 5)
-	j := 0
+	//bit64, _ := hex.DecodeString("504500006486")
+	bytes, empty := make([]byte, 1), [5]byte{}
+	i, j := 0, 0
 	for {
 		j++
-		byte = byte[:cap(byte)]
-		n, err := f.Read(byte)
+		bytes = bytes[:cap(bytes)]
+		n, err := f.Read(bytes)
 		if err == io.EOF {
 			return "x64", nil
 		}
-		byte = byte[:n]
-		if string(byte[:]) == string(bit32[:]) {
-			return "x86", nil
+		bytes = bytes[:n]
+		if i <= 4 {
+			if string(bytes[:]) == string(bit32[i]) {
+				empty[i] = bytes[0]
+				if string(empty[:]) == string(bit32[:]) {
+					return "x86", nil
+				}
+				i++
+			}
 		}
-		if string(byte[:]) == string(bit64[1:]) || string(byte[:]) == string(bit64[:len(bit32)]) {
-			return "x64", nil
-		}
-		if j == 60 {
+		if j == 500 {
 			return "x64", nil
 		}
 	}
