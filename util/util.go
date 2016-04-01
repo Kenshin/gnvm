@@ -351,7 +351,15 @@ func IsSessionEnv() (string, bool) {
 }
 
 /*
- Return binary arch
+ Get node.exe binary arch
+
+   Param:
+	- path:    node.exe path
+
+   Return:
+	- string: arch, inlcude: 'x86' 'x64'
+	- error
+
 */
 func Arch(path string) (string, error) {
 	f, err := os.Open(path)
