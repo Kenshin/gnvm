@@ -76,7 +76,7 @@ gnvm install npm                     :Not logger support command, please usage '
 				P(WARING, "when use --global must be only one parameter, e.g. '%v'. See 'gnvm install help'.\n", "gnvm install x.xx.xx --global")
 			}
 
-			nodehandle.Install(args, global)
+			nodehandle.InstallNode(args, global)
 		}
 	},
 }

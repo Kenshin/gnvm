@@ -142,7 +142,7 @@ func Use(folder string) bool {
  	- code:0
 
 */
-func Install(args []string, global bool) int {
+func InstallNode(args []string, global bool) int {
 
 	localVersion := ""
 	code := 0
@@ -312,30 +312,24 @@ func Update(global bool) {
 		}
 	}()
 
-	localVersion := config.GetConfig(config.LATEST_VERSION)
-	P(NOTICE, "local latest version is %v.\n", localVersion)
+	localVersion, remoteVersion := config.GetConfig(config.LATEST_VERSION), util.GetLatVer(latURL)
 
-	remoteVersion := util.GetLatVer(latURL)
+	P(NOTICE, "local latest version is %v.\n", localVersion)
 	if remoteVersion == "" {
 		P(ERROR, "get latest version error, please check. See '%v'.\n", "gnvm help config")
 		return
 	}
 	P(NOTICE, "remote %v latest version is %v.\n", config.GetConfig("registry"), remoteVersion)
 
-	local := util.FormatNodeVer(localVersion)
-	remote := util.FormatNodeVer(remoteVersion)
-
-	var args []string
-	args = append(args, remoteVersion)
+	local, remote, args := util.FormatNodeVer(localVersion), util.FormatNodeVer(remoteVersion), []string{remoteVersion}
 
 	switch {
 	case localVersion == config.UNKNOWN:
-		if code := Install(args, global); code == 0 || code == 2 {
+		if code := InstallNode(args, global); code == 0 || code == 2 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
 			P(DEFAULT, "Update latest success, current latest version is %v.\n", remoteVersion)
 		}
 	case local == remote:
-
 		if util.IsDirExist(rootPath + localVersion) {
 			cp := CP{Red, false, None, false, "="}
 			P(DEFAULT, "Remote latest version %v %v latest version %v, don't need to upgrade.\n", remoteVersion, cp, localVersion)
@@ -346,18 +340,17 @@ func Update(global bool) {
 			}
 		} else {
 			P(WARING, "local not exist %v\n", localVersion)
-			if code := Install(args, global); code == 0 || code == 2 {
+			if code := InstallNode(args, global); code == 0 || code == 2 {
 				P(DEFAULT, "Download latest version %v success.\n", localVersion)
 			}
 		}
-
 	case local > remote:
 		cp := CP{Red, false, None, false, ">"}
 		P(WARING, "local latest version %v %v remote latest version %v.\nPlease check your registry. See 'gnvm help config'.\n", localVersion, cp, remoteVersion)
 	case local < remote:
 		cp := CP{Red, false, None, false, ">"}
 		P(WARING, "remote latest version %v %v local latest version %v.\n", remoteVersion, cp, localVersion)
-		if code := Install(args, global); code == 0 || code == 2 {
+		if code := InstallNode(args, global); code == 0 || code == 2 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
 			P(DEFAULT, "Update latest success, current latest version is %v.\n", remoteVersion)
 		}
