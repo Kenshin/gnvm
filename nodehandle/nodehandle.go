@@ -364,6 +364,13 @@ func Update(global bool) {
 	}
 }
 
+/*
+ Search node.exe version and Print
+
+ Param:
+ 	- s: node.exe version, inlcude: *.*.* 0.*.* 0.10.* \<regexp>\ latest 0.10.10
+
+*/
 func Query(s string) {
 	regex, err := util.FormatWildcard(s, latURL)
 	if err != nil {
@@ -410,6 +417,13 @@ func Query(s string) {
 	}
 }
 
+/*
+ Print current local node.exe list
+
+ Param:
+ 	- isPrint: when isPrint == true, print console
+
+*/
 func LS(isPrint bool) ([]string, error) {
 
 	// try catch
@@ -483,6 +497,13 @@ func LS(isPrint bool) ([]string, error) {
 	return lsArr, err
 }
 
+/*
+ Print remote node.exe list
+
+ Param:
+ 	- isPrint: when isPrint == true, print console
+
+*/
 func LsRemote(limit int, io bool) {
 	// set url
 	url := config.GetConfig(config.REGISTRY)
