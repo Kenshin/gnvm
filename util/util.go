@@ -71,10 +71,8 @@ func VerifyNodeVer(version string) bool {
 	reg, _ := regexp.Compile(`^([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}$`)
 	if version == UNKNOWN || version == LATEST {
 		return true
-	} else if format := reg.MatchString(version); !format {
-		return false
 	}
-	return false
+	return reg.MatchString(version)
 }
 
 /*
