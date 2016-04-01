@@ -148,7 +148,14 @@ func init() {
 	// if exist, 'gnvm install -g', 'gnvm update -g' 'gnvm use x.xx.xx' can't be use.
 }
 
-func Run(param string) {
+/*
+ Regedit
+
+ Param:
+ 	- action: olny support 'start' and 'close'
+
+*/
+func Run(action string) {
 
 	// try catch
 	defer func() {
@@ -159,7 +166,7 @@ func Run(param string) {
 		}
 	}()
 
-	if param == "start" {
+	if action == "start" {
 		start()
 	} else {
 		close()
