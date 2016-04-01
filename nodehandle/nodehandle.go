@@ -138,16 +138,12 @@ func Use(folder string) bool {
  	- global: when global == true, call Use func.
 
  Return:
- 	- code:0
+ 	- code: dl[0].Code, usage 'gnvm update latest'
 
 */
 func InstallNode(args []string, global bool) int {
 
-	localVersion := ""
-	code := 0
-	isLatest := false
-	dl := new(curl.Download)
-	ts := new(curl.Task)
+	localVersion, isLatest, code, dl, ts := "", false, 0, new(curl.Download), new(curl.Task)
 
 	// try catch
 	defer func() {
@@ -240,6 +236,7 @@ func InstallNode(args []string, global bool) int {
 			}
 		}
 		if len(errs) > 0 {
+			code = (*dl)[0].Code
 			s := ""
 			for _, v := range errs {
 				s += v.Error()
@@ -250,7 +247,6 @@ func InstallNode(args []string, global bool) int {
 	}
 
 	return code
-
 }
 
 /*
@@ -295,7 +291,10 @@ func Uninstall(folder string) {
 }
 
 /*
- Update local latest node verion
+ Update local latest node.exe verion
+
+ - localVersion, remoteVersion: string  node.exe version
+ - local, remote:               float64 node.exe version
 
  Param:
  	- global: when global == true, call Use func.
@@ -324,7 +323,7 @@ func Update(global bool) {
 
 	switch {
 	case localVersion == config.UNKNOWN:
-		if code := InstallNode(args, global); code == 0 || code == 2 {
+		if code := InstallNode(args, global); code == 0 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
 			P(DEFAULT, "Update latest success, current latest version is %v.\n", remoteVersion)
 		}
@@ -339,7 +338,7 @@ func Update(global bool) {
 			}
 		} else {
 			P(WARING, "local not exist %v\n", localVersion)
-			if code := InstallNode(args, global); code == 0 || code == 2 {
+			if code := InstallNode(args, global); code == 0 {
 				P(DEFAULT, "Download latest version %v success.\n", localVersion)
 			}
 		}
@@ -349,7 +348,7 @@ func Update(global bool) {
 	case local < remote:
 		cp := CP{Red, false, None, false, ">"}
 		P(WARING, "remote latest version %v %v local latest version %v.\n", remoteVersion, cp, localVersion)
-		if code := InstallNode(args, global); code == 0 || code == 2 {
+		if code := InstallNode(args, global); code == 0 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
 			P(DEFAULT, "Update latest success, current latest version is %v.\n", remoteVersion)
 		}
