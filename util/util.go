@@ -68,8 +68,9 @@ func GetNodeVer(path string) (string, error) {
 func VerifyNodeVer(version string) bool {
 	version = strings.Split(version, "-")[0]
 	version = strings.TrimSpace(version)
+	version = strings.ToLower(version)
 	reg, _ := regexp.Compile(`^([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}$`)
-	if version == UNKNOWN || version == LATEST {
+	if version == UNKNOWN || version == LATEST || version == GLOBAL {
 		return true
 	}
 	return reg.MatchString(version)
