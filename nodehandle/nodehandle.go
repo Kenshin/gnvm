@@ -296,8 +296,16 @@ func LsRemote(limit int, io bool) {
 }
 
 /*
- * return code same as download return code
- */
+ Install node
+
+ Param:
+ 	- args  : install node.exe versions, include: x.xx.xx latest x.xx.xx-io-x86 x.xx.xx-x86
+ 	- global: when global == true, call Use func.
+
+ Return:
+ 	- code:0
+
+*/
 func Install(args []string, global bool) int {
 
 	localVersion := ""
@@ -412,6 +420,9 @@ func Install(args []string, global bool) int {
 
 /*
  Uninstall node and npm
+
+ Param:
+ 	- folder: version
 */
 func Uninstall(folder string) {
 
