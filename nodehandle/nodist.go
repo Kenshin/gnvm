@@ -56,6 +56,7 @@ var sorts []string
         - -2: read res.body error
         - -3: create json error
         - -4: parse json error
+
 */
 func New(url string, filter *regexp.Regexp) (*Nodeist, error, int) {
 	code, res, err := curl.Get(url)
@@ -112,6 +113,7 @@ func New(url string, filter *regexp.Regexp) (*Nodeist, error, int) {
  Return:
     - *NodeDetail: nodedetail struct
     - error
+
 */
 func FindNodeDetailByVer(url, ver string) (*NodeDetail, error) {
 	filter, err := util.FormatWildcard(ver, url)
