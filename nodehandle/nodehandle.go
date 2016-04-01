@@ -501,7 +501,8 @@ func LS(isPrint bool) ([]string, error) {
  Print remote node.exe list
 
  Param:
- 	- isPrint: when isPrint == true, print console
+ 	- limit: print max line
+ 	- io:    when io == true, print iojs
 
 */
 func LsRemote(limit int, io bool) {
@@ -540,6 +541,14 @@ func LsRemote(limit int, io bool) {
 	}
 }
 
+/*
+ Show local / global node.exe version
+
+ Param:
+ 	- args:   include: latest global
+ 	- remote: when remote == true, print remote latest version
+
+*/
 func NodeVersion(args []string, remote bool) {
 
 	// try catch
@@ -595,6 +604,13 @@ func NodeVersion(args []string, remote bool) {
 	}
 }
 
+/*
+ Print gnvm.exe version
+
+ Param:
+ 	- remote: when remote == true, print CHANGELOG
+
+*/
 func Version(remote bool) {
 
 	// try catch
