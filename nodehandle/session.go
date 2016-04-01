@@ -143,11 +143,6 @@ exit /b 0
 `
 var GNS_HOME = util.GlobalNodePath + util.DIVIDE + "gns.cmd"
 
-func init() {
-	// verify GNVM_SESSION_NODE_HOME exist.
-	// if exist, 'gnvm install -g', 'gnvm update -g' 'gnvm use x.xx.xx' can't be use.
-}
-
 /*
  Regedit
 
