@@ -494,22 +494,22 @@ func LsRemote(limit int, io bool) {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm ls --remote' an error has occurred. please check registry %v. \nError: ", url)
+			msg := fmt.Sprintf("'gnvm ls --remote' an error has occurred. please check your input %v. \nError: ", url)
 			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
 
 	// print
-	P(DEFAULT, "Read all node.exe version list from %v, please wait.\n", url)
+	P(DEFAULT, "Read all Node.js version list from %v, please wait.\n", url)
 
 	// generate nodist
 	nodist, err, code := New(url, nil)
 	if err != nil {
 		if code == -1 {
-			P(ERROR, "'%v' get url %v error, Error: %v\n", "gnvm search", url, err)
+			P(ERROR, "'%v' get url %v error, Error: %v\n", "gnvm ls -r -d", url, err)
 		} else {
-			P(ERROR, "%v an error has occurred. please check. Error: %v\n", "gnvm search", err)
+			P(ERROR, "%v an error has occurred. please check your input. Error: %v\n", "gnvm ls -r -d", err)
 		}
 		return
 	}

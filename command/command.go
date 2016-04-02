@@ -252,6 +252,12 @@ gnvm ls -r -d --limit=xx :Print remote Node.js maximum number of rows is xx.( de
 		} else {
 			switch {
 			case !remote && !detail:
+				if io {
+					P(WARING, "%v no support flag %v, please check your input. See '%v'.\n", "gnvm ls", "-i", "gnvm help ls")
+				}
+				if limit != 0 {
+					P(WARING, "%v no support flag %v, please check your input. See '%v'.\n", "gnvm ls", "-l", "gnvm help ls")
+				}
 				nodehandle.LS(true)
 			case remote && !detail:
 				if limit != 0 {
