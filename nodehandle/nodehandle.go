@@ -248,7 +248,7 @@ func Uninstall(folder string) {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm uninstall %v' an error has occurred. please check. \nError: ", folder)
+			msg := fmt.Sprintf("gnvm uninstall %v an error has occurred. please check your input. \nError: ", folder)
 			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
@@ -258,7 +258,7 @@ func Uninstall(folder string) {
 	removePath := rootPath + folder
 
 	if folder == config.UNKNOWN {
-		P(ERROR, "unassigned node.exe latest version. See '%v'.\n", "gnvm config INIT")
+		P(ERROR, "current latest version is %v, please usage '%v' first. See '%v'.\n", folder, "gnvm update latest", "gnvm help update")
 		return
 	}
 
@@ -274,7 +274,7 @@ func Uninstall(folder string) {
 		return
 	}
 
-	P(DEFAULT, "Node.exe version %v uninstall success.\n", folder)
+	P(DEFAULT, "Node.js version %v uninstall success.\n", folder)
 }
 
 /*
@@ -453,7 +453,7 @@ func LS(isPrint bool) ([]string, error) {
 				existVersion = true
 
 				// set lsArr
-				lsArr = append(lsArr, ver)
+				lsArr = append(lsArr, version)
 
 				if isPrint {
 					if desc == "" {

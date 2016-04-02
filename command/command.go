@@ -84,13 +84,13 @@ gnvm install npm                     :Not logger support command, please usage '
 // sub cmd
 var uninstallCmd = &cobra.Command{
 	Use:   "uninstall",
-	Short: "Uninstall local node.exe version",
-	Long: `Uninstall local node.exe version e.g.
-gnvm uninstall 0.10.28                     :Uninstall 0.10.28 version.
-gnvm uninstall latest                      :Uninstall latest  version.
+	Short: "Uninstall local Node.js version",
+	Long: `Uninstall local Node.js version e.g.
 gnvm uninstall npm                         :Uninstall npm.
-gnvm uninstall 0.10.26 0.11.2 latest npm   :Uninstall 0.10.26 0.11.2 latest npm.
-gnvm uninstall ALL                         :Uninstall all node.exe.
+gnvm uninstall 0.10.28                     :Uninstall 0.10.28  Node.js version.
+gnvm uninstall latest                      :Uninstall latest   Node.js version.
+gnvm uninstall 0.10.26 0.11.2 latest       :Uninstall multiple Node.js version, e.g. 0.10.26 0.11.2-x86 latest.
+gnvm uninstall ALL                         :Uninstall all      Node.js version.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if _, ok := util.IsSessionEnv(); ok {
@@ -98,7 +98,7 @@ gnvm uninstall ALL                         :Uninstall all node.exe.
 			return
 		}
 		if len(args) == 0 {
-			P(ERROR, "'%v' need parameter, please check your input. See '%v'.\n", "gnvm uninstall", "gnvm help uninstall")
+			P(ERROR, "%v need parameter, please check your input. See '%v'.\n", "gnvm uninstall", "gnvm help uninstall")
 			return
 		} else if len(args) == 1 {
 			args[0] = util.EqualAbs("ALL", args[0])
@@ -133,7 +133,7 @@ gnvm uninstall ALL                         :Uninstall all node.exe.
 
 			// check version format
 			if !util.VerifyNodeVer(v) {
-				P(ERROR, "%v format error, the correct format is %v.\n", v, "x.xx.xx")
+				P(ERROR, "%v not an %v Node.js version.\n", v, "valid")
 			} else {
 				nodehandle.Uninstall(v)
 			}
