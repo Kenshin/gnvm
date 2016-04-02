@@ -12,9 +12,9 @@ func TestCurl(t *testing.T) {
 	//testNodist()
 	//testNPManage()
 	//testGetNPMVer()
-	//testIsDirExist()
+	testIsDirExist()
 	//testArch()
-	testVaildPath()
+	//testVaildPath()
 }
 
 func testSearch() {
@@ -68,6 +68,10 @@ func testIsDirExist() {
 	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejs\node_modules`))
 	// not valid path
 	fmt.Println(util.IsDirExist("gnvm"))
+	// exist
+	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejs\5.9.1\node.exe`))
+	// exist
+	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejs\5.1.1\node.exe`))
 }
 
 func testArch() {
@@ -79,6 +83,6 @@ func testArch() {
 
 func testVaildPath() {
 	path := `C:\Users\Kenshin\Documents\DevTools\nodejs\5.1.1-x86\`
-	util.VaildPath(&path)
+	util.FormatPath(&path)
 	fmt.Println(path)
 }
