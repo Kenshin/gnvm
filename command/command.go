@@ -238,17 +238,17 @@ gnvm update latest --global`,
 // sub cmd
 var lsCmd = &cobra.Command{
 	Use:   "ls",
-	Short: "List show all <local> <remote> node.exe version",
-	Long: `List show all <local> <remote> node.exe version e.g.:
-gnvm ls                  :Print local node.js folder list.
-gnvm ls -r               :Print remote node.js versions.
-gnvm ls -r -d            :Print remote node.js details versions.
-gnvm ls -r -d -i         :Print remote io.js versions.
-gnvm ls -r -d --limit=xx :Print remote node.js maximum number of rows is xx.( default, print max rows. )
+	Short: "List show all [local] [remote] Node.js version",
+	Long: `List show all [local] [remote] Node.js version e.g.:
+gnvm ls                  :Print local  Node.js versions list.
+gnvm ls -r               :Print remote Node.js versions.
+gnvm ls -r -d            :Print remote Node.js details versions.
+gnvm ls -r -d -i         :Print remote io.js   versions.
+gnvm ls -r -d --limit=xx :Print remote Node.js maximum number of rows is xx.( default, print max rows. )
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 0 {
-			P(WARING, "gnvm ls no parameter, please check your input. See '%v'.\n", "gnvm help ls")
+			P(WARING, "%v no parameter, please check your input. See '%v'.\n", "gnvm ls", "gnvm help ls")
 		} else {
 			switch {
 			case !remote && !detail:

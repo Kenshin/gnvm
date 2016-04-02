@@ -431,7 +431,7 @@ func LS(isPrint bool) ([]string, error) {
 		if util.VerifyNodeVer(version) {
 
 			// <root>/x.xx.xx/node.exe is exist
-			if util.IsDirExist(rootPath + version) {
+			if util.IsDirExist(rootPath + version + util.DIVIDE + util.NODE) {
 				desc := ""
 				switch {
 				case version == config.GetConfig(config.GLOBAL_VERSION) && version == config.GetConfig(config.LATEST_VERSION):
@@ -469,7 +469,7 @@ func LS(isPrint bool) ([]string, error) {
 
 	// version is exist
 	if !existVersion {
-		P(WARING, "don't have any available version, please check. See '%v'.\n", "gnvm help install")
+		P(WARING, "don't have any available Node.js version, please check your input. See '%v'.\n", "gnvm help install")
 	}
 
 	return lsArr, err
