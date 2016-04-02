@@ -453,7 +453,7 @@ func Copy(src, dst, name string) (err error) {
 }
 
 /*
- Judge path( folder ) exist
+ Judge path( folder ) or file exist
 
  Param:
     - path: valid path e.g. /gnvm/node_modules
@@ -463,13 +463,11 @@ func Copy(src, dst, name string) (err error) {
     - false: no exit
 */
 func IsDirExist(path string) bool {
-	file, err := os.Stat(path)
-	if err != nil {
-		return os.IsExist(err)
-	} else {
-		return file.IsDir()
+	_, err := os.Stat(path)
+	if err != nil && os.IsNotExist(err) {
+		return false
 	}
-	return false
+	return true
 }
 
 func getGlobalNodePath() string {
