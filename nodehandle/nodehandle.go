@@ -377,8 +377,8 @@ func Search(s string) {
 	// print
 	P(DEFAULT, "Search node.exe version rules [%v] from %v, please wait.\n", s, url)
 
-	// generate nl
-	nl, err, code := New(url, regex)
+	// generate nodist
+	nodist, err, code := New(url, regex)
 	if err != nil {
 		if code == -1 {
 			P(ERROR, "'%v' get url %v error, Error: %v\n", "gnvm search", url, err)
@@ -388,8 +388,8 @@ func Search(s string) {
 		return
 	}
 
-	if len(*nl) > 0 {
-		nl.Detail(0)
+	if len(nodist.nl) > 0 {
+		nodist.Detail(0)
 	} else {
 		P(WARING, "not search any node.exe version details, use rules [%v] from %v.\n", s, url)
 	}
@@ -503,8 +503,8 @@ func LsRemote(limit int, io bool) {
 	// print
 	P(DEFAULT, "Read all node.exe version list from %v, please wait.\n", url)
 
-	// generate nl
-	nl, err, code := New(url, nil)
+	// generate nodist
+	nodist, err, code := New(url, nil)
 	if err != nil {
 		if code == -1 {
 			P(ERROR, "'%v' get url %v error, Error: %v\n", "gnvm search", url, err)
@@ -515,7 +515,11 @@ func LsRemote(limit int, io bool) {
 	}
 
 	if limit != -1 {
-		nl.Detail(limit)
+		nodist.Detail(limit)
+	} else {
+		for _, v := range nodist.Sorts {
+			fmt.Println(v)
+		}
 	}
 }
 
