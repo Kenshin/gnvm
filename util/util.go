@@ -411,7 +411,7 @@ func EqualAbs(key, value string) string {
 */
 func FormatPath(path *string) {
 	if !IsDirExist(*path) {
-		P(WARING, "%v not a vaild directory.\n", *path)
+		// TO DO
 	} else if !strings.HasSuffix(*path, DIVIDE) {
 		*path += DIVIDE
 	}
