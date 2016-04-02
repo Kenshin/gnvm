@@ -34,20 +34,21 @@ type (
 		NPM
 	}
 
-	Nodist map[string]NodeDetail
+	Nodist struct {
+		nl    map[string]NodeDetail
+		Sorts []string
+	}
 )
 
-var sorts []string
-
 /*
- Create nl( map[string]NodeDetail )
+ Create nodist( map[string]NodeDetail )
 
  Param:
     - url:    index.json url, e.g. http://npm.taobao.org/mirrors/node/index.json
     - filter: regexp when regexp == nil, filter all NodeDetail
 
  Return:
-    - nl:     nodedetail collection
+    - nodist: nodedetail collection
     - error:  error
     - code:   error flag
 
@@ -79,8 +80,8 @@ func New(url string, filter *regexp.Regexp) (*Nodist, error, int) {
 		return nil, err, -4
 	}
 
-	nl, idx := make(Nodist, 0), 0
-	sorts = make([]string, 0)
+	nodist, idx := new(Nodist), 0
+	nodist.nl = make(map[string]NodeDetail, 0)
 	for _, element := range arr {
 		if value, ok := element.(map[string]interface{}); ok {
 			ver, _ := value["version"].(string)
@@ -95,12 +96,12 @@ func New(url string, filter *regexp.Regexp) (*Nodist, error, int) {
 				npm = "[x]"
 			}
 			exe := formatExe(ver[1:])
-			sorts = append(sorts, ver)
-			nl[ver] = NodeDetail{idx, date, Node{ver, exe}, NPM{npm}}
+			nodist.Sorts = append(nodist.Sorts, ver)
+			nodist.nl[ver] = NodeDetail{idx, date, Node{ver, exe}, NPM{npm}}
 			idx++
 		}
 	}
-	return &nl, nil, 0
+	return nodist, nil, 0
 }
 
 /*
@@ -120,12 +121,12 @@ func FindNodeDetailByVer(url, ver string) (*NodeDetail, error) {
 	if err != nil {
 		return nil, err
 	}
-	nl, err, _ := New(url, filter)
+	nodist, err, _ := New(url, filter)
 	if err != nil {
 		return nil, err
 	}
-	if len(*nl) == 1 {
-		nd := (*nl)["v"+ver]
+	if len(nodist.nl) == 1 {
+		nd := nodist.nl["v"+ver]
 		return &nd, nil
 	}
 	return nil, nil
@@ -142,17 +143,17 @@ func (this *Nodist) Detail(limit int) {
 	table := `+--------------------------------------------------+
 | No.   date         node ver    exec      npm ver |
 +--------------------------------------------------+`
-	if limit == 0 || limit > len(sorts) {
-		limit = len(sorts)
+	if limit == 0 || limit > len(this.Sorts) {
+		limit = len(this.Sorts)
 	}
-	for idx, v := range sorts {
+	for idx, v := range this.Sorts {
 		if idx == 0 {
 			fmt.Println(table)
 		}
 		if idx >= limit {
 			break
 		}
-		value := (*this)[v]
+		value := this.nl[v]
 		id := leftpad(strconv.Itoa(value.ID+1), 6)
 		date := leftpad(value.Date, 13)
 		ver := leftpad(value.Node.Version[1:], 12)
