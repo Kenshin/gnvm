@@ -346,13 +346,13 @@ func Update(global bool) {
  Search node.exe version and Print
 
  Param:
- 	- s: node.exe version, inlcude: *.*.* 0.*.* 0.10.* \<regexp>\ latest 0.10.10
+ 	- s: node.exe version, inlcude: *.*.* 0.*.* 0.10.* /<regexp>/ latest 0.10.10
 
 */
 func Search(s string) {
 	regex, err := util.FormatWildcard(s, latURL)
 	if err != nil {
-		P(ERROR, "[%v] %v\n", s, err.Error())
+		P(ERROR, "%v not an %v Node.js version.\n", s, "valid")
 		return
 	}
 
@@ -368,14 +368,14 @@ func Search(s string) {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm search' an error has occurred. please check %v. \nError: ", url)
+			msg := fmt.Sprintf("'%v' an error has occurred. please check your input.\nError: ", "gnvm search")
 			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
 
 	// print
-	P(DEFAULT, "Search node.exe version rules [%v] from %v, please wait.\n", s, url)
+	P(DEFAULT, "Search Node.js version rules [%v] from %v, please wait.\n", s, url)
 
 	// generate nodist
 	nodist, err, code := New(url, regex)
@@ -391,7 +391,7 @@ func Search(s string) {
 	if len(nodist.nl) > 0 {
 		nodist.Detail(0)
 	} else {
-		P(WARING, "not search any node.exe version details, use rules [%v] from %v.\n", s, url)
+		P(WARING, "not search any Node.js version details, use rules [%v] from %v.\n", s, url)
 	}
 }
 
