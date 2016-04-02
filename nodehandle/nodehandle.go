@@ -58,7 +58,7 @@ func Use(newer string) bool {
 	// get true folder, e.g. folder is latest return x.xx.xx
 	util.FormatLatVer(&newer, config.GetConfig(config.LATEST_VERSION), true)
 	if newer == util.UNKNOWN {
-		P(WARING, "current latest is %v, please usage '%v' first. See '%v'.\n", newer, "gnvm node-version latest -r", "gnvm help node-version")
+		P(WARING, "current latest is %v, please usage '%v' first. See '%v'.\n", newer, "gnvm update latest", "gnvm help update")
 		return false
 	}
 
