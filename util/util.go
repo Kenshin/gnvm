@@ -12,6 +12,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"runtime"
 	"strconv"
@@ -456,13 +457,14 @@ func Copy(src, dst, name string) (err error) {
  Judge path( folder ) or file exist
 
  Param:
-    - path: valid path e.g. /gnvm/node_modules
+    - paths: multi valid path e.g. "/gnvm/node_modules", "npm", "bin", "npm.cmd"
 
  Return:
     - true : exist
     - false: no exit
 */
-func IsDirExist(path string) bool {
+func IsDirExist(paths ...string) bool {
+	path := filepath.Join(paths...)
 	_, err := os.Stat(path)
 	if err != nil && os.IsNotExist(err) {
 		return false
