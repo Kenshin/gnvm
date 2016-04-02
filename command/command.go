@@ -391,12 +391,12 @@ var searchCmd = &cobra.Command{
 	Use:   "search",
 	Short: "Search and Print Node.js version detail usage wildcard mode or regexp mode",
 	Long: `Search  and Print Node.js version detail usage wildcard mode or regexp mode. e.g. :
-gnvm search *.*.*          :Search and Print all Node.js versions detail, consistent with gnvm ls -r -d
+gnvm search *.*.*          :Search and Print all Node.js versions detail, consistent with gnvm ls -r -d.
 gnvm search 0.*.*          :Search and Print 0.0.0  ~ 0.99.99 range Node.js version detail.
 gnvm search 0.10.*         :Search and Print 0.10.0 ~ 0.10.99 range Node.js version detail.
 gnvm search /<regexp>/     :Search and Print <regexp> Node.js version detail.
-gnvm search latest         :Search and Print latest Node.js version detail.
-gnvm search 0.10.10        :Search and Print 0.10.10 Node.js version detail.
+gnvm search latest         :Search and Print latest   Node.js version detail.
+gnvm search 0.10.10        :Search and Print 0.10.10  Node.js version detail.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
