@@ -63,6 +63,7 @@ func testIsDirExist() {
 	// no exist
 	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejss`))
 	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejs\node_moduless\npm`))
+	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejs\5.1.1\node.exe`))
 	// exist
 	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejs`))
 	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejs\node_modules`))
@@ -70,8 +71,7 @@ func testIsDirExist() {
 	fmt.Println(util.IsDirExist("gnvm"))
 	// exist
 	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejs\5.9.1\node.exe`))
-	// exist
-	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools\nodejs\5.1.1\node.exe`))
+	fmt.Println(util.IsDirExist(`C:\Users\Kenshin\Documents\DevTools`, `nodejs`, `5.1.1`))
 }
 
 func testArch() {
