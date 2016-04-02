@@ -144,10 +144,12 @@ gnvm uninstall ALL                         :Uninstall all node.exe.
 // sub cmd
 var useCmd = &cobra.Command{
 	Use:   "use",
-	Short: "Use any version of the local already exists",
-	Long: `Use any version of the local already exists e.g.
-gnvm use x.xx.xx
-gnvm use latest`,
+	Short: "Use any the local already exists of Node.js version",
+	Long: `Use any the local already exists of Node.js version e.g.
+gnvm use x.xx.xx      :Usage x.xx.xx Node.js version.
+gnvm use latest       :Usage latest  Node.js version.
+gnvm use x.xx.xx-x86  :Usage x.xx.xx Node.js with arch x86 version.
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if _, ok := util.IsSessionEnv(); ok {
 			P(WARING, "current is %v, if you usage %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
@@ -157,7 +159,7 @@ gnvm use latest`,
 			version := args[0]
 			version = util.EqualAbs("latest", version)
 			if util.VerifyNodeVer(version) != true {
-				P(ERROR, "use parameter support '%v' or '%v', e.g. %v, please check your input. See '%v'.\n", "latest", "x.xx.xx", "0.10.28", "gnvm help use")
+				P(ERROR, "%v param only support [%v] or %v e.g. [%v], please check your input. See '%v'.\n", "gnvm use", "latest", "valid Node.js version", "5.9.1", "gnvm help use")
 				return
 			}
 
@@ -167,7 +169,7 @@ gnvm use latest`,
 				config.SetConfig(config.GLOBAL_VERSION, version)
 			}
 		} else {
-			P(ERROR, "use parameter maximum is 1, please check your input. See '%v'.\n", "gnvm help use")
+			P(ERROR, "%v must be only %v parameter, please check your input. See '%v'.\n", "gnvm use", "one", "gnvm help use")
 		}
 	},
 }

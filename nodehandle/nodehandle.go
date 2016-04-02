@@ -57,11 +57,15 @@ func Use(newer string) bool {
 
 	// get true folder, e.g. folder is latest return x.xx.xx
 	util.FormatLatVer(&newer, config.GetConfig(config.LATEST_VERSION), true)
+	if newer == util.UNKNOWN {
+		P(WARING, "current latest is %v, please usage '%v' first. See '%v'.\n", newer, "gnvm node-version latest -r", "gnvm help node-version")
+		return false
+	}
 
 	// set newerPath and verify newerPath is exist?
 	newerPath := rootPath + newer
 	if _, err := util.GetNodeVer(newerPath); err != nil {
-		P(WARING, "%v folder is not exist from %v, use '%v' get local node.exe list. See '%v'.\n", newer, rootPath, "gnvm ls", "gnvm help ls")
+		P(WARING, "%v folder is not exist %v, use '%v' get local node.exe list. See '%v'.\n", newer, "node.exe", "gnvm ls", "gnvm help ls")
 		return false
 	}
 
@@ -79,7 +83,7 @@ func Use(newer string) bool {
 
 	// check newer is global
 	if newer == global {
-		P(WARING, "current node.exe version is %v, not re-use. See 'gnvm node-version'.\n", newer)
+		P(WARING, "current node.exe version is %v, not re-use. See '%v'.\n", newer, "gnvm node-version")
 		return false
 	}
 
