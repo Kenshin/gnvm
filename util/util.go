@@ -107,7 +107,7 @@ func FormatNodeVer(version string) float64 {
 	- `1.*.*`      - wildcard
 	- `0.10.*`     - wildcard
 	- `5.9.0`      - {num}.{num}.{num}
-	- `\<regexp>\` - regexp
+	- `/<regexp>/` - regexp
 	- latest       - trans to true version
 
   Return:
