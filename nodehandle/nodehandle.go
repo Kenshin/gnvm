@@ -151,18 +151,18 @@ func InstallNode(args []string, global bool) int {
 			case "1":
 				P(ERROR, "%v not node.exe download.\n", v)
 			case "2":
-				P(ERROR, "%v format error, must be '%v' or '%v'.\n", v, "x86", "x64")
+				P(ERROR, "%v format error, suffix only must be '%v' or '%v'.\n", v, "x86", "x64")
 			case "3":
 				P(ERROR, "%v format error, parameter must be '%v' or '%v'.\n", v, "x.xx.xx", "x.xx.xx-x86|x64")
 			case "4":
-				P(ERROR, "%v format error, the correct format is %v or %v. \n", v, "0.xx.xx", "^0.xx.xx")
+				P(ERROR, "%v not an %v Node.js version.\n", v, "valid")
 			case "5":
 				P(WARING, "'%v' command is no longer supported. See '%v'.\n", "gnvm install npm", "gnvm help npm")
 			}
 			continue
 		}
 
-		// check latest and get remote latest
+		// check local latest and get remote latest
 		v = util.EqualAbs("latest", v)
 		if ver == config.LATEST {
 			localVersion = config.GetConfig(config.LATEST_VERSION)
@@ -181,7 +181,7 @@ func InstallNode(args []string, global bool) int {
 			isLatest = false
 		}
 
-		// get folder
+		// verify <root>/folder is exist
 		folder := rootPath + ver
 		if suffix != "" {
 			folder += "-" + suffix
