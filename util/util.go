@@ -307,9 +307,8 @@ func GetLatVer(url string) string {
  	- http://npm.taobao.org/mirrors/iojs/v1.0.0/win-x86/iojs.exe
 */
 func GetRemoteNodePath(url, version, arch string) (string, error) {
-	folder := "/"
-	exec := NODE
-	level := GetNodeVerLev(FormatNodeVer(version))
+	version = strings.Split(version, "-")[0]
+	folder, exec, level := "/", NODE, GetNodeVerLev(FormatNodeVer(version))
 
 	switch level {
 	case 0:
