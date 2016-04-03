@@ -162,6 +162,12 @@ func InstallNode(args []string, global bool) int {
 			continue
 		}
 
+		// when os is 386, not download 64 bit node.exe
+		if runtime.GOARCH == "386" && suffix == "x64" {
+			P(WARING, "current operating system is %v, not support %v suffix.", "32-bit", "-x64")
+			continue
+		}
+
 		// check local latest and get remote latest
 		v = util.EqualAbs("latest", v)
 		if ver == config.LATEST {
