@@ -50,13 +50,12 @@ gnvm version --remote`,
 // sub cmd
 var installCmd = &cobra.Command{
 	Use:   "install",
-	Short: "Install any node.exe version",
-	Long: `Install any node.exe version e.g.
-gnvm install latest                  :Download 'latest' version from .gnvmrc registry.
-gnvm install x.xx.xx y.yy.yy         :Multi version download.
-gnvm install x.xx.xx-x86             :Assign arch version.
-gnvm install x.xx.xx-io              :Assign io.js version.
-gnvm install x.xx.xx-io-x86          :Assign io.js arch version.
+	Short: "Install any Node.js version",
+	Long: `Install any Node.js version e.g.
+gnvm install latest                  :Download latest Node.js version from .gnvmrc registry.
+gnvm install x.xx.xx y.yy.yy         :Multiple Node.js version download.
+gnvm install x.xx.xx-x86             :Assign arch  version, suffix include: x86 and x64.
+gnvm install 1.xx.xx                 :Assign io.js version.
 gnvm install x.xx.xx --global        :Download and auto invoke 'gnvm use x.xx.xx'.
 gnvm install npm                     :Not logger support command, please usage 'gnvm npm x.xx.xx'. See 'gnvm help npm'.
 `,
