@@ -410,10 +410,10 @@ gnvm search 0.10.10        :Search and Print 0.10.10  Node.js version detail.
 var npmCmd = &cobra.Command{
 	Use:   "npm",
 	Short: "NPM version management",
-	Long: `Install any npm version. e.g. :
+	Long: `Download and intall any npm version. e.g. :
 gnvm npm x.xx.xx          :Install x.xx.xx npm version.
 gnvm npm latest           :Install latest  npm version.
-gnvm npm global           :Install local node.exe matching npm version.
+gnvm npm global           :Install local Node.js version matching npm version.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {

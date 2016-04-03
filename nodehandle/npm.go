@@ -120,9 +120,7 @@ func (this *NPMange) Download(url, name string) error {
 	curl.Options.Header = false
 	curl.Options.Footer = false
 	if _, errs := curl.New(url, name, name, this.root); len(errs) > 0 {
-		err := errs[0]
-		P(ERROR, "%v an error has occurred, url %v, Error is %v. See '%v'.\n", "gnvm npm", url, err.Error(), "gnvm help npm")
-		return err
+		return errs[0]
 	}
 	return nil
 }
@@ -247,7 +245,7 @@ func InstallNPM(version string) {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm npm %v' an error has occurred. please check. \nError: %v", version, err)
+			msg := fmt.Sprintf("'gnvm npm %v' an error has occurred. please check. \nError: ", version)
 			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
@@ -255,7 +253,7 @@ func InstallNPM(version string) {
 
 	version = strings.ToLower(version)
 	if !util.VerifyNodeVer(version) {
-		P(ERROR, "'%v' param only support [%v] [%v] or %v e.g. [%v], please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "valid version", "5.9.1", "gnvm help npm")
+		P(ERROR, "'%v' param only support [%v] [%v] or %v e.g. [%v], please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "valid version", "3.8.1", "gnvm help npm")
 		return
 	}
 
@@ -383,7 +381,7 @@ func downloadNpm(ver string) {
 
 	// download
 	if err := npm.Download(url, version); err != nil {
-		return
+		panic(err.Error())
 	}
 
 	P(DEFAULT, "Start unzip and install %v zip file, please wait.\n", version)
@@ -396,8 +394,8 @@ func downloadNpm(ver string) {
 
 	// unzip
 	if _, err := npm.Unzip(); err != nil {
-		P(ERROR, "unzip %v an error has occurred. \nError: ", npm.zipname, err.Error())
-		return
+		msg := fmt.Sprintf("unzip %v an error has occurred. \nError: ", npm.zipname, err.Error())
+		panic(errors.New(msg))
 	}
 
 	// install
