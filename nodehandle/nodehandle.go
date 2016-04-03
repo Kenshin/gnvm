@@ -187,11 +187,13 @@ func InstallNode(args []string, global bool) int {
 			isLatest = false
 		}
 
+		// ture folder name
+		if suffix != "" {
+			ver += "-" + suffix
+		}
+
 		// verify <root>/folder is exist
 		folder := rootPath + ver
-		if suffix != "" {
-			folder += "-" + suffix
-		}
 		if _, err := util.GetNodeVer(folder); err == nil {
 			P(WARING, "%v folder exist.\n", ver)
 			continue
@@ -214,7 +216,7 @@ func InstallNode(args []string, global bool) int {
 		curl.Options.Header = false
 		curl.Options.Footer = false
 		arr := (*dl).GetValues("Title")
-		P(DEFAULT, "Start download [%v].\n", strings.Join(arr, ", "))
+		P(DEFAULT, "Start download Node.js versions [%v].\n", strings.Join(arr, ", "))
 		newDL, errs := curl.New(*dl)
 		for _, task := range newDL {
 			v := strings.Replace(task.Dst, rootPath, "", -1)
