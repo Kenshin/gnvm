@@ -52,6 +52,13 @@ func init() {
 
 /*
   Get node.exe version, usage exec.Command()
+
+   Param:
+	- path:   node.exe path, e.g. x:\xxx\xxx
+
+   Return:
+	- string: node.exe version, e.g. 5.10.0
+	- error
 */
 func GetNodeVer(path string) (string, error) {
 	FormatPath(&path)
@@ -63,8 +70,14 @@ func GetNodeVer(path string) (string, error) {
 }
 
 /*
-  Verify node version format.
-  Node version format must be http://semver.org/
+  Verify Node.js version format.
+  Node.js version format must be http://semver.org/
+
+   Param:
+	- version: node.exe version
+
+   Return:
+	- bool:    true or false
 */
 func VerifyNodeVer(version string) bool {
 	version = strings.Split(version, "-")[0]
@@ -78,8 +91,14 @@ func VerifyNodeVer(version string) bool {
 }
 
 /*
-  Format node version
+  Format Node.js version
   x.xx.xx conver to float64
+
+   Param:
+	- version: string, e.g. "5.10.0"
+
+   Return:
+	- version: float64, e.g. 0.510
 */
 func FormatNodeVer(version string) float64 {
 	reg, _ := regexp.Compile(`\.(\d){0,2}`)
@@ -102,13 +121,16 @@ func FormatNodeVer(version string) float64 {
 
 /*
   Format wildcard node version
-  Do not allow the *.1.* model
-	- `*.*.*`      - wildcard( include x|X )
-	- `1.*.*`      - wildcard
-	- `0.10.*`     - wildcard
-	- `5.9.0`      - {num}.{num}.{num}
-	- `/<regexp>/` - regexp
-	- latest       - trans to true version
+
+  Param:
+	- version: Node.js version, e.g. "5.10.0"
+		- `*.*.*`      - wildcard( include x|X )
+		- `1.*.*`      - wildcard
+		- `0.10.*`     - wildcard
+		- `5.9.0`      - {num}.{num}.{num}
+		- `/<regexp>/` - regexp
+		- latest       - trans to true version
+	- url: Node.js latest version url
 
   Return:
 	- regexp
