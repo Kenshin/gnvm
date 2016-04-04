@@ -398,8 +398,9 @@ func IsSessionEnv() (string, bool) {
   Ignore key case and return lowercase value
 */
 func EqualAbs(key, value string) string {
+	key = strings.ToLower(key)
 	if strings.EqualFold(value, key) && value != key {
-		P(WARING, "current value is %v, please use %v.\n", value, key)
+		P(WARING, "current value is %v, please use %v lowercase format.\n", value, key)
 		value = key
 	}
 	return value
