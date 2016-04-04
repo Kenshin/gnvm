@@ -79,6 +79,9 @@ func init() {
 
 }
 
+/*
+ Create .gnvmrc file
+*/
 func createConfig() {
 
 	// create file
@@ -112,10 +115,11 @@ func createConfig() {
 	}
 
 	P(DEFAULT, "Config file %v create success.\n", configPath)
-	//P(NOTICE, "if you first run gnvm.exe, please use %v or %v.", "gnvm config INIT", "gnvm config registry TAOBAO", "\n")
-
 }
 
+/*
+ Read .gnvmrc file
+*/
 func readConfig() {
 	if err := config.ReadConfigFile(configPath); err != nil {
 		P(ERROR, "read config file fail, please use '%v'. \nError: %v\n", "gnvm config INIT", err.Error())
@@ -123,6 +127,14 @@ func readConfig() {
 	}
 }
 
+/*
+ Write config property value from .gnvmrc file
+
+ Param:
+ 	- key:   config property, include: registry noderoot latestversion globalversion
+ 	- value: config property value
+
+*/
 func SetConfig(key string, value interface{}) string {
 
 	if key == "registry" {
@@ -157,6 +169,16 @@ func SetConfig(key string, value interface{}) string {
 
 }
 
+/*
+ Read config property value from .gnvmrc file
+
+ Param:
+ 	- key:   config property, include: registry noderoot latestversion globalversion
+
+ Return:
+ 	- value: config property value
+
+*/
 func GetConfig(key string) string {
 	value, err := config.GetString(key)
 	if err != nil {
@@ -166,6 +188,9 @@ func GetConfig(key string) string {
 	return value
 }
 
+/*
+ Init config property value from .gnvmrc file
+*/
 func ReSetConfig() {
 	if newValue := SetConfig(REGISTRY, REGISTRY_VAL); newValue != "" {
 		P(NOTICE, "%v      init success, new value is %v\n", REGISTRY, newValue)
@@ -189,20 +214,11 @@ func ReSetConfig() {
 	if newValue := SetConfig(GLOBAL_VERSION, globalversion); newValue != "" {
 		P(NOTICE, "%v init success, new value is %v\n", GLOBAL_VERSION, newValue)
 	}
-	/*
-		url := REGISTRY_VAL + "latest/" + util.SHASUMS
-		P(NOTICE, "get node.exe latest version from %v, please wait.", url, "\n")
-		if latest := util.GetLatVer(url); latest != "" {
-			latsetversion = latest
-		} else {
-			latsetversion = LATEST_VERSION_VAL
-		}
-		if newValue := SetConfig(LATEST_VERSION, latsetversion); newValue != "" {
-			P(NOTICE, "%v init success, new value is %v\n", LATEST_VERSION, newValue)
-		}
-	*/
 }
 
+/*
+ Print all config property value from .gnvmrc file
+*/
 func List() {
 	P(NOTICE, "config file path: %v \n", configPath)
 	f, err := os.Open(configPath)
@@ -223,6 +239,16 @@ func List() {
 	}
 }
 
+/*
+ Get io.js url
+
+ Param:
+ 	- url:   config property, include: registry noderoot latestversion globalversion
+
+ Return:
+ 	- value: config property value
+
+*/
 func GetIOURL(url string) string {
 	if url == TAOBAO {
 		url = strings.Replace(url, "/node", "/iojs", -1)
@@ -232,6 +258,11 @@ func GetIOURL(url string) string {
 	return url
 }
 
+/*
+ Verify config registry url structural correctness, include:
+ 	- url:  <url>
+ 	- json: <url>/index.json
+*/
 func Verify() {
 	code := make(chan int)
 	fail := make(chan interface{})
@@ -287,7 +318,7 @@ func Verify() {
 }
 
 func verifyURL(status string, url string, code chan int, fail chan interface{}) {
-	P(NOTICE, "gnvm config registry: %v valid ", url)
+	P(NOTICE, "gnvm config registry %v valid ", url)
 	time.Sleep(time.Second * 2)
 	if resp, err := http.Get(url); err == nil {
 		if resp.StatusCode == 200 {
