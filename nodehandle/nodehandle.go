@@ -605,16 +605,15 @@ func NodeVersion(args []string, remote bool) {
 */
 func Version(remote bool) {
 
-	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			Error(ERROR, "'gnvm version --remote' an error has occurred. \nError: ", err)
+			msg := fmt.Sprintf("'%v' an error has occurred. please check. \nError: ", "gnvm version -r")
+			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
 
-	localVersion := config.VERSION
-	arch := "32 bit"
+	localVersion, arch := config.VERSION, "32 bit"
 	if runtime.GOARCH == "amd64" {
 		arch = "64 bit"
 	}
@@ -629,9 +628,9 @@ func Version(remote bool) {
 		return
 	}
 
-	code, res, _ := curl.Get(GNVMHOST)
+	code, res, err := curl.Get(GNVMHOST)
 	if code != 0 {
-		return
+		panic(err)
 	}
 	defer res.Body.Close()
 
@@ -669,6 +668,6 @@ func Version(remote bool) {
 	}
 
 	if err := curl.ReadLine(res.Body, versionFunc); err != nil && err != io.EOF {
-		P(ERROR, "gnvm version --remote Error: %v\n", err)
+		panic(err)
 	}
 }

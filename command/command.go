@@ -36,12 +36,12 @@ See https://github.com/kenshin/gnvm for more information.
 // sub cmd
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Print the version number of gnvm.exe",
-	Long: `Print the version number of gnvm.exe e.g.
-gnvm version
-gnvm version --remote`,
+	Short: "Print GNVM version number",
+	Long: `Print GNVM version number e.g. :
+gnvm version           :Print gnvm version information.
+gnvm version --remote  :Print gnvm version CHANGELOG.
+`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// check args
 		if len(args) > 0 {
 			P(WARING, "'%v' no parameter, please check your input. See '%v'.\n", "gnvm version", "gnvm help version")
 		}
