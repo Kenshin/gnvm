@@ -51,7 +51,7 @@ func init() {
 }
 
 /*
-  Get node.exe version, usage exec.Command()
+  Get Node.js version, usage exec.Command()
 
    Param:
 	- path:   node.exe path, e.g. x:\xxx\xxx
