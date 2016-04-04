@@ -396,7 +396,7 @@ gnvm search 0.10.10        :Search and Print 0.10.10  Node.js version detail.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
-			P(ERROR, "%v not support parameter, please check your input. See '%v'.\n", "gnvm search", "gnvm help search")
+			P(ERROR, "%v must be one parameter, please check your input. See '%v'.\n", "gnvm search", "gnvm help search")
 		} else {
 			nodehandle.Search(args[0])
 		}
