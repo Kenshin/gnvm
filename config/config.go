@@ -136,7 +136,6 @@ func readConfig() {
 
 */
 func SetConfig(key string, value interface{}) string {
-
 	if key == "registry" {
 		if !strings.HasPrefix(value.(string), "http://") {
 			P(WARING, "%v need %v", value.(string), "http://", "\n")
@@ -166,7 +165,6 @@ func SetConfig(key string, value interface{}) string {
 	}
 
 	return value.(string)
-
 }
 
 /*
@@ -182,7 +180,6 @@ func SetConfig(key string, value interface{}) string {
 func GetConfig(key string) string {
 	value, err := config.GetString(key)
 	if err != nil {
-		//P(ERROR, "get config Error: %v\n", err.Error())
 		value = UNKNOWN
 	}
 	return value
@@ -220,7 +217,7 @@ func ReSetConfig() {
  Print all config property value from .gnvmrc file
 */
 func List() {
-	P(NOTICE, "config file path: %v \n", configPath)
+	P(NOTICE, "config file path %v \n", configPath)
 	f, err := os.Open(configPath)
 	if err != nil {
 		P(ERROR, "read config file fail, please use '%v'. \nError: %v\n", "gnvm config INIT", err.Error())

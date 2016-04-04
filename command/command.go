@@ -310,9 +310,9 @@ var configCmd = &cobra.Command{
 gnvm config                   :Print all propertys from .gnvmrc.
 gnvm config INIT              :Initialization .gnvmrc file.
 gnvm config [props]           :Get .gnvmrc file props.
+gnvm config registry [custom] :Custom  is valid url.
 gnvm config registry DEFAULT  :DEFAULT is built-in variable. value is http://nodejs.org/dist/
 gnvm config registry TAOBAO   :TAOBAO  is built-in variable. value is http://npm.taobao.org/mirrors/node
-gnvm config registry [custom] :Custom  is valid url.
 gnvm config registry test     :Validation .gnvmfile registry property.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
