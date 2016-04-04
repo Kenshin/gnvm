@@ -277,28 +277,30 @@ gnvm ls -r -d --limit=xx :Print remote Node.js maximum number of rows is xx.( de
 // sub cmd
 var nodeVersionCmd = &cobra.Command{
 	Use:   "node-version",
-	Short: "Show <global> <latest> node.exe version",
-	Long: `Show <global> <latest> node.exe version e.g.
-gnvm node-version
-gnvm node-version latest
-gnvm node-version latest --remote
-gnvm node-version global`,
+	Short: "Show [global] [latest] Node.js version",
+	Long: `Show [global] [latest] Node.js version e.g. :
+gnvm node-version            :Show Node.js global and latest version.
+gnvm node-version latest     :Show Node.js latest version.
+gnvm node-version global     :Show Node.js global version.
+gnvm node-version latest -r  :Show Node.js local and remote latest version.
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 1 {
-			P(WARING, "use parameter maximum is 1, temporary only support <%v>, <%v>, please check your input. See '%v'.\n", "global", "latest", "gnvm help node-version")
-		} else if len(args) == 1 {
-
-			args[0] = util.EqualAbs("global", args[0])
-			args[0] = util.EqualAbs("latest", args[0])
-
-			switch {
-			case args[0] != "global" && args[0] != "latest":
-				P(WARING, "gnvm node-version only support <%v>, <%v> parameter.\n", "global", "latest")
-			case args[0] != "latest" && remote:
-				P(WARING, "gnvm node-version only support <%v> parameter.\n", "latest --remote")
+			P(WARING, "%v parameter only support [%v] or [%v] keyword, please check your input. See '%v'.\n", "gnvm node-version", "global", "latest", "gnvm help node-version")
+		} else {
+			if len(args) == 1 {
+				args[0] = util.EqualAbs("global", args[0])
+				args[0] = util.EqualAbs("latest", args[0])
+				if args[0] != "global" && args[0] != "latest" {
+					P(WARING, "%v parameter only support [%v] or [%v] keyword, please check your input. See '%v'.\n", "gnvm node-version", "global", "latest", "gnvm help node-version")
+					return
+				} else if args[0] == "global" && remote {
+					P(WARING, "%v parameter %v not support %v flag, please check your input. See '%v'.\n", "gnvm node-version", "global", "-r", "gnvm help node-version")
+					return
+				}
 			}
+			nodehandle.NodeVersion(args, remote)
 		}
-		nodehandle.NodeVersion(args, remote)
 	},
 }
 
