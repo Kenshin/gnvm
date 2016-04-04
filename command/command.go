@@ -206,10 +206,11 @@ gns version               :Show version.
 // sub cmd
 var updateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Update latest node.exe",
-	Long: `Update latest node.exe e.g.
-gnvm update latest
-gnvm update latest --global`,
+	Short: "Update Node.js latest version",
+	Long: `Update  Node.js latest version e.g.
+gnvm update latest       :Download and install Node.js latest version from .gnvmrc registry.
+gnvm update latest -g    :Download and auto invoke 'gnvm use latest'.
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
 			if global {
@@ -219,17 +220,13 @@ gnvm update latest --global`,
 				}
 			}
 			args[0] = util.EqualAbs("latest", args[0])
-			args[0] = util.EqualAbs("gnvm", args[0])
-			switch args[0] {
-			case "latest":
+			if args[0] == util.LATEST {
 				nodehandle.Update(global)
-			case "gnvm":
-				P(WARING, "%v temporarily does not support. See '%v'.\n", args[0], "gnvm help update")
-			default:
-				P(ERROR, "gnvm update only support <%v> parameter. See '%v'.\n", "latest", "gnvm help update")
+			} else {
+				P(ERROR, "%v only support [%v] keyword, please check your input. See '%v'.\n", "gnvm update", "latest", "gnvm help update")
 			}
 		} else {
-			P(ERROR, "use parameter maximum is 1, temporary support only <%v>, please check your input. See '%v'.\n", "latest", "gnvm help update")
+			P(ERROR, "%v must be one parameter and only support [%v] keyword, please check your input. See '%v'.\n", "gnvm update", "latest", "gnvm help update")
 		}
 	},
 }

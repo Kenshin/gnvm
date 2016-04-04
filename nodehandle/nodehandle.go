@@ -286,10 +286,10 @@ func Uninstall(folder string) {
 }
 
 /*
- Update local latest node.exe verion
+ Update local Node.js latest verion
 
- - localVersion, remoteVersion: string  node.exe version
- - local, remote:               float64 node.exe version
+ - localVersion, remoteVersion: string  Node.js version
+ - local, remote:               float64 Node.js version
 
  Param:
  	- global: when global == true, call Use func.
@@ -300,19 +300,20 @@ func Update(global bool) {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			Error(ERROR, "'gnvm updte latest' an error has occurred. \nError: ", err)
+			msg := fmt.Sprintf("'%v' an error has occurred. \nError: ", "gnvm updte latest")
+			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
 
 	localVersion, remoteVersion := config.GetConfig(config.LATEST_VERSION), util.GetLatVer(latURL)
 
-	P(NOTICE, "local latest version is %v.\n", localVersion)
+	P(NOTICE, "local  Node.js latest version is %v.\n", localVersion)
 	if remoteVersion == "" {
 		P(ERROR, "get latest version error, please check. See '%v'.\n", "gnvm help config")
 		return
 	}
-	P(NOTICE, "remote %v latest version is %v.\n", config.GetConfig("registry"), remoteVersion)
+	P(NOTICE, "remote Node.js latest version is %v from %v.\n", remoteVersion, config.GetConfig("registry"))
 
 	local, remote, args := util.FormatNodeVer(localVersion), util.FormatNodeVer(remoteVersion), []string{remoteVersion}
 
