@@ -72,7 +72,7 @@ func Use(newer string) bool {
 	// get <root>/node.exe version, when exist, get full version, e.g. x.xx.xx-x86
 	global, err := util.GetNodeVer(rootPath)
 	if err != nil {
-		P(WARING, "not found global node.exe version.\n")
+		P(WARING, "not found %v Node.js version.\n", "global")
 	} else {
 		if bit, err := util.Arch(rootPath); err == nil {
 			if bit == "x86" && runtime.GOARCH == "amd64" {
@@ -112,7 +112,7 @@ func Use(newer string) bool {
 		return false
 	}
 
-	P(DEFAULT, "Set success, global node.exe version is %v.\n", newer)
+	P(DEFAULT, "Set success, global Node.js version is %v.\n", newer)
 
 	return true
 }
@@ -214,7 +214,6 @@ func InstallNode(args []string, global bool) int {
 	// downlaod
 	if len(*dl) > 0 {
 		curl.Options.Header = false
-		curl.Options.Footer = false
 		arr := (*dl).GetValues("Title")
 		P(DEFAULT, "Start download Node.js versions [%v].\n", strings.Join(arr, ", "))
 		newDL, errs := curl.New(*dl)
@@ -238,7 +237,6 @@ func InstallNode(args []string, global bool) int {
 			}
 			P(WARING, s)
 		}
-		P(DEFAULT, "End download.")
 	}
 
 	return code
@@ -321,7 +319,7 @@ func Update(global bool) {
 	case localVersion == config.UNKNOWN:
 		if code := InstallNode(args, global); code == 0 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
-			P(DEFAULT, "Update latest success, current latest version is %v.\n", remoteVersion)
+			P(DEFAULT, "Update Node.js latest success, current latest version is %v.\n", remoteVersion)
 		}
 	case local == remote:
 		if util.IsDirExist(rootPath + localVersion) {
@@ -333,20 +331,20 @@ func Update(global bool) {
 				}
 			}
 		} else {
-			P(WARING, "local not exist %v\n", localVersion)
+			P(WARING, "%v folder is not exist. See '%v'.\n", localVersion, "gnvm ls")
 			if code := InstallNode(args, global); code == 0 {
-				P(DEFAULT, "Download latest version %v success.\n", localVersion)
+				P(DEFAULT, "Local Node.js latest version is %v.\n", localVersion)
 			}
 		}
 	case local > remote:
 		cp := CP{Red, false, None, false, ">"}
-		P(WARING, "local latest version %v %v remote latest version %v.\nPlease check your registry. See 'gnvm help config'.\n", localVersion, cp, remoteVersion)
+		P(WARING, "local latest version %v %v remote latest version %v.\nPlease check your config %v. See '%v'.\n", localVersion, cp, remoteVersion, "registry", "gnvm help config")
 	case local < remote:
 		cp := CP{Red, false, None, false, ">"}
 		P(WARING, "remote latest version %v %v local latest version %v.\n", remoteVersion, cp, localVersion)
 		if code := InstallNode(args, global); code == 0 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
-			P(DEFAULT, "Update latest success, current latest version is %v.\n", remoteVersion)
+			P(DEFAULT, "Update success, Node.js latest version is %v.\n", remoteVersion)
 		}
 	}
 }
