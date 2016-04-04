@@ -23,9 +23,11 @@ var (
 // defind root cmd
 var gnvmCmd = &cobra.Command{
 	Use:   "gnvm",
-	Short: "Gnvm is Node.exe version manager for Windows by GO",
-	Long: `Gnvm is Node.exe version manager for Windows by GO
-           like nvm. Complete documentation is available at https://github.com/kenshin/gnvm`,
+	Short: "GNVM is simple Node.js version manager on Windows by GO.",
+	Long: `GNVM is simple Node.js version manager on Windows by GO. e.g. nvm, nvmw, nodist.
+Copyright (C) 2014-2016 Kenshin Wang <kenshin@ksria.com>
+See https://github.com/kenshin/gnvm for more information.
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TO DO
 	},
@@ -307,7 +309,7 @@ gnvm node-version latest -r  :Show Node.js local and remote latest version.
 // sub cmd
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Setter and getter .gnvmrc file.",
+	Short: "Setter and getter .gnvmrc file",
 	Long: `Setter and getter .gnvmrc file.  e.g. :
 gnvm config                   :Print all propertys from .gnvmrc.
 gnvm config INIT              :Initialization .gnvmrc file.
