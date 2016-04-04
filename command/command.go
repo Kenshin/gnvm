@@ -306,27 +306,30 @@ gnvm node-version global`,
 var configCmd = &cobra.Command{
 	Use:   "config",
 	Short: "Setter and getter .gnvmrc file.",
-	Long: `Setter and getter .gnvmrc file.
+	Long: `Setter and getter .gnvmrc file.  e.g. :
 gnvm config                   :Print all propertys from .gnvmrc.
 gnvm config INIT              :Initialization .gnvmrc file.
-gnvm config <props>           :Get .gnvmrc file props.
-gnvm config registry xxx      :Set registry props, e.g:
-gnvm config registry DEFAULT  :DEFAULT is built-in variable, is http://nodejs.org/dist/
-gnvm config registry TAOBAO   :TAOBAO  is built-in variable, is http://npm.taobao.org/mirrors/node
-gnvm config registry <custom> :Custom  is valid url
-gnvm config registry test     :Validation .gnvmfile registry property
+gnvm config [props]           :Get .gnvmrc file props.
+gnvm config registry DEFAULT  :DEFAULT is built-in variable. value is http://nodejs.org/dist/
+gnvm config registry TAOBAO   :TAOBAO  is built-in variable. value is http://npm.taobao.org/mirrors/node
+gnvm config registry [custom] :Custom  is valid url.
+gnvm config registry test     :Validation .gnvmfile registry property.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			config.List()
 		} else if len(args) == 1 {
 			args[0] = util.EqualAbs("INIT", args[0])
+			args[0] = util.EqualAbs("registry", args[0])
+			args[0] = util.EqualAbs("noderoot", args[0])
+			args[0] = util.EqualAbs("latestversion", args[0])
+			args[0] = util.EqualAbs("globalversion", args[0])
 			if args[0] == "INIT" {
 				config.ReSetConfig()
 			} else {
 				value := config.GetConfig(args[0])
 				if value == config.UNKNOWN {
-					P(ERROR, "%v not a valid keyword. See '%v'.\n", args[0], "gnvm help config")
+					P(ERROR, "%v not a valid config keyword. See '%v'.\n", args[0], "gnvm help config")
 				} else {
 					P(DEFAULT, "gnvm config %v is %v\n", args[0], value)
 				}
@@ -337,7 +340,7 @@ gnvm config registry test     :Validation .gnvmfile registry property
 			args[1] = util.EqualAbs("TAOBAO", args[1])
 			args[1] = util.EqualAbs("test", args[1])
 			if args[0] != "registry" {
-				P(ERROR, "%v only support '%v' set. See '%v'.\n", "gnvm config", "registry", "gnvm help config")
+				P(ERROR, "%v only support [%v] keyword. See '%v'.\n", "gnvm config", "registry", "gnvm help config")
 				return
 			}
 			switch args[1] {
@@ -356,8 +359,8 @@ gnvm config registry test     :Validation .gnvmfile registry property
 					P(DEFAULT, "Set success, %v new value is %v\n", args[0], newValue)
 				}
 			}
-		} else if len(args) > 2 {
-			P(ERROR, "config parameter maximum is 2, please check your input. See '%v'.\n", "gnvm help config")
+		} else {
+			P(ERROR, "%v parameter maximum is 2, please check your input. See '%v'.\n", "gnvm config", "gnvm help config")
 		}
 	},
 }
