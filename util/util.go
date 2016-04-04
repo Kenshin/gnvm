@@ -399,7 +399,7 @@ func IsSessionEnv() (string, bool) {
 */
 func EqualAbs(key, value string) string {
 	if strings.EqualFold(value, key) && value != key {
-		P(WARING, "current value is %v, please use %v lowercase format.\n", value, key)
+		P(WARING, "current value is %v, please use %v.\n", value, key)
 		value = key
 	}
 	return value
