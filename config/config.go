@@ -27,7 +27,6 @@ const (
 	VERSION  = "0.1.4 beta"
 	CONFIG   = ".gnvmrc"
 	NEWLINE  = "\n"
-	UNKNOWN  = "unknown"
 	LATEST   = "latest"
 	NODELIST = "index.json"
 
@@ -42,11 +41,11 @@ const (
 
 	GLOBAL_VERSION     = "globalversion"
 	GLOBAL_VERSION_KEY = "globalversion: "
-	GLOBAL_VERSION_VAL = UNKNOWN
+	GLOBAL_VERSION_VAL = util.UNKNOWN
 
 	LATEST_VERSION     = "latestversion"
 	LATEST_VERSION_KEY = "latestversion: "
-	LATEST_VERSION_VAL = UNKNOWN
+	LATEST_VERSION_VAL = util.UNKNOWN
 
 	//CURRENT_VERSION     = "currentversion"
 	//CURRENT_VERSION_KEY = "currentversion: "
@@ -180,7 +179,7 @@ func SetConfig(key string, value interface{}) string {
 func GetConfig(key string) string {
 	value, err := config.GetString(key)
 	if err != nil {
-		value = UNKNOWN
+		value = util.UNKNOWN
 	}
 	return value
 }

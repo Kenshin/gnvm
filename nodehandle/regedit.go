@@ -13,6 +13,7 @@ import (
 
 	// local
 	"gnvm/config"
+	"gnvm/util"
 )
 
 const NODE_HOME, PATH = "NODE_HOME", "Path"
@@ -22,7 +23,7 @@ var nodehome, noderoot string
 func init() {
 	noderoot = config.GetConfig(config.NODEROOT)
 	nodehome = os.Getenv(NODE_HOME)
-	if nodehome == "" && config.GetConfig(config.GLOBAL_VERSION) == config.UNKNOWN {
+	if nodehome == "" && config.GetConfig(config.GLOBAL_VERSION) == util.UNKNOWN {
 		P(NOTICE, "not found environment variable '%v', please use '%v'. See '%v'.\n", NODE_HOME, "gnvm reg noderoot", "gnvm help reg")
 	}
 }

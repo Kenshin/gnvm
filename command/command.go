@@ -331,7 +331,7 @@ gnvm config registry test     :Validation .gnvmfile registry property.
 				config.ReSetConfig()
 			} else {
 				value := config.GetConfig(args[0])
-				if value == config.UNKNOWN {
+				if value == util.UNKNOWN {
 					P(ERROR, "%v not a valid config keyword. See '%v'.\n", args[0], "gnvm help config")
 				} else {
 					P(DEFAULT, "gnvm config %v is %v\n", args[0], value)

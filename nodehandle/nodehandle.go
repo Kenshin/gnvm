@@ -263,7 +263,7 @@ func Uninstall(folder string) {
 	// set removePath
 	removePath := rootPath + folder
 
-	if folder == config.UNKNOWN {
+	if folder == util.UNKNOWN {
 		P(ERROR, "current latest version is %v, please usage '%v' first. See '%v'.\n", folder, "gnvm update latest", "gnvm help update")
 		return
 	}
@@ -316,7 +316,7 @@ func Update(global bool) {
 	local, remote, args := util.FormatNodeVer(localVersion), util.FormatNodeVer(remoteVersion), []string{remoteVersion}
 
 	switch {
-	case localVersion == config.UNKNOWN:
+	case localVersion == util.UNKNOWN:
 		if code := InstallNode(args, global); code == 0 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
 			P(DEFAULT, "Update Node.js latest success, current latest version is %v.\n", remoteVersion)
@@ -555,23 +555,23 @@ func NodeVersion(args []string, remote bool) {
 	if len(args) == 0 {
 		P(DEFAULT, "Node.js %v version is %v.\n", "latest", latest)
 		P(DEFAULT, "Node.js %v version is %v.\n", "global", global)
-		if latest == config.UNKNOWN {
-			P(WARING, "latest version is %v, please use '%v'. See '%v'.\n", config.UNKNOWN, "gnvm node-version latest -r", "gnvm help node-version")
+		if latest == util.UNKNOWN {
+			P(WARING, "latest version is %v, please use '%v'. See '%v'.\n", util.UNKNOWN, "gnvm node-version latest -r", "gnvm help node-version")
 		}
-		if global == config.UNKNOWN {
-			P(WARING, "global version is %v, please use '%v' or '%v'. See '%v'.\n", config.UNKNOWN, "gnvm install latest -g", "gnvm install x.xx.xx -g", "gnvm help install")
+		if global == util.UNKNOWN {
+			P(WARING, "global version is %v, please use '%v' or '%v'. See '%v'.\n", util.UNKNOWN, "gnvm install latest -g", "gnvm install x.xx.xx -g", "gnvm help install")
 		}
 	} else {
 		switch {
 		case args[0] == "global":
 			P(DEFAULT, "Node.js global version is %v.\n", global)
-			if global == config.UNKNOWN {
-				P(WARING, "global version is %v, please use '%v' or '%v'. See '%v'.\n", config.UNKNOWN, "gnvm install latest -g", "gnvm install x.xx.xx -g", "gnvm help install")
+			if global == util.UNKNOWN {
+				P(WARING, "global version is %v, please use '%v' or '%v'. See '%v'.\n", util.UNKNOWN, "gnvm install latest -g", "gnvm install x.xx.xx -g", "gnvm help install")
 			}
 		case args[0] == "latest" && !remote:
 			P(DEFAULT, "Node.js latest version is %v.\n", latest)
-			if latest == config.UNKNOWN {
-				P(WARING, "latest version is %v, please use '%v'. See '%v'.\n", config.UNKNOWN, "gnvm node-version latest -r", "gnvm help node-version")
+			if latest == util.UNKNOWN {
+				P(WARING, "latest version is %v, please use '%v'. See '%v'.\n", util.UNKNOWN, "gnvm node-version latest -r", "gnvm help node-version")
 			}
 		case args[0] == "latest" && remote:
 			remoteVersion := util.GetLatVer(latURL)
@@ -581,7 +581,7 @@ func NodeVersion(args []string, remote bool) {
 			}
 			P(DEFAULT, "Local  Node.js latest version is %v.\n", latest)
 			P(DEFAULT, "Remote Node.js latest version is %v from %v.\n", remoteVersion, config.GetConfig(config.REGISTRY))
-			if latest == config.UNKNOWN {
+			if latest == util.UNKNOWN {
 				config.SetConfig(config.LATEST_VERSION, remoteVersion)
 				P(DEFAULT, "Set success, local Node.js %v version is %v.\n", config.LATEST, remoteVersion)
 				return
