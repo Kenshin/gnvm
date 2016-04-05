@@ -307,7 +307,7 @@ func getNodeNpmVer() string {
 	if level := util.GetNodeVerLev(util.FormatNodeVer(ver)); level == 3 {
 		url = config.GetIOURL(url)
 	}
-	url += config.NODELIST
+	url += util.NODELIST
 
 	nd, err := FindNodeDetailByVer(url, ver)
 	if err != nil {

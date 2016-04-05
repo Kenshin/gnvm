@@ -24,10 +24,9 @@ import (
 var configPath, globalversion, latsetversion string
 
 const (
-	VERSION  = "0.1.4 beta"
-	CONFIG   = ".gnvmrc"
-	NEWLINE  = "\n"
-	NODELIST = "index.json"
+	VERSION = "0.1.4 beta"
+	CONFIG  = ".gnvmrc"
+	NEWLINE = "\n"
 
 	REGISTRY     = "registry"
 	REGISTRY_KEY = "registry: "
@@ -290,7 +289,7 @@ func Verify() {
 			if ok && value == 200 {
 				finish = true
 				P(DEFAULT, "%v.\n", " ok")
-				go verifyURL("json", registry+NODELIST, code, fail)
+				go verifyURL("json", registry+util.NODELIST, code, fail)
 				finish = false
 				go wait()
 			} else if !ok {

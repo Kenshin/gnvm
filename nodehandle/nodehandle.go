@@ -370,7 +370,7 @@ func Search(s string) {
 			url = config.GetIOURL(url)
 		}
 	}
-	url += config.NODELIST
+	url += util.NODELIST
 
 	// try catch
 	defer func() {
@@ -496,7 +496,7 @@ func LsRemote(limit int, io bool) {
 	if io {
 		url = config.GetIOURL(url)
 	}
-	url += config.NODELIST
+	url += util.NODELIST
 
 	// try catch
 	defer func() {

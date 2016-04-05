@@ -20,14 +20,17 @@ import (
 )
 
 const (
-	NODE    = "node.exe"
-	GNVM    = "gnvm.exe"
-	IOJS    = "iojs.exe"
-	SHASUMS = "SHASUMS256.txt"
+	NODE = "node.exe"
+	GNVM = "gnvm.exe"
+	IOJS = "iojs.exe"
+
 	UNKNOWN = "unknown"
 	LATEST  = "latest"
 	GLOBAL  = "global"
 	NPM     = "npm"
+
+	NODELIST = "index.json"
+	SHASUMS  = "SHASUMS256.txt"
 )
 
 var DIVIDE = string(os.PathSeparator)
