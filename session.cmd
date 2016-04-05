@@ -25,25 +25,26 @@ if "%1" == "version" goto version
 ::===========================================================
 :help
 echo;
-echo GNS - Node.JS Session manager by GNVM
+echo GNS - Node.js session manager by GNVM
 echo;
 echo Usage:
 echo   gns [command]
 echo;
 echo Commands:
-echo   run               Set session node.exe version.
-echo   clear             Quit session node.exe version.
-echo   version           Show version.
+echo   help              Show gns cli command help.
+echo   run               Set  Node.js session environment.
+echo   clear             Quit Node.js session environment.
+echo   version           Show gns version.
 echo;
 echo Example:
 echo   gns help          Show gns cli command help.
-echo   gns run 0.10.24   Set 0.10.24 is session node.exe verison.
-echo   gns clear         Quit sesion node.exe, restore global node.exe version.
-echo   gns version       Show version.
+echo   gns run 0.10.24   Set 0.10.24 is session environment.
+echo   gns clear         Quit sesion Node.js, restore global Node.js version.
+echo   gns version       Show gns version.
 goto exit
 
 ::===========================================================
-:: version : Show gns.bat version
+:: version : Show gns.cmd version
 ::===========================================================
 :version
 echo Current version 0.0.1.
@@ -52,7 +53,7 @@ echo See https://github.com/kenshin/gnvm for more information.
 goto exit
 
 ::===========================================================
-:: run : Set session node.exe
+:: run : Set Node.js session environment
 ::===========================================================
 :run
 
@@ -64,7 +65,7 @@ if "%2" == "" (
 
 if not exist "%NODE_HOME%\%2" (
     echo Waring: "%NODE_HOME%\%2\" directory not exist.
-    echo Notice: you can usage "gnvm ls" check local exist Node.JS version.
+    echo Notice: you can usage "gnvm ls" check local exist Node.js version.
     goto exit
 )
 
@@ -74,9 +75,9 @@ if "%cd%" == "%NODE_HOME%" call :security
 set GNVM_SESSION_NODE_HOME=%NODE_HOME%\%2\
 set path=%GNVM_SESSION_NODE_HOME%;%path%
 
-echo Startup session node.exe version %2.
+echo Startup Node.js version %2 session environment.
 echo Important:
-echo - if node.exe work on session version, "gnvm use", "gnvm install -g", "gnvm uninstall", "gnvm update -g" can't be use.
+echo - if Node.js work on session environment, "gnvm use", "gnvm install -g", "gnvm uninstall", "gnvm update -g", "gnvm npm" can't be use.
 echo - if quit/remove session, you must use "gns clear".
 echo - if on "%NODE_HOME%" directory, unable to "run %2".
 echo - if on "%NODE_HOME%" directory, auto goto "%NODE_HOME%\gnvm_session" directory.
@@ -103,7 +104,7 @@ cd %GNVM_SESSION_HOME%
 goto exit
 
 ::===========================================================
-:: clear : Quit/Remove session node.exe version
+:: clear : Quit/Remove Node.js session environment
 ::===========================================================
 :clear
 if "%cd%" == "%NODE_HOME%\gnvm_session" (

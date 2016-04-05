@@ -96,7 +96,7 @@ func (this *NPMange) String() string {
  Create node_modules folder
 */
 func (this *NPMange) CreateModules() {
-	if !isDirExist(this.modules) {
+	if !util.IsDirExist(this.modules) {
 		if err := os.Mkdir(this.modules, 0755); err != nil {
 			P(ERROR, "create %v foler error, Error: %v\n", this.modules, err.Error())
 		} else {
@@ -109,18 +109,18 @@ func (this *NPMange) CreateModules() {
  Download npm zip
 
  Param:
-    - url: download url
+    - url:  download url
+    - name: download file name
 
  Return:
     - error
+
 */
 func (this *NPMange) Download(url, name string) error {
 	curl.Options.Header = false
 	curl.Options.Footer = false
 	if _, errs := curl.New(url, name, name, this.root); len(errs) > 0 {
-		err := errs[0]
-		P(ERROR, "%v an error has occurred, url %v, Error is %v. See '%v'.\n", "gnvm npm", url, err.Error(), "gnvm help npm")
-		return err
+		return errs[0]
 	}
 	return nil
 }
@@ -135,6 +135,7 @@ func (this *NPMange) Download(url, name string) error {
         - -2: open  file error
         - -3: write file error
         - -4: copy  file error
+
 */
 func (this *NPMange) Unzip() (int, error) {
 	path, dest := this.zippath, this.modules
@@ -200,14 +201,18 @@ func (this *NPMange) Install() error {
 }
 
 /*
- Remove file, inlcude:
-    - <root>/node_modules/npm
-    - <root>/npm
-    - <root>/npm.cmd
-    - <root>/<npm.zip>
+ Remove file
+
+ Param:
+    - path: olny clude path
+        - <root>/node_modules/npm
+        - <root>/npm
+        - <root>/npm.cmd
+        - <root>/<npm.zip>
+
 */
 func (this *NPMange) Clean(path string) error {
-	if isDirExist(path) {
+	if util.IsDirExist(path) {
 		if err := os.RemoveAll(path); err != nil {
 			P(ERROR, "remove %v folder Error: %v.\n", path, err.Error())
 			return err
@@ -218,6 +223,10 @@ func (this *NPMange) Clean(path string) error {
 
 /*
  Remove <root>/node_modules/npm, <root>/npm, <root>/npm.cmd
+
+ Return:
+    - error
+
 */
 func (this *NPMange) CleanAll() error {
 	paths := [3]string{this.npmpath, this.root + util.DIVIDE + this.command1, this.root + util.DIVIDE + this.command2}
@@ -236,15 +245,15 @@ func InstallNPM(version string) {
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm npm %v' an error has occurred. please check. \nError: %v", version, err)
+			msg := fmt.Sprintf("'gnvm npm %v' an error has occurred. please check. \nError: ", version)
 			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
 
 	version = strings.ToLower(version)
-	if version != util.LATEST && version != util.GLOBAL && !util.VerifyNodeVer(version) {
-		P(ERROR, "'%v' param only support [%v] [%v] or %v e.g. [%v], please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "valid version", "5.9.1", "gnvm help npm")
+	if !util.VerifyNodeVer(version) {
+		P(ERROR, "'%v' param only support [%v] [%v] or %v e.g. [%v], please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "valid version", "3.8.1", "gnvm help npm")
 		return
 	}
 
@@ -270,19 +279,23 @@ func InstallNPM(version string) {
 }
 
 /*
- Uninstall
+ Uninstall NPM
 */
 func UninstallNPM() {
 	if getLocalNPMVer() == util.UNKNOWN {
 		return
 	}
 	if err := npm.New().CleanAll(); err == nil {
-		P(DEFAULT, "Uninstall npm version %v.\n", "success")
+		P(DEFAULT, "Npm uninstall %v.\n", "success")
 	}
 }
 
 /*
  Get npm version by global( local ) node version
+
+ Return:
+    - string: npm version
+
 */
 func getNodeNpmVer() string {
 	ver, err := util.GetNodeVer(rootPath)
@@ -294,7 +307,7 @@ func getNodeNpmVer() string {
 	if level := util.GetNodeVerLev(util.FormatNodeVer(ver)); level == 3 {
 		url = config.GetIOURL(url)
 	}
-	url += config.NODELIST
+	url += util.NODELIST
 
 	nd, err := FindNodeDetailByVer(url, ver)
 	if err != nil {
@@ -305,6 +318,10 @@ func getNodeNpmVer() string {
 
 /*
  Get Latest NPM version
+
+ Return:
+    - string: latest npm version
+
 */
 func getLatNPMVer() string {
 	_, res, err := curl.Get(LATNPMURL)
@@ -332,6 +349,7 @@ func getLatNPMVer() string {
  Return:
     - util.UNKNOWN: current not exist npmCmd
     - version     : current npm version
+
 */
 func getLocalNPMVer() string {
 	out, err := exec.Command(rootPath+util.NPM, "-v").Output()
@@ -343,12 +361,16 @@ func getLocalNPMVer() string {
 }
 
 /*
- Download and unzip npm.zip
+ Download / unzip / install npm
+
+ Param:
+    - ver: npm version
+
 */
 func downloadNpm(ver string) {
 	version := "v" + ver + ZIP
 	url := NPMTAOBAO + version
-	if config.GetConfig(config.REGISTRY) != config.TAOBAO {
+	if config.GetConfig(config.REGISTRY) != util.ORIGIN_TAOBAO {
 		url = NPMDEFAULT + version
 	}
 
@@ -359,7 +381,7 @@ func downloadNpm(ver string) {
 
 	// download
 	if err := npm.Download(url, version); err != nil {
-		return
+		panic(err.Error())
 	}
 
 	P(DEFAULT, "Start unzip and install %v zip file, please wait.\n", version)
@@ -372,8 +394,8 @@ func downloadNpm(ver string) {
 
 	// unzip
 	if _, err := npm.Unzip(); err != nil {
-		P(ERROR, "unzip %v an error has occurred. \nError: ", npm.zipname, err.Error())
-		return
+		msg := fmt.Sprintf("unzip %v an error has occurred. \nError: ", npm.zipname, err.Error())
+		panic(errors.New(msg))
 	}
 
 	// install
