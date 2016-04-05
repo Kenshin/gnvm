@@ -27,7 +27,6 @@ const (
 	VERSION  = "0.1.4 beta"
 	CONFIG   = ".gnvmrc"
 	NEWLINE  = "\n"
-	LATEST   = "latest"
 	NODELIST = "index.json"
 
 	REGISTRY     = "registry"

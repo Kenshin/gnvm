@@ -31,7 +31,7 @@ var rootPath, latURL string
 
 func init() {
 	rootPath = util.GlobalNodePath + util.DIVIDE
-	latURL = config.GetConfig("registry") + config.LATEST + "/" + util.SHASUMS
+	latURL = config.GetConfig("registry") + util.LATEST + "/" + util.SHASUMS
 }
 
 /**
@@ -170,7 +170,7 @@ func InstallNode(args []string, global bool) int {
 
 		// check local latest and get remote latest
 		v = util.EqualAbs("latest", v)
-		if ver == config.LATEST {
+		if ver == util.LATEST {
 			localVersion = config.GetConfig(config.LATEST_VERSION)
 			P(NOTICE, "local  latest version is %v.\n", localVersion)
 
@@ -583,7 +583,7 @@ func NodeVersion(args []string, remote bool) {
 			P(DEFAULT, "Remote Node.js latest version is %v from %v.\n", remoteVersion, config.GetConfig(config.REGISTRY))
 			if latest == util.UNKNOWN {
 				config.SetConfig(config.LATEST_VERSION, remoteVersion)
-				P(DEFAULT, "Set success, local Node.js %v version is %v.\n", config.LATEST, remoteVersion)
+				P(DEFAULT, "Set success, local Node.js %v version is %v.\n", util.LATEST, remoteVersion)
 				return
 			}
 			v1 := util.FormatNodeVer(latest)
