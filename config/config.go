@@ -29,10 +29,10 @@ const (
 	NEWLINE = "\n"
 
 	REGISTRY     = "registry"
-	REGISTRY_KEY = "registry: "
+	REGISTRY_KEY = REGISTRY + ": "
 
 	NODEROOT     = "noderoot"
-	NODEROOT_KEY = "noderoot: "
+	NODEROOT_KEY = NODEROOT + ": "
 	NODEROOT_VAL = "root"
 
 	GLOBAL_VERSION     = "globalversion"
