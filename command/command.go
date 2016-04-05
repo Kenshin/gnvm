@@ -348,11 +348,11 @@ gnvm config registry test     :Validation .gnvmfile registry property.
 			}
 			switch args[1] {
 			case "DEFAULT":
-				if newValue := config.SetConfig(args[0], config.REGISTRY_VAL); newValue != "" {
+				if newValue := config.SetConfig(args[0], util.ORIGIN_DEFAULT); newValue != "" {
 					P(DEFAULT, "Set success, %v new value is %v\n", args[0], newValue)
 				}
 			case "TAOBAO":
-				if newValue := config.SetConfig(args[0], config.TAOBAO); newValue != "" {
+				if newValue := config.SetConfig(args[0], util.ORIGIN_TAOBAO); newValue != "" {
 					P(DEFAULT, "Set success, %v new value is %v\n", args[0], newValue)
 				}
 			case "test":

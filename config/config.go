@@ -30,8 +30,6 @@ const (
 
 	REGISTRY     = "registry"
 	REGISTRY_KEY = "registry: "
-	REGISTRY_VAL = "http://nodejs.org/dist/"
-	TAOBAO       = "http://npm.taobao.org/mirrors/node/"
 
 	NODEROOT     = "noderoot"
 	NODEROOT_KEY = "noderoot: "
@@ -105,7 +103,7 @@ func createConfig() {
 	}
 
 	//write init config
-	_, fileErr := file.WriteString(REGISTRY_KEY + REGISTRY_VAL + NEWLINE + NODEROOT_KEY + util.GlobalNodePath + NEWLINE + GLOBAL_VERSION_KEY + globalversion + NEWLINE + LATEST_VERSION_KEY + LATEST_VERSION_VAL)
+	_, fileErr := file.WriteString(REGISTRY_KEY + util.ORIGIN_DEFAULT + NEWLINE + NODEROOT_KEY + util.GlobalNodePath + NEWLINE + GLOBAL_VERSION_KEY + globalversion + NEWLINE + LATEST_VERSION_KEY + LATEST_VERSION_VAL)
 	if fileErr != nil {
 		P(ERROR, "write config file Error: %v\n", fileErr.Error())
 		return
@@ -186,7 +184,7 @@ func GetConfig(key string) string {
  Init config property value from .gnvmrc file
 */
 func ReSetConfig() {
-	if newValue := SetConfig(REGISTRY, REGISTRY_VAL); newValue != "" {
+	if newValue := SetConfig(REGISTRY, util.ORIGIN_DEFAULT); newValue != "" {
 		P(NOTICE, "%v      init success, new value is %v\n", REGISTRY, newValue)
 	}
 	if newValue := SetConfig(NODEROOT, util.GlobalNodePath); newValue != "" {
@@ -244,9 +242,9 @@ func List() {
 
 */
 func GetIOURL(url string) string {
-	if url == TAOBAO {
+	if url == util.ORIGIN_TAOBAO {
 		url = strings.Replace(url, "/node", "/iojs", -1)
-	} else if url == REGISTRY_VAL {
+	} else if url == util.ORIGIN_DEFAULT {
 		url = strings.Replace(url, "nodejs.org", "iojs.org", -1)
 	}
 	return url

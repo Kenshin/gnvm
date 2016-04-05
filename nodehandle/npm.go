@@ -370,7 +370,7 @@ func getLocalNPMVer() string {
 func downloadNpm(ver string) {
 	version := "v" + ver + ZIP
 	url := NPMTAOBAO + version
-	if config.GetConfig(config.REGISTRY) != config.TAOBAO {
+	if config.GetConfig(config.REGISTRY) != util.ORIGIN_TAOBAO {
 		url = NPMDEFAULT + version
 	}
 

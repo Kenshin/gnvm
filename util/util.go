@@ -29,8 +29,10 @@ const (
 	GLOBAL  = "global"
 	NPM     = "npm"
 
-	NODELIST = "index.json"
-	SHASUMS  = "SHASUMS256.txt"
+	ORIGIN_DEFAULT = "http://nodejs.org/dist/"
+	ORIGIN_TAOBAO  = "http://npm.taobao.org/mirrors/node/"
+	NODELIST       = "index.json"
+	SHASUMS        = "SHASUMS256.txt"
 )
 
 var DIVIDE = string(os.PathSeparator)
