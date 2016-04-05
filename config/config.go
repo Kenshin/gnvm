@@ -95,7 +95,7 @@ func createConfig() {
 	// get <root>/node.exe version
 	version, err := util.GetNodeVer(util.GlobalNodePath)
 	if err != nil {
-		P(WARING, "not found global node.exe version, please use '%v'. See '%v'.\n", "gnvm install x.xx.xx -g", "gnvm help install")
+		P(WARING, "not found %v Node.js version, please use '%v'. See '%v'.\n", "global", "gnvm install x.xx.xx -g", "gnvm help install")
 		globalversion = GLOBAL_VERSION_VAL
 	} else {
 		globalversion = version
