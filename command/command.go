@@ -67,8 +67,7 @@ gnvm install npm                     :Not logger support command, please usage '
 		} else {
 
 			if global {
-				if _, ok := util.IsSessionEnv(); ok {
-					P(WARING, "current is %v, if you usge %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+				if _, ok := util.IsSessionEnv("install -g", true); ok {
 					return
 				}
 			}
@@ -94,8 +93,7 @@ gnvm uninstall 0.10.26 0.11.2 latest       :Uninstall multiple Node.js version, 
 gnvm uninstall ALL                         :Uninstall all      Node.js version.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		if _, ok := util.IsSessionEnv(); ok {
-			P(WARING, "current is %v, if you usage %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+		if _, ok := util.IsSessionEnv("uninstall", true); ok {
 			return
 		}
 		if len(args) == 0 {
@@ -152,8 +150,7 @@ gnvm use latest       :Usage latest  Node.js version.
 gnvm use x.xx.xx-x86  :Usage x.xx.xx Node.js with arch x86 version.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		if _, ok := util.IsSessionEnv(); ok {
-			P(WARING, "current is %v, if you usage %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+		if _, ok := util.IsSessionEnv("use", true); ok {
 			return
 		}
 		if len(args) == 1 {
@@ -216,8 +213,7 @@ gnvm update latest -g    :Download and auto invoke 'gnvm use latest'.
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
 			if global {
-				if _, ok := util.IsSessionEnv(); ok {
-					P(WARING, "current is %v, if you usge %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+				if _, ok := util.IsSessionEnv("update -g", true); ok {
 					return
 				}
 			}
@@ -423,8 +419,7 @@ gnvm npm global           :Install local Node.js version matching npm version.
 		if len(args) != 1 {
 			P(ERROR, "%v must be one parameter and only support [%v] [%v] [%v] keyword, please check your input. See '%v'.\n", "gnvm npm", "latest", "global", "x.xx.xx", "gnvm help npm")
 		} else {
-			if _, ok := util.IsSessionEnv(); ok {
-				P(WARING, "current is %v, if you usge %v, you need '%v' first.\n", "session environment", "this command", "gns clear")
+			if _, ok := util.IsSessionEnv("npm", true); ok {
 				return
 			}
 			util.EqualAbs("global", args[0])

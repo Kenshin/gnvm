@@ -185,8 +185,7 @@ func start() {
 }
 
 func close() {
-	if _, ok := util.IsSessionEnv(); ok {
-		P(WARING, "current is %v, if you %v session environment, you need '%v' first.\n", "session environment", "remove", "gns clear")
+	if _, ok := util.IsSessionEnv("close", true); ok {
 		return
 	}
 
