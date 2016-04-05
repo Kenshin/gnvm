@@ -53,10 +53,10 @@ func init() {
 /*
   Get Node.js version, usage exec.Command()
 
-   Param:
+  Param:
 	- path:   node.exe path, e.g. x:\xxx\xxx
 
-   Return:
+  Return:
 	- string: node.exe version, e.g. 5.10.0
 	- error
 */
@@ -73,10 +73,10 @@ func GetNodeVer(path string) (string, error) {
   Verify Node.js version format.
   Node.js version format must be http://semver.org/
 
-   Param:
+  Param:
 	- version: Node.js version
 
-   Return:
+  Return:
 	- bool:    true or false
 */
 func VerifyNodeVer(version string) bool {
@@ -94,10 +94,10 @@ func VerifyNodeVer(version string) bool {
   Format Node.js version
   x.xx.xx conver to float64
 
-   Param:
+  Param:
 	- version: string, e.g. "5.10.0"
 
-   Return:
+  Return:
 	- version: float64, e.g. 0.510
 */
 func FormatNodeVer(version string) float64 {
@@ -120,9 +120,9 @@ func FormatNodeVer(version string) float64 {
 }
 
 /*
-  Format wildcard node version
+ Format wildcard node version
 
-  Param:
+ Param:
 	- version: Node.js version, e.g. "5.10.0"
 		- `*.*.*`      - wildcard( include x|X )
 		- `1.*.*`      - wildcard
@@ -132,7 +132,7 @@ func FormatNodeVer(version string) float64 {
 		- latest       - trans to true version
 	- url: Node.js latest version url
 
-  Return:
+ Return:
 	- regexp
 	- error
 */
@@ -167,6 +167,11 @@ func FormatWildcard(version, url string) (*regexp.Regexp, error) {
 
 /*
  Conver latest to x.xx.xx( include unknown)
+
+ Param:
+	- latest  : setting string, pointer
+	- value   : latest version, e.g. x.xx.xx
+	- isPrint : true( print console ) false( not print )
 */
 func FormatLatVer(latest *string, value string, print bool) {
 	if *latest == LATEST {
@@ -178,8 +183,12 @@ func FormatLatVer(latest *string, value string, print bool) {
 }
 
 /*
-  Get node version level( 0 ~ 4 )
-  Return
+ Get Node.js version level( 0 ~ 4 )
+
+ Param:
+	- ver: Node.js float64 version, usage FormatNodeVer() return.
+
+ Return:
 	- 0: no exec
 	- 1: only x86 exec
 	- 2: x86 and x64 exec, folder is "x64/" and <root>
@@ -203,13 +212,14 @@ func GetNodeVerLev(ver float64) (level int) {
 }
 
 /*
- parse arguments return version, io, suffix and arch
- s support format: <version>-<io>-<arch>, e.g.
+ Parse arguments return version, io, suffix and arch
 
- 	- x.xx.xx
+ Param:
+ 	s support format: <version>-<arch>, e.g.
+	- x.xx.xx
  	- x.xx.xx-x86|x64
 
-   Return:
+ Return:
 	- ver    : x.xx.xx
 	- iojs   : true  and false
 	- arch   : "386" and "amd64"
@@ -294,7 +304,13 @@ func ParseNodeVer(s string) (ver string, iojs bool, arch, suffix string, err err
 }
 
 /*
- Get remote latest version from url
+ Get remote Node.js latest version from url
+
+ Param:
+	- url:    remote Node.js url, e.g. http://npm.taobao.org/mirrors/node
+
+ Return:
+	- latest: remote Node.js latest version
 */
 func GetLatVer(url string) string {
 
@@ -327,6 +343,14 @@ func GetLatVer(url string) string {
  Return node.exe real url, e.g.
  	- http://npm.taobao.org/mirrors/node/v5.9.0/win-x64/node.exe
  	- http://npm.taobao.org/mirrors/iojs/v1.0.0/win-x86/iojs.exe
+
+ Param:
+	- url:     remote Node.js url, e.g. http://npm.taobao.org/mirrors/node
+	- version: Node.js version
+	- arch:    remote node.exe arch, include: "amd64" and "386"
+
+ Return:
+	- url:     remote node.exe url, e.g. http://npm.taobao.org/mirrors/node/v5.9.0/win-x64/node.exe
 */
 func GetRemoteNodePath(url, version, arch string) (string, error) {
 	version = strings.Split(version, "-")[0]
@@ -361,10 +385,10 @@ func GetRemoteNodePath(url, version, arch string) (string, error) {
 /*
  Get node.exe binary arch
 
-   Param:
+ Param:
 	- path:   node.exe path
 
-   Return:
+ Return:
 	- string: arch, inlcude: 'x86' 'x64'
 	- error
 
@@ -405,7 +429,7 @@ func Arch(path string) (string, error) {
 }
 
 /*
-  Return session environment variable
+ Return session environment variable
 
  Param:
  	- command: e.g. 'gnvm use', 'gnvm install'
@@ -428,7 +452,14 @@ func IsSessionEnv(command string, isPrint bool) (string, bool) {
 }
 
 /*
-  Ignore key case and return lowercase value
+ Ignore key case and return lowercase value
+
+ Param:
+ 	- key:   e.g. 'XXXXX'
+ 	- value: e.g. 'xxxxx'
+
+ Return:
+ 	- value: lowercase value
 */
 func EqualAbs(key, value string) string {
 	if strings.EqualFold(value, key) && value != key {
@@ -440,6 +471,9 @@ func EqualAbs(key, value string) string {
 
 /*
  Vaild Path, e.g x:\aa\bb\cc to x:\aa\bb\cc\
+
+ Param:
+ 	- path: format x:\aa\bb\cc to x:\aa\bb\cc\
 */
 func FormatPath(path *string) {
 	if !IsDirExist(*path) {
