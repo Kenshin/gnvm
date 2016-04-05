@@ -33,7 +33,6 @@ const (
 
 	NODEROOT     = "noderoot"
 	NODEROOT_KEY = NODEROOT + ": "
-	NODEROOT_VAL = "root"
 
 	GLOBAL_VERSION     = "globalversion"
 	GLOBAL_VERSION_KEY = GLOBAL_VERSION + ": "
