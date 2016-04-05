@@ -194,6 +194,9 @@ gns version               :Show version.
 			if args[0] != "start" && args[0] != "close" {
 				P(ERROR, "%v only support [%v] or [%v] parameter. See '%v'.\n", "gnvm session", "start", "close", "gnvm help session")
 			} else {
+				if _, ok := util.IsSessionEnv("session "+args[0], true); ok {
+					return
+				}
 				nodehandle.Run(args[0])
 			}
 		} else {

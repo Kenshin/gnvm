@@ -164,10 +164,6 @@ func Run(action string) {
 		}
 	}()
 
-	if _, ok := util.IsSessionEnv("session "+action, true); ok {
-		return
-	}
-
 	if action == "start" {
 		start()
 	} else {
