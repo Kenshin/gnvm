@@ -38,11 +38,11 @@ const (
 	NODEROOT_VAL = "root"
 
 	GLOBAL_VERSION     = "globalversion"
-	GLOBAL_VERSION_KEY = "globalversion: "
+	GLOBAL_VERSION_KEY = GLOBAL_VERSION + ": "
 	GLOBAL_VERSION_VAL = util.UNKNOWN
 
 	LATEST_VERSION     = "latestversion"
-	LATEST_VERSION_KEY = "latestversion: "
+	LATEST_VERSION_KEY = LATEST_VERSION + ": "
 	LATEST_VERSION_VAL = util.UNKNOWN
 
 	//CURRENT_VERSION     = "currentversion"
