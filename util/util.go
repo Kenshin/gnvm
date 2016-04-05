@@ -406,10 +406,21 @@ func Arch(path string) (string, error) {
 
 /*
   Return session environment variable
+
+ Param:
+ 	- command: e.g. 'gnvm use', 'gnvm install'
+ 	- isPrint: true( print waring message ) false( not print )
+
+ Return:
+ 	- env: GNVM_SESSION_NODE_HOME value, is a path
+ 	- bool: true( exist ) false( not exist )
 */
-func IsSessionEnv() (string, bool) {
+func IsSessionEnv(command string, isPrint bool) (string, bool) {
 	env := os.Getenv("GNVM_SESSION_NODE_HOME")
 	if env != "" {
+		if isPrint {
+			P(WARING, "current is %v, if you usage %v %v, you need %v first.\n", "session environment", "gnvm", command, "gns clear")
+		}
 		return env, true
 	} else {
 		return env, false
@@ -496,7 +507,7 @@ func IsDirExist(paths ...string) bool {
 func getGlobalNodePath() string {
 	var path string
 
-	if env, ok := IsSessionEnv(); ok {
+	if env, ok := IsSessionEnv("", false); ok {
 		if reg, err := regexp.Compile(`\\([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}\\$`); err == nil {
 			ver := reg.FindString(env)
 			path = strings.Replace(env, ver, "", -1)
