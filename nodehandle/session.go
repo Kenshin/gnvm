@@ -165,7 +165,7 @@ func Run(action string) {
 	}()
 
 	if _, err := util.GetNodeVer(util.GlobalNodePath); err != nil {
-		P(ERROR, "not found %v Node.js version, not use %v. please use '%v'. See '%v'.\n", "global", "gnvm session "+action, "gnvm install x.xx.xx -g", "gnvm help install")
+		P(ERROR, "not found %v node.exe, not use %v. please use '%v'. See '%v'.\n", "global", "gnvm session "+action, "gnvm install x.xx.xx -g", "gnvm help install")
 		return
 	}
 

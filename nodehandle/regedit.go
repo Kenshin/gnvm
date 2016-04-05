@@ -37,17 +37,12 @@ func init() {
 func Reg(s string) {
 	prompt := "n"
 
-	if s != "noderoot" {
-		P(ERROR, "parameter %v error, only support %v, please check your input. See '%v'.\n", s, "noderoot", "gnvm help reg")
-		return
-	}
-
-	P(WARING, "tis is the %v, need %v permission, please note!\n", "experimental function", "Administrator")
+	P(WARING, "this command is %v, need %v permission, please note!\n", "experimental function", "Administrator")
 	if nodehome != "" {
 		P(NOTICE, "current environment variable %v is %v\n", NODE_HOME, nodehome)
 	}
 	P(NOTICE, "current config %v is %v\n", "noderoot", noderoot)
-	P(NOTICE, "set environment variable %v new value is %v [Y/n]? ", NODE_HOME, noderoot)
+	P(NOTICE, "set environment variable %v is %v [Y/n]? ", NODE_HOME, noderoot)
 
 	fmt.Scanf("%s\n", &prompt)
 	prompt = strings.ToLower(prompt)

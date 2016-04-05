@@ -371,19 +371,21 @@ gnvm config registry test     :Validation .gnvmfile registry property.
 // sub cmd
 var regCmd = &cobra.Command{
 	Use:   "reg",
-	Short: "Add config property 'noderoot' to Environment variable 'NODE_HOME'.",
+	Short: "Add config property 'noderoot' to Environment variable 'NODE_HOME'",
 	Long: `This is the experimental function, need Administrator permission, please note!
-Add config property 'noderoot' to Environment variable 'NODE_HOME' e.g. :
+Add config property 'noderoot' to Environment variable 'NODE_HOME'. e.g. :
 gnvm reg noderoot   :Registry config noderoot to NODE_HOME and add to Path.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) > 1 {
-			P(WARING, "use parameter maximum is 1, only support %v, please check your input. See '%v'.\n", "noderoot", "gnvm help reg")
-		} else if len(args) == 0 {
-			P(WARING, "use parameter non't empty, only support %v, please check your input. See '%v'.\n", "noderoot", "gnvm help reg")
-			args = append(args, "noderoot")
+		if len(args) > 1 || len(args) == 0 {
+			P(ERROR, "%v must be one parameter and only support [%v] keyword, please check your input. See '%v'.\n", "gnvm reg", "noderoot", "gnvm help reg")
+			return
 		}
 		noderoot := util.EqualAbs("noderoot", args[0])
+		if noderoot != "noderoot" {
+			P(ERROR, "%v only support [%v] keyword, please check your input. See '%v'.\n", "gnvm reg", "noderoot", "gnvm help reg")
+			return
+		}
 		nodehandle.Reg(noderoot)
 	},
 }
