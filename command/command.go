@@ -178,11 +178,11 @@ gnvm use x.xx.xx-x86  :Usage x.xx.xx Node.js with arch x86 version.
 // sub cmd
 var sessionCmd = &cobra.Command{
 	Use:   "session",
-	Short: "Use any version of the local already exists version by current session",
+	Short: "Use any Node.js version of the local already exists version by current session",
 	Long: `
-Use any version of the local already exists by current session, e.g.
-gnvm session start        :Create gns.cmd
-gnvm session close        :Remove gns.cmd
+Use any Node.js version of the local already exists by current session, e.g. :
+gnvm session start        :Create gns.cmd.
+gnvm session close        :Remove gns.cmd.
 
 When session environment Start success, usage commands:
 gns help                  :Show session cli command help.
@@ -195,12 +195,12 @@ gns version               :Show version.
 			args[0] = util.EqualAbs("start", args[0])
 			args[0] = util.EqualAbs("close", args[0])
 			if args[0] != "start" && args[0] != "close" {
-				P(ERROR, "%v only support %v or %v parameter. See '%v'.\n", "gnvm session", "start", "close", "gnvm help session")
+				P(ERROR, "%v only support [%v] or [%v] parameter. See '%v'.\n", "gnvm session", "start", "close", "gnvm help session")
 			} else {
 				nodehandle.Run(args[0])
 			}
 		} else {
-			P(ERROR, "gnvm session parameter maximum is 1, please check your input. See '%v'.\n", "gnvm help session")
+			P(ERROR, "%v need parameter and only one parameter, support [%v] or [%v] keyword, please check your input. See '%v'.\n", "gnvm session", "start", "close", "gnvm help session")
 		}
 	},
 }
