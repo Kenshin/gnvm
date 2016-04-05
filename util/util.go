@@ -508,7 +508,7 @@ func getGlobalNodePath() string {
 	var path string
 
 	if env, ok := IsSessionEnv("", false); ok {
-		if reg, err := regexp.Compile(`\\([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}\\$`); err == nil {
+		if reg, err := regexp.Compile(`\\([0]|[1-9]\d?)(\.([0]|[1-9]\d?)){2}(-x(86|64))?\\$`); err == nil {
 			ver := reg.FindString(env)
 			path = strings.Replace(env, ver, "", -1)
 		}
