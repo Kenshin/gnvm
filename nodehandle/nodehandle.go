@@ -65,7 +65,7 @@ func Use(newer string) bool {
 	// set newerPath and verify newerPath is exist?
 	newerPath := rootPath + newer
 	if _, err := util.GetNodeVer(newerPath); err != nil {
-		P(WARING, "%v folder is not exist %v, use '%v' get local node.exe list. See '%v'.\n", newer, "node.exe", "gnvm ls", "gnvm help ls")
+		P(WARING, "%v folder is not exist %v, use '%v' get local Node.js version list. See '%v'.\n", newer, "node.exe", "gnvm ls", "gnvm help ls")
 		return false
 	}
 
@@ -83,7 +83,7 @@ func Use(newer string) bool {
 
 	// check newer is global
 	if newer == global {
-		P(WARING, "current node.exe version is %v, not re-use. See '%v'.\n", newer, "gnvm node-version")
+		P(WARING, "current Node.js version is %v, not re-use. See '%v'.\n", newer, "gnvm node-version")
 		return false
 	}
 
@@ -121,7 +121,7 @@ func Use(newer string) bool {
  Install node
 
  Param:
- 	- args  : install node.exe versions, include: x.xx.xx latest x.xx.xx-io-x86 x.xx.xx-x86
+ 	- args  : install Node.js versions, include: x.xx.xx latest x.xx.xx-io-x86 x.xx.xx-x86
  	- global: when global == true, call Use func.
 
  Return:
@@ -350,10 +350,10 @@ func Update(global bool) {
 }
 
 /*
- Search node.exe version and Print
+ Search Node.js version and Print
 
  Param:
- 	- s: node.exe version, inlcude: *.*.* 0.*.* 0.10.* /<regexp>/ latest 0.10.10
+ 	- s: Node.js version, inlcude: *.*.* 0.*.* 0.10.* /<regexp>/ latest 0.10.10
 
 */
 func Search(s string) {
@@ -403,7 +403,7 @@ func Search(s string) {
 }
 
 /*
- Print current local node.exe list
+ Print current local Node.js version list
 
  Param:
  	- isPrint: when isPrint == true, print console
@@ -483,7 +483,7 @@ func LS(isPrint bool) ([]string, error) {
 }
 
 /*
- Print remote node.exe list
+ Print remote Node.js version list
 
  Param:
  	- limit: print max line
@@ -531,7 +531,7 @@ func LsRemote(limit int, io bool) {
 }
 
 /*
- Show local / global node.exe version
+ Show local / global Node.js version
 
  Param:
  	- args:   include: latest global

@@ -182,10 +182,10 @@ gnvm session start        :Create gns.cmd.
 gnvm session close        :Remove gns.cmd.
 
 When session environment Start success, usage commands:
-gns help                  :Show session cli command help.
-gns run 0.10.24           :Set 0.10.24 is session node.exe verison.
-gns clear                 :Quit sesion node.exe, restore global node.exe version.
-gns version               :Show version.
+gns help                  :Show gns cli command help.
+gns run 0.10.24           :Set 0.10.24 is session environment.
+gns clear                 :Quit sesion Node.js, restore global Node.js version.
+gns version               :Show gns version.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {

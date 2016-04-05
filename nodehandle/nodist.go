@@ -170,10 +170,10 @@ func (this *Nodist) Detail(limit int) {
  Format exe
 
  Param:
- 	- version: node.exe version
+ 	- version: Node.js version
 
  Return:
- 	- exec: formatting string, e.g. '[x]'
+ 	- exec:    formatting string, e.g. '[x]'
 
 */
 func formatExe(version string) (exec string) {

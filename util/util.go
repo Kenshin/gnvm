@@ -74,7 +74,7 @@ func GetNodeVer(path string) (string, error) {
   Node.js version format must be http://semver.org/
 
    Param:
-	- version: node.exe version
+	- version: Node.js version
 
    Return:
 	- bool:    true or false
@@ -334,10 +334,10 @@ func GetRemoteNodePath(url, version, arch string) (string, error) {
 
 	switch level {
 	case 0:
-		P(ERROR, "downlaod node.exe version %v, not %v. See '%v'.\n", version, "node.exe", "gnvm help install")
+		P(ERROR, "downlaod Node.js version %v, not %v. See '%v'.\n", version, "node.exe", "gnvm help install")
 		return "", errors.New("Not support version " + version + "download.")
 	case 1:
-		P(WARING, "downlaod node.exe version %v, not %v node.exe.\n", version, "x64")
+		P(WARING, "downlaod Node.js version %v, not %v node.exe.\n", version, "x64")
 	case 2:
 		if arch == "amd64" {
 			folder = "/x64/"
