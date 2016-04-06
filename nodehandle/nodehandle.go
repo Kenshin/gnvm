@@ -23,7 +23,6 @@ import (
 
 const (
 	TIMEFORMART   = "02-Jan-2006 15:04"
-	GNVMHOST      = "http://ksria.com/gnvm/CHANGELOG.md"
 	PROCESSTAKEUP = "The process cannot access the file because it is being used by another process."
 )
 
@@ -628,7 +627,7 @@ func Version(remote, detail bool) {
 		return
 	}
 
-	code, res, err := curl.Get(GNVMHOST)
+	code, res, err := curl.Get("http://ksria.com/gnvm/CHANGELOG.md")
 	if code != 0 {
 		panic(err)
 	}
