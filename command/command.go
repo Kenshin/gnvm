@@ -84,7 +84,7 @@ gnvm install npm                     :Not logger support command, please usage '
 // sub cmd
 var uninstallCmd = &cobra.Command{
 	Use:   "uninstall",
-	Short: "Uninstall local Node.js version",
+	Short: "Uninstall local Node.js version and npm",
 	Long: `Uninstall local Node.js version e.g.
 gnvm uninstall npm                         :Uninstall npm.
 gnvm uninstall 0.10.28                     :Uninstall 0.10.28  Node.js version.
@@ -235,8 +235,8 @@ gnvm update latest -g    :Download and auto invoke 'gnvm use latest'.
 // sub cmd
 var lsCmd = &cobra.Command{
 	Use:   "ls",
-	Short: "List show all [local] [remote] Node.js version",
-	Long: `List show all [local] [remote] Node.js version e.g.:
+	Short: "Show all [local] [remote] Node.js version",
+	Long: `Show all [local] [remote] Node.js version e.g.:
 gnvm ls                  :Print local  Node.js versions list.
 gnvm ls -r               :Print remote Node.js versions.
 gnvm ls -r -d            :Print remote Node.js details versions.
