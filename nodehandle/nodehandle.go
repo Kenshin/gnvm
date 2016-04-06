@@ -603,7 +603,7 @@ func NodeVersion(args []string, remote bool) {
  	- remote: when remote == true, print CHANGELOG
 
 */
-func Version(remote bool) {
+func Version(remote, detail bool) {
 
 	defer func() {
 		if err := recover(); err != nil {
@@ -660,7 +660,7 @@ func Version(remote bool) {
 			}
 
 		}
-		if line > 1 {
+		if line > 2 && detail {
 			P(DEFAULT, content)
 		}
 

@@ -38,14 +38,15 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print GNVM version number",
 	Long: `Print GNVM version number e.g. :
-gnvm version           :Print gnvm version information.
-gnvm version --remote  :Print gnvm version CHANGELOG.
+gnvm version           :Print local  gnvm version information.
+gnvm version -r        :Print remote gnvm latest version.
+gnvm version -r -d     :Print remote CHANGELOG.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 0 {
 			P(WARING, "'%v' no parameter, please check your input. See '%v'.\n", "gnvm version", "gnvm help version")
 		}
-		nodehandle.Version(remote)
+		nodehandle.Version(remote, detail)
 	},
 }
 
@@ -459,6 +460,7 @@ func init() {
 	lsCmd.PersistentFlags().BoolVarP(&io, "io", "i", false, "get remote all io.js version details list.")
 	nodeVersionCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote node.js latest version.")
 	versionCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote gnvm latest version.")
+	versionCmd.PersistentFlags().BoolVarP(&detail, "detail", "d", false, "get remote CHANGELOG.")
 
 	// exec
 	gnvmCmd.Execute()
