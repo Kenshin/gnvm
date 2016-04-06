@@ -10,6 +10,7 @@ CHANGELOG
 * Senror  feature `gnvm config`  Add print all property`gnvm config` and test custom registry `gnvm config registry test`.
 * Senior  feature `gnvm config`  built-in `DEFAULT` <http://nodejs.org/dist/> and `TAOBAO` <http://npm.taobao.org/mirrors/node> keywords.
 * Senior  feature `gnvm install` Auto support iojs, e.g. `gnvm install 1.0.0` and arch, e.g. `gnvm install 5.1.1-x64 5.1.1-x86`.
+* Senior  feature `gnvm version` Add new flag `-r`, print `CHANGELOG`, e.g. `gnvm version -r -d`.
 
 -2016-02-24, Version 0.1.4 beta:
 * Fix <http://nodejs.org/dist> changes the structure errors, including: `gnvm install`, `gnvm ls -r`, `gnvm config INIT`.
