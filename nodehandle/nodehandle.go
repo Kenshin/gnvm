@@ -21,16 +21,11 @@ import (
 	"gnvm/util"
 )
 
-const (
-	TIMEFORMART   = "02-Jan-2006 15:04"
-	PROCESSTAKEUP = "The process cannot access the file because it is being used by another process."
-)
-
 var rootPath, latURL string
 
 func init() {
 	rootPath = util.GlobalNodePath + util.DIVIDE
-	latURL = config.GetConfig("registry") + util.LATEST + "/" + util.SHASUMS
+	latURL = config.GetConfig(config.REGISTRY) + util.LATEST + "/" + util.SHASUMS
 }
 
 /**
