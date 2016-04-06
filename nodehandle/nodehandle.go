@@ -23,7 +23,7 @@ import (
 
 const (
 	TIMEFORMART   = "02-Jan-2006 15:04"
-	GNVMHOST      = "http://k-zone.cn/gnvm/version.txt"
+	GNVMHOST      = "http://ksria.com/gnvm/CHANGELOG.md"
 	PROCESSTAKEUP = "The process cannot access the file because it is being used by another process."
 )
 
