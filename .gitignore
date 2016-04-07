@@ -1,0 +1,6 @@
+#ignore node_modules
+node_modules/**
+dest-www/**
+
+# for mac
+**/.DS_Store
