@@ -98,7 +98,7 @@ a:hover {
 .side ul .iconlink .download {
   background-image: url("../images/download.png");
 }
-.side ul .item {
+.side ul .textitem {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -108,9 +108,9 @@ a:hover {
   font-size: 13px;
   line-height: 1.9em;
 }
-.side ul .item .anchorlink {
+.side ul .textitem .anchorlink {
   width: 100%;
 }
-.side ul .item .anchorlink:hover {
+.side ul .textitem .anchorlink:hover {
   padding-right: 5px;
 }
