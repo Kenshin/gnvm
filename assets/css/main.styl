@@ -1,3 +1,6 @@
+forecolor = #111
+bgcolor   = #eee
+
 html
     width  : 100%
     height : 100%
@@ -8,6 +11,8 @@ body
     margin  : 0
     padding : 0
 
+    background-color: bgcolor
+
     font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif
 
     div
@@ -15,14 +20,14 @@ body
 
 a
     text-decoration:  none
-    color: #eee
+    color: bgcolor
 
     &:hover
         border-radius:    5px
         transition: background-color .5s ease
 
-        color:            #111
-        background-color: #eee
+        color:            forecolor
+        background-color: bgcolor
 
 .side
     display:  flex
@@ -35,8 +40,8 @@ a
     height: 100%
     width: 300px
 
-    background-color: #111
-    color: #eee
+    background-color: forecolor
+    color:            bgcolor
 
     ul
         display:    flex
@@ -72,7 +77,7 @@ a
             justify-content:flex-end
 
             padding-left: 3px
-            color:        #111
+            color:        forecolor
 
             span
                 display: block
@@ -80,9 +85,9 @@ a
                 height:  @width
                 border-radius: 5px
 
-                background-repeat: no-repeat
+                background-repeat:  no-repeat
                 background-position:center
-                background-color: #eee
+                background-color:   bgcolor
 
             .github
                 background-image: url("../images/github.png")
