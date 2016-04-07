@@ -6,10 +6,10 @@ html
     height : 100%
 
 body
-    width   : 100%
-    height  : 100%
-    margin  : 0
-    padding : 0
+    width:   100%
+    height:  100%
+    margin:  0
+    padding: 0
 
     background-color: bgcolor
 
@@ -19,26 +19,26 @@ body
         display: flex
 
 a
-    text-decoration:  none
-    color: bgcolor
+    text-decoration: none
+    color:           bgcolor
 
     &:hover
-        border-radius:    5px
-        transition: background-color .5s ease
+        border-radius: 5px
+        transition:    background-color .5s ease
 
         color:            forecolor
         background-color: bgcolor
 
 .side
-    display:  flex
-    flex-flow:row-reverse nowrap
+    display:   flex
+    flex-flow: row-reverse nowrap
 
     position: fixed
-    left: 0
-    top: 0
+    left:     0
+    top:      0
 
     height: 100%
-    width: 300px
+    width:  300px
 
     background-color: forecolor
     color:            bgcolor
@@ -51,8 +51,8 @@ a
         padding:    20px
         width:      200px
 
-        line-height: 2em
-        text-align:  right
+        line-height:    2em
+        text-align:     right
         text-transform: uppercase
 
         li:nth-child(5)
@@ -73,21 +73,21 @@ a
             padding-top: 10px
 
         .iconlink
-            display:        flex
-            justify-content:flex-end
+            display:         flex
+            justify-content: flex-end
 
             padding-left: 3px
             color:        forecolor
 
             span
-                display: block
-                width:   32px
-                height:  @width
+                display:       block
+                width:         32px
+                height:        @width
                 border-radius: 5px
 
-                background-repeat:  no-repeat
-                background-position:center
-                background-color:   bgcolor
+                background-repeat:   no-repeat
+                background-position: center
+                background-color:    bgcolor
 
             .github
                 background-image: url("../images/github.png")
