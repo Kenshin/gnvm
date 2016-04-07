@@ -6,6 +6,7 @@ var gulp   = require( 'gulp' ),
     stylish= require( 'jshint-stylish'),
     stylus = require( 'gulp-stylus' ),
     csslint= require( 'gulp-csslint'),
+    autopre= require( 'gulp-autoprefixer'),
     watch  = require( 'gulp-watch'  ),
     server = require( 'browser-sync').create(),
     clean  = require( 'gulp-clean'  ),
@@ -30,6 +31,7 @@ var gulp   = require( 'gulp' ),
         return gulp.src( filepaths )
                    .pipe( plumber())
                    .pipe( stylus() )
+                   .pipe(autopre({ browsers: ['last 2 versions'], cascade: false }))
                    .pipe( csslint())
                    .pipe( csslint.reporter())
                    .pipe( notify({ title: 'CSSLint Error', message: function ( file ) {
