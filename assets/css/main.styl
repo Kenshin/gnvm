@@ -6,6 +6,9 @@ html
     height : 100%
 
 body
+    display:   flex
+    flex-flow: row wrap
+
     width:   100%
     height:  100%
     margin:  0
@@ -15,37 +18,55 @@ body
 
     font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif
 
-    div
-        display: flex
+pre
+    color:            #1e1
+    background-color: forecolor
 
-a
-    text-decoration: none
-    color:           bgcolor
+    padding: 10px
 
-    &:hover
-        border-radius: 5px
-        transition:    background-color .5s ease
+    border-radius: 5px
+    line-height:   1.5em
 
-        color:            forecolor
-        background-color: bgcolor
+    overflow: auto
+
+code
+    font-family: Consolas, 'Liberation Mono', Menlo, 'Droid Sans Mono', Courier, monospace
+    font-size:   14px
+
+.focus
+    padding:   3px
+    font-size: 85%
+
+    background-color: rgba(0,0,0,0.1)
+    border-radius: 3px
 
 .side
     display:   flex
-    flex-flow: row-reverse nowrap
-
-    position: fixed
-    left:     0
-    top:      0
 
     height: 100%
-    width:  300px
+    width:  250px
 
     background-color: forecolor
     color:            bgcolor
 
+    a
+        text-decoration: none
+        color:           bgcolor
+
+        &:hover
+            border-radius: 5px
+            transition:    background-color .5s ease
+
+            color:            forecolor
+            background-color: bgcolor
+
     ul
         display:    flex
         flex-flow:  column nowrap
+
+        position: fixed
+        left:     0
+        top:      0
 
         list-style: none
         padding:    20px
@@ -106,3 +127,33 @@ a
 
                 &:hover
                     padding-right: 5px
+
+.main
+    display:  flex
+    flex-direction: column
+
+    padding:  50px 30px
+
+    color:       forecolor
+    font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', 'Droid Sans', Arial, freesans, sans-serif
+
+    .title
+        display:     flex
+        flex-flow:   row wrap
+        align-items: baseline
+
+        height: 39px
+
+        span
+            padding-left: 10px
+
+        h1
+            margin:  0
+            padding: 0
+
+    a
+        text-decoration: underline
+        color:           forecolor
+
+        &:hover
+            color: #E60900

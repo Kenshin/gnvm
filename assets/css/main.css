@@ -3,6 +3,12 @@ html {
   height: 100%;
 }
 body {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
   width: 100%;
   height: 100%;
   margin: 0;
@@ -10,35 +16,42 @@ body {
   background-color: #eee;
   font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif;
 }
-body div {
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-}
-a {
-  text-decoration: none;
-  color: #eee;
-}
-a:hover {
+pre {
+  color: #1e1;
+  background-color: #111;
+  padding: 10px;
   border-radius: 5px;
-  transition: background-color 0.5s ease;
-  color: #111;
-  background-color: #eee;
+  line-height: 1.5em;
+  overflow: auto;
+}
+code {
+  font-family: Consolas, 'Liberation Mono', Menlo, 'Droid Sans Mono', Courier, monospace;
+  font-size: 14px;
+}
+.focus {
+  padding: 3px;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 3px;
 }
 .side {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-flow: row-reverse nowrap;
-      -ms-flex-flow: row-reverse nowrap;
-          flex-flow: row-reverse nowrap;
-  position: fixed;
-  left: 0;
-  top: 0;
   height: 100%;
-  width: 300px;
+  width: 250px;
   background-color: #111;
   color: #eee;
+}
+.side a {
+  text-decoration: none;
+  color: #eee;
+}
+.side a:hover {
+  border-radius: 5px;
+  transition: background-color 0.5s ease;
+  color: #111;
+  background-color: #eee;
 }
 .side ul {
   display: -webkit-flex;
@@ -47,6 +60,9 @@ a:hover {
   -webkit-flex-flow: column nowrap;
       -ms-flex-flow: column nowrap;
           flex-flow: column nowrap;
+  position: fixed;
+  left: 0;
+  top: 0;
   list-style: none;
   padding: 20px;
   width: 200px;
@@ -114,4 +130,41 @@ a:hover {
 }
 .side ul .textitem .anchorlink:hover {
   padding-right: 5px;
+}
+.main {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 50px 30px;
+  color: #111;
+  font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', 'Droid Sans', Arial, freesans, sans-serif;
+}
+.main .title {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+  -webkit-align-items: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
+  height: 39px;
+}
+.main .title span {
+  padding-left: 10px;
+}
+.main .title h1 {
+  margin: 0;
+  padding: 0;
+}
+.main a {
+  text-decoration: underline;
+  color: #111;
+}
+.main a:hover {
+  color: #e60900;
 }
