@@ -95,6 +95,26 @@ reg          Add config property 'noderoot' to Environment variable 'NODE_HOME'
 version      Print GNVM version number
             </code></pre>
         </div>
+        <div id="getting-started">
+            <h2>Getting Started</h2>
+            <h3>Change fast registry</h3>
+            <blockquote>gnvm built-in DEFAULT( http://nodejs.org/dist/ ) and TAOBAO( http://npm.taobao.org/mirrors/node ) two registry.</blockquote>
+            <pre><code>gnvm config registry TAOBAO</code></pre>
+            <h3>Install multiple Node.js</h3>
+            <blockquote>Install any Node.js version include: automatic recognition of latest version, io.js version and specified arch, e.g. x.xx.xx-x64 </blockquote>
+            <pre><code>gnvm install latest 1.0.0-x86 1.0.0-x64 5.0.0</code></pre>
+            <h3>Uninstall local Node.js version</h3>
+            <pre><code>gnvm uninstall latest 1.0.0-x86 1.0.0-x64 5.0.0</code></pre>
+            <h3>Usage any local Node.js version</h3>
+            <pre><code>gnvm use 5.10.1</code></pre>
+            <h3>List all local Node.js versions</h3>
+            <pre><code>gnvm ls</code></pre>
+            <h3>Update local Node.js latest version</h3>
+            <pre><code>gnvm update latest</code></pre>
+            <h3>Install npm</h3>
+            <blockquote>gnvm support install npm, e.g. gnvm npm latest, download npm latest version.</blockquote>
+            <pre><code>gnvm npm latest </code></pre>
+        </div>
         <div id="about">
             <h2>About</h2>
             <ul>
