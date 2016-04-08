@@ -9,8 +9,6 @@ body {
   -webkit-flex-flow: row wrap;
       -ms-flex-flow: row wrap;
           flex-flow: row wrap;
-  width: 100%;
-  height: 100%;
   margin: 0;
   padding: 0;
   background-color: #eee;
@@ -38,7 +36,6 @@ code {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  height: 100%;
   width: 250px;
   background-color: #111;
   color: #eee;
