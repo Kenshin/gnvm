@@ -100,7 +100,10 @@ version      Print GNVM version number
             <h2>Getting Started</h2>
             <h3>.gnvmrc</h3>
             <blockquote>.gnvmrc auto create and saved local/remote Node.js information.</blockquote>
-            <pre><code>xxxx</code></pre>
+            <pre><code>globalversion: 5.0.1
+latestversion: 5.10.1
+noderoot: /Users/kenshin/Work/28-GO/01-work/src/gnvm
+registry: http://npm.taobao.org/mirrors/node/</code></pre>
             <h3>Change fast registry</h3>
             <blockquote>gnvm built-in DEFAULT( http://nodejs.org/dist/ ) and TAOBAO( http://npm.taobao.org/mirrors/node ) two registry.</blockquote>
             <pre><code>gnvm config registry TAOBAO</code></pre>
@@ -119,7 +122,21 @@ version      Print GNVM version number
             <blockquote>gnvm support install npm, e.g. gnvm npm latest, download npm latest version.</blockquote>
             <pre><code>gnvm npm latest</code></pre>
             <h3>Search Node.js version from .gnvmrc registry</h3>
-            <pre><code>gnvm search 5.*.* </code></pre>
+            <pre><code>
+gnvm search 5.*.*
+Search Node.js version rules [5.x.x] from http://npm.taobao.org/mirrors/node/index.json, please wait.
++--------------------------------------------------+
+| No.   date         node ver    exec      npm ver |
++--------------------------------------------------+
+1     2016-04-05   5.10.1      x86 x64   3.8.3
+2     2016-04-01   5.10.0      x86 x64   3.8.3
+3     2016-03-22   5.9.1       x86 x64   3.7.3
+4     2016-03-16   5.9.0       x86 x64   3.7.3
+5     2016-03-09   5.8.0       x86 x64   3.7.3
+6     2016-03-02   5.7.1       x86 x64   3.6.0
+7     2016-02-23   5.7.0       x86 x64   3.6.0
++--------------------------------------------------+
+</code></pre>
         </div>
         <div id="about">
             <h2>About</h2>
