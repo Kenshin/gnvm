@@ -1,5 +1,6 @@
 forecolor = #111
 bgcolor   = #eee
+border    = 5px
 
 html
     width  : 100%
@@ -22,7 +23,7 @@ pre
 
     padding: 10px
 
-    border-radius: 5px
+    border-radius: border
     line-height:   1.5em
 
     overflow: auto
@@ -37,7 +38,7 @@ code
 
     background: #000
     background: rgba(0,0,0,0.1)
-    border-radius: 5px
+    border-radius: border
 
 .side
     display:   flex
@@ -52,7 +53,7 @@ code
         color:           bgcolor
 
         &:hover
-            border-radius: 5px
+            border-radius: border
             transition:    background-color .5s ease
 
             color:            forecolor
@@ -102,7 +103,7 @@ code
                 display:       block
                 width:         32px
                 height:        @width
-                border-radius: 5px
+                border-radius: border
 
                 background-repeat:   no-repeat
                 background-position: center
