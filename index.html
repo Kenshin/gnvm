@@ -53,7 +53,7 @@ Start download Node.js versions [5.10.1, 1.0.0, 1.0.0-x86, 5.0.0].
 End download.
 
 c:\> gnvm ls
-5.10.1 -- latest
+5.1.1 -- latest
 1.0.0
 1.0.0 -- x86
 5.0.0 -- global
@@ -107,6 +107,7 @@ version      Print GNVM version number
         </div>
         <div id="getting-started">
             <h2>Getting Started</h2>
+            <blockquote><span class="focus">gnvm.exe</span> is a single exe file, don't need to configure, direct usage.</blockquote>
             <h3>.gnvmrc</h3>
             <blockquote><span class="focus">.gnvmrc</span> can be auto created and it saved local/remote Node.js version information.</blockquote>
             <pre><code>globalversion: 5.0.1
@@ -114,7 +115,7 @@ latestversion: 5.10.1
 noderoot: /Users/kenshin/Work/28-GO/01-work/src/gnvm
 registry: http://npm.taobao.org/mirrors/node/</code></pre>
             <h3>Change fast registry</h3>
-            <blockquote>gnvm built-in <a href="http://nodejs.org/dist/">DEFAULT</a> and <a href="http://npm.taobao.org/mirrors/node">TAOBAO</a> two registry.</blockquote>
+            <blockquote><span class="focus">gnvm.exe</span> built-in <a href="http://nodejs.org/dist/">DEFAULT</a> and <a href="http://npm.taobao.org/mirrors/node">TAOBAO</a> two registry.</blockquote>
             <pre><code>gnvm config registry TAOBAO</code></pre>
             <h3>Install multiple Node.js</h3>
             <blockquote>Install any Node.js version include: automatic recognition of <span class="focus">latest</span> version, <span class="focus">io.js</span> version and specified arch, e.g. <span class="focus">x.xx.xx-x64</span>.</blockquote>
@@ -124,7 +125,11 @@ registry: http://npm.taobao.org/mirrors/node/</code></pre>
             <h3>Usage any local Node.js version</h3>
             <pre><code>gnvm use 5.10.1</code></pre>
             <h3>List all local Node.js versions</h3>
-            <pre><code>gnvm ls</code></pre>
+            <pre><code>gnvm ls
+5.1.1 -- latest
+1.0.0
+1.0.0 -- x86
+5.0.0 -- global</code></pre>
             <h3>Update local Node.js latest version</h3>
             <pre><code>gnvm update latest</code></pre>
             <h3>Install npm</h3>
