@@ -79,6 +79,15 @@ Update success, current Node.js latest version is 5.10.0.
                 <p><span class="focus">curl -L https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true -o gnvm.exe</span></p></li>
             </ul>
         </div>
+        <div id="installation">
+            <h2>Installation</h2>
+            <ul>
+                <li><p>Not exist Node.js Environment</p>
+                <blockquote>Download and unzip <span class="focus">gnvm.exe</span> save to any local folder and add this folder to Environment <span class="focus">Path</span>.</blockquote></li>
+                <li><p>Exist Node.js Environment</p>
+                <blockquote>Download and unzip <span class="focus">gnvm.exe</span> save to the same <span class="focus">Node.js</span> folder.</blockquote></li>
+            <ul>
+        </div>
         <div id="feature">
             <h2>Feature</h2>
             <pre><code>
@@ -99,16 +108,16 @@ version      Print GNVM version number
         <div id="getting-started">
             <h2>Getting Started</h2>
             <h3>.gnvmrc</h3>
-            <blockquote>.gnvmrc auto create and saved local/remote Node.js information.</blockquote>
+            <blockquote><span class="focus">.gnvmrc</span> can be auto created and it saved local/remote Node.js version information.</blockquote>
             <pre><code>globalversion: 5.0.1
 latestversion: 5.10.1
 noderoot: /Users/kenshin/Work/28-GO/01-work/src/gnvm
 registry: http://npm.taobao.org/mirrors/node/</code></pre>
             <h3>Change fast registry</h3>
-            <blockquote>gnvm built-in DEFAULT( http://nodejs.org/dist/ ) and TAOBAO( http://npm.taobao.org/mirrors/node ) two registry.</blockquote>
+            <blockquote>gnvm built-in <a href="http://nodejs.org/dist/">DEFAULT</a> and <a href="http://npm.taobao.org/mirrors/node">TAOBAO</a> two registry.</blockquote>
             <pre><code>gnvm config registry TAOBAO</code></pre>
             <h3>Install multiple Node.js</h3>
-            <blockquote>Install any Node.js version include: automatic recognition of latest version, io.js version and specified arch, e.g. x.xx.xx-x64 </blockquote>
+            <blockquote>Install any Node.js version include: automatic recognition of <span class="focus">latest</span> version, <span class="focus">io.js</span> version and specified arch, e.g. <span class="focus">x.xx.xx-x64</span>.</blockquote>
             <pre><code>gnvm install latest 1.0.0-x86 1.0.0-x64 5.0.0</code></pre>
             <h3>Uninstall local Node.js version</h3>
             <pre><code>gnvm uninstall latest 1.0.0-x86 1.0.0-x64 5.0.0</code></pre>
@@ -119,9 +128,10 @@ registry: http://npm.taobao.org/mirrors/node/</code></pre>
             <h3>Update local Node.js latest version</h3>
             <pre><code>gnvm update latest</code></pre>
             <h3>Install npm</h3>
-            <blockquote>gnvm support install npm, e.g. gnvm npm latest, download npm latest version.</blockquote>
+            <blockquote>gnvm support install <span class="focus">npm</span>, download npm latest version, usage <span class="focus">gnvm npm latest</span>.</blockquote>
             <pre><code>gnvm npm latest</code></pre>
             <h3>Search Node.js version from .gnvmrc registry</h3>
+            <blockquote>you can usage <span class="focus">*</span> or <span class="focus">/regxp/</span>, e.g. <span class="focus">gnvm search 5.*.*</span> or <span class="focus">gnvm search /.10./</span></blockquote>
             <pre><code>
 gnvm search 5.*.*
 Search Node.js version rules [5.x.x] from http://npm.taobao.org/mirrors/node/index.json, please wait.
