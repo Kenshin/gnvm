@@ -57,6 +57,51 @@ blockquote {
   color: #111;
   background-color: #eee;
 }
+.side nav {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: row nowrap;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-justify-content: flex-end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+.side nav span {
+  background-color: #eee;
+}
+.side nav a {
+  opacity: 0.1;
+  padding-left: 5px;
+}
+.side nav a .weibo-share-icon {
+  background-image: url("../images/weibo-share-icon.png");
+}
+.side nav a .twitter-share-icon {
+  background-image: url("../images/twitter-share-icon.png");
+}
+.side nav a .facebook-share-icon {
+  background-image: url("../images/facebook-share-icon.png");
+}
+.side nav a .gplus-share-icon {
+  background-image: url("../images/gplus-share-icon.png");
+}
+.side nav a:hover {
+  opacity: 1;
+  transition: opacity 1s ease;
+  color: #111;
+  background-color: #111;
+}
+.side span {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #eee;
+}
 .side ul {
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -103,15 +148,6 @@ blockquote {
           justify-content: flex-end;
   padding-left: 3px;
   color: #111;
-}
-.side ul .iconlink span {
-  display: block;
-  width: 32px;
-  height: 32px;
-  border-radius: 5px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: #eee;
 }
 .side ul .iconlink .github {
   background-image: url("../images/github.png");

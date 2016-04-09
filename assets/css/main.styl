@@ -66,6 +66,43 @@ blockquote
             color:            forecolor
             background-color: bgcolor
 
+    nav
+        display:        flex
+        flex-flow:      row nowrap
+        justify-content:flex-end
+
+        span
+            background-color: bgcolor
+
+        a
+            opacity: 0.1
+            padding-left: 5px
+
+            .weibo-share-icon
+                background-image: url("../images/weibo-share-icon.png")
+            .twitter-share-icon
+                background-image: url("../images/twitter-share-icon.png")
+            .facebook-share-icon
+                background-image: url("../images/facebook-share-icon.png")
+            .gplus-share-icon
+                background-image: url("../images/gplus-share-icon.png")
+
+            &:hover
+                opacity:    1
+                transition: opacity 1s ease
+                color:            forecolor
+                background-color: forecolor
+
+    span
+        display:       block
+        width:         30px
+        height:        @width
+        border-radius: border
+
+        background-repeat:   no-repeat
+        background-position: center
+        background-color:    bgcolor
+
     ul
         display:    flex
         flex-flow:  column nowrap
@@ -105,16 +142,6 @@ blockquote
 
             padding-left: 3px
             color:        forecolor
-
-            span
-                display:       block
-                width:         32px
-                height:        @width
-                border-radius: border
-
-                background-repeat:   no-repeat
-                background-position: center
-                background-color:    bgcolor
 
             .github
                 background-image: url("../images/github.png")
