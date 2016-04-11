@@ -1,0 +1,7 @@
+{
+    "side":{
+        "start":"start",
+        "download":"download",
+        "installation":"installation"
+    }
+}

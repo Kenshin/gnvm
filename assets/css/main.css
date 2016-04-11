@@ -119,12 +119,12 @@ blockquote {
   text-align: right;
   text-transform: uppercase;
 }
-.side ul li:nth-child(5),
-.side ul li:nth-child(6) {
+.side ul li:nth-child(6),
+.side ul li:nth-child(7) {
   display: none;
   visibility: hidden;
 }
-.side ul li:nth-child(7),
+.side ul li:nth-child(8),
 .side ul li:last-child {
   padding-top: 15px;
 }
@@ -258,18 +258,23 @@ blockquote {
     position: static;
     text-align: center;
   }
+  .side ul .textitem {
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
   .side ul .iconitem {
     display: none;
     visibility: hidden;
   }
-  .side ul li:nth-child(5),
-  .side ul li:nth-child(6) {
+  .side ul li:nth-child(6),
+  .side ul li:nth-child(7) {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     visibility: visible;
   }
-  .side ul li:nth-child(7),
+  .side ul li:nth-child(8),
   .side ul li:last-child {
     padding-top: 0;
   }
