@@ -124,7 +124,8 @@ blockquote {
   display: none;
   visibility: hidden;
 }
-.side ul li:nth-child(7) {
+.side ul li:nth-child(7),
+.side ul li:last-child {
   padding-top: 15px;
 }
 .side ul .title {
@@ -264,7 +265,8 @@ blockquote {
     display: flex;
     visibility: visible;
   }
-  .side ul li:nth-child(7) {
+  .side ul li:nth-child(7),
+  .side ul li:last-child {
     padding-top: 0;
   }
   .side nav {
