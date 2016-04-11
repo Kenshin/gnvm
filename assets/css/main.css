@@ -269,7 +269,15 @@ blockquote {
         -ms-flex-pack: center;
             justify-content: center;
   }
+  .side nav a {
+    opacity: 1;
+  }
   .main {
     zoom: 0.6;
+  }
+  .footer {
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
   }
 }
