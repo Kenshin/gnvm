@@ -282,20 +282,19 @@ blockquote {
     zoom: 0.6;
   }
   .main header {
-    zoom: 0.6;
     padding-bottom: 50px;
   }
   .main header span:nth-child(1) {
-    font-size: 100px;
+    font-size: 60px;
   }
   .main header span:nth-child(2) {
-    font-size: 60px;
+    font-size: 40px;
   }
   .main .m-font-size {
     font-size: 13px;
   }
   .main .desc {
-    font-size: 12px;
+    font-size: 13px;
     padding-top: 30px;
   }
   .footer {
