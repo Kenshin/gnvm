@@ -195,9 +195,6 @@ blockquote {
   font-size: 25px;
   font-weight: bold;
 }
-.main header span:nth-child(2) {
-  padding-left: 10px;
-}
 .main a {
   text-decoration: underline;
   color: #111;
