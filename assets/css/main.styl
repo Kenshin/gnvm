@@ -175,7 +175,7 @@ blockquote
     color:       forecolor
     font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', 'Droid Sans', Arial, freesans, sans-serif
 
-    .title
+    header
         display:     flex
         flex-flow:   row wrap
         align-items: baseline
@@ -183,11 +183,12 @@ blockquote
         height: 39px
 
         span
-            padding-left: 10px
+            &:nth-child(1)
+                font-size:   25px
+                font-weight: bold
 
-        h1
-            margin:  0
-            padding: 0
+            &:nth-child(2)
+                padding-left: 10px
 
     a
         text-decoration: underline
@@ -218,6 +219,12 @@ blockquote
     body
         flex-direction: column
 
+    p
+        font-size: 12px
+
+    blockquote, span
+        font-size: 11px
+
     .side
         width: 100%
         ul
@@ -242,6 +249,16 @@ blockquote
                 opacity: 1
     .main
         zoom: 0.6
+
+        header
+            span
+                &:nth-child(1)
+                    font-size: 60px
+                &:nth-child(2)
+                    font-size: 40px
+
+        .m-font-size
+            font-size: 13px
 
     .footer
         justify-content: center

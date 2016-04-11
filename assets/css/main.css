@@ -188,7 +188,7 @@ blockquote {
   color: #111;
   font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', 'Droid Sans', Arial, freesans, sans-serif;
 }
-.main .title {
+.main header {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
@@ -200,12 +200,12 @@ blockquote {
           align-items: baseline;
   height: 39px;
 }
-.main .title span {
-  padding-left: 10px;
+.main header span:nth-child(1) {
+  font-size: 25px;
+  font-weight: bold;
 }
-.main .title h1 {
-  margin: 0;
-  padding: 0;
+.main header span:nth-child(2) {
+  padding-left: 10px;
 }
 .main a {
   text-decoration: underline;
@@ -242,6 +242,13 @@ blockquote {
         -ms-flex-direction: column;
             flex-direction: column;
   }
+  p {
+    font-size: 12px;
+  }
+  blockquote,
+  span {
+    font-size: 11px;
+  }
   .side {
     width: 100%;
   }
@@ -274,6 +281,15 @@ blockquote {
   }
   .main {
     zoom: 0.6;
+  }
+  .main header span:nth-child(1) {
+    font-size: 60px;
+  }
+  .main header span:nth-child(2) {
+    font-size: 40px;
+  }
+  .main .m-font-size {
+    font-size: 13px;
   }
   .footer {
     -webkit-justify-content: center;
