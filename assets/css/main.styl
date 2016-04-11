@@ -119,7 +119,11 @@ blockquote
         text-align:     right
         text-transform: uppercase
 
-        li:nth-child(5)
+        li:nth-child(5), li:nth-child(6)
+            display:    none
+            visibility: hidden
+
+        li:nth-child(7)
             padding-top: 15px
 
         .title
@@ -133,6 +137,7 @@ blockquote
         .iconitem
             display:        flex
             flex-direction: row-reverse
+            visibility:     visible
 
             padding-top: 10px
 
@@ -200,3 +205,38 @@ blockquote
     border-top: 1px solid forecolor
 
     font-size: 10px
+
+@media (max-width: 1222px)
+    .main
+        zoom: 0.8
+
+@media (max-width: 1037px)
+    .main
+        zoom: 0.7
+
+@media (max-width: 989px)
+    body
+        flex-direction: column
+
+    .side
+        width: 100%
+        ul
+            width: 100%
+            position:   static
+            text-align: center
+
+            .iconitem
+                display:    none
+                visibility: hidden
+
+            li:nth-child(5), li:nth-child(6)
+                display:    flex
+                visibility: visible
+
+            li:nth-child(7)
+                padding-top: 0
+
+        nav
+            justify-content: center
+    .main
+        zoom: 0.6
