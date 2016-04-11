@@ -196,6 +196,10 @@ blockquote {
   font-size: 25px;
   font-weight: bold;
 }
+.main .badge {
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
 .main a {
   text-decoration: underline;
   color: #111;
