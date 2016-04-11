@@ -189,15 +189,6 @@ blockquote {
   font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', 'Droid Sans', Arial, freesans, sans-serif;
 }
 .main header {
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-flow: row wrap;
-      -ms-flex-flow: row wrap;
-          flex-flow: row wrap;
-  -webkit-align-items: baseline;
-      -ms-flex-align: baseline;
-          align-items: baseline;
   height: 39px;
 }
 .main header span:nth-child(1) {
@@ -213,6 +204,9 @@ blockquote {
 }
 .main a:hover {
   color: #e60900;
+}
+.main .desc span {
+  margin: 16px 0;
 }
 .footer {
   display: -webkit-flex;
@@ -242,12 +236,17 @@ blockquote {
         -ms-flex-direction: column;
             flex-direction: column;
   }
-  p {
+  p,
+  li {
     font-size: 12px;
   }
   blockquote,
   span {
     font-size: 11px;
+  }
+  .focus {
+    padding: 3px 5px 3px 5px;
+    line-height: 1.2em;
   }
   .side {
     width: 100%;
@@ -282,14 +281,22 @@ blockquote {
   .main {
     zoom: 0.6;
   }
+  .main header {
+    zoom: 0.6;
+    padding-bottom: 50px;
+  }
   .main header span:nth-child(1) {
-    font-size: 60px;
+    font-size: 100px;
   }
   .main header span:nth-child(2) {
-    font-size: 40px;
+    font-size: 60px;
   }
   .main .m-font-size {
     font-size: 13px;
+  }
+  .main .desc {
+    font-size: 12px;
+    padding-top: 30px;
   }
   .footer {
     -webkit-justify-content: center;
