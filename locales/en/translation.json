@@ -14,9 +14,9 @@
     "main": {
         "subtitle" : "Node.js version manager on Windows by Go",
         "desc"     : "<a href='https://github.com/kenshin/gnvm'>GNVM</a> is simple multiple Node.js version manager on Windows by Go, like <span class='focus'>nvm</span> <span class='focus'>nvmw</span> <span class='focus'>nodist</span>.",
-        "gouser"   : "For go user, usage ",
-        "gogit"    : "For git user, usage ",
-        "gocurl"   : "For curl user, usage ",
+        "gouser"   : "For go user, please usage ",
+        "gogit"    : "For git user, please usage ",
+        "gocurl"   : "For curl user, please usage ",
         "noenv"    : "Not exist Node.js Environment",
         "existenv" : "Exist Node.js Environment",
         "noenvfunc": "Download and unzip <span class='focus'>gnvm.exe</span> save to any local folder and add this folder to Environment <span class='focus'>Path</span>.",

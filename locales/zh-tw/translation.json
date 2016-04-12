@@ -14,9 +14,9 @@
     "main": {
         "subtitle" : "使用 Go 语言编写的 Node.js 多版本管理器",
         "desc"     : "<a href='https://github.com/kenshin/gnvm'>GNVM</a> 是一个简单的 Node.js 多版本管理器，类似 <span class='focus'>nvm</span> <span class='focus'>nvmw</span> <span class='focus'>nodist</span> 。",
-        "gouser"   : " Go 用户，请使用 ",
-        "gogit"    : "Git 用户，请使用 ",
-        "gocurl"   : "Curl 用户，请使用 ",
+        "gouser"   : " go 用户，请使用 ",
+        "gogit"    : "git 用户，请使用 ",
+        "gocurl"   : "curl 用户，请使用 ",
         "noenv"    : "不存在 Node.js 环境",
         "existenv" : "存在 Node.js 环境",
         "noenvfunc": "下载并解压缩 <span class='focus'>gnvm.exe</span> 保存到任意文件夹，并将此文件夹加入到环境变量 <span class='focus'>Path</span>。",
