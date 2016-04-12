@@ -13,6 +13,15 @@
     },
     "main": {
         "subtitle" : "Node.js version manager on Windows by Go",
-        "desc"     : " is simple multiple Node.js version manager on Windows by Go, like "
+        "desc"     : " is simple multiple Node.js version manager on Windows by Go, like ",
+        "gouser"   : "For go user, usage ",
+        "gogit"    : "For git user, usage ",
+        "gocurl"   : "For curl user, usage ",
+        "noenv"    : "Not exist Node.js Environment",
+        "existenv" : "Exist Node.js Environment",
+        "noenvfunc": "Download and unzip <span class='focus'>gnvm.exe</span> save to any local folder and add this folder to Environment <span class='focus'>Path</span>.",
+        "exenvfunc": "Download and unzip <span class='focus'>gnvm.exe</span> save to the same <span class='focus'>Node.js</span> folder.",
+        "getstart" : "<span class='focus'>gnvm.exe</span> is a single exe file, don't need to configure, direct usage.",
+        "gnvmrc"   : "<span class='focus'>.gnvmrc</span> can be auto created and it saved local/remote Node.js version information."
     }
 }

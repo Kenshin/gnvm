@@ -13,6 +13,15 @@
     },
     "main": {
         "subtitle" : "使用 Go 语言编写的 Node.js 多版本管理器",
-        "desc"     : " 是一个简单的 Node.js 多版本管理器， 类似 "
+        "desc"     : " 是一个简单的 Node.js 多版本管理器，类似 ",
+        "gouser"   : " Go 用户，请使用 ",
+        "gogit"    : "Git 用户，请使用 ",
+        "gocurl"   : "Curl 用户，请使用 ",
+        "noenv"    : "不存在 Node.js 环境",
+        "existenv" : "存在 Node.js 环境",
+        "noenvfunc": "下载并解压缩 <span class='focus'>gnvm.exe</span> 保存到任意文件夹，并将此文件夹加入到环境变量 <span class='focus'>Path</span>。",
+        "exenvfunc": "下载并解压缩 <span class='focus'>gnvm.exe</span> 保存到 <span class='focus'>Node.js</span> 所在的文件夹。",
+        "getstart" : "<span class='focus'>gnvm.exe</span> 是一个单文件 exe，无需任何配置，直接使用。",
+        "gnvmrc"   : "<span class='focus'>.gnvmrc</span> 无需手动建立，其中保存了 本地 / 远程  Node.js 版本信息等。"
     }
 }
