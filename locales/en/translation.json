@@ -45,6 +45,7 @@
         "sns"      : "SNS",
         "feedback" : "Feedback",
         "thank1"   : "Icon <a href='http://www.easyicon.net'>http://www.easyicon.net</a> and <a href='https://www.iconfinder.com'>https://www.iconfinder.com</a>.",
-        "thank2"   : "Theme reference <a href='https://you-get.org/'>You-Get</a>."
+        "thank2"   : "Theme reference <a href='https://you-get.org/'>You-Get</a>.",
+        "footer"   : "<a href='https://github.com/kenshin/gnvm/' target='_blank'>GNVM</a> - Node.js version manager on Windows by Go"
     }
 }

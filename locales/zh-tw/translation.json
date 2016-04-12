@@ -45,6 +45,7 @@
         "sns"      : "微博",
         "feedback" : "反馈",
         "thank1"   : "图标来自 <a href='http://www.easyicon.net'>http://www.easyicon.net</a> 和 <a href='https://www.iconfinder.com'>https://www.iconfinder.com</a>。",
-        "thank2"   : "页面设计参考 <a href='https://you-get.org/'>You-Get</a>。"
+        "thank2"   : "页面设计参考 <a href='https://you-get.org/'>You-Get</a>。",
+        "footer"   : "<a href='https://github.com/kenshin/gnvm/' target='_blank'>GNVM</a> - 使用 Go 语言编写的 Node.js 多版本管理器"
     }
 }
