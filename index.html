@@ -182,12 +182,32 @@ Search Node.js version rules [5.x.x] from http://npm.taobao.org/mirrors/node/ind
             <h2 data-i18n="side.example">Example</h2>
             <h4 data-i18n="main.examp1">Not exist Node.js Environment and download Node.js latest version and usage it.</h4>
             <pre><code>c:\> gnvm config registry TAOBAO
-xxxxx
-gnvm install latest -g
+Set success, registry new value is http://npm.taobao.org/mirrors/node/
+c:\> gnvm install latest -g
+Notice: local  latest version is unknown.
+Notice: remote latest version is 5.10.1.
 Start download Node.js versions [5.10.1].
-5.10.1: 18% [=========>__________________________________________] 4s
+5.10.1: 100% [==================================================>] 13s
 End download.
-xxxxx</code></pre>
+Set success, latestversion new value is 5.10.1
+Set success, global Node.js version is 5.10.1.</code></pre>
+            <h4 data-i18n="main.examp2">Update local Node.js latest version.</h4>
+            <pre><code>c:\> gnvm config registry TAOBAO
+Set success, registry new value is http://npm.taobao.org/mirrors/node/
+c:\> gnvm update latest
+Notice: local  Node.js latest version is 5.9.1.
+Notice: remote Node.js latest version is 5.10.1 from http://npm.taobao.org/mirrors/node/.
+Waring: remote latest version 5.10.1 > local latest version 5.9.1.
+Waring: 5.10.1 folder exist.
+Update success, Node.js latest version is 5.10.1.</code></pre>
+            <h4 data-i18n="main.examp3">See Node.js global and latest version.</h4>
+            <pre><code>c:\> gnvm node-version
+Node.js latest version is 5.10.1.
+Node.js global version is 5.10.1.</code></pre>
+            <h4 data-i18n="main.examp4">Verify config registry.</h4>
+            <pre><code>c:\> gnvm config registry test
+Notice: gnvm config registry http://npm.taobao.org/mirrors/node/ valid ................... ok.
+Notice: gnvm config registry http://npm.taobao.org/mirrors/node/index.json valid ......... ok.</code></pre>
         </div>
         <div id="todo">
             <h2 data-i18n="side.to-do">TO-DO</h2>
