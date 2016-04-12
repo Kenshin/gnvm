@@ -12,7 +12,8 @@ body {
   margin: 0;
   padding: 0;
   background-color: #eee;
-  font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif;
+/*font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif*/
+  font-family: 'PingHei', 'PingFang SC', Helvetica Neue, 'Work Sans', 'Hiragino Sans GB', 'Microsoft YaHei', SimSun, sans-serif;
 }
 pre {
   color: #1e1;
@@ -187,7 +188,7 @@ blockquote {
           flex-direction: column;
   padding: 50px 30px 0 30px;
   color: #111;
-  font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', 'Droid Sans', Arial, freesans, sans-serif;
+/*font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', 'Droid Sans', Arial, freesans, sans-serif*/
 }
 .main header {
   height: 39px;
