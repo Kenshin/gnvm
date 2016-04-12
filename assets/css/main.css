@@ -37,6 +37,7 @@ blockquote {
 .focus {
   padding: 3px;
   font-size: 85%;
+  color: rgba(0,0,0,0.7);
   background: #000;
   background: rgba(0,0,0,0.1);
   border-radius: 5px;
@@ -188,7 +189,8 @@ blockquote {
       -ms-flex-direction: column;
           flex-direction: column;
   padding: 50px 30px 0 30px;
-  color: #111;
+  color: rgba(0,0,0,0.7);
+/*color:       forecolor*/
 /*font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', 'Droid Sans', Arial, freesans, sans-serif*/
 }
 .main header {
@@ -204,7 +206,9 @@ blockquote {
 }
 .main a {
   text-decoration: underline;
-  color: #111;
+/*color:           forecolor*/
+  color: #1e1e1c;
+  font-size: 14px;
 }
 .main a:hover {
   color: #e60900;
