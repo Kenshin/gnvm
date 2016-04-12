@@ -12,7 +12,7 @@
         "licenses"    : "授权"
     },
     "main": {
-        "subtitle" : "Node.js 多版本管理器 on Windows by Go",
+        "subtitle" : "使用 Go 语言编写的 Node.js 多版本管理器",
         "desc"     : " 是一个简单的 Node.js 多版本管理器， 类似 "
     }
 }
