@@ -1,6 +1,8 @@
 forecolor = #111
 bgcolor   = #eee
+fontcolor = rgba(0,0,0,0.7)
 border    = 5px
+blackcolor= #000
 
 html
     width  : 100%
@@ -44,15 +46,16 @@ blockquote
 
     font-size:   12px
 
-span
+span, p
     font-size:   14px
 
 .focus
     padding:   3px
     font-size: 85%
 
-    color:      rgba(0, 0, 0, 0.7)
-    background: #000
+    color:      blackcolor
+    color:      fontcolor
+    background: blackcolor
     background: rgba(0,0,0,0.1)
 
     border-radius: border
@@ -183,8 +186,8 @@ span
 
     padding:  50px 30px 0 30px
 
-    color:         rgba(0, 0, 0, 0.7)
-    /*color:       forecolor*/
+    color:         blackcolor
+    color:         fontcolor
     /*font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', 'Droid Sans', Arial, freesans, sans-serif*/
 
     header
@@ -201,8 +204,8 @@ span
 
     a
         text-decoration: underline
-        /*color:           forecolor*/
-        color:           #1e1e1c
+        color:           blackcolor
+        color:           fontcolor
         font-size:       14px
 
         &:hover
