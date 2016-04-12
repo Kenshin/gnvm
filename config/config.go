@@ -24,7 +24,7 @@ import (
 var configPath, globalversion, latsetversion string
 
 const (
-	VERSION = "0.1.4 beta"
+	VERSION = "0.2.0"
 	CONFIG  = ".gnvmrc"
 	NEWLINE = "\n"
 

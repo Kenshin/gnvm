@@ -21,17 +21,11 @@ import (
 	"gnvm/util"
 )
 
-const (
-	TIMEFORMART   = "02-Jan-2006 15:04"
-	GNVMHOST      = "http://k-zone.cn/gnvm/version.txt"
-	PROCESSTAKEUP = "The process cannot access the file because it is being used by another process."
-)
-
 var rootPath, latURL string
 
 func init() {
 	rootPath = util.GlobalNodePath + util.DIVIDE
-	latURL = config.GetConfig("registry") + util.LATEST + "/" + util.SHASUMS
+	latURL = config.GetConfig(config.REGISTRY) + util.LATEST + "/" + util.SHASUMS
 }
 
 /**
@@ -603,7 +597,7 @@ func NodeVersion(args []string, remote bool) {
  	- remote: when remote == true, print CHANGELOG
 
 */
-func Version(remote bool) {
+func Version(remote, detail bool) {
 
 	defer func() {
 		if err := recover(); err != nil {
@@ -628,7 +622,7 @@ func Version(remote bool) {
 		return
 	}
 
-	code, res, err := curl.Get(GNVMHOST)
+	code, res, err := curl.Get("http://ksria.com/gnvm/CHANGELOG.md")
 	if code != 0 {
 		panic(err)
 	}
@@ -660,7 +654,7 @@ func Version(remote bool) {
 			}
 
 		}
-		if line > 1 {
+		if line > 2 && detail {
 			P(DEFAULT, content)
 		}
 
