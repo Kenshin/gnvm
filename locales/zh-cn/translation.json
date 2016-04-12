@@ -13,7 +13,7 @@
     },
     "main": {
         "subtitle" : "使用 Go 语言编写的 Node.js 多版本管理器",
-        "desc"     : " 是一个简单的 Node.js 多版本管理器，类似 ",
+        "desc"     : "<a href='https://github.com/kenshin/gnvm'>GNVM</a> 是一个简单的 Node.js 多版本管理器，类似 <span class='focus'>nvm</span> <span class='focus'>nvmw</span> <span class='focus'>nodist</span> 。",
         "gouser"   : " Go 用户，请使用 ",
         "gogit"    : "Git 用户，请使用 ",
         "gocurl"   : "Curl 用户，请使用 ",

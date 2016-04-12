@@ -13,7 +13,7 @@
     },
     "main": {
         "subtitle" : "Node.js version manager on Windows by Go",
-        "desc"     : " is simple multiple Node.js version manager on Windows by Go, like ",
+        "desc"     : "<a href='https://github.com/kenshin/gnvm'>GNVM</a> is simple multiple Node.js version manager on Windows by Go, like <span class='focus'>nvm</span> <span class='focus'>nvmw</span> <span class='focus'>nodist</span>.",
         "gouser"   : "For go user, usage ",
         "gogit"    : "For git user, usage ",
         "gocurl"   : "For curl user, usage ",
