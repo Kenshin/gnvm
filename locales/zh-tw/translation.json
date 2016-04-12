@@ -35,6 +35,16 @@
         "npmfunc"  : "gnvm 支持安装 <span class='focus'>npm</span>, 例如：下载最新版的 npm version ，使用 <span class='focus'>gnvm npm latest</span>。",
         "search"   : "查询 Node.js 版本",
         "srchfunc" : "可以使用关键字 <span class='focus'>*</span> 或者 正则表达式 <span class='focus'>/regxp/</span>，例如： <span class='focus'>gnvm search 5.*.*</span> 或者 <span class='focus'>gnvm search /.10./</span> 。",
-        "examp1"   : "不存在 Node.js 环境时，下载 Node.js latest version 并设置为全局 Node.js"
+        "examp1"   : "不存在 Node.js 环境时，下载 Node.js latest version 并设置为全局 Node.js",
+        "todo1"    : "增加 <span class='focus'>HTTP_PROXY</span>。",
+        "todo2"    : "自动升级，例如 <span class='focus'>gnvm upgrad</span>.",
+        "todo3"    : "<span class='focus'>gnvm.exe</span> 增加 <span class='focus'>Chocolatey</span> 方案。",
+        "changelog": "更新日志",
+        "contact"  : "联系方式",
+        "email"    : "邮件",
+        "sns"      : "微博",
+        "feedback" : "反馈",
+        "thank1"   : "图标来自 <a href='http://www.easyicon.net'>http://www.easyicon.net</a> 和 <a href='https://www.iconfinder.com'>https://www.iconfinder.com</a>。",
+        "thank2"   : "页面设计参考 <a href='https://you-get.org/'>You-Get</a>。"
     }
 }
