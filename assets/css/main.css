@@ -201,6 +201,9 @@ p {
   color: rgba(0,0,0,0.7);
 /*font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', 'Droid Sans', Arial, freesans, sans-serif*/
 }
+.main h2 {
+  text-transform: capitalize;
+}
 .main header {
   height: 39px;
 }
