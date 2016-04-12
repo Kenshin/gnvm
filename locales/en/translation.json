@@ -22,6 +22,19 @@
         "noenvfunc": "Download and unzip <span class='focus'>gnvm.exe</span> save to any local folder and add this folder to Environment <span class='focus'>Path</span>.",
         "exenvfunc": "Download and unzip <span class='focus'>gnvm.exe</span> save to the same <span class='focus'>Node.js</span> folder.",
         "getstart" : "<span class='focus'>gnvm.exe</span> is a single exe file, don't need to configure, direct usage.",
-        "gnvmrc"   : "<span class='focus'>.gnvmrc</span> can be auto created and it saved local/remote Node.js version information."
+        "gnvmrc"   : "<span class='focus'>.gnvmrc</span> can be auto created and it saved local/remote Node.js version information.",
+        "registry" : "Change fast registry",
+        "regfunc"  : "<span class='focus'>gnvm.exe</span> built-in <a href='http://nodejs.org/dist/'>DEFAULT</a> and <a href='http://npm.taobao.org/mirrors/node'>TAOBAO</a> two registry.",
+        "installation": "Install multiple Node.js",
+        "insfunc"   : "Install any Node.js version include: automatic recognition of <span class='focus'>latest</span> version, <span class='focus'>io.js</span> version and specified arch, e.g. <span class='focus'>x.xx.xx-x64</span>.",
+        "uninstall": "Uninstall local Node.js version",
+        "usage"    : "Usage any local Node.js version",
+        "list"     : "List all local Node.js versions",
+        "update"   : "Update local Node.js latest version",
+        "npm"      : "Install npm",
+        "npmfunc"  : "gnvm support install <span class='focus'>npm</span>, download npm latest version, usage <span class='focus'>gnvm npm latest</span>.",
+        "search"   : "Search Node.js version from .gnvmrc registry",
+        "srchfunc" : "you can usage <span class='focus'>*</span> or <span class='focus'>/regxp/</span>, e.g. <span class='focus'>gnvm search 5.*.*</span> or <span class='focus'>gnvm search /.10./</span> .",
+        "examp1"   : "Not exist Node.js Environment and download Node.js latest version and usage it."
     }
 }

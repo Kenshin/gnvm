@@ -140,29 +140,29 @@ version      Print GNVM version number
 latestversion: 5.10.1
 noderoot: /Users/kenshin/Work/28-GO/01-work/src/gnvm
 registry: http://npm.taobao.org/mirrors/node/</code></pre>
-            <h3>Change fast registry</h3>
-            <blockquote><span class="focus">gnvm.exe</span> built-in <a href="http://nodejs.org/dist/">DEFAULT</a> and <a href="http://npm.taobao.org/mirrors/node">TAOBAO</a> two registry.</blockquote>
+            <h3 data-i18n="main.registry">Change fast registry</h3>
+            <blockquote data-i18n="[html]main.regfunc"><span class="focus">gnvm.exe</span> built-in <a href="http://nodejs.org/dist/">DEFAULT</a> and <a href="http://npm.taobao.org/mirrors/node">TAOBAO</a> two registry.</blockquote>
             <pre><code>gnvm config registry TAOBAO</code></pre>
-            <h3>Install multiple Node.js</h3>
-            <blockquote>Install any Node.js version include: automatic recognition of <span class="focus">latest</span> version, <span class="focus">io.js</span> version and specified arch, e.g. <span class="focus">x.xx.xx-x64</span>.</blockquote>
+            <h3 data-i18n="main.installation">Install multiple Node.js</h3>
+            <blockquote data-i18n="[html]main.insfunc">Install any Node.js version include: automatic recognition of <span class="focus">latest</span> version, <span class="focus">io.js</span> version and specified arch, e.g. <span class="focus">x.xx.xx-x64</span>.</blockquote>
             <pre><code>gnvm install latest 1.0.0-x86 1.0.0-x64 5.0.0</code></pre>
-            <h3>Uninstall local Node.js version</h3>
+            <h3 data-i18n="main.uninstall">Uninstall local Node.js version</h3>
             <pre><code>gnvm uninstall latest 1.0.0-x86 1.0.0-x64 5.0.0</code></pre>
-            <h3>Usage any local Node.js version</h3>
+            <h3 data-i18n="main.usage">Usage any local Node.js version</h3>
             <pre><code>gnvm use 5.10.1</code></pre>
-            <h3>List all local Node.js versions</h3>
+            <h3 data-i18n="main.list">List all local Node.js versions</h3>
             <pre><code>c:\> gnvm ls
 5.1.1 -- latest
 1.0.0
 1.0.0 -- x86
 5.0.0 -- global</code></pre>
-            <h3>Update local Node.js latest version</h3>
+            <h3 data-i18n="main.update">Update local Node.js latest version</h3>
             <pre><code>gnvm update latest</code></pre>
-            <h3>Install npm</h3>
-            <blockquote>gnvm support install <span class="focus">npm</span>, download npm latest version, usage <span class="focus">gnvm npm latest</span>.</blockquote>
+            <h3 data-i18n="main.npm">Install npm</h3>
+            <blockquote data-i18n="[html]main.npmfunc">gnvm support install <span class="focus">npm</span>, download npm latest version, usage <span class="focus">gnvm npm latest</span>.</blockquote>
             <pre><code>gnvm npm latest</code></pre>
-            <h3>Search Node.js version from .gnvmrc registry</h3>
-            <blockquote>you can usage <span class="focus">*</span> or <span class="focus">/regxp/</span>, e.g. <span class="focus">gnvm search 5.*.*</span> or <span class="focus">gnvm search /.10./</span></blockquote>
+            <h3 data-i18n="main.search">Search Node.js version from .gnvmrc registry</h3>
+            <blockquote data-i18n="[html]main.srchfunc">you can usage <span class="focus">*</span> or <span class="focus">/regxp/</span>, e.g. <span class="focus">gnvm search 5.*.*</span> or <span class="focus">gnvm search /.10./</span> .</blockquote>
             <pre><code>c:\> gnvm search 5.*.*
 Search Node.js version rules [5.x.x] from http://npm.taobao.org/mirrors/node/index.json, please wait.
 +--------------------------------------------------+
@@ -180,7 +180,7 @@ Search Node.js version rules [5.x.x] from http://npm.taobao.org/mirrors/node/ind
         </div>
         <div id="example">
             <h2 data-i18n="side.example">Example</h2>
-            <h3>Not exist Node.js Environment and download Node.js latest version and usage it.</h3>
+            <h4 data-i18n="main.examp1">Not exist Node.js Environment and download Node.js latest version and usage it.</h4>
             <pre><code>c:\> gnvm config registry TAOBAO
 xxxxx
 gnvm install latest -g
