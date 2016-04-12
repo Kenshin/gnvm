@@ -1,7 +1,14 @@
 {
     "side":{
-        "start":"关注",
-        "download":"下载",
-        "installation":"安装"
+        "github"      : "关注",
+        "download"    : "下载",
+        "installation": "安装",
+        "feature"     : "功能介绍",
+        "getting-started":"入门指南",
+        "example"     : "例子",
+        "to-do"       : "下一步",
+        "about"       : "关于",
+        "thanks"      : "感谢",
+        "licenses"    : "授权"
     }
 }

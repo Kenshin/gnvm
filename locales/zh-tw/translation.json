@@ -1,7 +1,14 @@
 {
     "side":{
-        "start":"關注",
-        "download":"下載",
-        "installation":"安裝"
+        "github"      : "關注",
+        "download"    : "下載",
+        "installation": "安裝",
+        "feature"     : "功能介紹",
+        "getting-started":"入門指南",
+        "example"     : "例子",
+        "to-do"       : "下一步",
+        "about"       : "關於",
+        "thanks"      : "感謝",
+        "licenses"    : "授權"
     }
 }

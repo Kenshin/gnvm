@@ -44,8 +44,6 @@ $( document ).ready( function() {
     // i18n init
     i18n.init( options, function(t) {
         $(".side").i18n();
-        $($(".iconitem")[0]).find("a").html( t( "side.start"    ) + '<span class="github"></span>' );
-        $($(".iconitem")[1]).find("a").html( t( "side.download" ) + '<span class="download"></span>' );
     });
 
 });

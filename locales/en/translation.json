@@ -1,7 +1,14 @@
 {
     "side":{
-        "start":"start",
-        "download":"download",
-        "installation":"installation"
+        "github"      : "start",
+        "download"    : "download",
+        "installation": "installation",
+        "feature"     : "feature",
+        "getting-started":"getting started",
+        "example"     : "example",
+        "to-do"       : "to-do",
+        "about"       : "about",
+        "thanks"      : "thanks",
+        "licenses"    : "licenses"
     }
 }
