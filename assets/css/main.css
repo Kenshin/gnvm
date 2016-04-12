@@ -33,6 +33,10 @@ blockquote {
   padding: 15px;
   color: #777;
   border-left: 4px solid #ddd;
+  font-size: 12px;
+}
+span {
+  font-size: 14px;
 }
 .focus {
   padding: 3px;
