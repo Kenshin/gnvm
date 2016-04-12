@@ -1,5 +1,5 @@
 {
-    "side":{
+    "side": {
         "github"      : "start",
         "download"    : "download",
         "installation": "installation",
@@ -10,5 +10,9 @@
         "about"       : "about",
         "thanks"      : "thanks",
         "licenses"    : "licenses"
+    },
+    "main": {
+        "subtitle" : "Node.js version manager on Windows by Go",
+        "desc"     : "is simple multiple Node.js version manager on Windows by Go, like"
     }
 }

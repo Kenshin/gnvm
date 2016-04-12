@@ -43,7 +43,8 @@ $( document ).ready( function() {
 
     // i18n init
     i18n.init( options, function(t) {
-        $(".side").i18n();
+        $( ".side" ).i18n();
+        $( ".main" ).i18n();
     });
 
 });

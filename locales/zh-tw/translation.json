@@ -1,5 +1,5 @@
 {
-    "side":{
+    "side": {
         "github"      : "關注",
         "download"    : "下載",
         "installation": "安裝",
@@ -10,5 +10,9 @@
         "about"       : "關於",
         "thanks"      : "感謝",
         "licenses"    : "授權"
+    },
+    "main": {
+        "subtitle" : "使用 Go 语言编写的 Node.js 多版本管理器",
+        "desc"     : " 是一个简单的 Node.js 多版本管理器， 类似 "
     }
 }

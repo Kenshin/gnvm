@@ -1,5 +1,5 @@
 {
-    "side":{
+    "side": {
         "github"      : "关注",
         "download"    : "下载",
         "installation": "安装",
@@ -10,5 +10,9 @@
         "about"       : "关于",
         "thanks"      : "感谢",
         "licenses"    : "授权"
+    },
+    "main": {
+        "subtitle" : "Node.js 多版本管理器 on Windows by Go",
+        "desc"     : " 是一个简单的 Node.js 多版本管理器， 类似 "
     }
 }
