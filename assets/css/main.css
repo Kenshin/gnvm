@@ -240,16 +240,22 @@ p {
   font-size: 10px;
 }
 @media (max-width: 1222px) {
+  .side {
+    zoom: 0.9;
+  }
   .main {
     zoom: 0.8;
   }
 }
-@media (max-width: 1037px) {
+@media (max-width: 1051px) {
+  .side {
+    zoom: 0.9;
+  }
   .main {
-    zoom: 0.7;
+    zoom: 0.6;
   }
 }
-@media (max-width: 989px) {
+@media (max-width: 1028px) {
   body {
     -webkit-flex-direction: column;
         -ms-flex-direction: column;
@@ -307,13 +313,13 @@ p {
     zoom: 0.6;
   }
   .main header {
-    padding-bottom: 50px;
+    padding-bottom: 20px;
   }
   .main header span:nth-child(1) {
-    font-size: 60px;
+    font-size: 2em;
   }
   .main header span:nth-child(2) {
-    font-size: 40px;
+    font-size: 1.5em;
   }
   .main .m-font-size {
     font-size: 13px;
