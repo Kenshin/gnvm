@@ -438,18 +438,18 @@ gnvm npm global           :Install local Node.js version matching npm version.
 func init() {
 
 	// add sub cmd to root
-	gnvmCmd.AddCommand(versionCmd)
+	gnvmCmd.AddCommand(configCmd)
+	gnvmCmd.AddCommand(useCmd)
+	gnvmCmd.AddCommand(lsCmd)
 	gnvmCmd.AddCommand(installCmd)
 	gnvmCmd.AddCommand(uninstallCmd)
-	gnvmCmd.AddCommand(useCmd)
-	gnvmCmd.AddCommand(sessionCmd)
 	gnvmCmd.AddCommand(updateCmd)
-	gnvmCmd.AddCommand(lsCmd)
-	gnvmCmd.AddCommand(nodeVersionCmd)
-	gnvmCmd.AddCommand(configCmd)
-	gnvmCmd.AddCommand(regCmd)
-	gnvmCmd.AddCommand(searchCmd)
 	gnvmCmd.AddCommand(npmCmd)
+	gnvmCmd.AddCommand(sessionCmd)
+	gnvmCmd.AddCommand(searchCmd)
+	gnvmCmd.AddCommand(nodeVersionCmd)
+	gnvmCmd.AddCommand(regCmd)
+	gnvmCmd.AddCommand(versionCmd)
 
 	// flag
 	installCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version.")
