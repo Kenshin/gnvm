@@ -180,7 +180,7 @@ Search Node.js version rules [5.x.x] from http://npm.taobao.org/mirrors/node/ind
         </div>
         <div id="example">
             <h2 data-i18n="side.example">Example</h2>
-            <h5 data-i18n="main.examp1">Not exist Node.js Environment and download Node.js latest version and usage it.</h5>
+            <h5 data-i18n="main.examp1">1. Not exist Node.js Environment and download Node.js latest version and usage it.</h5>
             <pre><code>c:\> gnvm config registry TAOBAO
 Set success, registry new value is http://npm.taobao.org/mirrors/node/
 c:\> gnvm install latest -g
@@ -191,7 +191,7 @@ Start download Node.js versions [5.10.1].
 End download.
 Set success, latestversion new value is 5.10.1
 Set success, global Node.js version is 5.10.1.</code></pre>
-            <h5 data-i18n="main.examp2">Update local Node.js latest version.</h5>
+            <h5 data-i18n="main.examp2">2. Update local Node.js latest version.</h5>
             <pre><code>c:\> gnvm config registry TAOBAO
 Set success, registry new value is http://npm.taobao.org/mirrors/node/
 c:\> gnvm update latest
@@ -200,15 +200,15 @@ Notice: remote Node.js latest version is 5.10.1 from http://npm.taobao.org/mirro
 Waring: remote latest version 5.10.1 > local latest version 5.9.1.
 Waring: 5.10.1 folder exist.
 Update success, Node.js latest version is 5.10.1.</code></pre>
-            <h5 data-i18n="main.examp3">See Node.js global and latest version.</h5>
+            <h5 data-i18n="main.examp3">3. See Node.js global and latest version.</h5>
             <pre><code>c:\> gnvm node-version
 Node.js latest version is 5.10.1.
 Node.js global version is 5.10.1.</code></pre>
-            <h5 data-i18n="main.examp4">Verify config registry.</h5>
+            <h5 data-i18n="main.examp4">4. Verify config registry.</h5>
             <pre><code>c:\> gnvm config registry test
 Notice: gnvm config registry http://npm.taobao.org/mirrors/node/ valid ................... ok.
 Notice: gnvm config registry http://npm.taobao.org/mirrors/node/index.json valid ......... ok.</code></pre>
-            <h5 data-i18n="main.examp8">Local not exist npm and install local Node.js version matching npm version.</h5>
+            <h5 data-i18n="main.examp5">5. Local not exist npm and install local Node.js version matching npm version.</h5>
             <pre><code>c:\ gnvm npm global
 Waring: current path C:\xxx\xxx\nodejs\ not exist npm.
 Notice: local    npm version is unknown
@@ -220,7 +220,7 @@ Start unzip and install v3.8.3.zip zip file, please wait.
 Set success, current npm version is 3.8.3.
 c:\> npm -v
 3.8.7</code></pre>
-            <h5 data-i18n="main.examp9">Install latest npm version.</h5>
+            <h5 data-i18n="main.examp6">Install latest npm version.</h5>
             <pre><code>c:\ gnvm npm laltest
 Notice: local    npm version is 3.7.3
 Notice: remote   npm version is 3.8.7
