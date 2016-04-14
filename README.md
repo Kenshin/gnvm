@@ -245,6 +245,7 @@ c:\> npm -v
 ---
 * <https://github.com/Kenshin/curl>
 * <https://github.com/Kenshin/cprint>
+* <https://github.com/Kenshin/regedit>
 
 第三方包
 ---
@@ -252,7 +253,7 @@ c:\> npm -v
 * <https://github.com/tsuru/config>
 * <https://github.com/pierrre/archivefile>
 * <https://github.com/daviddengcn/go-colortext>
-
+* <https://github.com/bitly/go-simplejson>
 
 下一步
 ---
