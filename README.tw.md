@@ -263,7 +263,7 @@ c:\> npm -v
 ---
 * [更新日誌](https://github.com/kenshin/gnvm/blob/master/CHANGELOG.md)
 * [聯繫方式](http://kenshin.wang/) | [郵件](kenshin@ksria.com) | [微博](https://twitter.com/wanglei001)
-* [常見問題](https://github.com/kenshin/gnvm/wiki/常見問題)
+* [常見問題](https://github.com/kenshin/gnvm/wiki/常见问题)
 * [反饋](https://github.com/kenshin/gnvm/issues)
 
 感謝
