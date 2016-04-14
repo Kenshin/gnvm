@@ -83,11 +83,11 @@ version      Print GNVM version number
 
 Definitions
 ---
-* `global`   Current `Node.js` version.
-* `latest`   Latest `Node.js` version.
-* `session`  Current `cmd` Environment.( Temporary environment )
+* `global`   current `Node.js` version.
+* `latest`   latest `Node.js` version.
+* `session`  current `cmd` Environment.( Temporary environment )
 * `.gnvmrc`  `gnvm`configure file, can be auto created and it saved local/remote Node.js version information.
-    - `registry` Download `node.exe` url，default is [DEFAULT](http://nodejs.org/dist/)，can be choose [TAOBAO](http://nodejs.org/dist/), and support custom url.
+    - `registry` download `node.exe` url，default is [DEFAULT](http://nodejs.org/dist/)，can be choose [TAOBAO](http://nodejs.org/dist/), and support custom url.
     - `noderoot` save global Node.js path.
 
 Getting Started
