@@ -89,9 +89,9 @@ version      Print GNVM version number
 * `global`   當前使用的 `Node.js` 。
 * `latest`   穩定版本的 `Node.js` 。
 * `session`  當前 `cmd` 所對應的環境。（臨時環境）
-* `.gnvmrc`  無需手動建立，其中保存了 `本地` / `遠程` Node.js 版本信息等。
-* `registry` 下載 `node.exe` 所對應的庫，默認為 [DEFAULT](http://nodejs.org/dist/)，可以更換為 [TAOBAO](http://nodejs.org/dist/)，也支持自定義（**但自定義庫的結構需要保持一致。**）
-* `noderoot` `.gnvmrc`中的變數，保存了全局 `Node.js` 所在的目錄（也是 `gnvm.exe` 所在的目錄。）
+* `.gnvmrc`  `gnvm`配置文件，無需手動建立，其中保存了 `本地` / `遠程` Node.js 版本信息等。
+    - `registry` 下載 `node.exe` 所對應的庫，默認為 [DEFAULT](http://nodejs.org/dist/)，可以更換為 [TAOBAO](http://nodejs.org/dist/)，也支持自定義（**但自定義庫的結構需要保持一致。**）
+    - `noderoot` 保存了全局 `Node.js` 所在的目錄（也是 `gnvm.exe` 所在的目錄。）
 
 入門指南
 ---
