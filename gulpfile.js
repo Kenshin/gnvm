@@ -53,7 +53,7 @@ var gulp   = require( 'gulp' ),
         local: 'locales/',
         csssrc: 'assets/css/',
         font : 'assets/font/',
-        image: 'assets/image/'
+        image: 'assets/images/'
     };
 
 gulp.task( 'srv:develop', function() {
