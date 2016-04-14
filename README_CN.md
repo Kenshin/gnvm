@@ -1,12 +1,21 @@
-GNVM: Node.js version manager on Windows by GO [![Build Status](https://travis-ci.org/Kenshin/gnvm.svg?branch=master)](https://travis-ci.org/Kenshin/gnvm)
-================================
-`GNVM` Windows下的Node.js多版本管理器，类似 `nvm` `nvmw` `nodist`
+GNVM - 使用 Go 语言编写的 Node.js 多版本管理器
+[![Travis][travis-badge]][travis-link]
+[![Version][version-badge]][version-link]
+[![Gitter][gitter-badge]][gitter-link]
+[![Slack][slack-badge]][slack-link]
+[![Jianliao][jianliao-badge]][jianliao-link]
+================================  
+`GNVM` 是一个简单的Windows下 Node.js 多版本管理器，类似的 `nvm` `nvmw` `nodist`
 
 文档
 ---
-[English](https://github.com/kenshin/gnvm/blob/master/README.md)
+[English](https://github.com/kenshin/gnvm/blob/master/README.md) | [繁體中午呢](https://github.com/kenshin/gnvm/blob/master/README_tw.md)
 
-网盘下载
+主页
+---
+[![Website][www-badge]][www-link]
+
+下载
 ---
 * [32-bit](https://app.box.com/gnvm/1/2014967291) | [64-bit](https://app.box.com/gnvm/1/2014967689) **常用地址，Box，速度稍慢**
 * [32-bit](http://pan.baidu.com/s/1gdmVgen#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F32-bit) | [64-bit](http://pan.baidu.com/s/1gdmVgen#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F64-bit) **备用地址，百度网盘，速度快**
@@ -26,75 +35,113 @@ GNVM: Node.js version manager on Windows by GO [![Build Status](https://travis-c
 
   `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true -o gnvm.exe`
 
-配置
+安装
 ---
+* 不存在 Node.js 环境
+  > 下载并解压缩 `gnvm.exe` 保存到任意文件夹，并将此文件夹加入到环境变量 `Path` 。
 
-#### 本机已有node.exe
-* 方式1: 将下载的`gnvm.exe`放到`node.exe`目录下。（**推荐方式**）
-* 方式2: 将下载的`gnvm.exe`放到任意文件夹下。（确保此文件夹在Path环境下，或者手动添加此文件夹到Path环境）
-
-#### 本机没有node.exe
-* 将下载的`gnvm.exe`放到任意文件夹下。（确保此文件夹在Path环境下，或者手动添加此文件夹到Path环境）
+* 存在 Node.js 环境
+  > 下载并解压缩 `gnvm.exe` 保存到 `Node.js` 所在的文件夹。
 
 验证
 ---
 在cmd下（确保获取管理员权限），输入：`gnvm version`，如有`Current version x.x.x`则说明配置成功。（注：`x.xx.xx`以下载的版本为准。）
-
-截图
----
-![gnvm](http://i.imgur.com/8yOv5pc.gif)
 
 术语
 ---
 * `global` 当前使用的node.exe。
 * `latest` 稳定版本的node.exe。
 
-使用
+功能
 ---
+![功能一览](http://i.imgur.com/GqkZcjZ.png)
+```
+config       Setter and getter .gnvmrc file
+use          Use any the local already exists of Node.js version
+ls           Show all [local] [remote] Node.js version
+install      Install any Node.js version
+uninstall    Uninstall local Node.js version and npm
+update       Update Node.js latest version
+npm          NPM version management
+session      Use any Node.js version of the local already exists version by current session
+search       Search and Print Node.js version detail usage wildcard mode or regexp mode
+node-version Show [global] [latest] Node.js version
+reg          Add config property 'noderoot' to Environment variable 'NODE_HOME'
+version      Print GNVM version number
+```
 
-    Usage:
-      gnvm
-      gnvm [command]
-
-    Available Commands:
-      version                   :: Print the version number of gnvm.exe
-      install                   :: Install any node.exe version
-      uninstall                 :: Uninstall local node.exe version
-      use                       :: Use any version of the local already exists
-      update                    :: Update latest node.exe
-      ls                        :: List show all <local> <remote> node.exe version
-      node-version              :: Show <global> <latest> node.exe version
-      config                    :: Setter and getter registry
-      help [command]            :: Help about any command
-
-最佳实践
+入门指南
 ---
-* 在cmd中运行`gnvm`需要管理员权限。
-* 虽然可以直接使用`gnvm`的各种命令，但第一次运行`gnvm`时，建议使用`gnvm config INIT`来初始化一些配置参数。
-* 虽然`gnvm`支持任意文件夹，但建议将`node.exe`与`gnvm.exe`放在同一目录下。
-* 使用`gnvm config registry xxx`更换库，默认库：<http://nodejs.org/dist/>，只要xxx的结构与默认库一致即可。
-* `gnvm`的使用依赖与`.gnvmrc`，请不要手动修改此文件。
-* `gnvm install npm`支持安装最新版的npm，但`0.1.0`版本只支持安装最新版本到`node.exe`所在文件夹，不可自定义`npm`的文件夹。（npm的最新版本取决于`gnvm config registry`对应的最新版本。）
+> `gnvm.exe` 是一个单文件 exe，无需任何配置，直接使用。
 
-使用场景之一（本机已有node.exe）
----
-    gnvm config INIT （第一次使用时，推荐做法）
-    gnvm config registry dist.u.qiniudn.com （更换库）
-    gnvm update latest （如果本机的latest过低，可以使用此方式升级。或者使用gnvm install latest）
-    gnvm node-version（查看本机global与latest node.exe版本）
-    gnvm install 0.11.1 0.11.2 0.11.3 （下载任意版本的node.exe）
-    gnvm use 0.11.1 （切换本机已安装的任意版本node.exe）
-    gnvm ls （查看当前共有多少个node.exe）
-    gnvm uninstall 0.11.1 （删除0.11.1）
+**.gnvmrc**
+> `.gnvmrc` 无需手动建立，其中保存了 本地 / 远程 Node.js 版本信息等。
+```
+globalversion: 5.0.1
+latestversion: 5.10.1
+noderoot: /Users/kenshin/Work/28-GO/01-work/src/gnvm
+registry: http://npm.taobao.org/mirrors/node/
+```
 
-使用场景之二（本机没有node.exe）
----
-    gnvm config INIT （第一次使用时，推荐做法）
-    gnvm config registry dist.u.qiniudn.com （更换库）
-    gnvm install latest -g （下载最新版本的latest并设置为全局node.exe）
-    gnvm node-version（查看本机global与latest node.exe版本）
-    gnvm ls （查看当前共有多少个node.exe）
-    gnvm install npm （安装最新版本的npm到node.exe所在目录）
+**更换更快的库 registry**
+  > `gnvm.exe` 内建了 [DEFAULT](http://nodejs.org/dist/) and [TAOBAO](http://nodejs.org/dist/) 两个库。
+```
+gnvm config registry TAOBAO
+```
+
+**安装 多个 Node.js**
+  > 安装任意版本的 Node.js 包括： 自动匹配 `latest` / `io.js` version 以及 选择 32 / 64 位，例如 `x.xx.xx-x64` 。
+```
+gnvm install latest 1.0.0-x86 1.0.0-x64 5.0.0
+```
+
+**卸载本地任意 Node.js 版本**
+```
+gnvm uninstall latest 1.0.0-x86 1.0.0-x64 5.0.0
+```
+
+**切换本地存在的任意版本 Node.js**
+```
+gnvm use 5.10.1
+```
+
+**列出本地已存在的全部 Node.js 版本**
+```
+c:\> gnvm ls
+5.1.1 -- latest
+1.0.0
+1.0.0 -- x86
+5.0.0 -- global
+```
+
+**更新本地的 Node.js latest 版本**
+```
+gnvm update latest
+```
+
+**安装 NPM**
+  > `gnvm` 支持安装 `npm`, 例如：下载最新版的 npm version ，使用 `gnvm npm latest` 。
+```
+gnvm npm latest
+```
+
+**gnvm npm latest**
+  > 可以使用关键字 `*` 或者 正则表达式 `/regxp/`，例如： `gnvm search 5.*.*` 或者 `gnvm search /.10./` 。
+```
+c:\> gnvm search 5.*.*
+Search Node.js version rules [5.x.x] from http://npm.taobao.org/mirrors/node/index.json, please wait.
++--------------------------------------------------+
+| No.   date         node ver    exec      npm ver |
++--------------------------------------------------+
+1     2016-04-05   5.10.1      x86 x64   3.8.3
+2     2016-04-01   5.10.0      x86 x64   3.8.3
+3     2016-03-22   5.9.1       x86 x64   3.7.3
+4     2016-03-16   5.9.0       x86 x64   3.7.3
+5     2016-03-09   5.8.0       x86 x64   3.7.3
+6     2016-03-02   5.7.1       x86 x64   3.6.0
+7     2016-02-23   5.7.0       x86 x64   3.6.0
++--------------------------------------------------+
+```
 
 依赖
 ---
@@ -108,64 +155,41 @@ GNVM: Node.js version manager on Windows by GO [![Build Status](https://travis-c
 * <https://github.com/pierrre/archivefile>
 * <https://github.com/daviddengcn/go-colortext>
 
-图标
+
+下一步
 ---
-* <http://www.easyicon.net/1143807-update_icon.html>
+- [ ] 增加 `HTTP_PROXY` 。
+- [ ] 自动升级，例如 `gnvm upgrad` .
+- [ ] `gnvm.exe` 增加 `Chocolatey` 方案。
 
-功能一览
+相关链接
 ---
-![功能一览](https://trello-attachments.s3.amazonaws.com/535f6fd8cb08b7fd799c2051/53606254da7b8f8b2f6c9d87/981x580/f6e58f47691d3d352f0b97ba94263df8/gnvm_0.1.0.png)
+* [更新日志](https://github.com/kenshin/gnvm/blob/master/CHANGELOG.md)
+* [联系方式](http://kenshin.wang/) | [邮件](kenshin@ksria.com) | [微博](http://weibo.com/23784148)
+* [常见问题](https://github.com/kenshin/gnvm/wiki/常见问题)
+* [反馈](https://github.com/kenshin/gnvm/issues)
 
-FAQ
+感谢
 ---
+* 图标来自 <http://www.easyicon.net> 。
+* 页面设计参考 [You-Get](https://you-get.org/) 。
 
-#### Q. 在安装了XXX卫士的某些Windows系统下，使用诸如`gnvm use x.xx.xx`的命令会弹出警告。
-A. 建议将`gnvm.exe`加入白名单。
-
-#### Q. `gnvm`与`nvmw` `nvm`有什么区别？
-A. `gnvm`是单文件CLI，同时比`nvmw`多了一些实用功能，如`gnvm update`, `gnvm install npm`, `gnvm config registry xxxx`等，在功能上更贴近`nvm`。
-
-Help
+许可
 ---
-* Email <kenshin@ksria.com>
-* Github issue
+[![license-badge]][license-link]
 
-CHANGELOG
----
-* **2014-07-23, Version `0.1.3`:**
-    * Fixbug of `node.exe` process to take up, `gnvm use x.xx.xx` not work.
-    * When usage `gnvm use x.xx.xx`, kill `node.exe` process automatically.
-
-* **2014-07-15, Version `0.1.2`:**
-    * Adapter go version 1.3.
-    * Fix bug of usage `gnvm update latest -g` adapter go version error.
-
-* **2014-06-06, Version `0.1.1`:**
-    * Change `util/p/print.go` to `github.com/Kenshin/cprint`.
-    * change `util/curl/curl.go` to `github.com/Kenshin/curl`.
-    * Add this project to travis-ci.org.
-    * Remove `nodehandle.cmd` method.
-    * Optimize `nodehandle.copy` method logic.
-    * Fix bug of When not global node.exe, need get gnvm.exe path.
-
-* **2014-05-30, Version `0.1.0`:**
-    * version
-    * install
-    * uninstall
-    * use
-    * update
-    * ls
-    * node-version
-    * config
-
-LICENSE
----
-(The MIT License)
-
-Copyright (c) 2014 Kenshin Wang <kenshin@ksria.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+<!-- Link -->
+[www-badge]:        https://img.shields.io/badge/website-gnvm.ksria.com-1DBA90.svg
+[www-link]:         http://ksria.com/gnvm
+[version-badge]:    https://img.shields.io/badge/lastest_version-0.2.0-blue.svg
+[version-link]:     https://github.com/kenshin/gnvm/releases
+[travis-badge]:     https://travis-ci.org/Kenshin/gnvm.svg?branch=master
+[travis-link]:      https://travis-ci.org/Kenshin/gnvm
+[gitter-badge]:     https://badges.gitter.im/kenshin/gnvm.svg
+[gitter-link]:      https://gitter.im/kenshin/gnvm?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
+[slack-badge]:      https://img.shields.io/badge/chat-slack-orange.svg
+[slack-link]:       https://gnvm.slack.com/
+[jianliao-badge]:   https://img.shields.io/badge/chat-jianliao-yellowgreen.svg
+[jianliao-link]:    https://guest.jianliao.com/rooms/76dce8b01v
+[license-badge]:    https://img.shields.io/github/license/mashape/apistatus.svg
+[license-link]:     https://opensource.org/licenses/MIT
