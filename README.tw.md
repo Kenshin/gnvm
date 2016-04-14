@@ -66,15 +66,6 @@ Update success, current Node.js latest version is 5.10.0.
 ---
 * 在 `cmd` 下（確保獲取管理員許可權），輸入：`gnvm version`，如有 `版本說明` 則配置成功。
 
-術語
----
-* `global`   當前使用的 `Node.js` 。
-* `latest`   穩定版本的 `Node.js` 。
-* `session`  當前 `cmd` 所對應的環境。（臨時環境）
-* `.gnvmrc`  無需手動建立，其中保存了 `本地` / `遠程` Node.js 版本信息等。
-* `registry` 下載 `node.exe` 所對應的庫，默認為 [DEFAULT](http://nodejs.org/dist/)，可以更換為 [TAOBAO](http://nodejs.org/dist/)，也支持自定義（**但自定義庫的結構需要保持一致。**）
-* `noderoot` `.gnvmrc`中的變數，保存了全局 `Node.js` 所在的目錄（也是 `gnvm.exe` 所在的目錄。）
-
 功能
 ---
 ```
@@ -92,6 +83,15 @@ reg          Add config property 'noderoot' to Environment variable 'NODE_HOME'
 version      Print GNVM version number
 ```
 ![功能一覽](http://i.imgur.com/GqkZcjZ.png)
+
+術語
+---
+* `global`   當前使用的 `Node.js` 。
+* `latest`   穩定版本的 `Node.js` 。
+* `session`  當前 `cmd` 所對應的環境。（臨時環境）
+* `.gnvmrc`  無需手動建立，其中保存了 `本地` / `遠程` Node.js 版本信息等。
+* `registry` 下載 `node.exe` 所對應的庫，默認為 [DEFAULT](http://nodejs.org/dist/)，可以更換為 [TAOBAO](http://nodejs.org/dist/)，也支持自定義（**但自定義庫的結構需要保持一致。**）
+* `noderoot` `.gnvmrc`中的變數，保存了全局 `Node.js` 所在的目錄（也是 `gnvm.exe` 所在的目錄。）
 
 入門指南
 ---

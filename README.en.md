@@ -63,15 +63,6 @@ Validation
 ---
 * Run `cmd`(administrator permissions) and input `gnvm version`, if output print `gnvm version` configuration is successful.
 
-Definitions
----
-* `global`   Current `Node.js` version.
-* `latest`   Latest `Node.js` version.
-* `session`  Current `cmd` Environment.( Temporary environment )
-* `.gnvmrc`  Can be auto created and it saved local/remote Node.js version information.
-* `registry` Download `node.exe` url，default is [DEFAULT](http://nodejs.org/dist/)，can be choose [TAOBAO](http://nodejs.org/dist/), and support custom url.
-* `noderoot` `.gnvmrc` variable, save global Node.js path.
-
 Feature
 ---
 ```
@@ -89,6 +80,15 @@ reg          Add config property 'noderoot' to Environment variable 'NODE_HOME'
 version      Print GNVM version number
 ```
 ![Feature](http://i.imgur.com/GqkZcjZ.png)
+
+Definitions
+---
+* `global`   Current `Node.js` version.
+* `latest`   Latest `Node.js` version.
+* `session`  Current `cmd` Environment.( Temporary environment )
+* `.gnvmrc`  Can be auto created and it saved local/remote Node.js version information.
+* `registry` Download `node.exe` url，default is [DEFAULT](http://nodejs.org/dist/)，can be choose [TAOBAO](http://nodejs.org/dist/), and support custom url.
+* `noderoot` `.gnvmrc` variable, save global Node.js path.
 
 Getting Started
 ---
