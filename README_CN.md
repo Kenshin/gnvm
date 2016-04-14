@@ -1,11 +1,11 @@
 GNVM - 使用 Go 语言编写的 Node.js 多版本管理器  
 ================================  
-### `GNVM` 是一个简单的Windows下 Node.js 多版本管理器，类似的 `nvm` `nvmw` `nodist`  
 [![Travis][travis-badge]][travis-link]
 [![Version][version-badge]][version-link]
 [![Gitter][gitter-badge]][gitter-link]
 [![Slack][slack-badge]][slack-link]
 [![Jianliao][jianliao-badge]][jianliao-link]
+`GNVM` 是一个简单的 `Windows` 下 Node.js 多版本管理器，类似的 `nvm` `nvmw` `nodist` 。
 
 主页
 ---
