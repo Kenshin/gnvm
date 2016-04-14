@@ -4,7 +4,7 @@ GNVM - 使用 Go 语言编写的 Node.js 多版本管理器
 [![Version][version-badge]][version-link]
 [![Gitter][gitter-badge]][gitter-link]
 [![Slack][slack-badge]][slack-link]
-[![Jianliao][jianliao-badge]][jianliao-link]
+[![Jianliao][jianliao-badge]][jianliao-link]  
 `GNVM` 是一个简单的 `Windows` 下 Node.js 多版本管理器，类似的 `nvm` `nvmw` `nodist` 。
 
 主页
@@ -25,10 +25,12 @@ GNVM - 使用 Go 语言编写的 Node.js 多版本管理器
 ---
 * 已经安装了go的用户，使用  
   `go get github.com/Kenshin/gnvm`
+
 * 已经安装了git的用户，使用  
   `git clone git@github.com:Kenshin/gnvm-bin.git`
+
 * 已经安装了curl的用户，使用  
-  `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true -o gnvm.exe`
+  `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true -o gnvm.exe`  
   `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true -o gnvm.exe`
 
 安装
@@ -41,7 +43,7 @@ GNVM - 使用 Go 语言编写的 Node.js 多版本管理器
 
 验证
 ---
-> 在 `cmd` 下（确保获取管理员权限），输入：`gnvm version`，如有`Current version x.x.x`则说明配置成功。（注：`x.xx.xx`以下载的版本为准。）
+* 在 `cmd` 下（确保获取管理员权限），输入：`gnvm version`，如有`Current version x.x.x`则说明配置成功。（注：`x.xx.xx`以下载的版本为准。）
 
 术语
 ---
