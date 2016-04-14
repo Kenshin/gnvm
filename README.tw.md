@@ -42,8 +42,6 @@ Update success, current Node.js latest version is 5.10.0.
 * [32-bit](http://pan.baidu.com/s/1gdmVgen#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F32-bit) | [64-bit](http://pan.baidu.com/s/1gdmVgen#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F64-bit) 備用地址，百度網盤，速度快
 * [32-bit](https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true) | [64-bit](https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true) 備用地址，Github
 
-其他方式
----
 * 已經安裝了go的用戶，使用  
   `go get github.com/Kenshin/gnvm`
 
@@ -90,7 +88,7 @@ version      Print GNVM version number
 * `latest`   穩定版本的 `Node.js` 。
 * `session`  當前 `cmd` 所對應的環境。（臨時環境）
 * `.gnvmrc`  `gnvm`配置文件，無需手動建立，其中保存了 `本地` / `遠程` Node.js 版本信息等。
-    - `registry` 下載 `node.exe` 所對應的庫，默認為 [DEFAULT](http://nodejs.org/dist/)，可以更換為 [TAOBAO](http://nodejs.org/dist/)，也支持自定義（**但自定義庫的結構需要保持一致。**）
+    - `registry` 下載 `node.exe` 所對應的庫，默認為 [DEFAULT](http://nodejs.org/dist/)，可以更換為 [TAOBAO](http://npm.taobao.org/mirrors/node)，也支持自定義（**但自定義庫的結構需要保持一致。**）
     - `noderoot` 保存了全局 `Node.js` 所在的目錄（也是 `gnvm.exe` 所在的目錄。）
 
 入門指南
@@ -107,7 +105,7 @@ registry: http://npm.taobao.org/mirrors/node/
 ```
 
 **更換更快的庫 registry**
-  > `gnvm.exe` 內建了 [DEFAULT](http://nodejs.org/dist/) and [TAOBAO](http://nodejs.org/dist/) 兩個庫。
+  > `gnvm.exe` 內建了 [DEFAULT](http://nodejs.org/dist/) and [TAOBAO](http://npm.taobao.org/mirrors/node) 兩個庫。
 
 ```
 gnvm config registry TAOBAO
@@ -264,7 +262,7 @@ c:\> npm -v
 相關鏈接
 ---
 * [更新日誌](https://github.com/kenshin/gnvm/blob/master/CHANGELOG.md)
-* [聯繫方式](http://kenshin.wang/) | [郵件](kenshin@ksria.com) | [微博](http://weibo.com/23784148)
+* [聯繫方式](http://kenshin.wang/) | [郵件](kenshin@ksria.com) | [微博](https://twitter.com/wanglei001)
 * [常見問題](https://github.com/kenshin/gnvm/wiki/常見問題)
 * [反饋](https://github.com/kenshin/gnvm/issues)
 
