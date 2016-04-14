@@ -39,8 +39,6 @@ $( document ).ready( function() {
         detectLngQS  : "lang"
     };
 
-    console.log(options)
-
     // i18n init
     i18n.init( options, function(t) {
         $( ".side" ).i18n();
