@@ -117,6 +117,11 @@ gulp.task( 'css', function() {
     gulp.src( paths.styl )
     .pipe( plumber() )
     .pipe( stylus()  )
+    .pipe(autopre({
+        browsers: ['last 2 versions'],
+        cascade:  true,
+        remove:   true
+    }))
     .pipe( minicss() )
     .pipe( gulp.dest( paths.dest + paths.csssrc ) );
 });
