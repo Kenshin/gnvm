@@ -5,7 +5,7 @@ GNVM - Node.js version manager on Windows by Go
 [![Gitter][gitter-badge]][gitter-link]
 [![Slack][slack-badge]][slack-link]
 [![Jianliao][jianliao-badge]][jianliao-link]  
-#### `GNVM` is simple multiple Node.js version manager on Windows by Go, like `nvm` `nvmw` `nodist` .  
+#### `GNVM` is simple multiple Node.js version manager by Go, like `nvm` `nvmw` `nodist`.  
 ```
 c:\> gnvm install latest 1.0.0-x86 1.0.0-x64 5.0.0
 Start download Node.js versions [5.10.1, 1.0.0, 1.0.0-x86, 5.0.0].
@@ -39,7 +39,6 @@ Document
 Download
 ---
 * [32-bit](https://app.box.com/gnvm/1/2014967291) | [64-bit](https://app.box.com/gnvm/1/2014967689) Host by Box.com
-
 * [32-bit](https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true) | [64-bit](https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true) Host by Github.com
 
 * For go user, please usage  
