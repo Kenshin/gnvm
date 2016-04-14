@@ -87,7 +87,7 @@ Definitions
 * `latest`   latest `Node.js` version.
 * `session`  current `cmd` Environment.( Temporary environment )
 * `.gnvmrc`  `gnvm`configure file, can be auto created and it saved local/remote Node.js version information.
-    - `registry` download `node.exe` url，default is [DEFAULT](http://nodejs.org/dist/)，can be choose [TAOBAO](http://nodejs.org/dist/), and support custom url.
+    - `registry` `node.exe` download URL, default is [DEFAULT](http://nodejs.org/dist/), can be choose [TAOBAO](http://nodejs.org/dist/), and support custom `url`.
     - `noderoot` save global Node.js path.
 
 Getting Started
