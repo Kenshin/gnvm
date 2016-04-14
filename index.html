@@ -16,7 +16,7 @@
   <meta property="og:image:height" content="466"/>
   <meta property="og:site_name"    content="ksria.com/gnvm | GNVM"/>
   <meta property="og:description"  content="GNVM is simple multi node.js version manager on Windows by GO, like nvm nvmw nodist."/>
-  <meta property='fb:app_id'       content="1528743474024441"/>
+  <meta property="fb:app_id"       content="1528743474024441"/>
   <title>GNVM - Node.js version manager on Windows by Go</title>
   <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
   <link rel="stylesheet"    href="./assets/css/main.css">
@@ -40,6 +40,7 @@
             <li class="textitem"><a href="#installation"    class="anchorlink" data-i18n="side.installation">INSTALLATION</a></li>
             <li class="textitem"><a href="#validation"      class="anchorlink" data-i18n="side.validation">VALIDATION</a></li>
             <li class="textitem"><a href="#feature"         class="anchorlink" data-i18n="side.feature">FEATURE</a></li>
+            <li class="textitem"><a href="#definitions"     class="anchorlink" data-i18n="side.definitions">DEFINITIONS</a></li>
             <li class="textitem"><a href="#getting-started" class="anchorlink" data-i18n="side.getting-started">GETTING STARTED</a></li>
             <li class="textitem"><a href="#example"         class="anchorlink" data-i18n="side.example">EXAMPLE</a></li>
             <li class="textitem"><a href="#todo"            class="anchorlink" data-i18n="side.to-do">TO-DO</a></li>
@@ -137,11 +138,21 @@ reg          Add config property 'noderoot' to Environment variable 'NODE_HOME'
 version      Print GNVM version number
             </code></pre>
         </div>
+        <div id="definitions">
+            <h2 data-i18n="side.definitions">Definitions</h2>
+            <ul>
+                <li><p data-i18n="[html]main.defined1"><span class="focus">global</span> current <span class="focus">Node.js</span> version.</p></li>
+                <li><p data-i18n="[html]main.defined2"><span class="focus">latest</span> latest <span class="focus">Node.js</span> version.</p></li>
+                <li><p data-i18n="[html]main.defined3"><span class="focus">session</span> current <span class="focus">cmd</span> Environment( temporary environment ).</p></li>
+                <li><p data-i18n="[html]main.defined4"><span class="focus"><span class="focus">.gnvmrc</span> <span class="focus">gnvm.exe</span> configure file, can be auto created and it saved local/remote <span class="focus">Node.js</span> version information.</p></li>
+                <li><p data-i18n="[html]main.defined5"><span class="focus">registry</span> <span class="focus">node.exe</span> download URL, default is <a href="http://nodejs.org/dist/">DEFAULT</a>, can be choose <a href="http://npm.taobao.org/mirrors/node">TAOBAO</a>, and support <span class="focus">custom url</span>.</p></li>
+                <li><p data-i18n="[html]main.defined6"><span class="focus">noderoot</span> global <span class="focus">Node.js</span> path.</p></li>
+            </ul>
+        </div>
         <div id="getting-started">
             <h2 data-i18n="side.getting-started">Getting Started</h2>
             <blockquote data-i18n="[html]main.getstart"><span class="focus">gnvm.exe</span> is a single exe file, don't need to configure, direct usage.</blockquote>
             <h5>.gnvmrc</h5>
-            <blockquote data-i18n="[html]main.gnvmrc"><span class="focus">.gnvmrc</span> can be auto created and it saved local/remote Node.js version information.</blockquote>
             <pre><code>globalversion: 5.0.1
 latestversion: 5.10.1
 noderoot: /Users/kenshin/Work/28-GO/01-work/src/gnvm

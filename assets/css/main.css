@@ -233,6 +233,11 @@ p {
 .main .desc span {
   margin: 16px 0;
 }
+.main #definitions ul li:nth-child(5),
+.main #definitions ul li:nth-child(6) {
+  list-style-type: circle;
+  margin-left: 20px;
+}
 .footer {
   display: -webkit-flex;
   display: -ms-flexbox;
