@@ -21,6 +21,9 @@ body
 
     /*font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif*/
 
+h2
+    text-transform: capitalize
+
 pre
     color:            #1e1
     background-color: forecolor
@@ -122,12 +125,10 @@ span, p
         flex-flow:  column nowrap
 
         position: fixed
-        left:     0
-        top:      0
+        left:     40px
+        padding:  30px 0 0 0
 
         list-style: none
-        padding:    20px
-        width:      200px
 
         line-height:    2em
         text-align:     right
@@ -188,10 +189,6 @@ span, p
 
     color:         blackcolor
     color:         fontcolor
-    /*font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', 'Droid Sans', Arial, freesans, sans-serif*/
-
-    h2
-        text-transform: capitalize
 
     header
         height: 39px
@@ -204,6 +201,9 @@ span, p
     .badge
         padding-top:    5px
         padding-bottom: 10px
+
+        a
+            padding-right: 2px
 
     a
         text-decoration: underline
@@ -259,6 +259,7 @@ span, p
         ul
             width: 100%
             position:   static
+            padding:    0
             text-align: center
 
             .textitem

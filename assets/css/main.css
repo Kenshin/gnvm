@@ -16,6 +16,9 @@ body {
   -webkit-font-smoothing: antialiased;
 /*font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif*/
 }
+h2 {
+  text-transform: capitalize;
+}
 pre {
   color: #1e1;
   background-color: #111;
@@ -121,11 +124,9 @@ p {
       -ms-flex-flow: column nowrap;
           flex-flow: column nowrap;
   position: fixed;
-  left: 0;
-  top: 0;
+  left: 40px;
+  padding: 30px 0 0 0;
   list-style: none;
-  padding: 20px;
-  width: 200px;
   line-height: 2em;
   text-align: right;
   text-transform: uppercase;
@@ -199,10 +200,6 @@ p {
   padding: 50px 30px 0 30px;
   color: #000;
   color: rgba(0,0,0,0.7);
-/*font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', 'Droid Sans', Arial, freesans, sans-serif*/
-}
-.main h2 {
-  text-transform: capitalize;
 }
 .main header {
   height: 39px;
@@ -214,6 +211,9 @@ p {
 .main .badge {
   padding-top: 5px;
   padding-bottom: 10px;
+}
+.main .badge a {
+  padding-right: 2px;
 }
 .main a {
   text-decoration: underline;
@@ -279,6 +279,7 @@ p {
   .side ul {
     width: 100%;
     position: static;
+    padding: 0;
     text-align: center;
   }
   .side ul .textitem {
