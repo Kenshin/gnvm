@@ -127,7 +127,7 @@ gnvm update latest
 gnvm npm latest
 ```
 
-**gnvm npm latest**
+**查询 Node.js 版本**
   > 可以使用关键字 `*` 或者 正则表达式 `/regxp/`，例如： `gnvm search 5.*.*` 或者 `gnvm search /.10./` 。
 
 ```
