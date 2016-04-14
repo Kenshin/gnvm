@@ -1,6 +1,6 @@
 GNVM - 使用 Go 语言编写的 Node.js 多版本管理器  
 ================================  
-`GNVM` 是一个简单的Windows下 Node.js 多版本管理器，类似的 `nvm` `nvmw` `nodist`  
+### `GNVM` 是一个简单的Windows下 Node.js 多版本管理器，类似的 `nvm` `nvmw` `nodist`  
 [![Travis][travis-badge]][travis-link]
 [![Version][version-badge]][version-link]
 [![Gitter][gitter-badge]][gitter-link]
@@ -23,11 +23,11 @@ GNVM - 使用 Go 语言编写的 Node.js 多版本管理器
 
 其他方式
 ---
-* 已经安装了go的用户，使用
+* 已经安装了go的用户，使用  
   `go get github.com/Kenshin/gnvm`
-* 已经安装了git的用户，使用
+* 已经安装了git的用户，使用  
   `git clone git@github.com:Kenshin/gnvm-bin.git`
-* 已经安装了curl的用户，使用
+* 已经安装了curl的用户，使用  
   `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true -o gnvm.exe`
   `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true -o gnvm.exe`
 
@@ -41,12 +41,12 @@ GNVM - 使用 Go 语言编写的 Node.js 多版本管理器
 
 验证
 ---
-在cmd下（确保获取管理员权限），输入：`gnvm version`，如有`Current version x.x.x`则说明配置成功。（注：`x.xx.xx`以下载的版本为准。）
+> 在 `cmd` 下（确保获取管理员权限），输入：`gnvm version`，如有`Current version x.x.x`则说明配置成功。（注：`x.xx.xx`以下载的版本为准。）
 
 术语
 ---
-* `global` 当前使用的node.exe。
-* `latest` 稳定版本的node.exe。
+* `global` 当前使用的 `Node.js` 。
+* `latest` 稳定版本的 `Node.js` 。
 
 功能
 ---
@@ -201,7 +201,7 @@ c:\> npm -v
 3.8.7
 ```
 
-**安装 NPM latest 版本。**
+**6. 安装 NPM latest 版本。**
 ```
 c:\ gnvm npm laltest
 Notice: local    npm version is 3.7.3
