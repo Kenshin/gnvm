@@ -1,4 +1,4 @@
-GNVM - 使用 Go 语言编写的 Node.js 多版本管理器
+GNVM - 使用 Go 语言编写的 Node.js 多版本管理器  
 [![Travis][travis-badge]][travis-link]
 [![Version][version-badge]][version-link]
 [![Gitter][gitter-badge]][gitter-link]
@@ -7,32 +7,28 @@ GNVM - 使用 Go 语言编写的 Node.js 多版本管理器
 ================================  
 `GNVM` 是一个简单的Windows下 Node.js 多版本管理器，类似的 `nvm` `nvmw` `nodist`
 
-文档
----
-[English](https://github.com/kenshin/gnvm/blob/master/README.md) | [繁體中午呢](https://github.com/kenshin/gnvm/blob/master/README_tw.md)
-
 主页
 ---
 [![Website][www-badge]][www-link]
 
+文档
+---
+[English](https://github.com/kenshin/gnvm/blob/master/README.md) | [繁體中文](https://github.com/kenshin/gnvm/blob/master/README_tw.md)
+
 下载
 ---
-* [32-bit](https://app.box.com/gnvm/1/2014967291) | [64-bit](https://app.box.com/gnvm/1/2014967689) **常用地址，Box，速度稍慢**
-* [32-bit](http://pan.baidu.com/s/1gdmVgen#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F32-bit) | [64-bit](http://pan.baidu.com/s/1gdmVgen#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F64-bit) **备用地址，百度网盘，速度快**
-* [32-bit](https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true) | [64-bit](https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true) **备用地址，Github**
+* [32-bit](https://app.box.com/gnvm/1/2014967291) | [64-bit](https://app.box.com/gnvm/1/2014967689) 常用地址，Box，速度稍慢
+* [32-bit](http://pan.baidu.com/s/1gdmVgen#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F32-bit) | [64-bit](http://pan.baidu.com/s/1gdmVgen#dir/path=%2F%E6%88%91%E7%9A%84%E5%85%B1%E4%BA%AB%2Fgnvm%2F64-bit) 备用地址，百度网盘，速度快
+* [32-bit](https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true) | [64-bit](https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true) 备用地址，Github
 
 其他方式
 ---
-* 已经安装了go的用户，使用 **go get**
-
+* 已经安装了go的用户，使用
   `go get github.com/Kenshin/gnvm`
-* 已经安装了git的用户，使用 **git clone**
-
+* 已经安装了git的用户，使用
   `git clone git@github.com:Kenshin/gnvm-bin.git`
-* 已经安装了curl的用户，使用 **curl -O**
-
+* 已经安装了curl的用户，使用
   `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/32-bit/gnvm.exe?raw=true -o gnvm.exe`
-
   `curl -L https://github.com/Kenshin/gnvm-bin/blob/master/64-bit/gnvm.exe?raw=true -o gnvm.exe`
 
 安装
@@ -54,7 +50,6 @@ GNVM - 使用 Go 语言编写的 Node.js 多版本管理器
 
 功能
 ---
-![功能一览](http://i.imgur.com/GqkZcjZ.png)
 ```
 config       Setter and getter .gnvmrc file
 use          Use any the local already exists of Node.js version
@@ -69,6 +64,7 @@ node-version Show [global] [latest] Node.js version
 reg          Add config property 'noderoot' to Environment variable 'NODE_HOME'
 version      Print GNVM version number
 ```
+![功能一览](http://i.imgur.com/GqkZcjZ.png)
 
 入门指南
 ---
@@ -76,6 +72,7 @@ version      Print GNVM version number
 
 **.gnvmrc**
 > `.gnvmrc` 无需手动建立，其中保存了 本地 / 远程 Node.js 版本信息等。
+
 ```
 globalversion: 5.0.1
 latestversion: 5.10.1
@@ -85,12 +82,14 @@ registry: http://npm.taobao.org/mirrors/node/
 
 **更换更快的库 registry**
   > `gnvm.exe` 内建了 [DEFAULT](http://nodejs.org/dist/) and [TAOBAO](http://nodejs.org/dist/) 两个库。
+
 ```
 gnvm config registry TAOBAO
 ```
 
 **安装 多个 Node.js**
   > 安装任意版本的 Node.js 包括： 自动匹配 `latest` / `io.js` version 以及 选择 32 / 64 位，例如 `x.xx.xx-x64` 。
+
 ```
 gnvm install latest 1.0.0-x86 1.0.0-x64 5.0.0
 ```
@@ -121,12 +120,14 @@ gnvm update latest
 
 **安装 NPM**
   > `gnvm` 支持安装 `npm`, 例如：下载最新版的 npm version ，使用 `gnvm npm latest` 。
+
 ```
 gnvm npm latest
 ```
 
 **gnvm npm latest**
   > 可以使用关键字 `*` 或者 正则表达式 `/regxp/`，例如： `gnvm search 5.*.*` 或者 `gnvm search /.10./` 。
+
 ```
 c:\> gnvm search 5.*.*
 Search Node.js version rules [5.x.x] from http://npm.taobao.org/mirrors/node/index.json, please wait.
