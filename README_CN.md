@@ -5,7 +5,28 @@ GNVM - 使用 Go 语言编写的 Node.js 多版本管理器
 [![Gitter][gitter-badge]][gitter-link]
 [![Slack][slack-badge]][slack-link]
 [![Jianliao][jianliao-badge]][jianliao-link]  
-#### `GNVM` 是一个简单的 `Windows` 下 Node.js 多版本管理器，类似的 `nvm` `nvmw` `nodist` 。
+#### `GNVM` 是一个简单的 `Windows` 下 Node.js 多版本管理器，类似的 `nvm` `nvmw` `nodist` 。  
+```
+c:\> gnvm install latest 1.0.0-x86 1.0.0-x64 5.0.0
+Start download Node.js versions [5.10.1, 1.0.0, 1.0.0-x86, 5.0.0].
+5.10.1: 18% [=========>__________________________________________] 4s
+ 1.0.0: 80% [==========================================>_________] 40s
+1.0...: 50% [==========================>_________________________] 30s
+ 5.0.1: 100% [==================================================>] 20s
+End download.
+
+c:\> gnvm ls
+5.1.1 -- latest
+1.0.0
+1.0.0 -- x86
+5.0.0 -- global
+
+c:\> gnvm use latest
+Set success, current Node.js version is 5.10.0.
+
+c:\> gnvm update latest
+Update success, current Node.js latest version is 5.10.0.
+```
 
 主页
 ---
