@@ -28,18 +28,18 @@ c:\> gnvm update latest
 Update success, current Node.js latest version is 5.10.0.
 ```
 
-Website
----
-[![Website][www-badge]][www-link]
-
 Characteristic
--
+---
 * Single file, not dependent on any environment.
 * Direct use, no configuration.
 * Color stdout.
 * Support multiple download.
 * Built-in [TAOBAO] (http://npm.taobao.org/mirrors/node), convenient switching, also support custom.
 * Support `NPM` download / install.
+
+Website
+---
+[![Website][www-badge]][www-link]
 
 Document
 ---

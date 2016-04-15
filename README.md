@@ -28,14 +28,6 @@ c:\> gnvm update latest
 Update success, current Node.js latest version is 5.10.0.
 ```
 
-主页
----
-[![Website][www-badge]][www-link]
-
-文档
----
-[English](https://github.com/kenshin/gnvm/blob/master/README.en.md) | [繁體中文](https://github.com/kenshin/gnvm/blob/master/README.tw.md)
-
 特色
 ---
 * 单文件，不依赖于任何环境。
@@ -44,6 +36,14 @@ Update success, current Node.js latest version is 5.10.0.
 * 支持多线程下载。
 * 内置 [TAOBAO](http://npm.taobao.org/mirrors/node)，方便切换，也支持自定义。
 * 支持 `NPM` 下载/安装/配置。
+
+主页
+---
+[![Website][www-badge]][www-link]
+
+文档
+---
+[English](https://github.com/kenshin/gnvm/blob/master/README.en.md) | [繁體中文](https://github.com/kenshin/gnvm/blob/master/README.tw.md)
 
 下载
 ---
