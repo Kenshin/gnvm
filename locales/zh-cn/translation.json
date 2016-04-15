@@ -2,6 +2,7 @@
     "side": {
         "github"      : "关注",
         "download"    : "下载",
+        "character"   : "特色",
         "installation": "安装",
         "validation"  : "验证",
         "feature"     : "功能介绍",
@@ -16,6 +17,12 @@
     "main": {
         "subtitle" : "使用 Go 语言编写的 Node.js 多版本管理器",
         "desc"     : "<a href='https://github.com/kenshin/gnvm'>GNVM</a> 是一个简单的 Node.js 多版本管理器，类似 <span class='focus'>nvm</span> <span class='focus'>nvmw</span> <span class='focus'>nodist</span> 。",
+        "char1"    : "单文件，不依赖于任何环境。",
+        "char2"    : "下载即用，无需配置。",
+        "char3"    : "彩色日志输出。",
+        "char4"    : "支持多线程下载。",
+        "char5"    : "内置 <a href='http://npm.taobao.org/mirrors/node'>TAOBAO</a>，方便切换，也支持<span class='focus'>自定义</span> 。",
+        "char6"    : "支持 <span class='focus'>NPM</span> 下载/安装/配置。",
         "gouser"   : " go 用户，请使用 ",
         "gogit"    : "git 用户，请使用 ",
         "gocurl"   : "curl 用户，请使用 ",
@@ -50,7 +57,7 @@
         "examp5"   : "5. 本地不存在 NPM 时，安装当前 Node.js 版本对应的 NPM 版本。",
         "examp6"   : "6. 安装 NPM latest 版本。",
         "todo1"    : "增加 <span class='focus'>HTTP_PROXY</span>。",
-        "todo2"    : "自动升级，例如 <span class='focus'>gnvm upgrad</span>.",
+        "todo2"    : "自动升级，例如 <span class='focus'>gnvm upgrad</span> 。",
         "todo3"    : "<span class='focus'>gnvm.exe</span> 增加 <span class='focus'>Chocolatey</span> 方案。",
         "changelog": "更新日志",
         "contact"  : "联系方式",
@@ -59,8 +66,8 @@
         "email"    : "邮件",
         "sns"      : "微博",
         "feedback" : "反馈",
-        "thank1"   : "图标来自 <a href='http://www.easyicon.net'>http://www.easyicon.net</a> 和 <a href='https://www.iconfinder.com'>https://www.iconfinder.com</a>。",
-        "thank2"   : "页面设计参考 <a href='https://you-get.org/'>You-Get</a>。",
+        "thank1"   : "图标来自 <a href='http://www.easyicon.net'>http://www.easyicon.net</a> 。",
+        "thank2"   : "页面布局配色参考 <a href='https://you-get.org/'>You-Get</a>。",
         "footer"   : "<a href='https://github.com/kenshin/gnvm/' target='_blank'>GNVM</a> - 使用 Go 语言编写的 Node.js 多版本管理器"
     }
 }
