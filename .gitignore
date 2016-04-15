@@ -1,7 +1,3 @@
-<<<<<<< HEAD
 node_modules/*
 .DS_Store
 assets/*
-=======
-node_modules/*
->>>>>>> origin/gh-pages
