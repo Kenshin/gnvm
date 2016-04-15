@@ -32,6 +32,15 @@ Website
 ---
 [![Website][www-badge]][www-link]
 
+Characteristic
+-
+* Single file, not dependent on any environment.
+* Direct use, no configuration.
+* Color stdout.
+* Support multiple download.
+* Built-in [TAOBAO] (http://npm.taobao.org/mirrors/node), convenient switching, also support custom.
+* Support `NPM` download / install.
+
 Document
 ---
 [English](https://github.com/kenshin/gnvm/blob/master/README.en.md) | [繁體中文](https://github.com/kenshin/gnvm/blob/master/README.tw.md)

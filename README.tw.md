@@ -36,6 +36,15 @@ Update success, current Node.js latest version is 5.10.0.
 ---
 [English](https://github.com/kenshin/gnvm/blob/master/README.en.md) | [繁體中文](https://github.com/kenshin/gnvm/blob/master/README.tw.md)
 
+特色
+---
+* 單文件，不依賴於任何環境。
+* 下載即用，無需配置。
+* 彩色日誌輸出。
+* 支持多線程下載。
+* 內置 [TAOBAO](http://npm.taobao.org/mirrors/node)，方便切換，也支持自定義。
+* 支持 `NPM` 下載/安裝/配置。
+
 下載
 ---
 * [32-bit](https://app.box.com/gnvm/1/2014967291) | [64-bit](https://app.box.com/gnvm/1/2014967689) 常用地址，Box，速度稍慢
