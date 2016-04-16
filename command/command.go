@@ -210,9 +210,9 @@ gns version               :Show gns version.
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update Node.js latest version",
-	Long: `Update  Node.js latest version e.g.
-gnvm update latest       :Download and install Node.js latest version from .gnvmrc registry.
-gnvm update latest -g    :Download and auto invoke 'gnvm use latest'.
+	Long: `Download Node.js latest version and update .gnvmrc, e.g.
+    gnvm update latest       :Download latest Node.js and write it(latest version) to .gnvmrc.
+    gnvm update latest -g    :Download latest Node.js and write it(latest version) to .gnvmrc and auto invoke 'gnvm use latest'.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
