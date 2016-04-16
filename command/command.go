@@ -238,11 +238,11 @@ var lsCmd = &cobra.Command{
 	Use:   "ls",
 	Short: "Show all [local] [remote] Node.js version",
 	Long: `Show all [local] [remote] Node.js version e.g.:
-gnvm ls                  :Print local  Node.js versions list.
-gnvm ls -r               :Print remote Node.js versions.
-gnvm ls -r -d            :Print remote Node.js details versions.
-gnvm ls -r -i            :Print remote io.js   versions.
-gnvm ls -r -d -i         :Print remote io.js   details versions.
+gnvm ls                  :Print local  Node.js version list.
+gnvm ls -r               :Print remote Node.js version list.
+gnvm ls -r -d            :Print remote Node.js details version list.
+gnvm ls -r -i            :Print remote io.js   version list.
+gnvm ls -r -d -i         :Print remote io.js   details version list.
 gnvm ls -r -d --limit=xx :Print remote Node.js maximum number of rows is xx.( default, print max rows. )
 `,
 	Run: func(cmd *cobra.Command, args []string) {
