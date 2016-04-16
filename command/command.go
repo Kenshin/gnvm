@@ -176,9 +176,9 @@ gnvm use x.xx.xx-x86  :Usage x.xx.xx Node.js with arch x86 version.
 // sub cmd
 var sessionCmd = &cobra.Command{
 	Use:   "session",
-	Short: "Use any Node.js version of the local already exists version by current session",
+	Short: "Set any local Node.js version to session Node.js version",
 	Long: `
-Use any Node.js version of the local already exists by current session, e.g. :
+Set any Node.js version of the local already exists to session Node.js version, e.g. :
 gnvm session start        :Create gns.cmd.
 gnvm session close        :Remove gns.cmd.
 
