@@ -90,7 +90,7 @@ var uninstallCmd = &cobra.Command{
 gnvm uninstall npm                         :Uninstall npm.
 gnvm uninstall 0.10.28                     :Uninstall 0.10.28  Node.js version.
 gnvm uninstall latest                      :Uninstall latest   Node.js version.
-gnvm uninstall 0.10.26 0.11.2 latest       :Uninstall multiple Node.js version, e.g. 0.10.26 0.11.2-x86 latest.
+gnvm uninstall 0.10.26 0.11.2-x86 latest   :Uninstall multiple Node.js version, e.g. 0.10.26 0.11.2-x86 latest.
 gnvm uninstall ALL                         :Uninstall all      Node.js version.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
