@@ -339,9 +339,6 @@ p {
   .main header span:nth-child(2) {
     font-size: 1.5em;
   }
-  .main .m-font-size {
-    font-size: 13px;
-  }
   .main .desc {
     font-size: 13px;
     padding-top: 30px;
