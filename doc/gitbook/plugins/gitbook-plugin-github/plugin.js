@@ -1,0 +1,1 @@
+require(["gitbook"],function(t){t.events.bind("start",function(i,n){var o=n.github.url;t.toolbar.createButton({icon:"fa fa-github",label:"GitHub",position:"right",onClick:function(){window.open(o)}})})});
