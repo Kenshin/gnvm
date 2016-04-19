@@ -45,6 +45,12 @@ $( document ).ready( function() {
         $( ".main" ).i18n();
     });
 
+    // document
+    $( ".side" ).find('a[data-i18n="side.document"]').click( function() {
+        var lng = i18n.lng();
+        lng     = lng === "zh-cn" ? "zh" : lng;
+        window.location.href = "http://ksria.com/gnvm/doc/"+ lng + "/index.html";
+    });
 });
 
 function getQueryString( name ) {
