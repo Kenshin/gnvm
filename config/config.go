@@ -262,7 +262,7 @@ func Verify() {
 	wait := func() {
 		wait := ""
 		for {
-			time.Sleep(time.Millisecond * 500)
+			time.Sleep(time.Millisecond * 1000)
 			if finish {
 				break
 			}
