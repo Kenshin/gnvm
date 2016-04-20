@@ -108,7 +108,7 @@ func createConfig() {
 		return
 	}
 
-	P(DEFAULT, "Config file %v create success.\n", configPath)
+	P(NOTICE, "Config file %v create success.\n", configPath)
 }
 
 /*
