@@ -285,12 +285,12 @@ func Verify() {
 		case value, ok := <-code:
 			if ok && value == 200 {
 				finish = true
-				P(DEFAULT, "%v.\n", " ok")
+				P(DEFAULT, "%v.\n", CP{Magenta, false, None, false, " ok"})
 				go verifyURL("json", registry+util.NODELIST, code, fail)
 				finish = false
 				go wait()
 			} else if !ok {
-				P(DEFAULT, "%v.\n", " ok")
+				P(DEFAULT, "%v.\n", CP{Magenta, false, None, false, " ok"})
 				return
 			}
 		case value, _ := <-fail:
