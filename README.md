@@ -76,20 +76,20 @@ Update success, current Node.js latest version is 5.10.0.
 功能
 ---
 ```
-config       Setter and getter .gnvmrc file
-use          Use any the local already exists of Node.js version
-ls           Show all [local] [remote] Node.js version
-install      Install any Node.js version
-uninstall    Uninstall local Node.js version and npm
-update       Update Node.js latest version
-npm          NPM version management
-session      Use any Node.js version of the local already exists version by current session
-search       Search and Print Node.js version detail usage wildcard mode or regexp mode
-node-version Show [global] [latest] Node.js version
-reg          Add config property 'noderoot' to Environment variable 'NODE_HOME'
-version      Print GNVM version number
+config       配置 .gnvmrc
+use          使用某个本地已存在的 Node.js 版本
+ls           输出 [local] [remote] Node.js 版本
+install      下载/安装任意已知版本的 Node.js
+uninstall    删除任意本地已存在的 Node.js
+update       下载 Node.js latest 版本并更新到 .gnvmrc 里面
+npm          NPM 下载/安装/删除 管理
+session      临时设定本地某个已存在的 Node.js 为 全局 Node.js
+search       查询并且输出符合查询条件的 Node.js 版本详细信息的列表
+node-version 输出 [global] [latest] Node.js 版本
+reg          设定 .gnvmrc 属性值 [noderoot] 为 环境变量 [NODE_HOME]，并加入到 Path 中
+version      查看 gnvm 版本
 ```
-![功能一览](http://i.imgur.com/GqkZcjZ.png)
+![功能一览](http://i.imgur.com/E7MvvQv.png)
 
 术语
 ---

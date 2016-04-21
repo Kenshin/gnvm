@@ -82,13 +82,13 @@ install      Install any Node.js version
 uninstall    Uninstall local Node.js version and npm
 update       Update Node.js latest version
 npm          NPM version management
-session      Use any Node.js version of the local already exists version by current session
+session      Set any local Node.js version to session Node.js version
 search       Search and Print Node.js version detail usage wildcard mode or regexp mode
 node-version Show [global] [latest] Node.js version
-reg          Add config property 'noderoot' to Environment variable 'NODE_HOME'
+reg          Add config property [noderoot] to Environment variable [NODE_HOME]
 version      Print GNVM version number
 ```
-![Feature](http://i.imgur.com/GqkZcjZ.png)
+![Feature](http://i.imgur.com/E7MvvQv.png)
 
 Definitions
 ---
