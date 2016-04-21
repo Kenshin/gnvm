@@ -607,7 +607,7 @@ func NodeVersion(args []string) {
 				config.SetConfig(config.GLOBAL_VERSION, global)
 				P(DEFAULT, "Set success, %v new value is %v.\n", config.GLOBAL_VERSION, global)
 			} else {
-				P(WARING, "global Node.js version is %v, please use '%v' or '%v'. See '%v'.\n", util.UNKNOWN, "gnvm install latest -g", "gnvm install x.xx.xx -g", "gnvm help install")
+				P(WARING, "global Node.js version is %v, please use %v or %v. See '%v'.\n", util.UNKNOWN, "gnvm install latest -g", "gnvm install x.xx.xx -g", "gnvm help install")
 			}
 		} else {
 			P(DEFAULT, "Node.js %v version is %v.\n", "global", global)
@@ -616,7 +616,7 @@ func NodeVersion(args []string) {
 
 	if isLatest {
 		if latest == util.UNKNOWN {
-			P(WARING, "local  Node.js latest version is %v.\n", util.UNKNOWN)
+			P(WARING, "latest Node.js version is %v, please use %v or %v. See '%v'.\n", util.UNKNOWN, "gnvm install latest -g", "gnvm update latest", "gnvm help node-version")
 		} else {
 			P(DEFAULT, "Node.js %v version is %v.\n", "latest", latest)
 		}
@@ -626,9 +626,9 @@ func NodeVersion(args []string) {
 			return
 		}
 		if latest == util.UNKNOWN {
-			P(NOTICE, "remote Node.js latest version is %v from %v.\n", remoteVersion, config.GetConfig(config.REGISTRY))
-			config.SetConfig(config.LATEST_VERSION, remoteVersion)
-			P(DEFAULT, "Set success, local Node.js %v version is %v.\n", util.LATEST, remoteVersion)
+			P(NOTICE, "remote Node.js %v version is %v from %v.\n", "latest", remoteVersion, config.GetConfig(config.REGISTRY))
+			//config.SetConfig(config.LATEST_VERSION, remoteVersion)
+			//P(DEFAULT, "Set success, local Node.js %v version is %v.\n", util.LATEST, remoteVersion)
 			return
 		}
 		v1 := util.FormatNodeVer(latest)
