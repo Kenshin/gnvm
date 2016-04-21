@@ -279,7 +279,7 @@ gnvm ls -r -d --limit=xx :Print remote Node.js maximum number of rows is xx.( de
 // sub cmd
 var nodeVersionCmd = &cobra.Command{
 	Use:   "node-version",
-	Short: "Show and fix [global] [latest] Node.js version",
+	Short: "Show [global] [latest] Node.js version",
 	Long: `Show and fix [global] [latest] Node.js version e.g. :
 gnvm node-version            :Show Node.js global and latest version, and fix it.
 gnvm node-version latest     :Show Node.js latest version, and fix it.
@@ -368,9 +368,9 @@ gnvm config registry test     :Validation .gnvmfile registry property.
 // sub cmd
 var regCmd = &cobra.Command{
 	Use:   "reg",
-	Short: "Add config property 'noderoot' to Environment variable 'NODE_HOME'",
+	Short: "Add config property [noderoot] to Environment variable [NODE_HOME]",
 	Long: `This is the experimental function, need Administrator permission, please note!
-Add config property 'noderoot' to Environment variable 'NODE_HOME'. e.g. :
+Add config property [noderoot] to Environment variable [NODE_HOME]. e.g. :
 gnvm reg noderoot   :Registry config noderoot to NODE_HOME and add to Path.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
