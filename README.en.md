@@ -43,7 +43,7 @@ Website
 
 Document
 ---
-[English](https://github.com/kenshin/gnvm/blob/master/README.en.md) | [繁體中文](https://github.com/kenshin/gnvm/blob/master/README.tw.md)
+[简体中文](https://github.com/kenshin/gnvm/blob/master/README.md) | [繁體中文](https://github.com/kenshin/gnvm/blob/master/README.tw.md)
 
 Download
 ---
@@ -271,7 +271,6 @@ About
 ---
 * [CHANGELOG](https://github.com/kenshin/gnvm/blob/master/CHANGELOG.md)
 * [Contact](http://kenshin.wang/) | [Email](kenshin@ksria.com) | [Twitter](https://twitter.com/wanglei001)
-* [Wiki](https://github.com/kenshin/gnvm/wiki/常见问题)
 * [Feedback](https://github.com/kenshin/gnvm/issues)
 
 Thanks

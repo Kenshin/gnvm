@@ -43,7 +43,7 @@ Update success, current Node.js latest version is 5.10.0.
 
 文檔
 ---
-[English](https://github.com/kenshin/gnvm/blob/master/README.en.md) | [繁體中文](https://github.com/kenshin/gnvm/blob/master/README.tw.md)
+[English](https://github.com/kenshin/gnvm/blob/master/README.en.md) | [简体中文](https://github.com/kenshin/gnvm/blob/master/README.md)
 
 下載
 ---
@@ -272,7 +272,6 @@ c:\> npm -v
 ---
 * [更新日誌](https://github.com/kenshin/gnvm/blob/master/CHANGELOG.md)
 * [聯繫方式](http://kenshin.wang/) | [郵件](kenshin@ksria.com) | [微博](https://twitter.com/wanglei001)
-* [常見問題](https://github.com/kenshin/gnvm/wiki/常见问题)
 * [反饋](https://github.com/kenshin/gnvm/issues)
 
 感謝
