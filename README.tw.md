@@ -1,4 +1,4 @@
-![logo](http://i.imgur.com/uPmYWlEs.png) GNVM - 使用 Go 語言編寫的 Node.js 多版本管理器  
+![logo](http://i.imgur.com/uPmYWlEs.png) GNVM - Node.js 多版本管理器  
 ================================  
 [![Travis][travis-badge]][travis-link]
 [![Version][version-badge]][version-link]
