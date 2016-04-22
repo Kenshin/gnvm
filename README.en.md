@@ -1,4 +1,4 @@
-![logo](http://i.imgur.com/fclseMl.png) GNVM - Node.js version manager on Windows  
+![logo](http://i.imgur.com/Z4iPSgQ.png) GNVM - Node.js version manager on Windows  
 ================================  
 [![Travis][travis-badge]][travis-link]
 [![Version][version-badge]][version-link]
