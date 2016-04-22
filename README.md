@@ -267,6 +267,7 @@ c:\> npm -v
 - [ ] 增加 `HTTP_PROXY` 。
 - [ ] 自动升级，例如 `gnvm upgrad` .
 - [ ] `gnvm.exe` 增加 `Chocolatey` 方案。
+- [ ] 支持多系统。（ `MAC`, `Linux` ）
 
 相关链接
 ---

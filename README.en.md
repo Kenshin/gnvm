@@ -266,6 +266,7 @@ To-Do
 - [ ] Add `HTTP_PROXY` .
 - [ ] Auto `Upgrade`, usage `gnvm upgrad` .
 - [ ] Add `gnvm.exe` to `Chocolatey`.
+- [ ] Multiple system. ( `MAC`, `Linux` )
 
 About
 ---
