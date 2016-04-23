@@ -1,4 +1,4 @@
-![logo](http://i.imgur.com/Z4iPSgQ.png) GNVM - Node.js 多版本管理器  
+![logo](http://i.imgur.com/NqnDgsK.png) GNVM - Node.js 多版本管理器  
 ================================  
 [![Travis][travis-badge]][travis-link]
 [![Version][version-badge]][version-link]
