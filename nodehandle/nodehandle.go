@@ -5,392 +5,126 @@ import (
 	// lib
 	. "github.com/Kenshin/cprint"
 	"github.com/Kenshin/curl"
-	"github.com/pierrre/archivefile/zip"
 
 	// go
 	//"log"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
-	"os/exec"
-	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
-	"time"
 
 	// local
 	"gnvm/config"
 	"gnvm/util"
 )
 
-const (
-	DIVIDE        = "\\"
-	NODE          = "node.exe"
-	TIMEFORMART   = "02-Jan-2006 15:04"
-	GNVMHOST      = "http://k-zone.cn/gnvm/version.txt"
-	PROCESSTAKEUP = "The process cannot access the file because it is being used by another process."
-)
-
-var rootPath string
+var rootPath, latURL string
 
 func init() {
-	rootPath = util.GlobalNodePath + DIVIDE
-}
-
-func TransLatestVersion(latest string, isPrint bool) string {
-	if latest == config.LATEST {
-		latest = config.GetConfig(config.LATEST_VERSION)
-		if isPrint {
-			P(NOTICE, "current latest version is %v.\n", latest)
-		}
-	}
-	return latest
+	rootPath = util.GlobalNodePath + util.DIVIDE
+	latURL = config.GetConfig(config.REGISTRY) + util.LATEST + "/" + util.SHASUMS
 }
 
 /**
- * rootNode is rootPath + "/node.exe", e.g. <root>/node.exe
+ * rootPath    : node.exe global path,         e.g. x:\xxx\xx\xx\
  *
- * usePath  is use node version path,  e.g. <root>/x.xx.xx
- * useNode  is usePath + "/node.exe",  e.g. <root>/x.xx.xx/node.exe
+ * global      : global node.exe version num,  e.g. x.xx.xx-x86 ( only rumtime.GOARCH == "amd64", suffix include: 'x86' and 'x64' )
+ * globalPath  : global node.exe version path, e.g. x:\xxx\xx\xx\x.xx.xx-x86
  *
- * rootVersion is <root>/node.exe version
- * rootFolder  is <root>/rootVersion
+ * newer       : newer node.exe version num,   e.g. x.xx.xx
+ * newerPath   : newer node.exe version path,  e.g. <rootPath>\x.xx.xx\
+ *
  */
-func Use(folder string) bool {
+func Use(newer string) bool {
 
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm use %v' an error has occurred. please check. \nError: ", folder)
+			msg := fmt.Sprintf("'gnvm use %v' an error has occurred. please check. \nError: ", newer)
 			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
 
-	rootNodeExist := true
-
 	// get true folder, e.g. folder is latest return x.xx.xx
-	folder = TransLatestVersion(folder, true)
-
-	if folder == config.UNKNOWN {
-		P(ERROR, "unassigned node.exe latest version, use %v. See '%v'.\n", "gnvm config INIT", "gnvm help config")
+	util.FormatLatVer(&newer, config.GetConfig(config.LATEST_VERSION), true)
+	if newer == util.UNKNOWN {
+		P(WARING, "current latest is %v, please usage '%v' first. See '%v'.\n", newer, "gnvm update latest", "gnvm help update")
 		return false
 	}
 
-	// set rootNode
-	rootNode := rootPath + NODE
+	// set newerPath and verify newerPath is exist?
+	newerPath := rootPath + newer
+	if _, err := util.GetNodeVer(newerPath); err != nil {
+		P(WARING, "%v folder is not exist %v, use '%v' get local Node.js version list. See '%v'.\n", newer, "node.exe", "gnvm ls", "gnvm help ls")
+		return false
+	}
 
-	// set usePath and useNode
-	usePath := rootPath + folder + DIVIDE
-	useNode := usePath + NODE
-
-	// get <root>/node.exe version
-	rootVersion, err := util.GetNodeVersion(rootPath)
+	// get <root>/node.exe version, when exist, get full version, e.g. x.xx.xx-x86
+	global, err := util.GetNodeVer(rootPath)
 	if err != nil {
-		P(WARING, "not found global node.exe version.\n")
-		rootNodeExist = false
+		P(WARING, "not found %v Node.js version.\n", "global")
+	} else {
+		if bit, err := util.Arch(rootPath); err == nil {
+			if bit == "x86" && runtime.GOARCH == "amd64" {
+				global += "-" + bit
+			}
+		}
 	}
 
-	// <root>/folder is exist
-	if isDirExist(usePath) != true {
-		P(WARING, "%v folder is not exist from %v, use '%v' get local node.exe list. See '%v'.\n", folder, rootPath, "gnvm ls", "gnvm help ls")
+	// check newer is global
+	if newer == global {
+		P(WARING, "current Node.js version is %v, not re-use. See '%v'.\n", newer, "gnvm node-version")
 		return false
 	}
 
-	// check folder is rootVersion
-	if folder == rootVersion {
-		P(WARING, "current node.exe version is %v, not re-use. See 'gnvm node-version'.\n", folder)
-		return false
-	}
+	// set globalPath
+	globalPath := rootPath + global
 
-	// set rootFolder
-	rootFolder := rootPath + rootVersion
-
-	// <root>/rootVersion is exist
-	if isDirExist(rootFolder) != true {
-
-		// create rootVersion folder
-		if err := os.Mkdir(rootFolder, 0777); err != nil {
-			P(ERROR, "create %v folder Error: %v.\n", rootVersion, err.Error())
+	// <root>/global is exist? when not exist, create global folder
+	if !util.IsDirExist(globalPath) {
+		if err := os.Mkdir(globalPath, 0777); err != nil {
+			P(ERROR, "create %v folder Error: %v.\n", global, err.Error())
 			return false
 		}
 	}
 
-	if rootNodeExist {
-		// copy rootNode to <root>/rootVersion
-		if err := copy(rootNode, rootFolder); err != nil {
-			P(ERROR, "copy %v to %v folder Error: %v.\n", rootNode, rootFolder, err.Error())
+	// backup copy <root>/node.exe to <root>/global/node.exe
+	if global != "" {
+		if err := util.Copy(rootPath, globalPath, util.NODE); err != nil {
+			P(ERROR, "copy %v to %v folder Error: %v.\n", rootPath, globalPath, err.Error())
 			return false
 		}
-
-		// delete <root>/node.exe
-		/*if err := os.Remove(rootNode); err != nil {
-			P(ERROR, "remove %v folder Error: %v.\n", rootNode, err.Error())
-			return false
-		}*/
-
 	}
 
-	// copy useNode to rootPath
-	if err := copy(useNode, rootPath); err != nil {
-		P(ERROR, "copy %v to %v folder Error: %v.\n", useNode, rootPath, err.Error())
+	// copy <root>/newer/node.exe to <root>/node.exe
+	if err := util.Copy(newerPath, rootPath, util.NODE); err != nil {
+		P(ERROR, "copy %v to %v folder Error: %v.\n", newerPath, rootPath, err.Error())
 		return false
 	}
 
-	P(DEFAULT, "Set success, global node.exe version is %v.\n", folder)
+	P(DEFAULT, "Set success, global Node.js version is %v.\n", newer)
 
 	return true
 }
 
-func NodeVersion(args []string, remote bool) {
-
-	// try catch
-	defer func() {
-		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm node-version %v' an error has occurred. please check. \nError: ", strings.Join(args, " "))
-			Error(ERROR, msg, err)
-			os.Exit(0)
-		}
-	}()
-
-	latest := config.GetConfig(config.LATEST_VERSION)
-	global := config.GetConfig(config.GLOBAL_VERSION)
-
-	if len(args) == 0 || len(args) > 1 {
-		P(DEFAULT, "Node.exe %v version is %v.\n", "latest", latest)
-		P(DEFAULT, "Node.exe %v version is %v.\n", "global", global)
-	} else {
-		switch {
-		case args[0] == "global":
-			P(DEFAULT, "Node.exe global version is %v.\n", global)
-		case args[0] == "latest" && !remote:
-			P(DEFAULT, "Node.exe latest version is %v.\n", latest)
-		case args[0] == "latest" && remote:
-			remoteVersion := getLatestVersionByRemote()
-			if remoteVersion == "" {
-				P(ERROR, "get remote %v latest version error, please check. See '%v'.\n", config.GetConfig("registry")+config.LATEST+"/"+config.NODELIST, "gnvm help config")
-				P(DEFAULT, "Node.exe latest version is %v.\n", latest)
-				return
-			}
-			P(DEFAULT, "Node.exe remote %v version is %v.\n", config.GetConfig("registry"), remoteVersion)
-			P(DEFAULT, "Node.exe latest version is %v.\n", latest)
-		}
-	}
-
-	isPrint := false
-	switch {
-	case len(args) == 0 && (global == config.UNKNOWN || latest == config.UNKNOWN):
-		isPrint = true
-	case len(args) > 0 && args[0] == "latest" && latest == config.UNKNOWN:
-		isPrint = true
-	case len(args) > 0 && args[0] == "global" && global == config.UNKNOWN:
-		isPrint = true
-	}
-	if isPrint {
-		P(WARING, "when version is %v, please use '%v'. See '%v'.\n", config.UNKNOWN, "gnvm config INIT", "gnvm help config")
-	}
-}
-
-func Uninstall(folder string) {
-
-	// try catch
-	defer func() {
-		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm uninstall %v' an error has occurred. please check. \nError: ", folder)
-			Error(ERROR, msg, err)
-			os.Exit(0)
-		}
-	}()
-
-	// set removePath
-	removePath := rootPath + folder
-
-	if folder == config.UNKNOWN {
-		P(ERROR, "unassigned node.exe latest version. See '%v'.\n", "gnvm config INIT")
-		return
-	}
-
-	// rootPath/version is exist
-	if isDirExist(removePath) != true {
-		P(ERROR, "%v folder is not exist. See '%v'.\n", folder, "gnvm ls")
-		return
-	}
-
-	// remove rootPath/version folder
-	if err := os.RemoveAll(removePath); err != nil {
-		P(ERROR, "uninstall %v fail, Error: %v.\n", folder, err.Error())
-		return
-	}
-
-	P(DEFAULT, "Node.exe version %v uninstall success.\n", folder)
-}
-
-func UninstallNpm() {
-
-	// try catch
-	defer func() {
-		if err := recover(); err != nil {
-			Error(ERROR, "'gnvm uninstall npm' an error has occurred. please check. \nError: ", err)
-			os.Exit(0)
-		}
-	}()
-
-	removeFlag := true
-
-	if !isDirExist(rootPath+"npm.cmd") && !isDirExist(rootPath+"node_modules"+DIVIDE+"npm") {
-		P(WARING, "%v not exist %v.\n", rootPath, "npm.cmd")
-		return
-	}
-
-	// remove npm.cmd
-	if err := os.RemoveAll(rootPath + "npm.cmd"); err != nil {
-		removeFlag = false
-		P(ERROR, "remove %v file fail from %v, Error: %v.\n", "npm.cmd", rootPath, err.Error())
-	}
-
-	// remove node_modules/npm
-	if err := os.RemoveAll(rootPath + "node_modules" + DIVIDE + "npm"); err != nil {
-		removeFlag = false
-		P(ERROR, "remove %v folder fail from %v, Error: %v.\n", "npm", rootPath+"node_modules", err.Error())
-	}
-
-	if removeFlag {
-		P(DEFAULT, "npm uninstall success from %v.\n", rootPath)
-	}
-}
-
-func LS(isPrint bool) ([]string, error) {
-
-	// try catch
-	defer func() {
-		if err := recover(); err != nil {
-			Error(ERROR, "'gnvm ls' an error has occurred. please check. \nError: ", err)
-			os.Exit(0)
-		}
-	}()
-
-	var lsArr []string
-	existVersion := false
-	err := filepath.Walk(rootPath, func(dir string, f os.FileInfo, err error) error {
-
-		// check nil
-		if f == nil {
-			return err
-		}
-
-		// check dir
-		if f.IsDir() == false {
-			return nil
-		}
-
-		// set version
-		version := f.Name()
-
-		// check node version
-		if ok := util.VerifyNodeVersion(version); ok {
-
-			// <root>/x.xx.xx/node.exe is exist
-			if isDirExist(rootPath + version + DIVIDE + NODE) {
-				desc := ""
-				switch {
-				case version == config.GetConfig(config.GLOBAL_VERSION) && version == config.GetConfig(config.LATEST_VERSION):
-					desc = " -- global, latest"
-				case version == config.GetConfig(config.LATEST_VERSION):
-					desc = " -- latest"
-				case version == config.GetConfig(config.GLOBAL_VERSION):
-					desc = " -- global"
-				}
-
-				// set true
-				existVersion = true
-
-				// set lsArr
-				lsArr = append(lsArr, version)
-
-				if isPrint {
-					if desc == "" {
-						P(DEFAULT, "v"+version+desc, "\n")
-					} else {
-						P(DEFAULT, "%v", "v"+version+desc, "\n")
-					}
-
-				}
-			}
-		}
-
-		// return
-		return nil
-	})
-
-	// show error
-	if err != nil {
-		P(ERROR, "'%v' Error: %v.\n", "gnvm ls", err.Error())
-		return lsArr, err
-	}
-
-	// version is exist
-	if !existVersion {
-		P(WARING, "don't have any available version, please check. See '%v'.\n", "gnvm help install")
-	}
-
-	return lsArr, err
-}
-
-func LsRemote() {
-
-	// set url
-	url := config.GetConfig(config.REGISTRY) + config.NODELIST
-
-	// try catch
-	defer func() {
-		if err := recover(); err != nil {
-			msg := fmt.Sprintf("'gnvm ls --remote' an error has occurred. please check registry %v. \nError: ", url)
-			Error(ERROR, msg, err)
-			os.Exit(0)
-		}
-	}()
-
-	// set exist version
-	isExistVersion := false
-
-	// print
-	P(DEFAULT, "Read all node.exe version list from %v, please wait.\n", url)
-
-	// get
-	code, res, _ := curl.Get(url)
-	if code != 0 {
-		return
-	}
-	// close
-	defer res.Body.Close()
-
-	writeVersion := func(content string, line int) bool {
-		// replace '\n'
-		content = strings.Replace(content, "\n", "", -1)
-
-		// split 'vx.xx.xx  1.1.0-alpha-2'
-		args := strings.Split(content, " ")
-
-		if ok := util.VerifyNodeVersion(args[0][1:]); ok {
-			isExistVersion = true
-			P(DEFAULT, args[0], "\n")
-		}
-		return false
-	}
-
-	if err := curl.ReadLine(res.Body, writeVersion); err != nil && err != io.EOF {
-		P(ERROR, "%v Error: %v\n", "gnvm ls --remote", err)
-	}
-
-}
-
 /*
- * return code same as download return code
- */
-func Install(args []string, global bool) int {
+ Install node
 
-	var currentLatest string
-	var code int
+ Param:
+ 	- args  : install Node.js versions, include: x.xx.xx latest x.xx.xx-io-x86 x.xx.xx-x86
+ 	- global: when global == true, call Use func.
+
+ Return:
+ 	- code: dl[0].Code, usage 'gnvm update latest'
+
+*/
+func InstallNode(args []string, global bool) int {
+
+	localVersion, isLatest, code, dl, ts := "", false, 0, new(curl.Download), new(curl.Task)
 
 	// try catch
 	defer func() {
@@ -405,171 +139,184 @@ func Install(args []string, global bool) int {
 	}()
 
 	for _, v := range args {
+		ver, io, arch, suffix, err := util.ParseNodeVer(v)
+		if err != nil {
+			switch err.Error() {
+			case "1":
+				P(ERROR, "%v not node.exe download.\n", v)
+			case "2":
+				P(ERROR, "%v format error, suffix only must be '%v' or '%v'.\n", v, "x86", "x64")
+			case "3":
+				P(ERROR, "%v format error, parameter must be '%v' or '%v'.\n", v, "x.xx.xx", "x.xx.xx-x86|x64")
+			case "4":
+				P(ERROR, "%v not an %v Node.js version.\n", v, "valid")
+			case "5":
+				P(WARING, "'%v' command is no longer supported. See '%v'.\n", "gnvm install npm", "gnvm help npm")
+			}
+			continue
+		}
 
-		if v == config.LATEST {
+		// when os is 386, not download 64 bit node.exe
+		if runtime.GOARCH == "386" && suffix == "x64" {
+			P(WARING, "current operating system is %v, not support %v suffix.\n", "32-bit", "x64")
+			continue
+		}
 
-			version := getLatestVersionByRemote()
+		// check local latest and get remote latest
+		v = util.EqualAbs("latest", v)
+		if ver == util.LATEST {
+			localVersion = config.GetConfig(config.LATEST_VERSION)
+			P(NOTICE, "local  latest version is %v.\n", localVersion)
+
+			version := util.GetLatVer(latURL)
 			if version == "" {
 				P(ERROR, "get latest version error, please check. See '%v'.\n", "gnvm config help")
 				break
 			}
 
-			// set v
-			v = version
-			currentLatest = version
-			P(NOTICE, "current latest version is %v.\n", version)
+			isLatest = true
+			ver = version
+			P(NOTICE, "remote latest version is %v.\n", version)
+		} else {
+			isLatest = false
 		}
 
-		// downlaod
-		code = download(v)
-		if code == 0 || code == 2 {
+		// ture folder name
+		if suffix != "" {
+			ver += "-" + suffix
+		}
 
-			if v == currentLatest {
+		// verify <root>/folder is exist
+		folder := rootPath + ver
+		if _, err := util.GetNodeVer(folder); err == nil {
+			P(WARING, "%v folder exist.\n", ver)
+			continue
+		}
+
+		// get and set url( include iojs)
+		url := config.GetConfig(config.REGISTRY)
+		if io {
+			url = config.GetIOURL(url)
+		}
+
+		// add task
+		if url, err := util.GetRemoteNodePath(url, ver, arch); err == nil {
+			dl.AddTask(ts.New(url, ver, util.NODE, folder))
+		}
+	}
+
+	// downlaod
+	if len(*dl) > 0 {
+		curl.Options.Header = false
+		arr := (*dl).GetValues("Title")
+		P(DEFAULT, "Start download Node.js versions [%v].\n", strings.Join(arr, ", "))
+		newDL, errs := curl.New(*dl)
+		for _, task := range newDL {
+			v := strings.Replace(task.Dst, rootPath, "", -1)
+			if v != localVersion && isLatest {
 				config.SetConfig(config.LATEST_VERSION, v)
+				P(DEFAULT, "Set success, %v new value is %v\n", config.LATEST_VERSION, v)
 			}
-
 			if global && len(args) == 1 {
 				if ok := Use(v); ok {
 					config.SetConfig(config.GLOBAL_VERSION, v)
 				}
 			}
 		}
+		if len(errs) > 0 {
+			code = (*dl)[0].Code
+			s := ""
+			for _, v := range errs {
+				s += v.Error()
+			}
+			P(WARING, s)
+		}
 	}
 
 	return code
-
 }
 
-func InstallNpm() {
+/*
+ Uninstall node and npm
+
+ Param:
+ 	- folder: version
+
+*/
+func Uninstall(folder string) {
 
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			if strings.HasPrefix(err.(string), "CURL Error:") {
-				fmt.Printf("\n")
-			}
-			Error(ERROR, "'gnvm install npm' an error has occurred. \nError: ", err)
+			msg := fmt.Sprintf("gnvm uninstall %v an error has occurred. please check your input. \nError: ", folder)
+			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
 
-	out, err := exec.Command(rootPath+"npm", "--version").Output()
-	if err == nil {
-		P(WARING, "current path %v exist npm, version is %v", rootPath, string(out[:]), "\n")
+	// set removePath
+	removePath := rootPath + folder
+
+	if folder == util.UNKNOWN {
+		P(ERROR, "current latest version is %v, please usage '%v' first. See '%v'.\n", folder, "gnvm update latest", "gnvm help update")
 		return
 	}
 
-	url := config.GetConfig(config.REGISTRY) + "npm"
-
-	// get
-	code, res, _ := curl.Get(url)
-	if code != 0 {
-		return
-	}
-	// close
-	defer res.Body.Close()
-
-	maxTime, _ := time.Parse(TIMEFORMART, TIMEFORMART)
-	var maxVersion string
-
-	getNpmVersion := func(content string, line int) bool {
-		if strings.Index(content, `<a href="`) == 0 && strings.Contains(content, ".zip") {
-
-			// parse
-			newLine := strings.Replace(content, `<a href="`, "", -1)
-			newLine = strings.Replace(newLine, `</a`, "", -1)
-			newLine = strings.Replace(newLine, `">`, " ", -1)
-
-			// e.g. npm-1.3.9.zip npm-1.3.9.zip> 23-Aug-2013 21:14 1535885
-			orgArr := strings.Fields(newLine)
-
-			// e.g. npm-1.3.9.zip
-			version := orgArr[0:1][0]
-
-			// e.g. 23-Aug-2013 21:14
-			sTime := strings.Join(orgArr[2:len(orgArr)-1], " ")
-
-			// bubble sort
-			if t, err := time.Parse(TIMEFORMART, sTime); err == nil {
-				if t.Sub(maxTime).Seconds() > 0 {
-					maxTime = t
-					maxVersion = version
-				}
-			}
-		}
-		return false
-	}
-
-	if err := curl.ReadLine(res.Body, getNpmVersion); err != nil && err != io.EOF {
-		P(ERROR, "parse npm version Error: %v, from %v\n", err, url)
+	// rootPath/version is exist
+	if util.IsDirExist(removePath) != true {
+		P(ERROR, "%v folder is not exist. See '%v'.\n", folder, "gnvm ls")
 		return
 	}
 
-	if maxVersion == "" {
-		P(ERROR, "get npm version fail from %v, please check. See '%v'.\n", url, "gnvm help config")
+	// remove rootPath/version folder
+	if err := os.RemoveAll(removePath); err != nil {
+		P(ERROR, "uninstall %v fail, Error: %v.\n", folder, err.Error())
 		return
 	}
 
-	P(NOTICE, "the latest version is %v from %v.\n", maxVersion, config.GetConfig(config.REGISTRY))
-
-	// download zip
-	zipPath := os.TempDir() + DIVIDE + maxVersion
-	if code := downloadNpm(maxVersion); code == 0 {
-
-		P(DEFAULT, "Start unarchive file %v.\n", maxVersion)
-
-		//unzip(maxVersion)
-
-		if err := zip.UnarchiveFile(zipPath, config.GetConfig(config.NODEROOT), nil); err != nil {
-			panic(err)
-		}
-
-		P(DEFAULT, "End unarchive.\n")
-	}
-
-	// remove temp zip file
-	if err := os.RemoveAll(zipPath); err != nil {
-		P(ERROR, "remove zip file fail from %v, Error: %v.\n", zipPath, err.Error())
-	}
-
+	P(DEFAULT, "Node.js version %v uninstall success.\n", folder)
 }
 
+/*
+ Update local Node.js latest verion
+
+ - localVersion, remoteVersion: string  Node.js version
+ - local, remote:               float64 Node.js version
+
+ Param:
+ 	- global: when global == true, call Use func.
+
+*/
 func Update(global bool) {
 
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			Error(ERROR, "'gnvm updte latest' an error has occurred. \nError: ", err)
+			msg := fmt.Sprintf("'%v' an error has occurred. \nError: ", "gnvm updte latest")
+			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
 
-	localVersion := config.GetConfig(config.LATEST_VERSION)
-	P(NOTICE, "local latest version is %v.\n", localVersion)
+	localVersion, remoteVersion := config.GetConfig(config.LATEST_VERSION), util.GetLatVer(latURL)
 
-	remoteVersion := getLatestVersionByRemote()
+	P(NOTICE, "local  Node.js latest version is %v.\n", localVersion)
 	if remoteVersion == "" {
 		P(ERROR, "get latest version error, please check. See '%v'.\n", "gnvm help config")
 		return
 	}
-	P(NOTICE, "remote %v latest version is %v.\n", config.GetConfig("registry"), remoteVersion)
+	P(NOTICE, "remote Node.js latest version is %v from %v.\n", remoteVersion, config.GetConfig("registry"))
 
-	local, _ := util.ConverFloat(localVersion)
-	remote, _ := util.ConverFloat(remoteVersion)
-
-	var args []string
-	args = append(args, remoteVersion)
+	local, remote, args := util.FormatNodeVer(localVersion), util.FormatNodeVer(remoteVersion), []string{remoteVersion}
 
 	switch {
-	case localVersion == config.UNKNOWN:
-		P(WARING, "local latest version is %v.\n", config.UNKNOWN)
-		if code := Install(args, global); code == 0 || code == 2 {
+	case localVersion == util.UNKNOWN:
+		if code := InstallNode(args, global); code == 0 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
-			P(DEFAULT, "Update latest success, current latest version is %v.\n", remoteVersion)
+			P(DEFAULT, "Update Node.js latest success, current latest version is %v.\n", remoteVersion)
 		}
 	case local == remote:
-
-		if isDirExist(rootPath + localVersion) {
+		if util.IsDirExist(rootPath + localVersion) {
 			cp := CP{Red, false, None, false, "="}
 			P(DEFAULT, "Remote latest version %v %v latest version %v, don't need to upgrade.\n", remoteVersion, cp, localVersion)
 			if global {
@@ -577,41 +324,347 @@ func Update(global bool) {
 					config.SetConfig(config.GLOBAL_VERSION, localVersion)
 				}
 			}
-		} else if !isDirExist(rootPath + localVersion) {
-			P(WARING, "local not exist %v\n", localVersion)
-			if code := Install(args, global); code == 0 || code == 2 {
-				P(DEFAULT, "Download latest version %v success.\n", localVersion)
+		} else {
+			P(WARING, "%v folder is not exist. See '%v'.\n", localVersion, "gnvm ls")
+			if code := InstallNode(args, global); code == 0 {
+				P(DEFAULT, "Local Node.js latest version is %v.\n", localVersion)
 			}
 		}
-
 	case local > remote:
 		cp := CP{Red, false, None, false, ">"}
-		P(WARING, "local latest version %v %v remote latest version %v.\nPlease check your registry. See 'gnvm help config'.\n", localVersion, cp, remoteVersion)
+		P(WARING, "local latest version %v %v remote latest version %v.\nPlease check your config %v. See '%v'.\n", localVersion, cp, remoteVersion, "registry", "gnvm help config")
 	case local < remote:
 		cp := CP{Red, false, None, false, ">"}
 		P(WARING, "remote latest version %v %v local latest version %v.\n", remoteVersion, cp, localVersion)
-		if code := Install(args, global); code == 0 || code == 2 {
+		if code := InstallNode(args, global); code == 0 {
 			config.SetConfig(config.LATEST_VERSION, remoteVersion)
-			P(DEFAULT, "Update latest success, current latest version is %v.\n", remoteVersion)
+			P(DEFAULT, "Update success, Node.js latest version is %v.\n", remoteVersion)
 		}
 	}
 }
 
-func Version(remote bool) {
+/*
+ Search Node.js version and Print
+
+ Param:
+ 	- s: Node.js version, inlcude: *.*.* 0.*.* 0.10.* /<regexp>/ latest 0.10.10
+
+*/
+func Search(s string) {
+	regex, err := util.FormatWildcard(s, latURL)
+	if err != nil {
+		P(ERROR, "%v not an %v Node.js version.\n", s, "valid")
+		return
+	}
+
+	// set url
+	url := config.GetConfig(config.REGISTRY)
+	if arr := strings.Split(s, "."); len(arr) == 3 {
+		if ver, _ := strconv.Atoi(arr[0]); ver >= 1 && ver <= 3 {
+			url = config.GetIOURL(url)
+		}
+	}
+	url += util.NODELIST
 
 	// try catch
 	defer func() {
 		if err := recover(); err != nil {
-			Error(ERROR, "'gnvm version --remote' an error has occurred. \nError: ", err)
+			msg := fmt.Sprintf("'%v' an error has occurred. please check your input.\nError: ", "gnvm search")
+			Error(ERROR, msg, err)
 			os.Exit(0)
 		}
 	}()
 
-	localVersion := config.VERSION
+	// print
+	P(DEFAULT, "Search Node.js version rules [%v] from %v, please wait.\n", s, url)
+
+	// generate nodist
+	nodist, err, code := New(url, regex)
+	if err != nil {
+		if code == -1 {
+			P(ERROR, "'%v' get url %v error, Error: %v\n", "gnvm search", url, err)
+		} else {
+			P(ERROR, "%v an error has occurred. please check. Error: %v\n", "gnvm search", err)
+		}
+		return
+	}
+
+	if len(nodist.nl) > 0 {
+		nodist.Detail(0)
+	} else {
+		P(WARING, "not search any Node.js version details, use rules [%v] from %v.\n", s, url)
+	}
+}
+
+/*
+ Print current local Node.js version list
+
+ Param:
+ 	- isPrint: when isPrint == true, print console
+
+*/
+func LS(isPrint bool) ([]string, error) {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			Error(ERROR, "'gnvm ls' an error has occurred. please check. \nError: ", err)
+			os.Exit(0)
+		}
+	}()
+
+	var lsArr []string
+	existVersion := false
+	files, err := ioutil.ReadDir(rootPath)
+
+	// show error
+	if err != nil {
+		P(ERROR, "'%v' Error: %v.\n", "gnvm ls", err.Error())
+		return lsArr, err
+	}
+
+	P(NOTICE, "gnvm.exe root is %v \n", rootPath)
+	for _, file := range files {
+		// set version
+		version := file.Name()
+
+		// check node version
+		if util.VerifyNodeVer(version) {
+
+			// <root>/x.xx.xx/node.exe is exist
+			if util.IsDirExist(rootPath + version + util.DIVIDE + util.NODE) {
+				desc := ""
+				switch {
+				case version == config.GetConfig(config.GLOBAL_VERSION) && version == config.GetConfig(config.LATEST_VERSION):
+					desc = " -- global, latest"
+				case version == config.GetConfig(config.LATEST_VERSION):
+					desc = " -- latest"
+				case version == config.GetConfig(config.GLOBAL_VERSION):
+					desc = " -- global"
+				}
+
+				ver, _, _, suffix, _ := util.ParseNodeVer(version)
+				if suffix == "x86" {
+					desc = " -- x86"
+				} else if suffix == "x64" {
+					desc = " -- x64"
+				}
+
+				// set true
+				existVersion = true
+
+				// set lsArr
+				lsArr = append(lsArr, version)
+
+				if isPrint {
+					if desc == "" {
+						P(DEFAULT, "v"+ver+desc, "\n")
+					} else {
+						P(DEFAULT, "%v", "v"+ver+desc, "\n")
+					}
+
+				}
+			}
+		}
+	}
+
+	// version is exist
+	if !existVersion {
+		P(WARING, "don't have any available Node.js version, please check your input. See '%v'.\n", "gnvm help install")
+	}
+
+	return lsArr, err
+}
+
+/*
+ Print remote Node.js version list
+
+ Param:
+ 	- limit: print max line
+ 	- io:    when io == true, print iojs
+
+*/
+func LsRemote(limit int, io bool) {
+	// set url
+	url := config.GetConfig(config.REGISTRY)
+	if io {
+		url = config.GetIOURL(url)
+	}
+	url += util.NODELIST
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			msg := fmt.Sprintf("'gnvm ls --remote' an error has occurred. please check your input %v. \nError: ", url)
+			Error(ERROR, msg, err)
+			os.Exit(0)
+		}
+	}()
+
+	// print
+	P(DEFAULT, "Read all Node.js version list from %v, please wait.\n", url)
+
+	// generate nodist
+	nodist, err, code := New(url, nil)
+	if err != nil {
+		if code == -1 {
+			P(ERROR, "'%v' get url %v error, Error: %v\n", "gnvm ls -r -d", url, err)
+		} else {
+			P(ERROR, "%v an error has occurred. please check your input. Error: %v\n", "gnvm ls -r -d", err)
+		}
+		return
+	}
+
+	if limit != -1 {
+		nodist.Detail(limit)
+	} else {
+		for _, v := range nodist.Sorts {
+			fmt.Println(v)
+		}
+	}
+}
+
+/*
+ Show local / global Node.js version
+
+ Param:
+ 	- args:   include: latest global
+
+*/
+func NodeVersion(args []string) {
+
+	// try catch
+	defer func() {
+		if err := recover(); err != nil {
+			msg := fmt.Sprintf("'gnvm node-version %v' an error has occurred. please check. \nError: ", strings.Join(args, " "))
+			Error(ERROR, msg, err)
+			os.Exit(0)
+		}
+	}()
+
+	/*
+		if len(args) == 0 {
+			P(DEFAULT, "Node.js %v version is %v.\n", "latest", latest)
+			P(DEFAULT, "Node.js %v version is %v.\n", "global", global)
+			if latest == util.UNKNOWN {
+				P(WARING, "latest version is %v, please use '%v'. See '%v'.\n", util.UNKNOWN, "gnvm node-version latest -r", "gnvm help node-version")
+			}
+			if global == util.UNKNOWN {
+				P(WARING, "global version is %v, please use '%v' or '%v'. See '%v'.\n", util.UNKNOWN, "gnvm install latest -g", "gnvm install x.xx.xx -g", "gnvm help install")
+			}
+		} else {
+			switch {
+			case args[0] == "global":
+				P(DEFAULT, "Node.js global version is %v.\n", global)
+				if global == util.UNKNOWN {
+					P(WARING, "global version is %v, please use '%v' or '%v'. See '%v'.\n", util.UNKNOWN, "gnvm install latest -g", "gnvm install x.xx.xx -g", "gnvm help install")
+				}
+			case args[0] == "latest" && !remote:
+				P(DEFAULT, "Node.js latest version is %v.\n", latest)
+				if latest == util.UNKNOWN {
+					P(WARING, "latest version is %v, please use '%v'. See '%v'.\n", util.UNKNOWN, "gnvm node-version latest -r", "gnvm help node-version")
+				}
+			case args[0] == "latest" && remote:
+				remoteVersion := util.GetLatVer(latURL)
+				if remoteVersion == "" {
+					P(ERROR, "get remote %v Node.js %v error, please check your input. See '%v'.\n", config.GetConfig(config.REGISTRY), "latest version", "gnvm help config")
+					return
+				}
+				P(DEFAULT, "Local  Node.js latest version is %v.\n", latest)
+				P(DEFAULT, "Remote Node.js latest version is %v from %v.\n", remoteVersion, config.GetConfig(config.REGISTRY))
+				if latest == util.UNKNOWN {
+					config.SetConfig(config.LATEST_VERSION, remoteVersion)
+					P(DEFAULT, "Set success, local Node.js %v version is %v.\n", util.LATEST, remoteVersion)
+					return
+				}
+				v1 := util.FormatNodeVer(latest)
+				v2 := util.FormatNodeVer(remoteVersion)
+				if v1 < v2 {
+					cp := CP{Red, false, None, false, ">"}
+					P(WARING, "remote Node.js latest version %v %v local Node.js latest version %v, suggest to upgrade, usage '%v'.\n", remoteVersion, cp, latest, "gnvm update latest")
+				}
+			}
+		}
+	*/
+
+	isLatest, isGlobal := false, false
+	latest, global := config.GetConfig(config.LATEST_VERSION), config.GetConfig(config.GLOBAL_VERSION)
+	if len(args) == 0 {
+		isLatest = true
+		isGlobal = true
+	} else {
+		if args[0] == util.LATEST {
+			isLatest = true
+		} else {
+			isGlobal = true
+		}
+	}
+
+	if isGlobal {
+		if global == util.UNKNOWN {
+			P(WARING, "global Node.js version is %v.\n", util.UNKNOWN)
+			if global, err := util.GetNodeVer(rootPath); err == nil {
+				config.SetConfig(config.GLOBAL_VERSION, global)
+				P(DEFAULT, "Set success, %v new value is %v.\n", config.GLOBAL_VERSION, global)
+			} else {
+				P(WARING, "global Node.js version is %v, please use %v or %v. See '%v'.\n", util.UNKNOWN, "gnvm install latest -g", "gnvm install x.xx.xx -g", "gnvm help install")
+			}
+		} else {
+			P(DEFAULT, "Node.js %v version is %v.\n", "global", global)
+		}
+	}
+
+	if isLatest {
+		if latest == util.UNKNOWN {
+			P(WARING, "latest Node.js version is %v, please use %v or %v. See '%v'.\n", util.UNKNOWN, "gnvm install latest -g", "gnvm update latest", "gnvm help node-version")
+		} else {
+			P(DEFAULT, "Node.js %v version is %v.\n", "latest", latest)
+		}
+		remoteVersion := util.GetLatVer(latURL)
+		if remoteVersion == "" {
+			P(ERROR, "get remote %v Node.js %v error, please check your input. See '%v'.\n", config.GetConfig(config.REGISTRY), "latest version", "gnvm help config")
+			return
+		}
+		if latest == util.UNKNOWN {
+			P(NOTICE, "remote Node.js %v version is %v from %v.\n", "latest", remoteVersion, config.GetConfig(config.REGISTRY))
+			//config.SetConfig(config.LATEST_VERSION, remoteVersion)
+			//P(DEFAULT, "Set success, local Node.js %v version is %v.\n", util.LATEST, remoteVersion)
+			return
+		}
+		v1 := util.FormatNodeVer(latest)
+		v2 := util.FormatNodeVer(remoteVersion)
+		if v1 < v2 {
+			cp := CP{Red, false, None, false, ">"}
+			P(WARING, "remote Node.js latest version %v %v local Node.js latest version %v, suggest to upgrade, usage '%v'.\n", remoteVersion, cp, latest, "gnvm update latest")
+		}
+	}
+}
+
+/*
+ Print gnvm.exe version
+
+ Param:
+ 	- remote: when remote == true, print CHANGELOG
+
+*/
+func Version(remote, detail bool) {
+
+	defer func() {
+		if err := recover(); err != nil {
+			msg := fmt.Sprintf("'%v' an error has occurred. please check. \nError: ", "gnvm version -r")
+			Error(ERROR, msg, err)
+			os.Exit(0)
+		}
+	}()
+
+	localVersion, arch := config.VERSION, "32 bit"
+	if runtime.GOARCH == "amd64" {
+		arch = "64 bit"
+	}
 
 	cp := CP{Red, true, None, true, "Kenshin Wang"}
-	P(DEFAULT, "Current version %v", localVersion, "\n")
-	P(DEFAULT, "Copyright (C) 2014 %v <kenshin@ksria.com>", cp, "\n")
+	P(DEFAULT, "Current version %v %v.", localVersion, arch, "\n")
+	P(DEFAULT, "Copyright (C) 2014-2016 %v <kenshin@ksria.com>", cp, "\n")
 	cp.FgColor, cp.Value = Blue, "https://github.com/kenshin/gnvm"
 	P(DEFAULT, "See %v for more information.", cp, "\n")
 
@@ -619,9 +672,9 @@ func Version(remote bool) {
 		return
 	}
 
-	code, res, _ := curl.Get(GNVMHOST)
+	code, res, err := curl.Get("http://ksria.com/gnvm/CHANGELOG.md")
 	if code != 0 {
-		return
+		panic(err)
 	}
 	defer res.Body.Close()
 
@@ -651,7 +704,7 @@ func Version(remote bool) {
 			}
 
 		}
-		if line > 1 {
+		if line > 2 && detail {
 			P(DEFAULT, content)
 		}
 
@@ -659,143 +712,6 @@ func Version(remote bool) {
 	}
 
 	if err := curl.ReadLine(res.Body, versionFunc); err != nil && err != io.EOF {
-		P(ERROR, "gnvm version --remote Error: %v\n", err)
+		panic(err)
 	}
-
-}
-
-func isDirExist(path string) bool {
-	_, err := os.Stat(path)
-	if err != nil {
-		return os.IsExist(err)
-	} else {
-		// return file.IsDir()
-		return true
-	}
-}
-
-func copy(src, dest string) error {
-	//_, err := exec.Command("cmd", "/C", "copy", "/y", src, dest).Output()
-
-	srcFile, errSrc := os.Open(src)
-	if errSrc != nil {
-		return errSrc
-	}
-	defer srcFile.Close()
-
-	srcInfo, errInfor := srcFile.Stat()
-	if errInfor != nil {
-		return errInfor
-	}
-
-	dstFile, errDst := os.OpenFile(dest+DIVIDE+NODE, os.O_CREATE|os.O_TRUNC|os.O_RDWR, srcInfo.Mode().Perm())
-	if errDst != nil {
-
-		if errDst.(*os.PathError).Err.Error() != PROCESSTAKEUP {
-			return errDst
-		}
-
-		P(WARING, "write %v fail, Error: %v\n", dest+DIVIDE+NODE, PROCESSTAKEUP)
-
-		if _, err := exec.Command("taskkill.exe", "/f", "/im", NODE).Output(); err != nil && strings.Index(err.Error(), "exit status") == -1 {
-			return err
-		}
-
-		P(NOTICE, "%v process kill ok.\n", dest+DIVIDE+NODE)
-
-		dstFile, errDst = os.OpenFile(dest+DIVIDE+NODE, os.O_WRONLY|os.O_CREATE, 0644)
-		if errDst != nil {
-			return errDst
-		}
-
-	}
-	defer dstFile.Close()
-
-	_, err := io.Copy(dstFile, srcFile)
-
-	return err
-}
-
-/*
- * return code
- * 0: success
- * 1: remove folder error
- * 2: folder exist
- * 3: create folder error
- *
- */
-func download(version string) int {
-
-	// get current os arch
-	amd64 := "/"
-	if runtime.GOARCH == "amd64" {
-		amd64 = "/x64/"
-	}
-
-	// rootPath/version/node.exe is exist
-	if _, err := util.GetNodeVersion(rootPath + version + DIVIDE); err == nil {
-		P(WARING, "%v folder exist.\n", version)
-		return 2
-	} else {
-		if err := os.RemoveAll(rootPath + version); err != nil {
-			P(ERROR, "remove %v fail, Error: %v\n", version, err.Error())
-			return 1
-		}
-		//P(DEFAULT, "Remove empty [%v] folder success.\n", version)
-	}
-
-	// rootPath/version is exist
-	if isDirExist(rootPath+version) != true {
-		if err := os.Mkdir(rootPath+version, 0777); err != nil {
-			P(ERROR, "create %v fail, Error: %v\n", version, err.Error())
-			return 3
-		}
-	}
-
-	// set url
-	url := config.GetConfig(config.REGISTRY) + "v" + version + amd64 + NODE
-
-	// download
-	if code := curl.New(url, version, rootPath+version+DIVIDE+NODE); code != 0 {
-		if code == -1 {
-			if err := os.RemoveAll(rootPath + version); err != nil {
-				P(ERROR, "remove %v fail, Error: %v\n", version, err.Error())
-				return 1
-			}
-		}
-		return code
-	}
-
-	return 0
-}
-
-/*
- * return code
- * 0: success
- *
- */
-func downloadNpm(version string) int {
-
-	// set url
-	url := config.GetConfig(config.REGISTRY) + "npm/" + version
-
-	// download
-	if code := curl.New(url, version, os.TempDir()+DIVIDE+version); code != 0 {
-		return code
-	}
-
-	return 0
-}
-
-func getLatestVersionByRemote() string {
-
-	var version string
-
-	// set url
-	url := config.GetConfig("registry") + "latest/" + util.SHASUMS
-
-	version = util.GetLatestVersion(url)
-
-	return version
-
 }

@@ -1,1 +1,5 @@
 .gnvmrc
+.DS_Store
+node_modules/*
+assets/*
+dest-www/*
