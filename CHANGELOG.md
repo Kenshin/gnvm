@@ -1,11 +1,12 @@
-v0.2.0 2016-04-10
+v0.2.0 2016-04-27
 
 CHANGELOG
-- 2016-04-10, Version 0.2.0:
+- 2016-04-27, Version 0.2.0:
 * Add new feature `gnvm session` Use any Node.js version of the local already exists version by current session.
 * Add new feature `gnvm npm`     NPM version management.
 * Add new feature `gnvm search`  Search and Print Node.js version detail usage wildcard mode or regexp mode.
 * Add new feature `gnvm reg`     Add config property `noderoot` to Environment variable `NODE_HOME`.
+* Add new `gnvm` icon, inlcude:  `32*32`, `64*64`, `128*128` size.
 * Senior  feature `gnvm ls`      Add detail print, e.g. `gnvm ls -r -d -l`.
 * Senror  feature `gnvm config`  Add print all property`gnvm config` and test custom registry `gnvm config registry test`.
 * Senior  feature `gnvm config`  built-in `DEFAULT` <http://nodejs.org/dist/> and `TAOBAO` <http://npm.taobao.org/mirrors/node> keywords.
