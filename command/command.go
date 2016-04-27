@@ -90,7 +90,7 @@ var uninstallCmd = &cobra.Command{
 gnvm uninstall npm                         :Uninstall npm.
 gnvm uninstall 0.10.28                     :Uninstall 0.10.28  Node.js version.
 gnvm uninstall latest                      :Uninstall latest   Node.js version.
-gnvm uninstall 0.10.26 0.11.2 latest       :Uninstall multiple Node.js version, e.g. 0.10.26 0.11.2-x86 latest.
+gnvm uninstall 0.10.26 0.11.2-x86 latest   :Uninstall multiple Node.js version, e.g. 0.10.26 0.11.2-x86 latest.
 gnvm uninstall ALL                         :Uninstall all      Node.js version.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -176,9 +176,9 @@ gnvm use x.xx.xx-x86  :Usage x.xx.xx Node.js with arch x86 version.
 // sub cmd
 var sessionCmd = &cobra.Command{
 	Use:   "session",
-	Short: "Use any Node.js version of the local already exists version by current session",
+	Short: "Set any local Node.js version to session Node.js version",
 	Long: `
-Use any Node.js version of the local already exists by current session, e.g. :
+Set any Node.js version of the local already exists to session Node.js version, e.g. :
 gnvm session start        :Create gns.cmd.
 gnvm session close        :Remove gns.cmd.
 
@@ -210,9 +210,9 @@ gns version               :Show gns version.
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update Node.js latest version",
-	Long: `Update  Node.js latest version e.g.
-gnvm update latest       :Download and install Node.js latest version from .gnvmrc registry.
-gnvm update latest -g    :Download and auto invoke 'gnvm use latest'.
+	Long: `Download Node.js latest version and update .gnvmrc, e.g.
+    gnvm update latest       :Download latest Node.js and write it(latest version) to .gnvmrc.
+    gnvm update latest -g    :Download latest Node.js and write it(latest version) to .gnvmrc and auto invoke 'gnvm use latest'.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 {
@@ -238,11 +238,11 @@ var lsCmd = &cobra.Command{
 	Use:   "ls",
 	Short: "Show all [local] [remote] Node.js version",
 	Long: `Show all [local] [remote] Node.js version e.g.:
-gnvm ls                  :Print local  Node.js versions list.
-gnvm ls -r               :Print remote Node.js versions.
-gnvm ls -r -d            :Print remote Node.js details versions.
-gnvm ls -r -i            :Print remote io.js   versions.
-gnvm ls -r -d -i         :Print remote io.js   details versions.
+gnvm ls                  :Print local  Node.js version list.
+gnvm ls -r               :Print remote Node.js version list.
+gnvm ls -r -d            :Print remote Node.js details version list.
+gnvm ls -r -i            :Print remote io.js   version list.
+gnvm ls -r -d -i         :Print remote io.js   details version list.
 gnvm ls -r -d --limit=xx :Print remote Node.js maximum number of rows is xx.( default, print max rows. )
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -280,11 +280,10 @@ gnvm ls -r -d --limit=xx :Print remote Node.js maximum number of rows is xx.( de
 var nodeVersionCmd = &cobra.Command{
 	Use:   "node-version",
 	Short: "Show [global] [latest] Node.js version",
-	Long: `Show [global] [latest] Node.js version e.g. :
-gnvm node-version            :Show Node.js global and latest version.
-gnvm node-version latest     :Show Node.js latest version.
-gnvm node-version global     :Show Node.js global version.
-gnvm node-version latest -r  :Show Node.js local and remote latest version.
+	Long: `Show and fix [global] [latest] Node.js version e.g. :
+gnvm node-version            :Show Node.js global and latest version, and fix it.
+gnvm node-version latest     :Show Node.js latest version, and fix it.
+gnvm node-version global     :Show Node.js global version, and fix it.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 1 {
@@ -296,12 +295,9 @@ gnvm node-version latest -r  :Show Node.js local and remote latest version.
 				if args[0] != "global" && args[0] != "latest" {
 					P(WARING, "%v parameter only support [%v] or [%v] keyword, please check your input. See '%v'.\n", "gnvm node-version", "global", "latest", "gnvm help node-version")
 					return
-				} else if args[0] == "global" && remote {
-					P(WARING, "%v parameter %v not support %v flag, please check your input. See '%v'.\n", "gnvm node-version", "global", "-r", "gnvm help node-version")
-					return
 				}
 			}
-			nodehandle.NodeVersion(args, remote)
+			nodehandle.NodeVersion(args)
 		}
 	},
 }
@@ -372,9 +368,9 @@ gnvm config registry test     :Validation .gnvmfile registry property.
 // sub cmd
 var regCmd = &cobra.Command{
 	Use:   "reg",
-	Short: "Add config property 'noderoot' to Environment variable 'NODE_HOME'",
+	Short: "Add config property [noderoot] to Environment variable [NODE_HOME]",
 	Long: `This is the experimental function, need Administrator permission, please note!
-Add config property 'noderoot' to Environment variable 'NODE_HOME'. e.g. :
+Add config property [noderoot] to Environment variable [NODE_HOME]. e.g. :
 gnvm reg noderoot   :Registry config noderoot to NODE_HOME and add to Path.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -438,18 +434,18 @@ gnvm npm global           :Install local Node.js version matching npm version.
 func init() {
 
 	// add sub cmd to root
-	gnvmCmd.AddCommand(versionCmd)
+	gnvmCmd.AddCommand(configCmd)
+	gnvmCmd.AddCommand(useCmd)
+	gnvmCmd.AddCommand(lsCmd)
 	gnvmCmd.AddCommand(installCmd)
 	gnvmCmd.AddCommand(uninstallCmd)
-	gnvmCmd.AddCommand(useCmd)
-	gnvmCmd.AddCommand(sessionCmd)
 	gnvmCmd.AddCommand(updateCmd)
-	gnvmCmd.AddCommand(lsCmd)
-	gnvmCmd.AddCommand(nodeVersionCmd)
-	gnvmCmd.AddCommand(configCmd)
-	gnvmCmd.AddCommand(regCmd)
-	gnvmCmd.AddCommand(searchCmd)
 	gnvmCmd.AddCommand(npmCmd)
+	gnvmCmd.AddCommand(sessionCmd)
+	gnvmCmd.AddCommand(searchCmd)
+	gnvmCmd.AddCommand(nodeVersionCmd)
+	gnvmCmd.AddCommand(regCmd)
+	gnvmCmd.AddCommand(versionCmd)
 
 	// flag
 	installCmd.PersistentFlags().BoolVarP(&global, "global", "g", false, "set this version global version.")
@@ -458,7 +454,7 @@ func init() {
 	lsCmd.PersistentFlags().BoolVarP(&detail, "detail", "d", false, "get remote all node.js version details list.")
 	lsCmd.PersistentFlags().IntVarP(&limit, "limit", "l", 0, "get remote all node.js version details list by limit count.")
 	lsCmd.PersistentFlags().BoolVarP(&io, "io", "i", false, "get remote all io.js version details list.")
-	nodeVersionCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote node.js latest version.")
+	//nodeVersionCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote node.js latest version.")
 	versionCmd.PersistentFlags().BoolVarP(&remote, "remote", "r", false, "get remote gnvm latest version.")
 	versionCmd.PersistentFlags().BoolVarP(&detail, "detail", "d", false, "get remote CHANGELOG.")
 

@@ -108,7 +108,7 @@ func createConfig() {
 		return
 	}
 
-	P(DEFAULT, "Config file %v create success.\n", configPath)
+	P(NOTICE, "Config file %v create success.\n", configPath)
 }
 
 /*
@@ -262,7 +262,7 @@ func Verify() {
 	wait := func() {
 		wait := ""
 		for {
-			time.Sleep(time.Millisecond * 500)
+			time.Sleep(time.Millisecond * 1000)
 			if finish {
 				break
 			}
@@ -285,12 +285,12 @@ func Verify() {
 		case value, ok := <-code:
 			if ok && value == 200 {
 				finish = true
-				P(DEFAULT, "%v.\n", " ok")
+				P(DEFAULT, "%v.\n", CP{Magenta, false, None, false, " ok"})
 				go verifyURL("json", registry+util.NODELIST, code, fail)
 				finish = false
 				go wait()
 			} else if !ok {
-				P(DEFAULT, "%v.\n", " ok")
+				P(DEFAULT, "%v.\n", CP{Magenta, false, None, false, " ok"})
 				return
 			}
 		case value, _ := <-fail:

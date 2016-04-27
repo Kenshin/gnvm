@@ -6,6 +6,7 @@ CHANGELOG
 * Add new feature `gnvm npm`     NPM version management.
 * Add new feature `gnvm search`  Search and Print Node.js version detail usage wildcard mode or regexp mode.
 * Add new feature `gnvm reg`     Add config property `noderoot` to Environment variable `NODE_HOME`.
+* Add new `gnvm` icon, inlcude:  `32*32`, `64*64`, `128*128` size.
 * Senior  feature `gnvm ls`      Add detail print, e.g. `gnvm ls -r -d -l`.
 * Senror  feature `gnvm config`  Add print all property`gnvm config` and test custom registry `gnvm config registry test`.
 * Senior  feature `gnvm config`  built-in `DEFAULT` <http://nodejs.org/dist/> and `TAOBAO` <http://npm.taobao.org/mirrors/node> keywords.
