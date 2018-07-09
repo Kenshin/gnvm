@@ -24,7 +24,7 @@ import (
 )
 
 const (
-	LATNPMURL  = "https://raw.githubusercontent.com/npm/npm/master/package.json"
+	LATNPMURL  = "https://raw.githubusercontent.com/npm/npm/latest/package.json"
 	NPMTAOBAO  = "http://npm.taobao.org/mirrors/npm/"
 	NPMDEFAULT = "https://github.com/npm/npm/releases/"
 	ZIP        = ".zip"
