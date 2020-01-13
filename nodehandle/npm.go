@@ -24,9 +24,11 @@ import (
 )
 
 const (
-	LATNPMURL  = "https://raw.githubusercontent.com/npm/npm/master/package.json"
+	LATNPMURL  = "https://raw.githubusercontent.com/npm/cli/latest/package.json"
 	NPMTAOBAO  = "http://npm.taobao.org/mirrors/npm/"
-	NPMDEFAULT = "https://github.com/npm/npm/releases/"
+	// use net/http, http.get(url), to download the github releases, failed. and curl.New() return error code -4 
+	// but taobao is fine, so I change the default to taobao to avoid reporting errors
+	NPMDEFAULT = "http://npm.taobao.org/mirrors/npm/"
 	ZIP        = ".zip"
 )
 
